@@ -1,0 +1,53 @@
+
+Installation
+============
+
+Use this page to set up EMode and run a simple example.
+
+1. Get an EMode License
+-----------------------
+
+- First, `create an EMode account <https://emodephotonix.com/register/>`_.
+- Verify your account via the confirmation email.
+- Then, purchase a software license online through the `EMode store <https://emodephotonix.com/get-emode/>`_. This is required, even for a free EMode\ :sup:`2D`\  license.
+
+2. Download and Install EMode
+-----------------------------
+
+**System requirements**: Windows 10, 64-bit, 960 MB free disk space.
+
+- Login to your `EMode account <https://emodephotonix.com/my-account/>`_.
+- Click the ``Download EMode`` button.
+- Run the downloaded installer and follow the prompts to complete the installation.
+
+    - `Release notes <installation/release-notes.html>`_
+    - `Troubleshooting <installation/troubleshooting.html>`_
+
+.. tip::
+    *Mac users*: Try installing a virtual machine to run EMode (`Parallels <https://www.parallels.com/>`_ and `UTM <https://mac.getutm.app/>`_ are currently being tested).
+
+
+3. Setup Script Interface and Login to EMode
+--------------------------------------------
+
+.. grid:: 2
+    :gutter: 4
+    :padding: 0
+    :margin: auto
+
+    .. grid-item-card:: Python
+
+        - :ref:`Setup Python interface <SetupPython>`
+        - :ref:`EMode Login with Python <PythonEModeLogin>`
+
+    .. grid-item-card:: MATLAB
+
+        - :ref:`Setup MATLAB interface <SetupMATLAB>`
+        - :ref:`EMode Login with MATLAB <MATLABEModeLogin>`
+
+4. Run an EMode Example Script
+------------------------------
+
+- Copy and run the `Basic: SOI <examples/SOI.html>`_ example in your scripting environment.
+
+If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.

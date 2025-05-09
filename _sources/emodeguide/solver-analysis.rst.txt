@@ -1,0 +1,161 @@
+
+Solver and analysis
+-------------------
+
+.. data:: FDM
+    
+    Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``x_edge``, ``y_edge``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
+    
+    .. math::
+        \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
+    
+    It also calculates the TE fraction of each mode (``TE_fraction``) with the following equation, and it saves the indices of the TE and TM modes (``TE_indices`` and ``TM_indices``). 
+    
+    .. math::
+        \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y} 
+    
+    :param str label: dataset label name to automatically create a dataset after running ``FDM()``, no dataset is created if blank, default: ''
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: sweep
+    
+    This function sweeps a calculation as a function of any available setting, shape parameter, or section parameter (EMode\ :sup:`3D`\  only). Run a parameter sweep of ``key`` over defined ``values`` by solving ``solve_type`` for each value and saving a list of parameters defined by 'result' that correspond to the ``values``. After running a sweep, the data will be available from a parameter called ``sweep_data``, which includes all of the specified parameters of this funcion and the data specified by the ``result`` parameter.
+    
+    :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME
+    :param values: the values that define the ``key`` during the sweep
+    :type values: list or array
+    :param str solve_type: either 'Mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
+    :param result: the parameters to save from each iteration of the sweep, default: 'effective_index'
+    :type result: str or list
+    :param str label: dataset label to use in the parameter sweep, default: ''
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: confinement
+    
+    Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included.
+    
+    :param shape_list: name (from ``shape``) or list of names of shapes to include in confinement or 'all' for all shapes, default: 'all'
+    :type shapes: str or list
+    :param mode_list: desired modes to calculate confinement, 'all', 'TE', 'TM', or a list of the desired mode indices, default: 'all'
+    :type mode_list: str or list
+    :param vertices: list of vertices that define a closed polygon, specifying this parameter will override the ``shape_list`` input, default: None
+    :type vertices: list (Nx2)
+    :param bool ignore_priority: toggle ignoring overlapped shapes with higher priority, default: False
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: effective_area
+    
+    Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas.
+    
+    .. math::
+        A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y}
+    
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: orthogonality
+    
+    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available either in the simulation data or in the labeled dataset if specified. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
+    
+    :param str label: dataset label, default: ''
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: group_index
+    
+    Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index.
+    
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: report
+    
+    Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); confinement factors (if calculated); effective areas (if calculated).
+    
+    :param bool save: whether to save the table to a file or not, default: False
+    :param str file_name: name of the file to save, default: 'mode_report'
+    :param str file_type: file type to save, 'txt', 'latex', or 'csv', default: 'txt'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: label
+    
+    Creates a labeled dataset from the current settings and field data, saved as a Python dictionary or a MATLAB structure array called ``dataset_LABEL``. It can be used to run different simulations and compare the outputs. Also, it is used in conjunction with ``calc_overlap``.
+    
+    :param str label: label added to current mode set, default: '0'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: overlap
+    
+    Calculate overlap integral between two modes. The result is saved as ``overlap``.
+    
+        Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
+    
+    .. math::
+        \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
+    
+    :param str label_a: label of first mode set, or a blank string for the current mode set, default: ''
+    :param int mode_a: mode number from the first mode set, default: 0
+    :param str simulation_name_a: simulation name for the first mode set, default: 'emode'
+    :param str label_b: label of second mode set, or a blank string for the current mode set, default: ''
+    :param int mode_b: mode number from the second mode set, default: 0
+    :param str simulation_name_b: simulation name for the second mode set, default: 'emode'
+
+.. data:: scattering
+    
+    Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE['scattering_sum']`` (total scattering loss), ``SHAPE['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.
+    
+    [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
+    
+    :param str shape: name of the shape for calculating the interfacial scattering
+    :param mode_list: mode number, list of mode numbers, or 'all', default: 'all'
+    :type mode: int, list, or str
+    :param str simulation_name: simulation name for the second mode set, default: 'emode'
+
+.. data:: plot
+    
+    Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.
+    
+    :param str component: field component or index, 'Ex/y/z'; 'Hx/y/z'; 'Sx/y/z'; 'Index'; 'Shapes', default: 'Ex'
+    :param str plot_function: plotting function, 'real'; 'imag'; 'abs'; 'abs^2'; 'log', default: 'real'
+    :param int mode: mode number, default: 0
+    :param aspect_ratio: the height:width aspect ratio, 'norm' uses the normal aspect ratio of 0.707, 'real' uses the real aspect ratio defined by the simulation window, or a float specifies the aspect ratio, default: 'norm'
+    :type aspect_ratio: str or float
+    :param bool index_outline: setting index outline, default: True
+    :param bool text_display: setting text display, default: True
+    :param bool mesh_display: setting mesh display, default: False
+    :param bool window_display: setting window display, default: False
+    :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
+    :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, default: False
+    :param str file_type: file type for saving a plot, 'pdf' or 'png', default: 'pdf'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: material_explorer
+    
+    Interactive material explorer to plot the refractive indices of all available materials. The default wavelength range in the plot corresponds to the recommended range from the material reference listed below the plot. If wavelengths are specified outside this range, the model will be plotted with a dashed line instead of a solid line. User defined materials are also available.
+    
+    :param str simulation_name: simulation name, default: 'emode'
+
+
+.. data:: refractive_index
+    
+    Returns the refractive index from a material name (retrieved from the internal reference list) or from a custom refractive index value. Optionally, the material's reference (or citation) may be returned.
+
+    :param material: material name or refractive index value; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: "AlGaAs, 0.2" for a Al_{0.2}Ga_{0.8}As.
+    :type material: str or float
+    :param float wavelength: [nm] wavelength, default: 1550
+    :param bool reference: additionally return the citation for the material, default: False
+    :return: [n_xx, n_yy, n_zz] or ([n_xx, n_yy, n_zz], reference)
+
+.. data:: permeability
+    
+    Returns the relative permeability from a material name (retrieved from the internal reference list) or from a custom permeability value. Optionally, the material's reference (or citation) may be returned.
+    
+    :param material: material name or refractive index value
+    :type material: str or float
+    :param float wavelength: [nm] wavelength, default: 1550
+    :param bool reference: additionally return the citation for the material, default: False
+    :return: [permeability_xx, permeability_yy, permeability_zz] or ([permeability_xx, permeability_yy, permeability_zz], reference)
+
+.. data:: mesh
+    
+    Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape (``shape_name_vertices``), the actual refractive index for each shape (``shape_NAME_refractive_index_value``), arrays to define the edges (``x_edge``, ``y_edge``) and center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
+    
+    :param str simulation_name: simulation name, default: 'emode'
+

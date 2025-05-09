@@ -1,0 +1,286 @@
+
+EME: GDS
+--------
+
+To simulate more complex structures, a GDS import function is used to support any geometry that can be created on a mask GDS file. This example shows how an s-bend structure can be created in a GDS file, imported to EMode, and simulated as part of a directional coupler.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+First, the GDS is created.
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+
+        from phidl import Path, CrossSection, Device
+        import phidl.geometry as pg
+        import phidl.path as pp
+        from phidl import quickplot as qp
+
+        ## Parameters
+        width_wg = 0.6 # [um]
+        gap_input = 2.0 # [um]
+        gap_output = 0.3 # [um]
+        L_bend = 6.0 # [um]
+
+        ## Create the first CrossSection
+        X1 = CrossSection()
+        X1.add(width = width_wg,
+            offset = -gap_input/2 - width_wg/2, layer = 1,
+            name = 'wg1', ports = ('in1', 'out1'))
+
+        X1.add(width = width_wg,
+            offset = gap_input/2 + width_wg/2, layer = 1,
+            name = 'wg2')
+
+        ## Create the second CrossSection
+        X2 = CrossSection()
+        X2.add(width = width_wg,
+            offset = -gap_output/2 - width_wg/2, layer = 1,
+            name = 'wg1', ports = ('in2', 'out2'))
+
+        X2.add(width = width_wg,
+            offset = gap_output/2 + width_wg/2, layer = 1,
+            name = 'wg2')
+
+        ## Transition from first to second CrossSection
+        Xtrans = pp.transition(cross_section1 = X1, cross_section2 = X2, width_type = 'sine')
+        P3 = pp.straight(length = L_bend)
+        WG_trans = P3.extrude(Xtrans)
+
+        ## Place all CrossSection extrusions
+        D = Device()
+        wgt = D << WG_trans
+
+        ## Quickplot to view
+        qp(D)
+
+        ## Save gds file
+        D.write_gds('sbend.gds')
+
+
+
+.. figure:: Figures/EME_GDS/sbend.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+Next, the directional coupler device is created and simulated for a short coupler length. The sweep function is used to optimize  the coupler length for 100 % coupling, and the propagation is re-plotted.
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+
+        import emodeconnection as emc
+        from matplotlib import pyplot as plt
+        import numpy as np
+        import sys
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 20, 10 # [nm] resolution
+        h_core = 220 # [nm] waveguide core height
+        h_clad = 1200 # [nm] waveguide top and bottom clad
+        width_wg = 600 # [nm]
+        gap = 300 # [nm]
+        input_gap = 2000 # [nm]
+
+        window_height = h_core + h_clad*2
+
+        num_modes = 2 # [-] number of modes
+        BC = 'TE-v'
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        ## Settings
+        em.settings(wavelength = wavelength,
+            x_resolution = dx, y_resolution = dy,
+            window_height = window_height,
+            num_modes = num_modes, boundary_condition = BC,
+            background_refractive_index = 'SiO2')
+
+        ## Draw shapes
+        em.shape(name = 'BOX', refractive_index = 'SiO2',
+            height = h_clad)
+
+        em.shape(name = 'core', refractive_index = 'Si',
+            height = h_core, etch_depth = h_core)
+
+        ## Create profiles
+        em.settings(window_width = 5200)
+        em.label(label = 'slab')
+
+        em.settings(window_width = 3200)
+        em.shape(name = 'core', mask = [width_wg, width_wg],
+            mask_offset = [-gap/2-width_wg/2, gap/2+width_wg/2])
+        em.label(label = 'coupler')
+
+        ## Draw EME sections
+        em.section(name = 'sbend', section_type = 'gds',
+            gds = 'sbend.gds', profile = 'slab',
+            shape_to_mask = 'core', num_modes = num_modes,
+            length = 10e3, # modify length of gds
+            minimum_z_step = 50, overlap_variation = 0.05)
+
+        em.section(name = 'coupler', section_type = 'straight',
+            profile = 'coupler', length = 30e3,
+            num_modes = num_modes)
+
+        em.section(section_type = 'copy',
+            section_name = 'sbend', mirror = True)
+
+        ## Run EME and plot results
+        em.EME()
+        em.plot()
+
+        ## Sweep the coupler length and plot results
+        data = em.sweep(key='section, coupler, length',
+            values = np.arange(0, 200.1e3, 5000),
+            result = ['S_matrix'])
+
+        S = data['S_matrix']
+        plt.plot(data['values']*1e-3, np.abs(S[:,1,0,0])**2*100)
+        plt.xlabel("Coupler length (\u03BCm)")
+        plt.ylabel("Transmission (%)")
+        plt.autoscale(enable=True, axis='x', tight=True)
+        plt.ylim([0,100])
+        plt.show()
+
+        ## Plot final design for 100 % coupler
+        em.section(name = 'coupler', length = 180e3)
+        em.EME()
+        em.plot()
+
+        ## Close EMode
+        em.close()
+
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+
+        %% Set simulation parameters
+        wavelength = 1550; % [nm] wavelength
+        dx = 20; dy = 10; % [nm] resolution
+        h_core = 220; % [nm] waveguide core height
+        h_clad = 1200; % [nm] waveguide top and bottom clad
+        width_wg = 600; % [nm]
+        gap = 300; % [nm]
+        input_gap = 2000; % [nm]
+
+        window_height = h_core + h_clad*2;
+
+        num_modes = 2; % [-] number of modes
+        BC = 'TE-v';
+
+        %% Connect and initialize EMode
+        em = emodeconnection();
+
+        %% Settings
+        em.settings('wavelength', wavelength, ...
+            'x_resolution', dx, 'y_resolution', dy, ...
+            'window_height', window_height, ...
+            'num_modes', num_modes, 'boundary_condition', BC, ...
+            'background_refractive_index', 'SiO2');
+
+        %% Draw shapes
+        em.shape('name', 'BOX', 'refractive_index', 'SiO2', ...
+            'height', h_clad);
+
+        em.shape('name', 'core', 'refractive_index', 'Si', ...
+            'height', h_core, 'etch_depth', h_core);
+
+        %% Create profiles
+        em.settings('window_width', 5200);
+        em.label('label', 'slab');
+
+        em.settings('window_width', 3200);
+        em.shape('name', 'core', 'mask', [width_wg, width_wg], ...
+            'mask_offset', [-gap/2-width_wg/2, gap/2+width_wg/2]);
+        em.label('label', 'coupler');
+
+        %% Draw EME sections
+        em.section('name', 'sbend', 'section_type', 'gds', ...
+            'gds', 'sbend.gds', 'profile', 'slab', ...
+            'shape_to_mask', 'core', 'num_modes', num_modes, ...
+            'length', 10e3, ... % modify length of gds
+            'minimum_z_step', 50, 'overlap_variation', 0.05);
+
+        em.section('name', 'coupler', 'section_type', 'straight', ...
+            'profile', 'coupler', 'length', 30e3, ...
+            'num_modes', num_modes);
+
+        em.section('section_type', 'copy', ...
+            'section_name', 'sbend', 'mirror', true);
+
+        %% Run EME and plot results
+        em.EME();
+        em.plot();
+
+        %% Sweep the coupler length and plot results
+        data = em.sweep('key', 'section, coupler, length', ...
+            'values', 0:5000:200e3, ...
+            'result', ['S_matrix']);
+
+        S = data.S_matrix;
+        figure;
+        plot(squeeze(data.values)*1e-3, abs(squeeze(S(1,1,1,2,:))).^2*100);
+        hold on;
+        plot(squeeze(data.values)*1e-3, abs(squeeze(S(1,2,1,2,:))).^2*100);
+        xlabel(append('Coupler length (', char(181), 'm)'));
+        ylabel('Transmission (%)');
+        xlim([min(data.values*1e-3) max(data.values*1e-3)]);
+        ylim([0 100]);
+
+        %% Plot final design for 100 % coupler
+        em.section('name', 'coupler', 'length', 180e3);
+        em.EME();
+        em.plot();
+
+        %% Close EMode
+        em.close();
+
+
+Console output::
+
+    EMode 0.1.2 - email
+    Solving S-matrices... 
+    Solving section: sbend... completed in 1 min 42.9 sec
+
+    Solving section: coupler... completed in 0.5 sec
+
+    Solving section: 1... completed in 25.6 sec
+    completed in 2 min 10.2 sec
+
+    Sweeping section parameter 'length'... completed in 26.6 sec
+    Solving S-matrices... 
+    Solving section: sbend... completed in 0.1 sec
+
+    Solving section: coupler... completed in 0.0 sec
+
+    Solving section: 1... completed in 0.1 sec
+    completed in 0.7 sec
+    Exited EMode
+
+
+Figures:
+
+.. figure:: Figures/EME_GDS/coupler_1.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_GDS/coupler_sweep.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_GDS/coupler_2.png
+    :width: 500
+    :align: center
+    :figwidth: 500

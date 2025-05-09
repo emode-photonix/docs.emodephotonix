@@ -1,0 +1,114 @@
+
+Simulation setup
+----------------
+
+.. data:: settings
+    
+    Specify the simulation settings.
+    
+    :param float wavelength: [nm] wavelength, default: 1550
+    :param float x_resolution: [nm] resolution in the x-direction, default: 10
+    :param float y_resolution: [nm] resolution in the y-direction, default: 10
+    :param float window_width: [nm] simulation window width
+    :param float window_height: [nm] simulation window height
+    :param boundary_condition: boundary condition set as a string with two characters 'XX'; the first character is the south boundary condition, the second character is the west boundary condition; '0': no symmetry (metal boundary), 'S': symmetric Ex, 'A': asymmetric Ex; alternatively, 'TE' and 'TM' can be specified to use the any symmetry available to find the fundamental TE and TM modes; use 'TE-h', 'TE-v', 'TM-h', and 'TM-v' to specify only horizontal or vertical symmetry for TE or TM modes; when using an (a)symmetric boundary, the ``pml_NSEW_bool`` setting is copied from the north/east perimeter to the south/west perimeter; default: '00'
+    :type boundary_condition: str, length = 2
+    :param int num_modes: number of modes to solve for, default: 1
+    :param str field_to_solve: either 'Et' or 'Ht' to specify whether the transverse electric field or magnetic field is solved, default: 'Et'
+    :param float max_effective_index: maximum value for the effective refractive index, if ``max_effective_index`` is 0 the maximum refractive index found in the simulation window is used, default: 0
+    :param float tolerance: eigenmode solver convergence tolerance, if ``tolerance`` = 0 the computer's precision is used, default: 1e-12
+    :param float bend_radius: [nm] waveguide bend radius relative to the center of the window, must be positive and larger than window_width/2, if ``bend_radius`` = 0 no bending is used in the calculation, default: 0
+    :param pml_NSEW_bool: indicates whether to use a pml on each of the 4 boundaries, [north, south, east, west], 0: no pml, 1: use pml, default: [0,0,0,0]
+    :type pml_NSEW_bool: list, length = 4
+    :param num_pml_layers: number of pml layers to use, either a single value that is applied to all boundaries or a list of 4 values, default: 10
+    :type num_pml_layers: int or list with length = 4
+    :param bool remove_pml_modes_bool: automatically remove pml modes, default: True
+    :param background_refractive_index: background refractive index, either a material name or a value, default: 1.0
+    :type background_refractive_index: str or float
+    :param expansion_resolution: [nm] single value or list of 4 values for the stretched grid resolution; [north, south, east, west], the grid is gradually transitioned from res to ``expansion_resolution``, default: 20
+    :type expansion_resolution: float or list
+    :param expansion_size: [nm] single value or list of 4 values for the approximate stretched distance; [north, south, east, west], default: 0
+    :type expansion_size: float or list
+    :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/25
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: add_material
+    
+    Add a custom material by specifying a wavelength dependent equation.
+    
+    :param str name: material name, this will override the built-in material name if an idential name is used; a variable ``user_material_[name]`` will be created
+    :param str refractive_index_equation: refractive index equation to evaluate as a function of the wavelength parameter 'x', where imaginary numbers are specified with a preceding 'j'; only the following characters are allowed in the equation string: "0123456789 x j . + - ^ * / ( ) [ ]"; a list of three equations can also be specified for non-isotropic materials, like '[n_xx, n_yy, n_zz]'; the string must have less than 1000 characters
+    :param str wavelength_unit: either 'nm' or 'um' to specify the unit for the wavelength parameter 'x', default: 'um'
+    :param list wavelength_range: [um] list of the minimum and maximum wavelength recommended for the refractive index equation, default: [0.2, 2.0]
+    :param str citation: reference displayed in material explorer for the custom material, default: 'User defined.'
+    :param str simulation_name: simulation name, default: 'emode'
+    
+.. data:: import_database
+    
+    Import a custom material database by specifying custom materials in a text file.
+        
+    :param str filename: name of text file to be imported
+    :param str simulation_name: simulation name, default: 'emode'
+    
+    Here is an example of several custom materials in the database text file to be imported. See the ``add_material`` function for parameter details. Each custom material must contain the ``name`` and ``refractive_index_equation``, separated by a new line. Comments can be added with '#' or '%'.
+    
+        | name = custom_name_1 
+        | refractive_index_equation = equation_1 
+        | wavelength_unit = um (optional)
+        | wavelength_range = [0.2, 2.0] (optional)
+        | citation = reference_1 (optional, default: "User defined by database import.")
+        |
+        | # comment about my custom_SiO2 material
+        | name = custom_SiO2
+        | refractive_index_equation = (1 + 0.696166/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2) + 0.8974794/(1 - (9.896161/x)^2))^0.5
+        | wavelength_unit = um 
+        | wavelength_range = [0.21, 6.7]
+        | citation = '(1) I. H. Malitson, "Interspecimen comparison of the refractive index of fused silica," J. Opt. Soc. Am. 55, 1205 (1965). (2) C. Z. Tan, "Determination of refractive index of silica glass for infrared wavelengths by IR spectroscopy," J. Non-Cryst. Solids 223, 158 (1998).'
+        | 
+        | % comment about my custom_name_3 material
+        | name = custom_name_3
+        | refractive_index_equation = equation_3
+        | wavelength_unit = nm
+
+.. data:: shape
+    
+    Create or update a shape with attributes. These parameters are saved with 'shape\_'+name+'/' preceding the attribute name. If a name is not given, a number will be allocated as the shape name.
+    
+    :param str name: shape name, default: an auto-generated number
+    :param refractive_index: refractive index value, list of values [n_xx, n_yy, n_zz], or material name, default: 1.0
+    :type refractive_index: float, list, or str
+    :param permeability: relative permeability value, list of values [mu_xx, mu_yy, mu_zz], or material name, default: 1.0
+    :type permeability: float, list, or str
+    :param float loss_dB_per_m: [dB/m] material propagation loss, default: 0
+    :param vertices: list of N vertices that define a closed polygon, if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
+    :type vertices: list (N,2) or int
+    :param float width: shape width, gets set to the ``window_width`` if not specified, default: None
+    :param float height: shape height, default: 0
+    :param position: centered x and y positions relative to the shape width and height, if y position is negative then it is treated like a layer stacked on top of the previous layer, if only a single value is provided it is assumed to be the x position and the y position is set to -1, default: [0,-1]
+    :type position: list, length = 2
+    :param mask: mask width for etching, centered on x-position set by ``position`` and ``mask_offset``, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask_offset`` values, default: ``width``
+    :type mask: float or list
+    :param mask_offset: the x-position offset for the ``mask`` parameter, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask`` values, default: ``0``
+    :type mask_offset: float or list
+    :param tone: 'n' or 'p' to define the pattern tone as negative or positive for the ``mask`` parameter, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask`` values, default: ``n``
+    :type tone: str or list
+    :param float etch_depth: etch depth for a layer outside the mask region, thickness = ``height`` - ``etch_depth``, default: 0
+    :param float sidewall_angle: etched sidewall angle in degrees, 0 is perfectly vertical, 90 is the maximum, this decreases the width at the top of the shape to create the angle, default: 0
+    :param fill_refractive_index: refractive index (similar to ``refractive_index`` parameter) to fill the etched region when a planar layer is added on top of the current layer, default: take the background refractive index
+    :type fill_refractive_index: float, list, or str
+    :param fill_permeability: relative permeability (similar to ``permeability`` parameter) to fill the etched region when a planar layer is added on top of the current layer, default: take the background relative permeability
+    :type fill_permeability: float, list, or str
+    :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
+    :type correlation_length: float or list
+    :param roughness_rms: interfacial roughness standard deviation in nm rms, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
+    :type roughness_rms: float or list
+    :param str shape_type: set shape type as 'planar', 'conformal' (only uses ``name``, ``refractive_index``, and ``height``), or 'ellipse' (only uses ``name``, ``refractive_index``, ``width``, ``height``, ``position``, ``sidewall_angle``, and ``priority``), default: 'planar'
+    :param float priority: a number that signifies the order in which shapes will be drawn, a higher priority gets drawn over a lower number priority, default: auto-generated integer based on order called
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: reset
+    
+    Clear simulation settings, shape definitions, or both.
+    
+    :param str kind: either 'shapes', 'settings', or 'all' to specify what data is cleared, default: 'shapes'
+    :param str simulation_name: simulation name, default: 'emode'

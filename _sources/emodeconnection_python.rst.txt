@@ -1,0 +1,107 @@
+
+Python interface
+================
+
+To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.7, 3.8, 3.9, and 3.10, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.
+
+The source code can be viewed here: `emodeconnection <https://github.com/emode-photonix/emodeconnection>`_
+
+For more information about Python, see these links:
+
+.. hlist::
+   :columns: 2
+   
+   - `Python documentation <https://docs.python.org/3/tutorial/>`_
+   - `Download Python <https://www.python.org/downloads/>`_
+   - `Real Python <https://realpython.com/>`_
+   - `Python Tutorial <https://www.pythontutorial.net/>`_
+
+.. _SetupPython:
+
+Setup
+-----
+
+Install the ``emodeconnection`` Python package from the Windows command line.
+
+.. code-block::
+
+    pip install emodeconnection
+
+.. _PythonEModeLogin:
+
+EMode Login
+-----------
+
+Open a Python session and run the following. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+
+.. code-block::
+
+    import emodeconnection as emc
+    emc.EModeLogin()
+
+
+The EMode class
+---------------
+
+.. class:: EMode(simulation_name = 'emode', license_type = 'default', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN')
+    
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``EModeLogin`` from the the start menu.
+    
+    An existing file can be opened for further analysis by specifying the input argument ``open_existing = True``. This opened file can be copied to a new file name by specifying the input argument ``new_name = 'new_filename'``.
+    
+    .. note::
+        All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using keyword arguments for each funtion input parameter.
+    
+    :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name.
+    :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available.
+    :param str save_path: Name of the path where the simulation file will be created and saved.
+    :param bool verbose: Whether to run EMode in verbose mode for debugging.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license.
+    :param bool open_existing: Whether to open an existing file or to start a new simulation.
+    :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name.
+    :type new_name: bool or str
+    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle.
+
+
+Functions
+---------
+
+The ``emodeconnection`` package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.
+
+.. function:: EModeLogin()
+    
+    Opens the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+
+.. function:: open_file(simulation_name = 'emode')
+    
+    Opens an EMode simulation file with the extension '.eph' or '.mat' and returns a dictionary with the file contents.
+    
+    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :return: Dictionary with all keys and data from the specified EMode simulation file.
+    :rtype: dict
+
+.. function:: get(variable, simulation_name = 'emode')
+    
+    Returns the contents of a specified variable from an EMode simulation file with the extension '.eph' or '.mat'.
+    
+    :param str variable: Name of the variable to return from EMode.
+    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :return: Requested item from EMode.
+    :rtype: int, float, str, or array-like
+
+.. function:: inspect(simulation_name = 'emode')
+    
+    Get the names of all variables from EMode simulation file with the extension '.eph' or '.mat'.
+    
+    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get()` function.
+    :rtype: list
+
+Updating the Python Interface
+-----------------------------
+
+Update the ``emodeconnection`` Python package to the latest version with:
+
+.. code-block::
+
+    pip install -U emodeconnection

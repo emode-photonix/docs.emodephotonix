@@ -1,0 +1,228 @@
+
+Variable Descriptions
+---------------------
+
+Descriptions of all variables available in the simulation file. Some variables have an alias, which is a copy of the data from the primary variable name for enhanced compatability with previous versions of EMode. For shapes, SHAPE indicates the name defined by the user.
+
+.. glossary::
+
+    background_refractive_index
+        (*float*) Refractive index in the background of simulation window, setting the default refractive index where no shapes are defined.
+
+    bend_radius
+        (*float*) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.
+        
+        Alias: ``radius``
+
+    boundary_condition
+        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate asymmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition.
+    
+    BC
+        (*str*) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of '0', 'A', or 'S'. For example, setting the boundary_condition to 'TE' and running FDM() will result in BC changing to either 'SS', '0S', 'S0', or '00', depending on the index profile cross-section symmetry.
+    
+    confinement_window
+        (*list*) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.
+    
+    dataset_LABEL
+        (*dictionary*) Labeled dataset with settings and simulation results.
+    
+    effective_area
+        (*list*) The effective area of each waveguide mode in units of square microns (:math:`\mu \mathrm{m}^2`), calculated by the following equation.
+        
+        .. math::
+            A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y}
+
+    effective_index
+        (*list*) The real part of the effective index for each mode.
+        
+        Alias: ``n_eff``
+
+    Ex, Ey, Ez, Hx, Hy, Hz
+        (*complex arrays*) The electric (E [V/nm]) and magnetic (H [A/nm]) fields in the x-, y-, and z-directions. These calculated fields are interpolated to the center point of each mesh grid (defined by ``x`` and ``y``). The fields are normalized to the equation below.
+        
+        .. math::
+            \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
+
+    expansion_resolution
+        (*list*) List of the desired mesh step size in the x- and y-directions in the expanded regions around the perimeter of the simulation window.
+
+    expansion_size
+        (*list*) List of the size of the expanded regions in the x- and y-directions.
+
+    field_to_solve
+        (*str*) Desired transverse field component to solve; either 'Et' or 'Ht'.
+
+    Fx, Fy
+        (*complex arrays*) Raw fields that are solved. They either correspond to the electric or magnetic fields depending on ``field_to_solve``. However, these raw fields are defined on the Yee mesh grid, not the center points of the mesh grid. An internal function extracts all other field components from ``Fx``, ``Fy``, ``permittivity``, and ``permeability``.
+
+    group_index
+        (*list*) The group refractive index calculated for each mode.
+        
+        Alias: ``n_g``
+
+    loss_dB_per_m
+        (*float*) [dB/m] The power loss coefficient (:math:`\alpha`), which relates to the imaginary part of the effective index (:math:`\kappa`) by the following equation with the wavelength (:math:`\lambda`).
+        
+        Alias: ``alpha``
+        
+        .. math::
+            \kappa = \frac{\alpha \lambda}{(4 \pi) 10 \, \mathrm{log}_{10}(e)} \approx \frac{\alpha \lambda}{54.575}
+    
+    maximum_overlap
+        (*float*) Largest overlap in the mode list, calculated from the ``orthogonality()`` function.
+    
+    mesh_complete_bool
+        (*boolean*) Indicates if the mesh grid has been calculated for the current definition of shapes and settings.
+
+    num_modes
+        (*int*) Total number of modes to solve.
+
+    num_pml_layers
+        (*int* or *list*) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West].
+
+    max_effective_index
+        (*float*) Upper limit for the effective index.
+
+    overlap
+        (*list*) The overlap integral in ``overlap`` uses the following formula to calculate the modal excitation of :math:`\vec E_2` by :math:`\vec E_1`.
+        
+            Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
+        
+        .. math::
+            \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
+
+    permittivity, permeability
+        (*list*) The permittivity and permeability arrays are defined by ``mesh`` from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.
+
+    pml_modes_removed
+        (*list*) Mode indices that were removed during the automatic process to determine artificial modes introduced from the pml layers.
+
+    pml_NSEW_bool
+        (*list*) List of booleans indicating if a perfectly matched layer (pml) boundary condition is applied to each boundary: [North, South, East, West].
+    
+    priority_indices
+        (*list*) A list of indices corresponding to the priorities of the shapes in the list ``shape_materials``.
+    
+    remove_pml_modes_bool
+        (*bool*) Indicates whether or not to automatically remove artificial modes found in the pml layers.
+
+    shape_list
+        (*list*) Complete list of defined shapes.
+    
+    shape_materials
+        (*list*) A list of materials corresponding to the defined shapes.
+    
+    shape_vertices
+        (*list*) A list of the vertices of the shapes defined by ``shape_materials``.
+    
+    SHAPE['correlation_length']
+        (*list*) A list of two values describing the correlation length of the roughness on the vertical and horizontal edges of the shape.
+        
+        Alias: ``Lc_nm``
+    
+    SHAPE['confinement']
+        (*list*) Confinement factor for each mode in the corresponding shape.
+    
+    SHAPE['edges']
+        (*list*) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from ``SHAPE['scattering_all_edges']``.
+
+    SHAPE['etch_depth']
+        (*float*) The etch depth associated with a 'planar' shape that also has a defined ``SHAPE['mask']``. The shape will have a thickness outside the mask definition equal to the difference between the ``SHAPE['height']`` and ``SHAPE['etch_depth']`` (or zero if this is negative).
+
+    SHAPE['fill_permeability']
+        (*float* or *str*) Either a value or a material name to define the permeability in the etched region of a 'planar' shape.
+
+    SHAPE['fill_refractive_index']
+        (*float* or *str*) Either a value or a material name to define the refractive index in the etched region of a 'planar' shape.
+
+    SHAPE['height']
+        (*float*) Maximum size of the shape in the y-direction.
+
+    SHAPE['loss_dB_per_m']
+        (*float*) [dB/m] Absorption coefficient for power loss in the region defined by the shape.
+
+    SHAPE['mask']
+        (*float* or *list*) Width of the a mask for etching a 'planar' shape. Also accepts a list to define both the width and the x-offset of the mask.
+
+    SHAPE['name']
+        (*str*) User-defined name of the shape. This name will be used to reference this shape in subsequent functions.
+
+    SHAPE['permeability']
+        (*float* or *str*) Either a value or a material name to define the permeability of the shape.
+
+    SHAPE['position']
+        (*list*) The x- and y-positions of the center point of the shape, constrained by the ``SHAPE['width']`` and ``SHAPE['width']``.
+
+    SHAPE['priority']
+        (*float*) A value that defines the order in which the shape is drawn relative to other shapes. A higher value give a higher priority, putting the shape in front of other shapes with lower priority.
+
+    SHAPE['refractive_index']
+        (*float* or *str*) Either a value or a material name to define the refractive index of the shape.
+
+    SHAPE['refractive_index_value']
+        (*float*) The value of the refractive index for the shape. This is useful as a reference when a material name is passed for ``SHAPE['refractive_index']``.
+    
+    SHAPE['roughness_rms']
+        (*list*) A list of two values describing the rms roughness on the vertical and horizontal edges of the shape.
+        
+        Alias: ``st_dev_nm``
+    
+    SHAPE['scattering_all_edges']
+        (*list*) Calculated scattering loss for each edge of the shape, defined by ``SHAPE['edges']``.
+
+    SHAPE['scattering_horizontal_edges']
+        (*list*) Calculated scattering loss for each horizontal edge of the shape.
+
+    SHAPE['scattering_sum']
+        (*list*) Total calculated scattering loss for all edges of the shape.
+
+    SHAPE['scattering_vertical_edges']
+        (*list*) Calculated scattering loss for each vertical edge of the shape.
+
+    SHAPE['shape_type']
+        (*str*) The shape type is either 'planar', 'conformal', 'polygon', or 'ellipse'.
+
+    SHAPE['sidewall_angle']
+        (*float*) [degrees] Angle of the side wall for a 'planar' shape relative to a vertical at 0 degrees.
+
+    SHAPE['vertices']
+        (*list*) Pairs of [x,y] vertices that define the perimeter of a shape.
+
+    SHAPE['width']
+        (*float*) Maximum size of the shape in the x-direction.
+
+    Sx, Sy, Sz
+        (*arrays*) [W/nm] The Poynting vector in the x-, y-, and z-directions.
+
+    TE_fraction
+        (*list*) Fractions representing how much the mode is like a TE mode, calculated with the following equation.
+        
+        .. math::
+            \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
+
+    TE_indices, TM_indices
+        (*list*) Indices for the corresponding TE or TM modes in the modes list.
+
+    tolerance
+        (*float*) Numerical tolerance for convergence of the effective indices.
+
+    user_material_NAME
+        (*str*) The name of a user defined material.
+
+    wavelength
+        (*float*) [nm] Free-space wavelength.
+
+    window_height
+        (float) [nm] Total height (y-direction) of the simulation window.
+
+    window_width
+        (float) [nm] Total width (x-direction) of the simulation window.
+
+    x, y
+        (*complex arrays*) Arrays that define the x and y grid **center** points of the mesh. These can be complex when pml layers are introduced.
+
+    x_edge, y_edge
+        (*complex arrays*) Arrays that define the x and y grid **edge** points of the mesh. These can be complex when pml layers are introduced.
+
+    x_resolution, y_resolution
+        (*float*) [nm] Mesh grid step in the x- and y-directions.

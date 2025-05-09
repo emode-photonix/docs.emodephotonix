@@ -1,0 +1,659 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>EMode 0.0.5-b3 Updates</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c32a3d25" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c32a3d25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/EMode_0.0.5-b3_Updates';</script>
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="emode-0-0-5-b3-updates">
+<h1>EMode 0.0.5-b3 Updates</h1>
+<section id="new-function-input-parameter-and-variable-names">
+<h2>New function, input parameter, and variable names</h2>
+<p>Each function, input parameter, and variable that has changed name starting with EMode version 0.0.5-b3 is listed below with the following nomenclature. Functions, input parameters, and variables that have not changed names are not listed. The alias in an optional name for the variable, to help with backwards compatability. However, when an alias is not specified, only the new name is supported.</p>
+<blockquote>
+<div><p>Old name → New name [alias]</p>
+</div></blockquote>
+<section id="functions-with-input-parameters">
+<h3>Functions with input parameters</h3>
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_init</span> <span class="pre">→</span> <span class="pre">init</span></span></dt>
+<dd><p>(new) → save_path</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_open</span> <span class="pre">→</span> <span class="pre">open</span></span></dt>
+<dd><p>(new) → save_path</p>
+<p>sim → simulation_name [sim]</p>
+<p>new_name → new_simulation_name</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_clear_field_data</span> <span class="pre">→</span> <span class="pre">clear_field_data</span></span></dt>
+<dd><p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_save</span> <span class="pre">→</span> <span class="pre">save</span></span></dt>
+<dd><p>(new) → save_all_fields</p>
+<p>ftype → file_type</p>
+<p>(new) → new_save_path</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_close</span> <span class="pre">→</span> <span class="pre">close</span></span></dt>
+<dd><p>(new) → save_all_fields</p>
+<p>ftype → file_type</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_settings</span> <span class="pre">→</span> <span class="pre">settings</span></span></dt>
+<dd><p>wav → wavelength [wav]</p>
+<p>res → x_resolution, y_resolution [res]</p>
+<p>width → window_width</p>
+<p>height → window_height</p>
+<p>x_offset → (remove completely)</p>
+<p>BC → boundary_condition [BC]</p>
+<p>N_modes → num_modes [N_modes]</p>
+<p>(new) → field_to_solve</p>
+<p>guess → max_effective_index [guess]</p>
+<p>tol → tolerance [tol]</p>
+<p>radius → bend_radius [radius]</p>
+<p>pml → pml_NSEW_bool [pml]</p>
+<p>N_pml → num_pml_layers [N_pml]</p>
+<p>remove_pml_modes → remove_pml_modes_bool</p>
+<p>bg_index → background_refractive_index [bg_index]</p>
+<p>expand_res → expansion_resolution [expand_res]</p>
+<p>expand_size → expansion_size [expand_size]</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_add_material</span> <span class="pre">→</span> <span class="pre">add_material</span></span></dt>
+<dd><p>equation → refractive_index_equation [eq]</p>
+<p>unit → wavelength_unit</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_shape</span> <span class="pre">→</span> <span class="pre">shape</span></span></dt>
+<dd><p>index → refractive_index [index]</p>
+<p>mu → permeability</p>
+<p>alpha → loss_dB_per_m [alpha]</p>
+<p>vs → vertices [vs]</p>
+<p>pos → position</p>
+<p>etch → etch_depth [etch]</p>
+<p>angle → sidewall_angle [angle]</p>
+<p>fill_index → fill_refractive_index [fill_index]</p>
+<p>fill_mu → fill_permeability</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_FDM</span> <span class="pre">→</span> <span class="pre">FDM</span></span></dt>
+<dd><p>field_calc → (removed)</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_confinement</span> <span class="pre">→</span> <span class="pre">confinement</span></span></dt>
+<dd><p>shapes → shape_list [shapes]</p>
+<p>modes → mode_list [modes]</p>
+<p>vs → vertices [vs]</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_effective_area</span> <span class="pre">→</span> <span class="pre">effective_area</span></span></dt>
+<dd><p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_group_index</span> <span class="pre">→</span> <span class="pre">group_index</span></span></dt>
+<dd><p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_report</span> <span class="pre">→</span> <span class="pre">report</span></span></dt>
+<dd><p>filename → file_name</p>
+<p>ftype → file_type</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_label</span> <span class="pre">→</span> <span class="pre">label</span></span></dt>
+<dd><p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_calc_overlap</span> <span class="pre">→</span> <span class="pre">overlap</span></span></dt>
+<dd><p>label0 → label_a</p>
+<p>m0 → mode_a</p>
+<p>sim0 → simulation_name_a</p>
+<p>label → label_b</p>
+<p>m → mode_b</p>
+<p>sim → simulation_name_b</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_scattering</span> <span class="pre">→</span> <span class="pre">scattering</span></span></dt>
+<dd><p>mode → mode_list</p>
+<p>Lc_nm → correlation_length [Lc_nm]</p>
+<p>st_dev_nm → roughness_rms [st_dev_nm]</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_plot</span> <span class="pre">→</span> <span class="pre">plot</span></span></dt>
+<dd><p>plot_fn → plot_function</p>
+<p>aspect → aspect_ratio</p>
+<p>filename → file_name</p>
+<p>ftype → file_type</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_materials</span> <span class="pre">→</span> <span class="pre">material_explorer</span></span></dt>
+<dd><p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_index</span> <span class="pre">→</span> <span class="pre">refractive_index</span></span></dt>
+<dd><p>wav_nm → wavelength</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_mu</span> <span class="pre">→</span> <span class="pre">permeability</span></span></dt>
+<dd><p>wav_nm → wavelength</p>
+<p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EM_mesh</span> <span class="pre">→</span> <span class="pre">mesh</span></span></dt>
+<dd><p>sim → simulation_name [sim]</p>
+</dd></dl>
+
+</section>
+<section id="variables-in-the-simulation-file">
+<h3>Variables in the simulation file</h3>
+<table class="hlist"><tr><td><ul class="simple">
+<li><p>wavelength_nm → wavelength</p></li>
+<li><p>res → x_resolution, y_resolution [res]</p></li>
+<li><p>width → window_width</p></li>
+<li><p>height → window_height</p></li>
+<li><p>BC → boundary_condition [BC]</p></li>
+<li><p>N_modes → num_modes</p></li>
+<li><p>field → field_to_solve</p></li>
+<li><p>guess → max_effective_index</p></li>
+<li><p>tol → tolerance</p></li>
+<li><p>radius → bend_radius [radius]</p></li>
+<li><p>pml → pml_NSEW_bool</p></li>
+<li><p>N_pml → num_pml_layers</p></li>
+<li><p>remove_pml_modes → remove_pml_modes_bool</p></li>
+<li><p>bg_index → background_refractive_index</p></li>
+<li><p>expand_res → expansion_resolution</p></li>
+<li><p>expand_size → expansion_size</p></li>
+<li><p>shape_*_index → shape_*_refractive_index</p></li>
+<li><p>shape_*_mu → shape_*_permeability</p></li>
+<li><p>shape_*_alpha → shape_*_loss_dB_per_m</p></li>
+<li><p>shape_*_vs → shape_*_vertices</p></li>
+<li><p>shape_*_pos → shape_*_position</p></li>
+<li><p>shape_*_etch → shape_*_etch_depth</p></li>
+<li><p>shape_*_angle → shape_*_sidewall_angle</p></li>
+<li><p>shape_*_fill_index → shape_*_fill_refractive_index</p></li>
+<li><p>shape_*_fill_mu → shape_*_fill_permeability</p></li>
+<li><p>shape_*_index_value → shape_*_refractive_index_value</p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p>all_shapes → shape_list</p></li>
+<li><p>User_material_* → user_material_*</p></li>
+<li><p>x → x_edge</p></li>
+<li><p>y → y_edge</p></li>
+<li><p>xc → x</p></li>
+<li><p>yc → y</p></li>
+<li><p>mu → permeability</p></li>
+<li><p>eps → permittivity</p></li>
+<li><p>mesh_up_to_date → mesh_complete_bool</p></li>
+<li><p>solve_pml → (removed)</p></li>
+<li><p>x_pml → (removed)</p></li>
+<li><p>y_pml → (removed)</p></li>
+<li><p>eps_pml → (removed)</p></li>
+<li><p>mu_pml → (removed)</p></li>
+<li><p>n_eff → effective_index [n_eff]</p></li>
+<li><p>alpha → loss_dB_per_m [alpha]</p></li>
+<li><p>TE_frac → TE_fraction</p></li>
+<li><p>ind_TE → TE_indices</p></li>
+<li><p>ind_TM → TM_indices</p></li>
+<li><p>modes_removed → pml_modes_removed</p></li>
+<li><p>n_g → group_index [n_g]</p></li>
+<li><p>shape_*_scattering_vertical → shape_*_scattering_vertical_edges</p></li>
+<li><p>shape_*_scattering_horizontal → shape_*_scattering_horizontal_edges</p></li>
+<li><p>shape_*_scattering_edges → shape_*_scattering_all_edges</p></li>
+<li><p>shape_*_scattering → shape_*_scattering_sum</p></li>
+</ul>
+</td></tr></table>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#new-function-input-parameter-and-variable-names">New function, input parameter, and variable names</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions-with-input-parameters">Functions with input parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-in-the-simulation-file">Variables in the simulation file</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode Photonix LLC. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

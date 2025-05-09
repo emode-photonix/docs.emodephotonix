@@ -1,0 +1,12 @@
+
+Troubleshooting
+^^^^^^^^^^^^^^^
+
+.. glossary::
+    
+    *EMode and EModeLogin open, but they have an issue connecting to the license server.*
+        First, double-check your internet connection. Next, try restarting your computer to make sure the new firewall settings are implemented.
+    
+    *EMode was installed and functioning properly, but now there are issues launching EMode or logging into the license server.*
+        Check that you have the latest version of EMode installed by navigating the installation page. Also, check that your connection module is up to date.
+    

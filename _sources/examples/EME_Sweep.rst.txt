@@ -1,0 +1,278 @@
+
+EME: Sweep
+----------
+
+In practice, a taper length needs to be optimized to ensure proper modal transmission and low loss. This example shows how the sweep function can be used to visualize the transmission of an EME taper simulation.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+
+        import emodeconnection as emc
+        import numpy as np
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 20, 20 # [nm] resolution
+        h_core = 220 # [nm] waveguide core height
+        h_clad = 1000 # [nm] waveguide top and bottom clad
+
+        window_width = 3200
+        window_height = h_core + h_clad*2
+
+        num_modes = 4 # [-] number of modes
+        BC = 'TE-v'
+
+        ## Connect and initialize EMode
+        em = emc.EMode(simulation_name = 'taper', verbose = True)
+
+        ## Settings
+        em.settings(wavelength = wavelength,
+            x_resolution = dx, y_resolution = dy,
+            window_width = window_width,
+            window_height = window_height,
+            num_modes = num_modes, boundary_condition = BC,
+            background_refractive_index = 'SiO2')
+
+        ## Draw shapes
+        em.shape(name = 'BOX', refractive_index = 'SiO2',
+            height = h_clad)
+        em.shape(name = 'core', refractive_index = 'Si',
+            height = h_core, etch_depth = h_core)
+
+        ## Launch FDM solver and label profiles
+        em.shape(name = 'core', mask = 600)
+        em.label(label = 'a') # skips solving the modes here
+
+        em.shape(name = 'core', mask = 1200)
+        em.label(label = 'b') # skips solving the modes here
+
+        ## Draw EME sections
+        em.section(profile = 'a', section_type = 'straight',
+            length = 2e3, num_modes = num_modes)
+
+        em.section(name = 'taper', section_type = 'taper',
+            profile = 'a', profile_end = 'b',
+            length = 6000, num_modes = num_modes,
+            minimum_z_step = 10, overlap_variation = 0.01)
+
+        em.section(profile = 'b', section_type = 'straight',
+            length = 2e3, num_modes = num_modes)
+
+        ## Run EME sweep
+        data = em.sweep(key='section, taper, length',
+            values=np.arange(0, 6001, 100),
+            result = ['S_matrix'])
+
+        ## Close EMode
+        em.close()
+
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+        %% Set simulation parameters
+        wavelength = 1550; % [nm] wavelength
+        dx = 20; dy = 20; % [nm] resolution
+        h_core = 220; % [nm] waveguide core height
+        h_clad = 1000; % [nm] waveguide top and bottom clad
+
+        window_width = 3200;
+        window_height = h_core + h_clad*2;
+
+        num_modes = 4; % [-] number of modes
+        BC = 'TE-v';
+
+        %% Connect and initialize EMode
+        em = emodeconnection('simulation_name', 'taper', 'verbose', true);
+
+        %% Settings
+        em.settings('wavelength', wavelength, ...
+            'x_resolution', dx, 'y_resolution', dy, ...
+            'window_width', window_width, ...
+            'window_height', window_height, ...
+            'num_modes', num_modes, 'boundary_condition', BC, ...
+            'background_refractive_index', 'SiO2');
+
+        %% Draw shapes
+        em.shape('name', 'BOX', 'refractive_index', 'SiO2', ...
+            'height', h_clad);
+        em.shape('name', 'core', 'refractive_index', 'Si', ...
+            'height', h_core, 'etch_depth', h_core);
+
+        %% Launch FDM solver and label profiles
+        em.shape('name', 'core', 'mask', 600);
+        em.label('label', 'a'); % skips solving the modes here
+
+        em.shape('name', 'core', 'mask', 1200);
+        em.label('label', 'b'); % skips solving the modes here
+
+        %% Draw EME sections
+        em.section('profile', 'a', 'section_type', 'straight', ...
+            'length', 2e3, 'num_modes', num_modes);
+
+        em.section('name', 'taper', 'section_type', 'taper', ...
+            'profile', 'a', 'profile_end', 'b', ...
+            'length', 6000, 'num_modes', num_modes, ...
+            'minimum_z_step', 10, 'overlap_variation', 0.01);
+
+        em.section('profile', 'b', 'section_type', 'straight', ...
+            'length', 2e3, 'num_modes', num_modes);
+
+        %% Run EME sweep
+        data = em.sweep('key', 'section, taper, length', ...
+            'values', 0:100:6000, ...
+            result = ['S_matrix']);
+
+        %% Close EMode
+        em.close();
+
+
+Console output::
+
+    EMode 0.1.2 - email
+    Connected on port 64865 to LM-1.
+    Session type: 3d
+    Successfully logged in to the license manager.
+
+    Sweeping section parameter 'length'... 
+    Solving EME: length = 6000... completed in 1 min 18.1 sec
+    Solving EME: length = 5900... completed in 0.4 sec
+    Solving EME: length = 5800... completed in 0.3 sec
+    Solving EME: length = 5700... completed in 0.3 sec
+    Solving EME: length = 5600... completed in 0.3 sec
+    Solving EME: length = 5500... completed in 0.3 sec
+    Solving EME: length = 5400... completed in 0.3 sec
+    Solving EME: length = 5300... completed in 0.3 sec
+    Solving EME: length = 5200... completed in 0.3 sec
+    Solving EME: length = 5100... completed in 0.3 sec
+    Solving EME: length = 5000... completed in 0.3 sec
+    Solving EME: length = 4900... completed in 0.3 sec
+    Solving EME: length = 4800... completed in 0.3 sec
+    Solving EME: length = 4700... completed in 0.3 sec
+    Solving EME: length = 4600... completed in 0.4 sec
+    Solving EME: length = 4500... completed in 0.4 sec
+    Solving EME: length = 4400... completed in 0.3 sec
+    Solving EME: length = 4300... completed in 0.3 sec
+    Solving EME: length = 4200... completed in 0.3 sec
+    Solving EME: length = 4100... completed in 0.4 sec
+    Solving EME: length = 4000... completed in 0.3 sec
+    Solving EME: length = 3900... completed in 0.3 sec
+    Solving EME: length = 3800... completed in 0.3 sec
+    Solving EME: length = 3700... completed in 0.4 sec
+    Solving EME: length = 3600... completed in 0.3 sec
+    Solving EME: length = 3500... completed in 0.3 sec
+    Solving EME: length = 3400... completed in 0.3 sec
+    Solving EME: length = 3300... completed in 0.3 sec
+    Solving EME: length = 3200... completed in 0.3 sec
+    Solving EME: length = 3100... completed in 0.4 sec
+    Solving EME: length = 3000... completed in 0.3 sec
+    Solving EME: length = 2900... completed in 0.4 sec
+    Solving EME: length = 2800... completed in 0.4 sec
+    Solving EME: length = 2700... completed in 0.3 sec
+    Solving EME: length = 2600... completed in 0.3 sec
+    Solving EME: length = 2500... completed in 0.3 sec
+    Solving EME: length = 2400... completed in 0.3 sec
+    Solving EME: length = 2300... completed in 0.3 sec
+    Solving EME: length = 2200... completed in 0.3 sec
+    Solving EME: length = 2100... completed in 0.3 sec
+    Solving EME: length = 2000... completed in 0.3 sec
+    Solving EME: length = 1900... completed in 0.3 sec
+    Solving EME: length = 1800... completed in 0.4 sec
+    Solving EME: length = 1700... completed in 0.3 sec
+    Solving EME: length = 1600... completed in 0.3 sec
+    Solving EME: length = 1500... completed in 0.4 sec
+    Solving EME: length = 1400... completed in 0.4 sec
+    Solving EME: length = 1300... completed in 0.3 sec
+    Solving EME: length = 1200... completed in 0.4 sec
+    Solving EME: length = 1100... completed in 0.3 sec
+    Solving EME: length = 1000... completed in 0.3 sec
+    Solving EME: length = 900... completed in 0.3 sec
+    Solving EME: length = 800... completed in 0.4 sec
+    Solving EME: length = 700... completed in 0.3 sec
+    Solving EME: length = 600... completed in 0.3 sec
+    Solving EME: length = 500... completed in 0.3 sec
+    Solving EME: length = 400... completed in 0.3 sec
+    Solving EME: length = 300... completed in 0.3 sec
+    Solving EME: length = 200... completed in 0.3 sec
+    Solving EME: length = 100... completed in 0.3 sec
+    Solving EME: length = 0... completed in 0.3 sec
+    completed in 1 min 38.5 sec
+    Exited EMode
+
+
+While no figures are generated in the EMode script, a separate script can be used to plot the results.
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+
+        import emodeconnection as emc
+        import numpy as np
+
+        ## Extract sweep results without an EMode license
+        data = emc.get(variable = 'sweep_data',
+            simulation_name = 'taper')
+
+        ## Plot
+        import matplotlib.pyplot as plt
+        from matplotlib import rc as mplrc
+
+        fw, LW = 8/2.54, 0.5
+        mplrc('font',**{'family':'sans-serif','sans-serif':['Arial'],'size':7})
+        mplrc('axes', linewidth=LW, axisbelow=True)
+        mplrc('xtick', bottom=True, top=True, direction='in')
+        mplrc('ytick', left=True, right=True, direction='in')
+        mplrc('xtick.major', size=3, width=LW)
+        mplrc('ytick.major', size=3, width=LW)
+        mplrc('figure',figsize=[fw, fw/2**0.5])
+
+        fig, ax = plt.subplots(1, 1)
+        ax.set_xlabel('Taper length (nm)')
+        ax.set_ylabel('Tranmission (%)')
+        ax.grid(visible=True, which='major', axis='both', linewidth=LW/2, color='grey', alpha=0.25)
+
+        S = np.array(data['S_matrix'])
+        lines = []
+        for kk in range(S.shape[-1]):
+            line, = ax.plot(data['values'],
+                100*np.abs(S[:,1,0,kk,0])**2,
+                marker = '', linestyle = '-', lw = LW*1.5,
+                label = r'Mode 0$\rightarrow$%d' % kk)
+    
+            lines.append(line)
+
+        ax.set_xlim([
+            np.min(data['values']),
+            np.max(data['values'])])
+
+        lg = ax.legend(handles = lines[0:1], loc = 'center right')
+        lg.get_frame().set_linewidth(LW/2)
+        lg.get_frame().set_edgecolor('k')
+        ax.set_ylim([80, 100])
+        fig.savefig('taper_1.png', dpi=600, bbox_inches='tight')
+
+        lg = ax.legend(handles = lines[1:], loc = 'upper right')
+        lg.get_frame().set_linewidth(LW/2)
+        lg.get_frame().set_edgecolor('k')
+        ax.set_ylim([-1, 16])
+        fig.savefig('taper_2.png', dpi=600, bbox_inches='tight')
+
+
+Figures:
+
+.. figure:: Figures/EME_Sweep/taper_1.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_Sweep/taper_2.png
+    :width: 500
+    :align: center
+    :figwidth: 500

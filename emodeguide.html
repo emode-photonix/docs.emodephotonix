@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>EMode Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c32a3d25" />
+    <link rel="stylesheet" type="text/css" href="_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c32a3d25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/code-tabs.js?v=c983d12e"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide';</script>
+    <link rel="icon" href="_static/icon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="File management" href="emodeguide/file-management.html" />
+    <link rel="prev" title="MATLAB interface" href="emodeconnection_matlab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/file-management.html">File management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/setup.html">Simulation setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/solver-analysis.html">Solver and analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/eme.html">EME</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/variables.html">Variable Descriptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/materials.html">Material Database</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation/release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="emode-guide">
+<h1>EMode Guide</h1>
+<p><strong>User profile login</strong>: run <code class="docutils literal notranslate"><span class="pre">EModeLogin</span></code> from the start menu or the command line. Entering your username and password will save your EMode user profile.</p>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/file-management.html">File management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/setup.html">Simulation setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/solver-analysis.html">Solver and analysis</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/eme.html">EME</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/variables.html">Variable Descriptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="emodeguide/materials.html">Material Database</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<hr class="docutils" />
+<section id="features">
+<h2>Features</h2>
+<table class="hlist"><tr><td><ul class="simple">
+<li><p>Finite difference method</p></li>
+<li><p>Scattering loss</p></li>
+<li><p>Bend modes</p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p>(A)symmetries</p></li>
+<li><p>Perfectly matched layers</p></li>
+<li><p>Sub-pixel averaging</p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p>Anisotropic materials</p></li>
+<li><p>Magnetic materials</p></li>
+<li><p>Non-uniform meshing</p></li>
+</ul>
+</td></tr></table>
+<section id="finite-difference-method">
+<h3>Finite difference method</h3>
+<p>The finite difference method (FDM) is used to solve the waveguide eigenmodes. The electric and magnetics fields are solved in a Yee grid, and they are subsequently interpolated to common grid points. Features are added to support subpixel averaging, bend modes, anisotropic materials, non-uniform meshing, and mode symmetries.</p>
+<blockquote>
+<div><ol class="upperalpha simple" start="26">
+<li><p>Zhu and T. G. Brown, ‘’Full-vectorial finite-difference analysis of microstructured optical fibers,’’ Opt. Express <strong>10</strong>, 853 (2002).</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="boundary-conditions">
+<h3>Boundary conditions</h3>
+<p>Symmetric or asymmetric boundary conditions can be applied to the south and west sides of the simulation window. By explicitly setting the (a)symmetry with an ‘S’ or ‘A’, the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to ‘TE’ or ‘TM’ and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate ‘S’ or ‘A’ boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.</p>
+</section>
+<section id="meshing">
+<h3>Meshing</h3>
+<p>Shapes define the refractive index profile of the waveguide and a meshing algorithm using contour-path effective permittivities is implemented. On the Yee grid, the permittivity and permeability arrays are unique for each x, y, and z direction. The plot of the refractive index shows the exact shapes that are defined, and the actual permittivity and permeability arrays are available using the <code class="docutils literal notranslate"><span class="pre">get</span></code> method. Calculated fields correspond to the center points of the meshed grid (<code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>), while the edges of the mesh are defined by the parameters <code class="docutils literal notranslate"><span class="pre">x_edge</span></code> and <code class="docutils literal notranslate"><span class="pre">y_edge</span></code>.</p>
+<blockquote>
+<div><ol class="upperalpha simple">
+<li><p>Mohammadi, H. Nadgaran, and M. Agio, ‘’Contour-path effective permittivities for the two-dimensional finite-difference time-domain method,’’ Opt. Express <strong>13</strong>, 10367 (2005).</p></li>
+</ol>
+</div></blockquote>
+<section id="non-uniform-mesh">
+<h4>Non-uniform mesh</h4>
+<p>A non-uniform mesh can be specified to increase the grid spacing in the perimeter area of the simulation window. This is helpful to reduce the simulation time when using a fine grid mesh. The primary simulation window is defined by the <code class="docutils literal notranslate"><span class="pre">window_width</span></code>, <code class="docutils literal notranslate"><span class="pre">window_height</span></code>, <code class="docutils literal notranslate"><span class="pre">x_resolution</span></code>, and <code class="docutils literal notranslate"><span class="pre">y_resolution</span></code> parameters. To add a non-uniform grid, the parameters <code class="docutils literal notranslate"><span class="pre">expansion_size</span></code> and <code class="docutils literal notranslate"><span class="pre">expansion_resolution</span></code> must be defined. Expanded regions taper the resolution from the primary window to a maximum value of the <code class="docutils literal notranslate"><span class="pre">expansion_resolution</span></code>. However, the tapering is terminated if the <code class="docutils literal notranslate"><span class="pre">expansion_size</span></code> is reached before the resolution has reached the <code class="docutils literal notranslate"><span class="pre">expansion_resolution</span></code> value. Unique values for the <code class="docutils literal notranslate"><span class="pre">expansion_size</span></code> can be defined for each edge of the simulation window. The user must investigate convergence of the effective index and loss values by varying the window size, expanded area size, and grid resolutions.</p>
+</section>
+</section>
+<section id="citing-emode">
+<h3>Citing EMode</h3>
+<p>If you use EMode for design or analysis in a publication, please use the following citation.</p>
+<blockquote>
+<div><p>EMode (version 0.1.2) [Software] from EMode Photonix. Available at <a class="reference external" href="https://www.emodephotonix.com">emodephotonix.com</a>.</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finite-difference-method">Finite difference method</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#boundary-conditions">Boundary conditions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meshing">Meshing</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#non-uniform-mesh">Non-uniform mesh</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-emode">Citing EMode</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode Photonix LLC. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

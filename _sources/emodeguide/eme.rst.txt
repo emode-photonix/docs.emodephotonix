@@ -1,0 +1,51 @@
+
+EME
+---
+
+.. data:: section
+    
+    Define a waveguide section used in the EME solver. This function is analagous to the ``shape`` function for defining the shapes of a profile, but instead defined the shapes of an EME simulation.
+    
+    :param str name: section name, default: an auto-generated number
+    :param str section_type: either 'straight', 'taper', 'gds', or 'copy', and each section type corresponds with only a subset of other input parameters:
+    
+        * **'straight'**: ``name``, ``profile``, ``order``, ``num_modes``, ``length``, ``offset``, ``simulation_name``
+        * **'taper'**: ``name``, ``profile``, ``profile_end``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``simulation_name``
+        * **'gds'**: ``name``, ``gds``, ``cell_index``, ``unit``, ``profile``, ``shape_to_mask``, ``etch_depth``, ``sidewall_angle``, ``tone``, ``window_width``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``simulation_name``
+        * **'copy'**: ``name``, ``section_name``, ``mirror``, ``order``, ``simulation_name``
+    
+    :param str profile: label of the profile to define the entire section (**'straight'** and **'gds'**) or section beginning (**'taper'**)
+    :param str profile_end: label of the profile to define the section ending (**'taper'**)
+    :param float order: a number that signifies the order in which section will be placed in the z-direction, default: auto-generated integer based on the order each section is called
+    :param str num_modes: how many modes to solve in the section (**'straight'**, **'taper'**, and **'gds'**)
+    :param float length: the length of the section (in nanometers) (**'straight'**, **'taper'**, and **'gds'**)
+    :param offset: the x- and y-offset of the section (**'straight'**, **'taper'**, and **'gds'**), if only a single value is specified then it is assumed to be the x-offset: (``offset``, 0), default: (0,0)
+    :type offset: float or list
+    :param z_slices: manually specify the ``z_slices`` that will be solved in sections with variations in the z-direction (**'taper'** and **'gds'**), by specifying this parameter the ``z_option`` is forced to be 'custom', default: None
+    :type z_slices: list or array
+    :param float overlap_variation: threshold of mode list overlap between ``z_slices`` when solving with ``z_option`` of 'auto', this will use a bisection optimization limited by this ``overlap_variation`` parameter and ``minimum_z_step`` to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 0.01
+    :param float minimum_z_step: the minimum allowed step size in the z-direction for the ``z_slices`` determined by the bisection optimization for the ``z_option`` of 'auto' (**'taper'** and **'gds'**), default: 250
+    :param str z_option: either 'custom' or 'auto' to manually specify the ``z_slices`` or use the automatic bisection optimization algorithm to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 'auto'
+    :param str gds: name of the gds file used to mask a shape in the designated profile, this options allows for more complex section geometries using third party layout tools to define the mask (**'gds'**)
+    :param int cell_index: the cell index in the specified gds file (**'gds'**), default: 0
+    :param str unit: either 'um' or 'nm' to specify the units used in the gds file (**'gds'**), default: 'um'
+    :param str shape_to_mask: name of the shape that will be masked from the specified profile with the gds pattern (**'gds'**)
+    :param float etch_depth: the etch depth for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
+    :param float sidewall_angle: the sidewall angle of the etch for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
+    :param str tone: either 'p' or 'n' to specify the etch mask tone for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
+    :param float window_width: the simulation window width (**'gds'**), default: inherited from the original profile definition
+    :param str section_name: name of the section to copy (**'copy'**)
+    :param bool mirror: whether or not to mirror the copied shape (**'copy'**), default: False
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: EME
+    
+    Calculate the complete scattering matrix of the defined sections using the eigenmode expansion method (EME).
+    
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: plot_S_matrix
+    
+    Colormap plot of the transmission or reflection component of the complete scattering matrix.
+    
+    :param str simulation_name: simulation name, default: 'emode'

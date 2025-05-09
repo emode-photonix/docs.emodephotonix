@@ -1,0 +1,84 @@
+
+Examples
+========
+
+To launch EMode, initialize a simulation, and check out an active license:
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+        import emodeconnection as emc
+        em = emc.EMode()
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+        em = emodeconnection();
+
+Next, EMode functions are called with:
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+        em.function_name('keyword 1' = value_1, 'keyword 2' = value_2, ... )
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+        em.function_name('keyword 1', value_1, 'keyword 2', value_2, ... );
+
+Close EMode and check in the license with:
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+        em.close()
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+        em.close();
+
+EMode\ :sup:`2D`\  Scripts
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* :doc:`SOI <examples//SOI>`
+* :doc:`SiN <examples//SiN>`
+* :doc:`LNOI <examples//LNOI>`
+* :doc:`Laser <examples//Laser>`
+* :doc:`Open <examples//Open>`
+* :doc:`Dispersion <examples//Dispersion>`
+
+.. toctree::
+   :maxdepth: 1
+   :caption: EMode-2D
+   :hidden:
+   
+   examples//SOI
+   examples//SiN
+   examples//LNOI
+   examples//Laser
+   examples//Open
+   examples//Dispersion
+
+EMode\ :sup:`3D`\  Scripts
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* :doc:`EME_Taper <examples//EME_Taper>`
+* :doc:`EME_Sweep <examples//EME_Sweep>`
+* :doc:`EME_GDS <examples//EME_GDS>`
+
+.. toctree::
+   :maxdepth: 1
+   :caption: EMode-3D
+   :hidden:
+   
+   examples//EME_Taper
+   examples//EME_Sweep
+   examples//EME_GDS

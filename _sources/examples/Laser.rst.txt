@@ -1,0 +1,206 @@
+
+Scattering loss: Laser
+----------------------
+
+An example of a complex layer structure where scattering loss is calculated for the Si waveguide core. Note that a fill_index is specified for the waveguide core, which is useful for structures formed by bonding. Also, a custom file name for the simulation is specified ("laser.eph") instead of the default "emode.eph".
+
+The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tutorial on narrow linewidth tunable semiconductor lasers using Si/III-V heterogeneous integration," APL Photonics 4, 111101 (2019).
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+        import emodeconnection as emc
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 10, 5 # [nm] resolution
+        w_core = 1000 # [nm] waveguide core width
+        w_trench = 3000 # [nm] waveguide side trench width
+        h_core = 500 # [nm] waveguide core height
+        h_clad = 1000 # [nm] waveguide bottom clad
+        h_SL = 35 # [nm] superlattice height
+        h_n = 110 # [nm] n-contact height
+        h_SCH = 125 # [nm] SCH height
+        h_QW = 55 # [nm] quantum well height
+        h_uclad = 2000 # [nm] upper cladding height
+        window_width = w_core + w_trench*2 # [nm]
+        window_height = h_core + h_clad + h_SL + h_n + h_SCH*2 + h_QW + h_uclad # [nm]
+        num_modes = 1 # [-] number of modes
+        boundary = '00' # boundary condition
+
+        ## Connect and initialize EMode
+        em = emc.EMode(simulation_name = 'laser') # custom file name instead of the default "emode.eph"
+
+        ## Settings
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = window_width, window_height = window_height,
+            num_modes = num_modes, background_refractive_index = 'SiO2',
+            boundary_condition = boundary)
+
+        ## Draw shapes
+        em.shape(name = 'BOX', refractive_index = 'SiO2', height = h_clad)
+        em.shape(name = 'core', refractive_index = 'Si', height = h_core,
+            mask = w_core, etch = h_core*0.5, fill_refractive_index = 'Air',
+            roughness_rms = [5, 0.2], correlation_length = [100, 80])
+        em.shape(name = 'SL', refractive_index = 3.20, height = h_SL)
+        em.shape(name = 'n-contact', refractive_index = 3.17, height = h_n)
+        em.shape(name = 'SCH1', refractive_index = 3.43, height = h_SCH)
+        em.shape(name = 'QW', refractive_index = 3.41, height = h_QW)
+        em.shape(name = 'SCH2', refractive_index = 3.43, height = h_SCH)
+        em.shape(name = 'uclad', refractive_index = 3.17, height = h_uclad)
+
+        ## Launch FDM solver
+        em.FDM()
+
+        ## Display the effective indices, TE fractions, core confinement, and scattering loss
+        em.confinement(shape_list = 'core')
+        em.scattering(shape = 'core')
+        em.report()
+
+        ## Display scattering loss details from the core
+        shape_core = em.get('shape_core')
+        sv = shape_core['scattering_vertical_edges']
+        sh = shape_core['scattering_horizontal_edges']
+        sT = shape_core['scattering_sum']
+        print('Scattering loss from all vertical edges: %0.1f dB/m' % sv)
+        print('Scattering loss from all horizontal edges: %0.1f dB/m' % sh)
+        print('Total scattering loss: %0.1f dB/m\n' % sT)
+
+        edges = shape_core['edges']
+        sa = shape_core['scattering_all_edges']
+        for kk in range(len(edges)):
+            print('From', edges[kk][0], 'to', edges[kk][1])
+            print('    scattering loss = %0.1f dB/m\n' % sa[0][kk])
+
+        ## Plot the field and refractive index profiles
+        em.plot()
+
+        ## Close EMode
+        em.close()
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+        % Set simulation parameters
+        wavelength = 1550; % [nm] wavelength
+        dx = 10; dy = 5; % [nm] resolution
+        w_core = 1000; % [nm] waveguide core width
+        w_trench = 3000; % [nm] waveguide side trench width
+        h_core = 500; % [nm] waveguide core height
+        h_clad = 1000; % [nm] waveguide top and bottom clad
+        h_SL = 35; % [nm] superlattice height
+        h_n = 110; % [nm] n-contact height
+        h_SCH = 125; % [nm] SCH height
+        h_QW = 55; % [nm] quantum well height
+        h_uclad = 2000; % [nm] upper cladding height
+        window_width = w_core + w_trench*2; % [nm]
+        window_height = h_core + h_clad + h_SL + h_n + h_SCH*2 + h_QW + h_uclad; % [nm]
+        num_modes = 1; % [-] number of modes
+        boundary = '00'; % boundary condition
+
+        % Connect and initialize EMode
+        em = emodeconnection('simulation_name', 'laser'); % custom file name instead of the default 'emode.eph'
+
+        % Settings
+        em.settings( ...
+            'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
+            'window_width', window_width, 'window_height', window_height, ...
+            'num_modes', num_modes, 'background_refractive_index', 'SiO2', ...
+            'boundary_condition', boundary);
+
+        % Draw shapes
+        em.shape('name', 'BOX', 'refractive_index', 'SiO2', 'height', h_clad);
+        em.shape('name', 'core', 'refractive_index', 'Si', 'height', h_core, ...
+            'mask', w_core, 'etch', h_core*0.5, 'fill_refractive_index', 'Air', ...
+            'roughness_rms', [5, 0.2], 'correlation_length', [100, 80]);
+        em.shape('name', 'SL', 'refractive_index', 3.20, 'height', h_SL);
+        em.shape('name', 'n-contact', 'refractive_index', 3.17, 'height', h_n);
+        em.shape('name', 'SCH1', 'refractive_index', 3.43, 'height', h_SCH);
+        em.shape('name', 'QW', 'refractive_index', 3.41, 'height', h_QW);
+        em.shape('name', 'SCH2', 'refractive_index', 3.43, 'height', h_SCH);
+        em.shape('name', 'uclad', 'refractive_index', 3.17, 'height', h_uclad);
+
+        % Launch FDM solver
+        em.FDM();
+
+        % Display the effective indices, TE fractions, core confinement, and scattering loss
+        em.confinement('shape_list', 'core');
+        em.scattering('shape', 'core');
+        em.report();
+
+        % Display scattering loss details from the core
+        shape_core = em.get('shape_core');
+        sv = shape_core.scattering_vertical_edges;
+        sh = shape_core.scattering_horizontal_edges;
+        sT = shape_core.scattering_sum;
+        fprintf('Scattering loss from all vertical edges: %0.1f dB/m\n', sv)
+        fprintf('Scattering loss from all horizontal edges: %0.1f dB/m\n', sh)
+        fprintf('Total scattering loss: %0.1f dB/m\n\n', sT)
+
+        edges = shape_core.edges;
+        sa = shape_core.scattering_all_edges;
+        for kk = 1:length(edges)
+            fprintf('From (%s) to (%s):', num2str(edges(kk,:,1)), num2str(edges(kk,:,2)))
+            fprintf('    scattering loss = %0.1f dB/m\n', sa(kk))
+        end
+
+        % Plot the field and refractive index profiles
+        em.plot();
+
+        % Close EMode
+        em.close();
+
+
+Console output::
+
+    EMode 0.1.2 - email
+    Meshing... completed in 3.8 sec
+    Solving... completed in 12.7 sec
+
+    Wavelength: 1550.0 nm
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)    core confinement    core scattering (dB/m)
+    --------  --------  ------  -------------  ------------------  ------------------------
+        TE-0  3.291912  99.8 %          0.000              50.4 %                   416.628
+ 
+    Exited EMode
+    Scattering loss from all vertical edges: 414.6 dB/m
+    Scattering loss from all horizontal edges: 2.0 dB/m
+    Total scattering loss: 416.6 dB/m
+
+    From [-500.0, 1250.0] to [-500.0, 1500.0]
+        scattering loss = 207.3 dB/m
+
+    From [500.0, 1500.0] to [500.0, 1250.0]
+        scattering loss = 207.3 dB/m
+
+    From [-500.0, 1500.0] to [500.0, 1500.0]
+        scattering loss = 0.5 dB/m
+
+    From [500.0, 1250.0] to [3500.0, 1250.0]
+        scattering loss = 0.2 dB/m
+
+    From [3500.0, 1000.0] to [-3500.0, 1000.0]
+        scattering loss = 1.1 dB/m
+
+    From [-3500.0, 1250.0] to [-500.0, 1250.0]
+        scattering loss = 0.2 dB/m
+
+
+
+Figures:
+
+.. figure:: Figures/Laser/0Ex_laser.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/Laser/index_laser.png
+    :width: 400
+    :align: center
+    :figwidth: 500

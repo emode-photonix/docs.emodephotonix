@@ -1,0 +1,26 @@
+
+Interface
+=========
+
+EMode requires either Python or MATLAB as an interface to run EMode with script-based commands.
+
+.. toctree::
+   :maxdepth: 0
+   :hidden:
+   
+   emodeconnection_python
+   emodeconnection_matlab
+
+.. card:: Python Interface
+   :link: emodeconnection_python
+   :link-alt: Python Interface
+   :link-type: doc
+   :width: 50%
+   :margin: 3
+
+.. card:: MATLAB Interface
+   :link: emodeconnection_matlab
+   :link-alt: MATLAB Interface
+   :link-type: doc
+   :width: 50%
+   :margin: 3

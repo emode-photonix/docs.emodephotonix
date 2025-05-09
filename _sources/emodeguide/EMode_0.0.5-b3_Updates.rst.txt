@@ -1,0 +1,289 @@
+
+EMode 0.0.5-b3 Updates
+======================
+
+New function, input parameter, and variable names
+-------------------------------------------------
+
+Each function, input parameter, and variable that has changed name starting with EMode version 0.0.5-b3 is listed below with the following nomenclature. Functions, input parameters, and variables that have not changed names are not listed. The alias in an optional name for the variable, to help with backwards compatability. However, when an alias is not specified, only the new name is supported.
+
+    Old name → New name [alias]
+
+Functions with input parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. data:: EM_init → init
+    :noindex:
+    
+    (new) → save_path
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_open → open
+    :noindex:
+    
+    (new) → save_path
+    
+    sim → simulation_name [sim]
+    
+    new_name → new_simulation_name
+
+.. data:: EM_clear_field_data → clear_field_data
+    :noindex:
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_save → save
+    :noindex:
+    
+    (new) → save_all_fields
+    
+    ftype → file_type
+    
+    (new) → new_save_path
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_close → close
+    :noindex:
+    
+    (new) → save_all_fields
+    
+    ftype → file_type
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_settings → settings
+    :noindex:
+    
+    wav → wavelength [wav]
+    
+    res → x_resolution, y_resolution [res]
+    
+    width → window_width 
+    
+    height → window_height
+    
+    x_offset → (remove completely)
+    
+    BC → boundary_condition [BC]
+    
+    N_modes → num_modes [N_modes]
+    
+    (new) → field_to_solve
+    
+    guess → max_effective_index [guess]
+    
+    tol → tolerance [tol]
+    
+    radius → bend_radius [radius]
+    
+    pml → pml_NSEW_bool [pml]
+    
+    N_pml → num_pml_layers [N_pml]
+    
+    remove_pml_modes → remove_pml_modes_bool
+    
+    bg_index → background_refractive_index [bg_index]
+    
+    expand_res → expansion_resolution [expand_res]
+    
+    expand_size → expansion_size [expand_size]
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_add_material → add_material
+    :noindex:
+    
+    equation → refractive_index_equation [eq]
+    
+    unit → wavelength_unit
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_shape → shape
+    :noindex:
+    
+    index → refractive_index [index]
+    
+    mu → permeability
+    
+    alpha → loss_dB_per_m [alpha]
+    
+    vs → vertices [vs]
+    
+    pos → position
+    
+    etch → etch_depth [etch]
+    
+    angle → sidewall_angle [angle]
+    
+    fill_index → fill_refractive_index [fill_index]
+    
+    fill_mu → fill_permeability
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_FDM → FDM
+    :noindex:
+    
+    field_calc → (removed)
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_confinement → confinement
+    :noindex:
+    
+    shapes → shape_list [shapes]
+    
+    modes → mode_list [modes]
+    
+    vs → vertices [vs]
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_effective_area → effective_area
+    :noindex:
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_group_index → group_index
+    :noindex:
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_report → report
+    :noindex:
+    
+    filename → file_name
+    
+    ftype → file_type
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_label → label
+    :noindex:
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_calc_overlap → overlap
+    :noindex:
+    
+    label0 → label_a
+    
+    m0 → mode_a
+    
+    sim0 → simulation_name_a
+    
+    label → label_b
+    
+    m → mode_b
+    
+    sim → simulation_name_b
+
+.. data:: EM_scattering → scattering
+    :noindex:
+    
+    mode → mode_list
+    
+    Lc_nm → correlation_length [Lc_nm]
+    
+    st_dev_nm → roughness_rms [st_dev_nm]
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_plot → plot
+    :noindex:
+    
+    plot_fn → plot_function
+    
+    aspect → aspect_ratio
+    
+    filename → file_name
+    
+    ftype → file_type
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_materials → material_explorer
+    :noindex:
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_index → refractive_index
+    :noindex:
+    
+    wav_nm → wavelength
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_mu → permeability
+    :noindex:
+    
+    wav_nm → wavelength
+    
+    sim → simulation_name [sim]
+
+.. data:: EM_mesh → mesh
+    :noindex:
+    
+    sim → simulation_name [sim]
+
+
+Variables in the simulation file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. hlist::
+    :columns: 2
+    
+    * wavelength_nm → wavelength
+    * res → x_resolution, y_resolution [res]
+    * width → window_width
+    * height → window_height
+    * BC → boundary_condition [BC]
+    * N_modes → num_modes
+    * field → field_to_solve
+    * guess → max_effective_index
+    * tol → tolerance
+    * radius → bend_radius [radius]
+    * pml → pml_NSEW_bool
+    * N_pml → num_pml_layers
+    * remove_pml_modes → remove_pml_modes_bool
+    * bg_index → background_refractive_index
+    * expand_res → expansion_resolution
+    * expand_size → expansion_size
+    * shape_*_index → shape_*_refractive_index
+    * shape_*_mu → shape_*_permeability
+    * shape_*_alpha → shape_*_loss_dB_per_m
+    * shape_*_vs → shape_*_vertices
+    * shape_*_pos → shape_*_position
+    * shape_*_etch → shape_*_etch_depth
+    * shape_*_angle → shape_*_sidewall_angle
+    * shape_*_fill_index → shape_*_fill_refractive_index
+    * shape_*_fill_mu → shape_*_fill_permeability
+    * shape_*_index_value → shape_*_refractive_index_value
+    * all_shapes → shape_list
+    * User_material_* → user_material_*
+    * x → x_edge
+    * y → y_edge
+    * xc → x
+    * yc → y
+    * mu → permeability 
+    * eps → permittivity
+    * mesh_up_to_date → mesh_complete_bool
+    * solve_pml → (removed)
+    * x_pml → (removed)
+    * y_pml → (removed)
+    * eps_pml → (removed)
+    * mu_pml → (removed)
+    * n_eff → effective_index [n_eff]
+    * alpha → loss_dB_per_m [alpha]
+    * TE_frac → TE_fraction
+    * ind_TE → TE_indices
+    * ind_TM → TM_indices
+    * modes_removed → pml_modes_removed
+    * n_g → group_index [n_g]
+    * shape_*_scattering_vertical → shape_*_scattering_vertical_edges
+    * shape_*_scattering_horizontal → shape_*_scattering_horizontal_edges
+    * shape_*_scattering_edges → shape_*_scattering_all_edges
+    * shape_*_scattering → shape_*_scattering_sum

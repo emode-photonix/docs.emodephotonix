@@ -1,0 +1,54 @@
+
+.. toctree::
+   :glob:
+   :maxdepth: 0
+   :hidden:
+   
+   installation
+   interface
+   emodeguide
+   examples
+
+*******************
+EMode Documentation
+*******************
+
+.. **Version**: 0.1.2
+
+EMode is a software product by EMode Photonix, offering a solution for photonics simulation and device design.
+
+.. card:: Installation
+   :link: installation
+   :link-alt: Installation
+   :link-type: doc
+   :width: 75%
+   :margin: 3
+   
+   Step-by-step instructions for installing and configuring EMode.
+
+.. card:: Interface
+   :link: interface
+   :link-alt: Interface
+   :link-type: doc
+   :width: 75%
+   :margin: 3
+
+   Learn how to setup either Python or MATLAB to interact with EMode.
+
+.. card:: EMode Guide
+   :link: emodeguide
+   :link-alt: EMode Guide
+   :link-type: doc
+   :width: 75%
+   :margin: 3
+
+   Detailed reference documentation for all EMode functions, including background information and explanations.
+
+.. card:: Examples
+   :link: examples
+   :link-alt: Examples
+   :link-type: doc
+   :width: 75%
+   :margin: 3
+
+   A collection of practical examples and common simulation setups.

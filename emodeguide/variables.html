@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Variable Descriptions</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c32a3d25" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c32a3d25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/variables';</script>
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Material Database" href="materials.html" />
+    <link rel="prev" title="EME" href="eme.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="file-management.html">File management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Simulation setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solver-analysis.html">Solver and analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Variable Descriptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation/release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="variable-descriptions">
+<h1>Variable Descriptions</h1>
+<p>Descriptions of all variables available in the simulation file. Some variables have an alias, which is a copy of the data from the primary variable name for enhanced compatability with previous versions of EMode. For shapes, SHAPE indicates the name defined by the user.</p>
+<dl class="glossary">
+<dt id="term-background_refractive_index">background_refractive_index</dt><dd><p>(<em>float</em>) Refractive index in the background of simulation window, setting the default refractive index where no shapes are defined.</p>
+</dd>
+<dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.</p>
+<p>Alias: <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
+</dd>
+<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate asymmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition.</p>
+</dd>
+<dt id="term-BC">BC</dt><dd><p>(<em>str</em>) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of ‘0’, ‘A’, or ‘S’. For example, setting the boundary_condition to ‘TE’ and running FDM() will result in BC changing to either ‘SS’, ‘0S’, ‘S0’, or ‘00’, depending on the index profile cross-section symmetry.</p>
+</dd>
+<dt id="term-confinement_window">confinement_window</dt><dd><p>(<em>list</em>) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.</p>
+</dd>
+<dt id="term-dataset_LABEL">dataset_LABEL</dt><dd><p>(<em>dictionary</em>) Labeled dataset with settings and simulation results.</p>
+</dd>
+<dt id="term-effective_area">effective_area</dt><dd><p>(<em>list</em>) The effective area of each waveguide mode in units of square microns (<span class="math notranslate nohighlight">\(\mu \mathrm{m}^2\)</span>), calculated by the following equation.</p>
+<div class="math notranslate nohighlight">
+\[A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y}\]</div>
+</dd>
+<dt id="term-effective_index">effective_index</dt><dd><p>(<em>list</em>) The real part of the effective index for each mode.</p>
+<p>Alias: <code class="docutils literal notranslate"><span class="pre">n_eff</span></code></p>
+</dd>
+<dt id="term-Ex-Ey-Ez-Hx-Hy-Hz">Ex, Ey, Ez, Hx, Hy, Hz</dt><dd><p>(<em>complex arrays</em>) The electric (E [V/nm]) and magnetic (H [A/nm]) fields in the x-, y-, and z-directions. These calculated fields are interpolated to the center point of each mesh grid (defined by <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>). The fields are normalized to the equation below.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}\]</div>
+</dd>
+<dt id="term-expansion_resolution">expansion_resolution</dt><dd><p>(<em>list</em>) List of the desired mesh step size in the x- and y-directions in the expanded regions around the perimeter of the simulation window.</p>
+</dd>
+<dt id="term-expansion_size">expansion_size</dt><dd><p>(<em>list</em>) List of the size of the expanded regions in the x- and y-directions.</p>
+</dd>
+<dt id="term-field_to_solve">field_to_solve</dt><dd><p>(<em>str</em>) Desired transverse field component to solve; either ‘Et’ or ‘Ht’.</p>
+</dd>
+<dt id="term-Fx-Fy">Fx, Fy</dt><dd><p>(<em>complex arrays</em>) Raw fields that are solved. They either correspond to the electric or magnetic fields depending on <code class="docutils literal notranslate"><span class="pre">field_to_solve</span></code>. However, these raw fields are defined on the Yee mesh grid, not the center points of the mesh grid. An internal function extracts all other field components from <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>.</p>
+</dd>
+<dt id="term-group_index">group_index</dt><dd><p>(<em>list</em>) The group refractive index calculated for each mode.</p>
+<p>Alias: <code class="docutils literal notranslate"><span class="pre">n_g</span></code></p>
+</dd>
+<dt id="term-loss_dB_per_m">loss_dB_per_m</dt><dd><p>(<em>float</em>) [dB/m] The power loss coefficient (<span class="math notranslate nohighlight">\(\alpha\)</span>), which relates to the imaginary part of the effective index (<span class="math notranslate nohighlight">\(\kappa\)</span>) by the following equation with the wavelength (<span class="math notranslate nohighlight">\(\lambda\)</span>).</p>
+<p>Alias: <code class="docutils literal notranslate"><span class="pre">alpha</span></code></p>
+<div class="math notranslate nohighlight">
+\[\kappa = \frac{\alpha \lambda}{(4 \pi) 10 \, \mathrm{log}_{10}(e)} \approx \frac{\alpha \lambda}{54.575}\]</div>
+</dd>
+<dt id="term-maximum_overlap">maximum_overlap</dt><dd><p>(<em>float</em>) Largest overlap in the mode list, calculated from the <code class="docutils literal notranslate"><span class="pre">orthogonality()</span></code> function.</p>
+</dd>
+<dt id="term-mesh_complete_bool">mesh_complete_bool</dt><dd><p>(<em>boolean</em>) Indicates if the mesh grid has been calculated for the current definition of shapes and settings.</p>
+</dd>
+<dt id="term-num_modes">num_modes</dt><dd><p>(<em>int</em>) Total number of modes to solve.</p>
+</dd>
+<dt id="term-num_pml_layers">num_pml_layers</dt><dd><p>(<em>int</em> or <em>list</em>) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West].</p>
+</dd>
+<dt id="term-max_effective_index">max_effective_index</dt><dd><p>(<em>float</em>) Upper limit for the effective index.</p>
+</dd>
+<dt id="term-overlap">overlap</dt><dd><p>(<em>list</em>) The overlap integral in <code class="docutils literal notranslate"><span class="pre">overlap</span></code> uses the following formula to calculate the modal excitation of <span class="math notranslate nohighlight">\(\vec E_2\)</span> by <span class="math notranslate nohighlight">\(\vec E_1\)</span>.</p>
+<blockquote>
+<div><p>Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ‘’Diode lasers and photonic integrated circuits,’’ John Wiley &amp; Sons, 2012.</p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}\]</div>
+</dd>
+<dt id="term-permittivity-permeability">permittivity, permeability</dt><dd><p>(<em>list</em>) The permittivity and permeability arrays are defined by <code class="docutils literal notranslate"><span class="pre">mesh</span></code> from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.</p>
+</dd>
+<dt id="term-pml_modes_removed">pml_modes_removed</dt><dd><p>(<em>list</em>) Mode indices that were removed during the automatic process to determine artificial modes introduced from the pml layers.</p>
+</dd>
+<dt id="term-pml_NSEW_bool">pml_NSEW_bool</dt><dd><p>(<em>list</em>) List of booleans indicating if a perfectly matched layer (pml) boundary condition is applied to each boundary: [North, South, East, West].</p>
+</dd>
+<dt id="term-priority_indices">priority_indices</dt><dd><p>(<em>list</em>) A list of indices corresponding to the priorities of the shapes in the list <code class="docutils literal notranslate"><span class="pre">shape_materials</span></code>.</p>
+</dd>
+<dt id="term-remove_pml_modes_bool">remove_pml_modes_bool</dt><dd><p>(<em>bool</em>) Indicates whether or not to automatically remove artificial modes found in the pml layers.</p>
+</dd>
+<dt id="term-shape_list">shape_list</dt><dd><p>(<em>list</em>) Complete list of defined shapes.</p>
+</dd>
+<dt id="term-shape_materials">shape_materials</dt><dd><p>(<em>list</em>) A list of materials corresponding to the defined shapes.</p>
+</dd>
+<dt id="term-shape_vertices">shape_vertices</dt><dd><p>(<em>list</em>) A list of the vertices of the shapes defined by <code class="docutils literal notranslate"><span class="pre">shape_materials</span></code>.</p>
+</dd>
+<dt id="term-SHAPE-correlation_length">SHAPE[‘correlation_length’]</dt><dd><p>(<em>list</em>) A list of two values describing the correlation length of the roughness on the vertical and horizontal edges of the shape.</p>
+<p>Alias: <code class="docutils literal notranslate"><span class="pre">Lc_nm</span></code></p>
+</dd>
+<dt id="term-SHAPE-confinement">SHAPE[‘confinement’]</dt><dd><p>(<em>list</em>) Confinement factor for each mode in the corresponding shape.</p>
+</dd>
+<dt id="term-SHAPE-edges">SHAPE[‘edges’]</dt><dd><p>(<em>list</em>) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_all_edges']</span></code>.</p>
+</dd>
+<dt id="term-SHAPE-etch_depth">SHAPE[‘etch_depth’]</dt><dd><p>(<em>float</em>) The etch depth associated with a ‘planar’ shape that also has a defined <code class="docutils literal notranslate"><span class="pre">SHAPE['mask']</span></code>. The shape will have a thickness outside the mask definition equal to the difference between the <code class="docutils literal notranslate"><span class="pre">SHAPE['height']</span></code> and <code class="docutils literal notranslate"><span class="pre">SHAPE['etch_depth']</span></code> (or zero if this is negative).</p>
+</dd>
+<dt id="term-SHAPE-fill_permeability">SHAPE[‘fill_permeability’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the permeability in the etched region of a ‘planar’ shape.</p>
+</dd>
+<dt id="term-SHAPE-fill_refractive_index">SHAPE[‘fill_refractive_index’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the refractive index in the etched region of a ‘planar’ shape.</p>
+</dd>
+<dt id="term-SHAPE-height">SHAPE[‘height’]</dt><dd><p>(<em>float</em>) Maximum size of the shape in the y-direction.</p>
+</dd>
+<dt id="term-SHAPE-loss_dB_per_m">SHAPE[‘loss_dB_per_m’]</dt><dd><p>(<em>float</em>) [dB/m] Absorption coefficient for power loss in the region defined by the shape.</p>
+</dd>
+<dt id="term-SHAPE-mask">SHAPE[‘mask’]</dt><dd><p>(<em>float</em> or <em>list</em>) Width of the a mask for etching a ‘planar’ shape. Also accepts a list to define both the width and the x-offset of the mask.</p>
+</dd>
+<dt id="term-SHAPE-name">SHAPE[‘name’]</dt><dd><p>(<em>str</em>) User-defined name of the shape. This name will be used to reference this shape in subsequent functions.</p>
+</dd>
+<dt id="term-SHAPE-permeability">SHAPE[‘permeability’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the permeability of the shape.</p>
+</dd>
+<dt id="term-SHAPE-position">SHAPE[‘position’]</dt><dd><p>(<em>list</em>) The x- and y-positions of the center point of the shape, constrained by the <code class="docutils literal notranslate"><span class="pre">SHAPE['width']</span></code> and <code class="docutils literal notranslate"><span class="pre">SHAPE['width']</span></code>.</p>
+</dd>
+<dt id="term-SHAPE-priority">SHAPE[‘priority’]</dt><dd><p>(<em>float</em>) A value that defines the order in which the shape is drawn relative to other shapes. A higher value give a higher priority, putting the shape in front of other shapes with lower priority.</p>
+</dd>
+<dt id="term-SHAPE-refractive_index">SHAPE[‘refractive_index’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the refractive index of the shape.</p>
+</dd>
+<dt id="term-SHAPE-refractive_index_value">SHAPE[‘refractive_index_value’]</dt><dd><p>(<em>float</em>) The value of the refractive index for the shape. This is useful as a reference when a material name is passed for <code class="docutils literal notranslate"><span class="pre">SHAPE['refractive_index']</span></code>.</p>
+</dd>
+<dt id="term-SHAPE-roughness_rms">SHAPE[‘roughness_rms’]</dt><dd><p>(<em>list</em>) A list of two values describing the rms roughness on the vertical and horizontal edges of the shape.</p>
+<p>Alias: <code class="docutils literal notranslate"><span class="pre">st_dev_nm</span></code></p>
+</dd>
+<dt id="term-SHAPE-scattering_all_edges">SHAPE[‘scattering_all_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each edge of the shape, defined by <code class="docutils literal notranslate"><span class="pre">SHAPE['edges']</span></code>.</p>
+</dd>
+<dt id="term-SHAPE-scattering_horizontal_edges">SHAPE[‘scattering_horizontal_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each horizontal edge of the shape.</p>
+</dd>
+<dt id="term-SHAPE-scattering_sum">SHAPE[‘scattering_sum’]</dt><dd><p>(<em>list</em>) Total calculated scattering loss for all edges of the shape.</p>
+</dd>
+<dt id="term-SHAPE-scattering_vertical_edges">SHAPE[‘scattering_vertical_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each vertical edge of the shape.</p>
+</dd>
+<dt id="term-SHAPE-shape_type">SHAPE[‘shape_type’]</dt><dd><p>(<em>str</em>) The shape type is either ‘planar’, ‘conformal’, ‘polygon’, or ‘ellipse’.</p>
+</dd>
+<dt id="term-SHAPE-sidewall_angle">SHAPE[‘sidewall_angle’]</dt><dd><p>(<em>float</em>) [degrees] Angle of the side wall for a ‘planar’ shape relative to a vertical at 0 degrees.</p>
+</dd>
+<dt id="term-SHAPE-vertices">SHAPE[‘vertices’]</dt><dd><p>(<em>list</em>) Pairs of [x,y] vertices that define the perimeter of a shape.</p>
+</dd>
+<dt id="term-SHAPE-width">SHAPE[‘width’]</dt><dd><p>(<em>float</em>) Maximum size of the shape in the x-direction.</p>
+</dd>
+<dt id="term-Sx-Sy-Sz">Sx, Sy, Sz</dt><dd><p>(<em>arrays</em>) [W/nm] The Poynting vector in the x-, y-, and z-directions.</p>
+</dd>
+<dt id="term-TE_fraction">TE_fraction</dt><dd><p>(<em>list</em>) Fractions representing how much the mode is like a TE mode, calculated with the following equation.</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}\]</div>
+</dd>
+<dt id="term-TE_indices-TM_indices">TE_indices, TM_indices</dt><dd><p>(<em>list</em>) Indices for the corresponding TE or TM modes in the modes list.</p>
+</dd>
+<dt id="term-tolerance">tolerance</dt><dd><p>(<em>float</em>) Numerical tolerance for convergence of the effective indices.</p>
+</dd>
+<dt id="term-user_material_NAME">user_material_NAME</dt><dd><p>(<em>str</em>) The name of a user defined material.</p>
+</dd>
+<dt id="term-wavelength">wavelength</dt><dd><p>(<em>float</em>) [nm] Free-space wavelength.</p>
+</dd>
+<dt id="term-window_height">window_height</dt><dd><p>(float) [nm] Total height (y-direction) of the simulation window.</p>
+</dd>
+<dt id="term-window_width">window_width</dt><dd><p>(float) [nm] Total width (x-direction) of the simulation window.</p>
+</dd>
+<dt id="term-x-y">x, y</dt><dd><p>(<em>complex arrays</em>) Arrays that define the x and y grid <strong>center</strong> points of the mesh. These can be complex when pml layers are introduced.</p>
+</dd>
+<dt id="term-x_edge-y_edge">x_edge, y_edge</dt><dd><p>(<em>complex arrays</em>) Arrays that define the x and y grid <strong>edge</strong> points of the mesh. These can be complex when pml layers are introduced.</p>
+</dd>
+<dt id="term-x_resolution-y_resolution">x_resolution, y_resolution</dt><dd><p>(<em>float</em>) [nm] Mesh grid step in the x- and y-directions.</p>
+</dd>
+</dl>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode Photonix LLC. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

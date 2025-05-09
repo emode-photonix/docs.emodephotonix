@@ -1,0 +1,104 @@
+
+MATLAB interface
+================
+
+To control EMode directly from a MATLAB script (version R2016b or higher), we supply a class file called ``emodeconnection.m`` that is automatically installed alongside EMode.
+
+For more information about MATLAB, check out this link:
+
+.. hlist::
+   :columns: 1
+   
+   - `Get Started with MATLAB <https://www.mathworks.com/help/matlab/getting-started-with-matlab.html/>`_
+
+.. _SetupMATLAB:
+
+Setup
+-----
+
+Before running EMode from MATLAB, you must run the following in your MATLAB command window.
+
+.. code-block::
+
+    addpath(fullfile('C:', 'Program Files', 'EMode Photonix', 'EMode')); savepath;
+
+.. _MATLABEModeLogin:
+
+EMode Login
+-----------
+
+Open MATLAB and run the following in the MATLAB command line. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+
+.. code-block::
+
+    emodeconnection.EModeLogin()
+
+
+The EMode class
+---------------
+
+.. class:: emodeconnection(name, value)
+    
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``EMode Login`` from the the start menu.
+    
+    An existing file can be opened for further analysis by specifying the input name-value pair ``'open_existing', true``. This opened file can be copied to a new file name by specifying the input name-value pair ``'new_name', 'new_filename'``.
+    
+    By default, calling the `close()` method saves the simulation file as a MATLAB-style .mat file. Adding optional input parameters can override this behavior to either delete the simulation file or save it as a .eph file.
+    
+    .. note::
+        All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using name-value pair input arguments for each funtion input parameter, in the format of ("name 1", value_1, "name 2", value_2, "name 3", value_3, ...).
+    
+    :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
+    :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available. Default: 'default'.
+    :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
+    :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license. Default: False.
+    :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
+    :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
+    :type new_name: bool or str
+    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN'.
+
+Functions
+---------
+
+The ``emodeconnection`` package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.
+    
+    .. staticmethod:: EModeLogin()
+        :noindex:
+        
+        Opens the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+
+    .. staticmethod:: open_file(simulation_name)
+        :noindex:
+        
+        Returns an EMode simulation file name with the extension ".mat" to be passed to the load() function.
+        
+        :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name. Default: 'emode'.
+        :return: Name of the specified EMode simulation file if it is available.
+        :rtype: char array
+
+    .. staticmethod:: get_(variable, simulation_name)
+        
+        Returns the contents of a specified variable from an EMode simulation file with the extension ".mat".
+        
+        :param str variable: Name of the variable to return from EMode. Default: 'emode'.
+        :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name.
+        :return: Requested item from EMode.
+        :rtype: int, float, str, or array-like
+
+    .. staticmethod:: inspect_(simulation_name)
+        
+        Get the names of all variables from EMode simulation file with the extension ".mat".
+        
+        :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name. Default: 'emode'.
+        :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get_()` function.
+        :rtype: list
+
+Updating the MATLAB Interface
+-----------------------------
+
+The latest version of ``emodeconnection.m`` can also be downloaded here, which can be added to the EMode directory under Program Files: :download:`emodeconnection.m <_static/emodeconnection.m>`. This is not necessary to setup EMode with MATLAB, and it is only intended for updating this connection package without re-installing EMode.
+
+.. code-block::
+    
+    C:\Program Files\EMode Photonix\EMode\emodeconnection.m

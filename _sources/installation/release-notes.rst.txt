@@ -1,0 +1,90 @@
+
+Release Notes
+^^^^^^^^^^^^^
+
+**0.1.2: March 16, 2024**
+
+* Fixed a bug where ``num_modes`` was reset after modes are automatically removed from the pml regions.
+* Fixed a bug with the ``label()`` function when using the ``fill_refractive_index`` parameter.
+* Fixed a bug in the ``plot()`` function when ``fill_refractive_index`` was set on conformal layers.
+* Fixed a bug with EModeLogin when displaying error messages.
+* Updated the EModeLogin GUI layout.
+* For both the Python and the MATLAB interfaces, a static function called ``EModeLogin()`` was added, which replaces the previous EModeLogin executable for running the EMode Login GUI. New instructions are added to the website for running the EMode Login GUI.
+
+**0.1.1: May 7, 2024**
+
+* Fixed a bug with the MATLAB connection.
+* Fixed a bug with the ``shape()`` argument ``position``.
+* Fixed a bug with the ``scattering()`` calculate that was overestimating the scattering loss.
+
+**0.1.0: April 24, 2024**
+
+* The EME module has been added, including ``section()``, ``EME()``, and ``plot_S_matrix()``. These are only available with an active EMode\ :sup:`3D`\  license.
+* EME solver is limited to only use field_to_solve of 'Et'.
+* EME length sweeps are solved in the reverse order.
+* Changed the parameter ``length_nm`` to ``length`` for all EME sections and functions.
+* EME sections automatically re-solved after a shape change and label reset.
+* Materials added to the material database: InGaAs, InGaP, InP, InSb, PMMA, SU8, TiO2_rutile, HfO2, H2O, GGG, GaSb, GaP, BBO, and InSb.
+* Material explorer: fixed bug saving certain filetypes, fixed bug with logo placement in saved files, and added gridlines.
+* Updated ``material_explorer()`` plot display and saving resolution.
+* The ``add_material()`` function now accepts citation and wavelength_range as an inputs.
+* Updated ``add_material()`` so that is accepts a list of three equations for defining anisotropic materials with dispersion.
+* New function ``import_database()`` added, which supports the import of a custom database text file.
+* The west boundary condition has been re-defined to reflect the Ex (a)symmetry, so it matches the south boundary condition.
+* The default y-position has been changed from -1 to 'auto'.
+* In the ``plot()`` function, scaling is added to the cursor data-value for field plotting.
+* Fixed a plot error following a call to ``group_index()``.
+* Fixed a bug when iteratively updating a shape setting.
+* MATLAB connection now outputs text to the MATLAB command window.
+* Updated the scattering loss tool to make the calculation more consistent.
+* Fixed bugs with saving and opening EMode simulation files with MATLAB.
+* Added the new parameter ``propagation_resolution`` to the ``settings()`` function.
+
+**0.0.7-b5: December 12, 2023**
+
+* Fixed bugs with conformal layers.
+* Added arbitrary number of masks for each shape.
+* Added input parameters to shape: ``mask_offset`` and ``tone``. Either ``mask``, ``mask_offset``, or both can be a list. The length of each parameter will be matched by padding with the last value. Settings from ``tone`` and ``etch`` are applied to all ``mask``/``mask_offset`` values.
+* Added etch functionality to conformal layers.
+* Fixed the bug the made incorrect mode list ordering.
+* Added the function ``orthogonality`` to test the othogonality of the mode list. This is helpful to determine if the mode list is sufficiently accurate.
+* Added the input parameter ``label`` to ``get()``, so users can extract data from labeled datasets.
+* The ``label()`` function now saves all settings and field data under in a Python dictionary or a MATLAB structure array called ``dataset_LABEL``.
+* Changed the default operation in ``confinement()`` to only include areas of a shape that define the refractive index, not including areas that are overlapped by other shapes with higher priority.
+* Added a boolean option ``ignore_priority`` to ``confinement()`` that toggles ignoring overlapping shapes with higher priority.
+* Added user-accessible variables ``shape_materials``, ``priority_indices``, and ``shape_vertices``.
+* Added support for iPython.
+* Added functionality to use an existing material name to define a custom material. This will override the EMode database material during the session.
+* ``FDM()`` now takes the input parameter ``label`` to automatically save the simulation result as a labaled dataset.
+* Updated ``group_index()`` so it will run without running ``FDM()`` first.
+* Added 'min' as an option for ``slice_op`` parameter in ``scattering()``.
+* Shapes and associated properties are now saved as dictionaries. This also includes the scattering loss results.
+* Interfacial roughness and correlation length values are now specified in the shape parameters: ``correlation_length`` (alias ``Lc_nm``) and ``roughness_rms`` (alias ``st_dev_nm``).
+* Added the new function ``reset()`` to clear all shapes, reset settings, or both.
+* Shape argument ``position`` now accepts a single float to specify only the x-position and automatically place the y-position of a planar layer on top of the previous layer.
+* Added boundary conditions options 'TE-h', 'TE-v', 'TM-h', and 'TM-v' to specify only horizontal or vertical symmetry for TE or TM modes.
+* Fixed bugs with MATLAB connection: default ``file_type`` is now '.mat' for ``close()``, and '.eph' file is preserved after ``save()``.
+
+**0.0.6-b4: March 13, 2023**
+
+* Added an option to remove the legend from ``plot``.
+* Now planar layers do not add fill material by default, only if ``fill_refractive_index`` is defined.
+* Updated meshing algorithm to fix bugs at shape interfaces.
+* ``plot`` now shows positive and negative field values on the colorbar.
+* Fixed error when setting ``wavelength`` units to 'um' in ``add_material``.
+* Added options to improve sidewall scattering accuracy. See details in the documentation for the ``scattering`` function.
+
+
+**0.0.5-b3: February 3, 2023**
+
+* Scattering loss now works with angled sidewalls.
+* For ``scattering``, the default for ``mode`` is 'all'.
+* Added imaginary index capability to ``add_material``.
+* Bend mode solver updated so field patterns and loss are now more accurate.
+* Switched from uniaxial pml to stretched-coordinate pml.
+* User-defined materials now override EMode database materials.
+* ``plot`` now shows shapes with the same refractive index in a different color.
+* Added capability to solve for the magnetic field instead of the electric field. See the ``field_to_solve`` parameter in ``settings``.
+* Removed the field_calc option from ``FDM``. Now the fields will always be available, but they will not be stored in memory. This reduces the memory usage by about 7x.
+* Saved .eph files do not contain the raw field data by default. This can be controlled with the ``save_all_fields`` parameter in ``save`` and ``close``.
+* ``material_explorer`` now shows user added materials.

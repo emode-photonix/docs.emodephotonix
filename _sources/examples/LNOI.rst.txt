@@ -1,0 +1,192 @@
+
+Angled: LNOI
+------------
+
+Highlighted features: angle etch, mask etch, expand window with lower resolution, overlap integral.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+        import emodeconnection as emc
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 10, 10 # [nm] resolution
+        w_core = 1000 # [nm] waveguide core width
+        w_trench = 1000 # [nm] waveguide side trench width
+        h_core = 500 # [nm] waveguide core height
+        h_clad = 1000 # [nm] waveguide top and bottom clad
+        window_width = w_core + w_trench*2 # [nm]
+        window_height = h_core + h_clad*2 # [nm]
+        num_modes = 1 # [-] number of modes
+        boundary = '0S' # boundary condition
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        ## View material database
+        em.material_explorer()
+
+        ## Settings
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = window_width, window_height = window_height,
+            num_modes = num_modes, background_refractive_index = 'Air',
+            boundary_condition = boundary,
+            expansion_resolution = 20, expansion_size = 1500)
+
+        ## Draw shapes
+        em.shape(name = 'BOX', refractive_index = 'SiO2', height = h_clad)
+        em.shape(name = 'core', refractive_index = 'LN_MgO_z', height = h_core,
+            etch_depth = h_core*3/4, mask = w_core, sidewall_angle = 15)
+
+        ## Solve the first mode
+        em.FDM()
+        em.confinement(shape_list = 'core')
+        em.report()
+        em.label(label = '0') # save the data from the first mode
+
+        ## Solve the second mode
+        em.shape(name = 'core', mask = w_core + 100)
+        em.FDM()
+        em.confinement(shape_list = 'core')
+        em.report()
+
+        ## Calculate the overlap integral
+        em.overlap(label_a = '0', mode_a = 0, mode_b = 0)
+        overlap = em.get('overlap')
+        print('Power overlap: %0.3f %%' % (overlap*100))
+
+        ## Plot the field and refractive index profiles
+        em.plot(window_display = True)
+
+        ## Get the refractive index of the core
+        res = em.refractive_index(material = 'LN_MgO_z', wavelength = wavelength, reference = True)
+        n_LN, ref = res
+        print('\nRefractive index of LN:', n_LN)
+        print(ref)
+
+        ## Close EMode
+        em.close()
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+        % Set simulation parameters
+        wavelength = 1550; % [nm] wavelength
+        dx = 10; dy = 10; % [nm] resolution
+        w_core = 1000; % [nm] waveguide core width
+        w_trench = 1000; % [nm] waveguide side trench width
+        h_core = 500; % [nm] waveguide core height
+        h_clad = 1000; % [nm] waveguide top and bottom clad
+        window_width = w_core + w_trench*2; % [nm]
+        window_height = h_core + h_clad*2; % [nm]
+        num_modes = 1; % [-] number of modes
+        boundary = '0S'; % boundary condition
+
+        % Connect and initialize EMode
+        em = emodeconnection();
+
+        % View material database
+        em.material_explorer();
+
+        % Settings
+        em.settings( ...
+            'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
+            'window_width', window_width, 'window_height', window_height, ...
+            'num_modes', num_modes, 'background_refractive_index', 'Air', ...
+            'boundary_condition', boundary, ...
+            'expansion_resolution', 20, 'expansion_size', 1500);
+
+        % Draw shapes
+        em.shape('name', 'BOX', 'refractive_index', 'SiO2', 'height', h_clad);
+        em.shape('name', 'core', 'refractive_index', 'LN_MgO_z', 'height', h_core, ...
+            'etch_depth', h_core*3/4, 'mask', w_core, 'sidewall_angle', 15);
+
+        % Solve the first mode
+        em.FDM();
+        em.confinement('shape_list', 'core');
+        em.report();
+        em.label(label = '0'); % save the data from the first mode
+
+        % Solve the second mode
+        em.shape('name', 'core', 'mask', w_core + 100);
+        em.FDM();
+        em.confinement('shape_list', 'core');
+        em.report();
+
+        % Calculate the overlap integral
+        em.overlap('label_a', '0', 'mode_a', 0, 'mode_b', 0);
+        overlap = em.get('overlap');
+        fprintf('Power overlap: %0.3f %%', (overlap*100));
+
+        % Plot the field and refractive index profiles
+        em.plot('window_display', true);
+
+        % Get the refractive index of the core
+        res = em.refractive_index('material', 'LN_MgO_z', 'wavelength', wavelength, 'reference', true);
+        n_LN = res{1};
+        ref = res{2};
+        fprintf('\nRefractive index of LN: [%0.6f, %0.6f, %0.6f]\n', n_LN);
+        if (find(ref=='%'))
+            ref = [ref(1:find(ref=='%')-1) '%' ref(find(ref=='%'):end)];
+        end
+        fprintf([ref '\n']);
+
+        % Close EMode
+        em.close();
+
+Console output::
+
+    EMode 0.1.2 - email
+    Meshing... completed in 0.3 sec
+    Solving... completed in 1.7 sec
+
+    Wavelength: 1550.0 nm
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)    core confinement
+    --------  --------  ------  -------------  ------------------
+        TE-0  1.772699  98.8 %          0.000              82.1 %
+ 
+    Meshing... completed in 0.3 sec
+    Solving... completed in 1.6 sec
+
+    Wavelength: 1550.0 nm
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)    core confinement
+    --------  --------  ------  -------------  ------------------
+        TE-0  1.794352  99.1 %          0.000              83.3 %
+ 
+    Exited EMode
+    Power overlap: 98.628 %
+
+    Refractive index of LN: [2.1305703312029918, 2.208812688703256, 2.208812688703256]
+    O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
+
+    Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the x-direction and n_o is the y- and z-direction.
+
+
+
+    Wavelength range: 500 nm to 4000 nm
+
+
+Figures:
+
+.. figure:: Figures/LNOI/EM_materials.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/LNOI/0Ex_LN.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/LNOI/index_LN.png
+    :width: 400
+    :align: center
+    :figwidth: 500

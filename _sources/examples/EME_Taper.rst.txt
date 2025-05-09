@@ -1,0 +1,203 @@
+
+EME: Taper
+----------
+
+The simplest EMode example of an EME simulation.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+    
+    .. code-tab:: python
+        :caption: Python
+        
+        import emodeconnection as emc
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 20, 20 # [nm] resolution
+        h_core = 220 # [nm] waveguide core height
+        h_clad = 1000 # [nm] waveguide top and bottom clad
+
+        window_width = 3200
+        window_height = h_core + h_clad*2
+
+        num_modes = 4 # [-] number of modes
+        BC = 'TE'
+
+        ## Connect and initialize EMode
+        em = emc.EMode(verbose = True)
+
+        ## Settings
+        em.settings(wavelength = wavelength,
+            x_resolution = dx, y_resolution = dy,
+            window_width = window_width,
+            window_height = window_height,
+            num_modes = num_modes, boundary_condition=BC,
+            background_refractive_index = 'SiO2')
+
+        ## Draw shapes
+        em.shape(name = 'BOX', refractive_index = 'SiO2',
+            height = h_clad)
+        em.shape(name = 'core', refractive_index = 'Si',
+            height = h_core, etch_depth=h_core*0.90,
+            sidewall_angle=10)
+
+        ## Launch FDM solver and label profiles
+        em.shape(name = 'core', mask = 600)
+        em.FDM(label = 'a')
+        em.report()
+        em.plot()
+
+        em.shape(name = 'core', mask = 1200)
+        em.FDM(label = 'b')
+        em.report()
+        em.plot()
+
+        ## Draw EME sections
+        em.section(profile = 'a', section_type = 'straight',
+            length = 2e3, num_modes = num_modes)
+
+        em.section(section_type = 'taper',
+            profile = 'a', profile_end = 'b',
+            length = 5000, num_modes = num_modes,
+            minimum_z_step = 200, overlap_variation = 0.01)
+
+        em.section(profile = 'b', section_type = 'straight',
+            length = 2e3, num_modes = num_modes)
+
+        ## Run EME and plot results
+        em.EME()
+        em.plot()
+        em.plot_S_matrix()
+
+        ## Close EMode
+        em.close()
+
+    
+    .. code-tab:: matlab
+        :caption: MATLAB
+        
+        %% Set simulation parameters
+        wavelength = 1550; % [nm] wavelength
+        dx = 20; dy = 20; % [nm] resolution
+        h_core = 220; % [nm] waveguide core height
+        h_clad = 1000; % [nm] waveguide top and bottom clad
+
+        window_width = 3000;
+        window_height = h_core + h_clad*2;
+
+        num_modes = 4; % [-] number of modes
+        BC = 'TE';
+
+        %% Connect and initialize EMode
+        em = emodeconnection('verbose', true);
+
+        %% Settings
+        em.settings('wavelength', wavelength, ...
+            'x_resolution', dx, 'y_resolution', dy, ...
+            'window_width', window_width, ...
+            'window_height', window_height, ...
+            'num_modes', num_modes, 'boundary_condition', BC, ...
+            'background_refractive_index', 'SiO2');
+
+        %% Draw shapes
+        em.shape('name', 'BOX', 'refractive_index', 'SiO2', ...
+            'height', h_clad);
+        em.shape('name', 'core', 'refractive_index', 'Si', ...
+            'height', h_core, 'etch_depth', h_core*0.90, ...
+            'sidewall_angle', 10);
+
+        %% Launch FDM solver and label profiles
+        em.shape('name', 'core', 'mask', 600);
+        em.FDM('label', 'a');
+        em.report();
+        em.plot();
+
+        em.shape('name', 'core', 'mask', 1200);
+        em.FDM('label', 'b');
+        em.report();
+        em.plot();
+
+        %% Draw EME sections
+        em.section('profile', 'a', 'section_type', 'straight', ...
+            'length', 2e3, 'num_modes', num_modes);
+
+        em.section('section_type', 'taper', ...
+            'profile', 'a', 'profile_end', 'b', ...
+            'length', 5000, 'num_modes', num_modes, ...
+            'minimum_z_step', 200, 'overlap_variation', 0.01);
+
+        em.section('profile', 'b', 'section_type', 'straight', ...
+            'length', 2e3, 'num_modes', num_modes);
+
+        %% Run EME and plot results
+        em.EME();
+        em.plot();
+        em.plot_S_matrix();
+
+        %% Close EMode
+        em.close();
+
+
+Console output::
+
+    EMode 0.1.2 - email
+    Connected on port 64855 to LM-1.
+    Session type: 3d
+    Successfully logged in to the license manager.
+    Meshing... completed in 0.1 sec
+    Solving... completed in 0.4 sec
+
+    Wavelength: 1550.0 nm
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)
+    --------  --------  ------  -------------
+        TE-0  2.612962  98.9 %          0.000
+        TE-1  1.590768  99.2 %          0.000
+        TE-2  1.475549  86.6 %          0.000
+        TM-3  1.444024   0.0 %          0.000
+ 
+    Meshing... completed in 0.1 sec
+    Solving... completed in 0.2 sec
+
+    Wavelength: 1550.0 nm
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)
+    --------  --------  ------  -------------
+        TE-0  2.826396  99.9 %          0.000
+        TE-1  2.212096  96.4 %          0.000
+        TM-2  1.849012  10.6 %          0.000
+        TE-3  1.580520  99.2 %          0.000
+ 
+    Solving S-matrices... 
+    Solving section: 1... completed in 0.5 sec
+
+    Solving section: 2... completed in 18.1 sec
+
+    Solving section: 3... completed in 0.4 sec
+    completed in 19.3 sec
+    Exited EMode
+
+
+Figures:
+
+.. figure:: Figures/EME_Taper/Ex_a.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_Taper/Ex_b.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_Taper/Ex_taper.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_Taper/EM_S10_abs^2.png
+    :width: 500
+    :align: center
+    :figwidth: 500
