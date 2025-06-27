@@ -2,7 +2,7 @@
 Release Notes
 ^^^^^^^^^^^^^
 
-**0.2.0: June 27, 2024**
+**0.2.0: June 27, 2025**
 
 * Added an explicit restriction on the ``tolerance`` parameter so that it cannot be set to be smaller than the machine precision. The default for ``tolerance`` is 1e-12.
 * Removed a bug in EME for symmetric section simulations.
@@ -19,7 +19,7 @@ Release Notes
 * Changes to biaxial materials: extraordinary index is always aligned with the z-axis (ordinary is aligned with the x and y axes). Rotations can be performed to orient a crystal to the simulation axes as desired. Affected materials: BBO, LN_z --> LN, LN_MgO_z --> LN_MgO, TiO2_rutile.
 * When EMode encounters errors, emodeconnection.py (1.0.11) will now raise an exception instead of just printing an error message.
 
-**0.1.2: March 16, 2024**
+**0.1.2: March 16, 2025**
 
 * Fixed a bug where ``num_modes`` was reset after modes are automatically removed from the pml regions.
 * Fixed a bug with the ``label()`` function when using the ``fill_refractive_index`` parameter.
