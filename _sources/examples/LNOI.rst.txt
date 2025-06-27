@@ -12,6 +12,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         :caption: Python
         
         import emodeconnection as emc
+        import numpy as np
 
         ## Set simulation parameters
         wavelength = 1550 # [nm] wavelength
@@ -35,13 +36,15 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
             window_width = window_width, window_height = window_height,
-            num_modes = num_modes, background_refractive_index = 'Air',
+            num_modes = num_modes, background_material = 'Air',
             boundary_condition = boundary,
             expansion_resolution = 20, expansion_size = 1500)
 
         ## Draw shapes
-        em.shape(name = 'BOX', refractive_index = 'SiO2', height = h_clad)
-        em.shape(name = 'core', refractive_index = 'LN_MgO_z', height = h_core,
+        ln_mgo = emc.MaterialSpec(material='LN_MgO', theta = np.pi/2)
+
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad)
+        em.shape(name = 'core', material = ln_mgo, height = h_core,
             etch_depth = h_core*3/4, mask = w_core, sidewall_angle = 15)
 
         ## Solve the first mode
@@ -65,7 +68,8 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         em.plot(window_display = True)
 
         ## Get the refractive index of the core
-        res = em.refractive_index(material = 'LN_MgO_z', wavelength = wavelength, reference = True)
+        res = em.refractive_index(material = ln_mgo,
+            wavelength = wavelength, reference = True)
         n_LN, ref = res
         print('\nRefractive index of LN:', n_LN)
         print(ref)
@@ -98,13 +102,17 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         em.settings( ...
             'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
             'window_width', window_width, 'window_height', window_height, ...
-            'num_modes', num_modes, 'background_refractive_index', 'Air', ...
+            'num_modes', num_modes, 'background_material', 'Air', ...
             'boundary_condition', boundary, ...
             'expansion_resolution', 20, 'expansion_size', 1500);
 
         % Draw shapes
-        em.shape('name', 'BOX', 'refractive_index', 'SiO2', 'height', h_clad);
-        em.shape('name', 'core', 'refractive_index', 'LN_MgO_z', 'height', h_core, ...
+        em.MaterialSpec.material = 'LN_MgO';
+        em.MaterialSpec.theta = pi/2;
+
+        em.shape('name', 'BOX', 'material', 'SiO2', 'height', h_clad);
+        em.shape('name', 'core', ...
+            'material', em.MaterialSpec, 'height', h_core, ...
             'etch_depth', h_core*3/4, 'mask', w_core, 'sidewall_angle', 15);
 
         % Solve the first mode
@@ -128,7 +136,8 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         em.plot('window_display', true);
 
         % Get the refractive index of the core
-        res = em.refractive_index('material', 'LN_MgO_z', 'wavelength', wavelength, 'reference', true);
+        res = em.refractive_index('material', emodeconnection.MaterialSpec, ...
+            'wavelength', wavelength, 'reference', true);
         n_LN = res{1};
         ref = res{2};
         fprintf('\nRefractive index of LN: [%0.6f, %0.6f, %0.6f]\n', n_LN);
@@ -142,32 +151,31 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode 0.1.2 - email
-    Meshing... completed in 0.3 sec
-    Solving... completed in 1.7 sec
+    EMode 0.2.0 - email
+    Meshing completed in 0.7 sec
+    Solving completed in 1.8 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
-        TE-0  1.772699  98.8 %          0.000              82.1 %
+        TE-0  1.767903  98.8 %          0.000              82.1 %
  
-    Meshing... completed in 0.3 sec
-    Solving... completed in 1.6 sec
+    Meshing completed in 0.8 sec
+    Solving completed in 1.7 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
-        TE-0  1.794352  99.1 %          0.000              83.3 %
+        TE-0  1.789641  99.1 %          0.000              83.3 %
  
-    Exited EMode
-    Power overlap: 98.628 %
+    Power overlap: 98.645 %
 
-    Refractive index of LN: [2.1305703312029918, 2.208812688703256, 2.208812688703256]
+    Refractive index of LN: [2.13057033 2.20881269 2.20881269]
     O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
 
-    Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the x-direction and n_o is the y- and z-direction.
+    Notes: x-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
 
 
 

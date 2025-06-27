@@ -345,7 +345,7 @@
                   
   <section id="python-interface">
 <h1>Python interface</h1>
-<p>To control EMode directly from a Python script, we supply a Python package called <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>. This has been tested with Python versions 3.7, 3.8, 3.9, and 3.10, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.</p>
+<p>To control EMode directly from a Python script, we supply a Python package called <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>. This has been tested with Python versions 3.9, and 3.10, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.</p>
 <p>The source code can be viewed here: <a class="reference external" href="https://github.com/emode-photonix/emodeconnection">emodeconnection</a></p>
 <p>For more information about Python, see these links:</p>
 <table class="hlist"><tr><td><ul class="simple">
@@ -359,14 +359,14 @@
 </td></tr></table>
 <section id="setup">
 <span id="setuppython"></span><h2>Setup</h2>
-<p>Install the <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> Python package from the Windows command line.</p>
+<p>Install the <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> Python package from the command line.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">emodeconnection</span>
 </pre></div>
 </div>
 </section>
 <section id="emode-login">
 <span id="pythonemodelogin"></span><h2>EMode Login</h2>
-<p>Open a Python session and run the following. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
+<p>Open a Python session and run the following. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. <em>Alternatively</em>, you can run <code class="docutils literal notranslate"><span class="pre">emode</span></code> from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
 <span class="n">emc</span><span class="o">.</span><span class="n">EModeLogin</span><span class="p">()</span>
 </pre></div>
@@ -376,7 +376,7 @@
 <h2>The EMode class</h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="EMode">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emode'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roaming</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_existing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pN'</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emode'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roaming</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_existing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pN'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emode_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Opens the EMode software and initializes a local simulation file. The user’s account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run <code class="docutils literal notranslate"><span class="pre">EModeLogin</span></code> from the the start menu.</p>
 <p>An existing file can be opened for further analysis by specifying the input argument <code class="docutils literal notranslate"><span class="pre">open_existing</span> <span class="pre">=</span> <span class="pre">True</span></code>. This opened file can be copied to a new file name by specifying the input argument <code class="docutils literal notranslate"><span class="pre">new_name</span> <span class="pre">=</span> <span class="pre">'new_filename'</span></code>.</p>
 <div class="admonition note">
@@ -386,14 +386,15 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>simulation_name</strong> (<em>str</em>) – Name of the simulation file. The extension ‘.eph’ will be added to this name.</p></li>
-<li><p><strong>license_type</strong> (<em>str</em>) – The requested license type, either ‘2D’, ‘3D’, or ‘default’. When running with ‘default’ license type, a ‘3D’ license will be initialized if it is available, otherwise a ‘2D’ license will be initialized if it is available. The ‘2D’ or ‘3D’ options will only request that specific license type if it is available.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) – Name of the path where the simulation file will be created and saved.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to run EMode in verbose mode for debugging.</p></li>
-<li><p><strong>roaming</strong> (<em>bool</em>) – Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license.</p></li>
-<li><p><strong>open_existing</strong> (<em>bool</em>) – Whether to open an existing file or to start a new simulation.</p></li>
-<li><p><strong>new_name</strong> (<em>bool</em><em> or </em><em>str</em>) – New name of opened existing file so the original file does not get modified. If False the original name is used. The extension ‘.eph’ will be added to this name.</p></li>
-<li><p><strong>priority</strong> (<em>str</em>) – Set the CPU process priority. ‘pH’: High; ‘pAN’: Above normal; ‘pN’: Normal; ‘pBN’: Below normal; ‘pI’: Idle.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Name of the simulation file. The extension ‘.eph’ will be added to this name. Default: ‘emode’.</p></li>
+<li><p><strong>license_type</strong> (<em>str</em>) – The requested license type, either ‘2D’, ‘3D’, or ‘default’. When running with ‘default’ license type, a ‘3D’ license will be initialized if it is available, otherwise a ‘2D’ license will be initialized if it is available. The ‘2D’ or ‘3D’ options will only request that specific license type if it is available. Default: ‘default’.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – Name of the path where the simulation file will be created and saved. Default: ‘.’.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to run EMode in verbose mode for debugging. Default: False.</p></li>
+<li><p><strong>roaming</strong> (<em>bool</em>) – Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license. Default: False.</p></li>
+<li><p><strong>open_existing</strong> (<em>bool</em>) – Whether to open an existing file or to start a new simulation. Default: False.</p></li>
+<li><p><strong>new_name</strong> (<em>bool</em><em> or </em><em>str</em>) – New name of opened existing file so the original file does not get modified. If False the original name is used. The extension ‘.eph’ will be added to this name. Default: False.</p></li>
+<li><p><strong>priority</strong> (<em>str</em>) – Set the CPU process priority. ‘pH’: High; ‘pAN’: Above normal; ‘pN’: Normal; ‘pBN’: Below normal; ‘pI’: Idle. Default: ‘pN’.</p></li>
+<li><p><strong>emode_cmd</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location.</p></li>
 </ul>
 </dd>
 </dl>
@@ -406,7 +407,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="EModeLogin">
 <span class="sig-name descname"><span class="pre">EModeLogin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Opens the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
+<dd><p>Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -464,6 +465,160 @@
 </dd></dl>
 
 </section>
+<section id="types">
+<h2>Types</h2>
+<p>Two types that can be used for specifying material properties are available as classes of the emodeconnection package.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="MaterialProperties">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MaterialProperties</span></span></dt>
+<dd><p>A container for linear and non-linear electromagnetic material parameters. At least one of <cite>n</cite> or <cite>eps</cite> <strong>must</strong> be supplied in any valid instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Scalar or tensor refractive index. Accepts <em>None</em> (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.</p></li>
+<li><p><strong>eps</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Relative permittivity tensor εᵣ. Accepts <em>None</em> (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.</p></li>
+<li><p><strong>mu</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Relative permeability tensor μᵣ. Same shape conventions as <cite>eps</cite>. Default: <em>None</em> (μᵣ = 1).</p></li>
+<li><p><strong>d</strong> (<em>Optional</em><em>[</em><em>~DTensorType</em><em>]</em>) – Second-order nonlinear susceptibility <em>d</em>. Expected shape is 3x6. Use <em>None</em> when the material is linear. Default: <em>None</em>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="MaterialSpec">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MaterialSpec</span></span></dt>
+<dd><p>A container that defines the adjustable properties of a material being used. All properties default to the materials
+defaults (typically 0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>~MaterialProperties</em><em>]</em>) – Either a <em>str</em> pointing to a material in the Material Database, or a MaterialProperties object. Required.</p></li>
+<li><p><strong>theta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>y</em> for the material in radians.</p></li>
+<li><p><strong>phi</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>z</em> for the material in radians. This is applied <em>after</em> the theta rotation.</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.</p></li>
+<li><p><strong>loss</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The absorption loss of the material in dB/m.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection.types</span></code> module also contains the following exception classes. All errors in EMode are raised and passed back to the user as one of these errors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="EModeError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EModeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Base class for all EMode exceptions.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="ArgumentError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ArgumentError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Invalid value passed to <em>function</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Human-readable explanation.</p></li>
+<li><p><strong>function</strong> (<em>str</em>) – Function name.</p></li>
+<li><p><strong>argument</strong> (<em>str</em>) – Name of the offending argument.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="EPHKeyError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EPHKeyError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Missing dataset or attribute <em>key</em> in the given EPH file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Details of the failure.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Path to the EPH file.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Absent key.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="FileError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FileError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Generic file-system or I/O problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Description of the error.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – File path involved.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="LicenseError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LicenseError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_type</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Operation not permitted under <em>license_type</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Explanation of the denial.</p></li>
+<li><p><strong>license_type</strong> (<em>LicenseType</em>) – Active or required licence class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="ShapeError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ShapeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape_name</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Unexpected tensor or geometry shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Explanation of the mismatch.</p></li>
+<li><p><strong>shape_name</strong> (<em>str</em>) – Symbolic name of the offending shape.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="NameError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NameError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Forbidden <em>name</em> within the given <em>type</em> category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Reason for the failure.</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – Category being searched (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;section&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;label&quot;</span></code>).</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Forbidden identifier.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="NotImplementedError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotImplementedError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Feature is recognised but not yet implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – Description of the missing capability.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="updating-the-python-interface">
 <h2>Updating the Python Interface</h2>
 <p>Update the <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> Python package to the latest version with:</p>
@@ -507,6 +662,22 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#open_file"><code class="docutils literal notranslate"><span class="pre">open_file()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect"><code class="docutils literal notranslate"><span class="pre">inspect()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types">Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialProperties"><code class="docutils literal notranslate"><span class="pre">MaterialProperties</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialSpec"><code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#EModeError"><code class="docutils literal notranslate"><span class="pre">EModeError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ArgumentError"><code class="docutils literal notranslate"><span class="pre">ArgumentError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#EPHKeyError"><code class="docutils literal notranslate"><span class="pre">EPHKeyError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#FileError"><code class="docutils literal notranslate"><span class="pre">FileError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#LicenseError"><code class="docutils literal notranslate"><span class="pre">LicenseError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ShapeError"><code class="docutils literal notranslate"><span class="pre">ShapeError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#NameError"><code class="docutils literal notranslate"><span class="pre">NameError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#NotImplementedError"><code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-the-python-interface">Updating the Python Interface</a></li>

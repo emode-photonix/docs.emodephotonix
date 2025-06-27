@@ -16,6 +16,7 @@ Solver and analysis
     
     :param str label: dataset label name to automatically create a dataset after running ``FDM()``, no dataset is created if blank, default: ''
     :param str simulation_name: simulation name, default: 'emode'
+    :param bool force_isotropic: if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.
 
 .. data:: sweep
     
@@ -137,21 +138,21 @@ Solver and analysis
     
     Returns the refractive index from a material name (retrieved from the internal reference list) or from a custom refractive index value. Optionally, the material's reference (or citation) may be returned.
 
-    :param material: material name or refractive index value; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: "AlGaAs, 0.2" for a Al_{0.2}Ga_{0.8}As.
-    :type material: str or float
+    :param material: material name; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: "AlGaAs, 0.2" for a Al_{0.2}Ga_{0.8}As.
+    :type material: str
     :param float wavelength: [nm] wavelength, default: 1550
     :param bool reference: additionally return the citation for the material, default: False
-    :return: [n_xx, n_yy, n_zz] or ([n_xx, n_yy, n_zz], reference)
+    :return: [n_x, n_y, n_z] or ([n_x, n_y, n_z], reference)
 
 .. data:: permeability
     
     Returns the relative permeability from a material name (retrieved from the internal reference list) or from a custom permeability value. Optionally, the material's reference (or citation) may be returned.
     
-    :param material: material name or refractive index value
-    :type material: str or float
+    :param material: material name
+    :type material: str
     :param float wavelength: [nm] wavelength, default: 1550
     :param bool reference: additionally return the citation for the material, default: False
-    :return: [permeability_xx, permeability_yy, permeability_zz] or ([permeability_xx, permeability_yy, permeability_zz], reference)
+    :return: [permeability_x, permeability_y, permeability_z] or ([permeability_x, permeability_y, permeability_z], reference)
 
 .. data:: mesh
     

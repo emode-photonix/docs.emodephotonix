@@ -308,13 +308,13 @@
         <div class="sidebar-primary-item">
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
-  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D Functions</span></p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="file-management.html">File management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Simulation setup</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Solver and analysis</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D Functions</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
 </ul>
@@ -376,6 +376,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>label</strong> (<em>str</em>) – dataset label name to automatically create a dataset after running <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, no dataset is created if blank, default: ‘’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+<li><p><strong>force_isotropic</strong> (<em>bool</em>) – if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.</p></li>
 </ul>
 </dd>
 </dl>
@@ -565,13 +566,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>material</strong> (<em>str</em><em> or </em><em>float</em>) – material name or refractive index value; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: “AlGaAs, 0.2” for a Al_{0.2}Ga_{0.8}As.</p></li>
+<li><p><strong>material</strong> (<em>str</em>) – material name; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: “AlGaAs, 0.2” for a Al_{0.2}Ga_{0.8}As.</p></li>
 <li><p><strong>wavelength</strong> (<em>float</em>) – [nm] wavelength, default: 1550</p></li>
 <li><p><strong>reference</strong> (<em>bool</em>) – additionally return the citation for the material, default: False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>[n_xx, n_yy, n_zz] or ([n_xx, n_yy, n_zz], reference)</p>
+<dd class="field-even"><p>[n_x, n_y, n_z] or ([n_x, n_y, n_z], reference)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -583,13 +584,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>material</strong> (<em>str</em><em> or </em><em>float</em>) – material name or refractive index value</p></li>
+<li><p><strong>material</strong> (<em>str</em>) – material name</p></li>
 <li><p><strong>wavelength</strong> (<em>float</em>) – [nm] wavelength, default: 1550</p></li>
 <li><p><strong>reference</strong> (<em>bool</em>) – additionally return the citation for the material, default: False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>[permeability_xx, permeability_yy, permeability_zz] or ([permeability_xx, permeability_yy, permeability_zz], reference)</p>
+<dd class="field-even"><p>[permeability_x, permeability_y, permeability_z] or ([permeability_x, permeability_y, permeability_z], reference)</p>
 </dd>
 </dl>
 </dd></dl>

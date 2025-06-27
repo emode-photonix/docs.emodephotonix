@@ -11,7 +11,6 @@ How to open an existing EMode simulation.
     .. code-tab:: python
         :caption: Python
         
-
         import emodeconnection as emc
 
         ## Run an initial session with a unique simulation name.
@@ -41,11 +40,11 @@ How to open an existing EMode simulation.
             x_resolution = dx, y_resolution = dy,
             window_width = width, window_height = height,
             boundary_condition = boundary, num_modes = num_modes,
-            background_refractive_index = "Air")
+            background_material = "Air")
 
         # Draw shapes
-        em.shape(name = "BOX", refractive_index = "SiO2", height=b_clad)
-        em.shape(name = "core", refractive_index = "GaAs", angle=angle, mask=w_core, height=h_core, etch_depth=h_core-h_slab)
+        em.shape(name = "BOX", material = "SiO2", height=b_clad)
+        em.shape(name = "core", material = "GaAs", angle=angle, mask=w_core, height=h_core, etch_depth=h_core-h_slab)
 
         # Launch FDM solver
         em.FDM()
@@ -92,7 +91,6 @@ How to open an existing EMode simulation.
         TM_indices = em.get('TM_indices')
         em.plot(component = 'Ey', mode = TM_indices)
         em.close()
-
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -124,11 +122,11 @@ How to open an existing EMode simulation.
             'x_resolution', dx, 'y_resolution', dy, ...
             'window_width', width, 'window_height', height, ...
             'boundary_condition', boundary, 'num_modes', num_modes, ...
-            'background_refractive_index', 'Air');
+            'background_material', 'Air');
 
         % Draw shapes
-        em.shape('name', 'BOX', 'refractive_index', 'SiO2', 'height', b_clad);
-        em.shape('name', 'core', 'refractive_index', 'GaAs', 'angle', angle, ...
+        em.shape('name', 'BOX', 'material', 'SiO2', 'height', b_clad);
+        em.shape('name', 'core', 'material', 'GaAs', 'angle', angle, ...
             'mask', w_core, 'height', h_core, 'etch_depth', h_core-h_slab);
 
         % Launch FDM solver
@@ -177,35 +175,30 @@ How to open an existing EMode simulation.
         em.plot('component', 'Ey', 'mode', TM_indices(1));
         em.close();
 
-
 Console output::
 
-    EMode 0.1.2 - email
-    Meshing... completed in 0.4 sec
-    Solving... completed in 1.9 sec
+    EMode 0.2.0 - email
+    Meshing completed in 1.0 sec
+    Solving completed in 2.1 sec
 
     Wavelength: 1970.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.117392  99.8 %          0.000
+        TE-0  2.094190  99.8 %          0.000
  
-    Exited EMode
-    EMode 0.1.2 - email
-    Meshing... completed in 0.6 sec
-    Solving... completed in 1.3 sec
+    EMode 0.2.0 - email
+    Meshing completed in 1.3 sec
+    Solving completed in 1.5 sec
 
     Wavelength: 985.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TM-0  2.117345   1.1 %          0.000
+        TM-0  2.067847   1.2 %          0.000
  
-    Exited EMode
-    EMode 0.1.2 - email
-    Exited EMode
-    EMode 0.1.2 - email
-    Exited EMode
+    EMode 0.2.0 - email
+    EMode 0.2.0 - email
 
 
 Figures:

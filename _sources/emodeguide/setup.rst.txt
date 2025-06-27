@@ -23,8 +23,8 @@ Simulation setup
     :param num_pml_layers: number of pml layers to use, either a single value that is applied to all boundaries or a list of 4 values, default: 10
     :type num_pml_layers: int or list with length = 4
     :param bool remove_pml_modes_bool: automatically remove pml modes, default: True
-    :param background_refractive_index: background refractive index, either a material name or a value, default: 1.0
-    :type background_refractive_index: str or float
+    :param background_material: background material, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object, default: "Vacuum"
+    :type background_material: str or ~MaterialProperties or ~MaterialSpec
     :param expansion_resolution: [nm] single value or list of 4 values for the stretched grid resolution; [north, south, east, west], the grid is gradually transitioned from res to ``expansion_resolution``, default: 20
     :type expansion_resolution: float or list
     :param expansion_size: [nm] single value or list of 4 values for the approximate stretched distance; [north, south, east, west], default: 0
@@ -41,6 +41,7 @@ Simulation setup
     :param str wavelength_unit: either 'nm' or 'um' to specify the unit for the wavelength parameter 'x', default: 'um'
     :param list wavelength_range: [um] list of the minimum and maximum wavelength recommended for the refractive index equation, default: [0.2, 2.0]
     :param str citation: reference displayed in material explorer for the custom material, default: 'User defined.'
+    :param float loss: the loss of the material in 'dB/m', default: 0.
     :param str simulation_name: simulation name, default: 'emode'
     
 .. data:: import_database
@@ -75,10 +76,8 @@ Simulation setup
     Create or update a shape with attributes. These parameters are saved with 'shape\_'+name+'/' preceding the attribute name. If a name is not given, a number will be allocated as the shape name.
     
     :param str name: shape name, default: an auto-generated number
-    :param refractive_index: refractive index value, list of values [n_xx, n_yy, n_zz], or material name, default: 1.0
-    :type refractive_index: float, list, or str
-    :param permeability: relative permeability value, list of values [mu_xx, mu_yy, mu_zz], or material name, default: 1.0
-    :type permeability: float, list, or str
+    :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
+    :type material: ~MaterialSpec, ~MaterialProperties, or str
     :param float loss_dB_per_m: [dB/m] material propagation loss, default: 0
     :param vertices: list of N vertices that define a closed polygon, if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
     :type vertices: list (N,2) or int
@@ -90,25 +89,23 @@ Simulation setup
     :type mask: float or list
     :param mask_offset: the x-position offset for the ``mask`` parameter, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask`` values, default: ``0``
     :type mask_offset: float or list
-    :param tone: 'n' or 'p' to define the pattern tone as negative or positive for the ``mask`` parameter, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask`` values, default: ``n``
-    :type tone: str or list
+    :param tone: 'n' or 'p' to define the pattern tone as negative or positive for the ``mask`` parameter, default: ``n``
+    :type tone: str
     :param float etch_depth: etch depth for a layer outside the mask region, thickness = ``height`` - ``etch_depth``, default: 0
     :param float sidewall_angle: etched sidewall angle in degrees, 0 is perfectly vertical, 90 is the maximum, this decreases the width at the top of the shape to create the angle, default: 0
-    :param fill_refractive_index: refractive index (similar to ``refractive_index`` parameter) to fill the etched region when a planar layer is added on top of the current layer, default: take the background refractive index
-    :type fill_refractive_index: float, list, or str
-    :param fill_permeability: relative permeability (similar to ``permeability`` parameter) to fill the etched region when a planar layer is added on top of the current layer, default: take the background relative permeability
-    :type fill_permeability: float, list, or str
+    :param fill_material: the material for the fill for this shape.  Takes the same values as material, as well as "transparent_fill" (the default). "transparent_fill" results in the fill being the background.
+    :type fill_material: ~MaterialSpec, ~MaterialProperties, or str
     :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
     :type correlation_length: float or list
     :param roughness_rms: interfacial roughness standard deviation in nm rms, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
     :type roughness_rms: float or list
-    :param str shape_type: set shape type as 'planar', 'conformal' (only uses ``name``, ``refractive_index``, and ``height``), or 'ellipse' (only uses ``name``, ``refractive_index``, ``width``, ``height``, ``position``, ``sidewall_angle``, and ``priority``), default: 'planar'
+    :param str shape_type: set shape type as 'planar', 'conformal' (only uses ``name``, ``material``, ``height``, and ``priority``), 'polygon' (only uses ``name``, ``vertices``, ``material`` and ``priority``), or 'ellipse' (only uses ``name``, ``material``, ``width``, ``height``, ``position``, ``sidewall_angle`` (the angle of the ellipse), and ``priority``), default: 'planar'
     :param float priority: a number that signifies the order in which shapes will be drawn, a higher priority gets drawn over a lower number priority, default: auto-generated integer based on order called
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: reset
-    
+
     Clear simulation settings, shape definitions, or both.
-    
+
     :param str kind: either 'shapes', 'settings', or 'all' to specify what data is cleared, default: 'shapes'
     :param str simulation_name: simulation name, default: 'emode'

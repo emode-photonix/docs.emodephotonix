@@ -40,14 +40,14 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
             window_width = window_width, window_height = window_height,
-            num_modes = num_modes, background_refractive_index = 'custom_SiO2',
+            num_modes = num_modes, background_material = 'custom_SiO2',
             boundary_condition = boundary, bend_radius = bend_radius + x_off,
             pml_NSEW_bool = [0,0,1,1], num_pml_layers = 20,
             max_effective_index = 1.7)
 
         ## Draw shapes
-        em.shape(
-            name = 'core', refractive_index = 'SiN', width = w_core, height = h_core, position = [-x_off, window_height/2])
+        em.shape(name = 'core', material = 'SiN', width = w_core,
+                 height = h_core, position = [-x_off, window_height/2])
 
         ## Launch FDM solver
         em.FDM()
@@ -96,14 +96,14 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         em.settings( ...
             'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
             'window_width', window_width, 'window_height', window_height, ...
-            'num_modes', num_modes, 'background_refractive_index', 'custom_SiO2', ...
+            'num_modes', num_modes, 'background_material', 'custom_SiO2', ...
             'boundary_condition', boundary, 'bend_radius', bend_radius + x_off, ...
             'pml_NSEW_bool', [0,0,1,1], 'num_pml_layers', 20, ...
             'max_effective_index', 1.7);
 
         % Draw shapes
-        em.shape( ...
-            'name', 'core', 'refractive_index', 'SiN', 'width', w_core, 'height', h_core, 'position', [-x_off, window_height/2]);
+        em.shape('name', 'core', 'material', 'SiN', 'width', w_core, ...
+                'height', h_core, 'position', [-x_off, window_height/2]);
 
         % Launch FDM solver
         em.FDM();
@@ -125,17 +125,16 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode 0.1.2 - email
-    Meshing... completed in 0.2 sec
-    Solving... completed in 3.6 sec
+    EMode 0.2.0 - email
+    Meshing completed in 0.8 sec
+    Solving completed in 3.7 sec
 
     Wavelength: 980.0 nm
  
       Mode #     n_eff     TE %    Loss (dB/m)    core confinement
     --------  --------  -------  -------------  ------------------
-        TE-0  1.692391  100.0 %          0.000              62.0 %
+        TE-0  1.679910  100.0 %          0.000              61.7 %
  
-    Exited EMode
 
 
 Figures:

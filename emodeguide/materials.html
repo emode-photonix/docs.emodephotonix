@@ -308,13 +308,13 @@
         <div class="sidebar-primary-item">
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
-  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D Functions</span></p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="file-management.html">File management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Simulation setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solver-analysis.html">Solver and analysis</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D Functions</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
 </ul>
@@ -440,7 +440,7 @@ n_\mathrm{e} &amp;= \left( 1 + \frac{1.151075}{1 - 7.142 \times 10^{-3} / \lambd
 <div><div class="line-block">
 <div class="line">(1) G. Tamošauskas, G. Beresnevičius, D. Gadonas, and A. Dubietis, “Transmittance and phase matching of BBO crystal in the 3−5 μm range and its application for the characterization of mid-infrared laser pulses,” Opt. Mater. Express 8, 1410 (2018).</div>
 <div class="line">(2) G. Tamošauskas, “β-barium borate (BBO) absorption in the 0.188-6.22 μm range,” arXiv:2111.01212 [physics.optics] (2021).</div>
-<div class="line">Notes: The n_e is the y-direction and n_o is the x- and z-direction.</div>
+<div class="line">Notes: The n_e is the z-direction and n_o is the x- and y-direction.</div>
 </div>
 </div></blockquote>
 </dd></dl>
@@ -604,8 +604,8 @@ n_\mathrm{e} &amp;= \left( 1 + \frac{1.151075}{1 - 7.142 \times 10^{-3} / \lambd
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="LN_MgO_z">
-<span class="sig-name descname"><span class="pre">LN_MgO_z</span></span></dt>
+<dt class="sig sig-object py" id="LN_MgO">
+<span class="sig-name descname"><span class="pre">LN_MgO</span></span></dt>
 <dd><div class="math notranslate nohighlight">
 \[\begin{split}n_\mathrm{o} &amp;= \left( 5.653 + \frac{0.1185}{\lambda^2 - 0.2091^2} + \frac{89.61}{\lambda^2 - 10.85^2} - 0.0197 \lambda^2 \right)^{0.5} \\
 n_\mathrm{e} &amp;= \left( 5.756 + \frac{0.0983}{\lambda^2 - 0.2020^2} + \frac{189.32}{\lambda^2 - 12.52^2} - 0.0132 \lambda^2 \right)^{0.5}\end{split}\]</div>
@@ -613,22 +613,22 @@ n_\mathrm{e} &amp;= \left( 5.756 + \frac{0.0983}{\lambda^2 - 0.2020^2} + \frac{1
 <blockquote>
 <div><div class="line-block">
 <div class="line">O. Gayer, Z. Sacks, E. Galun, and A. Arie, “Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3,” Appl. Phys.B 91, 343 (2008).</div>
-<div class="line">Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the x-direction and n_o is the y- and z-direction.</div>
+<div class="line">Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.</div>
 </div>
 </div></blockquote>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="LN_z">
-<span class="sig-name descname"><span class="pre">LN_z</span></span></dt>
+<dt class="sig sig-object py" id="LN">
+<span class="sig-name descname"><span class="pre">LN</span></span></dt>
 <dd><div class="math notranslate nohighlight">
-\[\begin{split}n_\mathrm{o} &amp;= \left( 1 + \frac{2.6734}{1 - (0.01764/ \lambda)^2} + \frac{1.2290}{1 - (0.05914/ \lambda)^2}  + \frac{8.9543}{1 - (416.08/ \lambda)^2} \right)^{0.5} \\
+\[\begin{split}n_\mathrm{o} &amp;= \left( 1 + \frac{2.6734}{1 - (0.01764/ \lambda)^2} + \frac{1.2290}{1 - (0.05914/ \lambda)^2}  + \frac{12.614}{1 - (474.6/ \lambda)^2} \right)^{0.5} \\
 n_\mathrm{e} &amp;= \left( 1 + \frac{2.9804}{1 - (0.02047/ \lambda)^2} + \frac{0.5981}{1 - (0.0666/ \lambda)^2}  + \frac{8.9543}{1 - (416.08/ \lambda)^2} \right)^{0.5}\end{split}\]</div>
 <p>Wavelength range: 400 nm to 5000 nm</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">D. E. Zelmon, D. L. Small, and D. Jundt, “Infrared corrected Sellmeier coefficients for congruently grown lithium niobate and 5 mol. % magnesium oxide-doped lithium niobate,” J. Opt. Soc. Am. B 14, 3319 (1997).</div>
-<div class="line">Notes: z-cut lithium niobate. The n_e is the x-direction and n_o is the y- and z-direction.</div>
+<div class="line">Notes: z-cut lithium niobate. The n_e is the z-direction and n_o is the x- and y-direction.</div>
 </div>
 </div></blockquote>
 </dd></dl>
@@ -763,7 +763,7 @@ n_\mathrm{e} &amp;= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10
 <blockquote>
 <div><div class="line-block">
 <div class="line">A. Borne, P. Segonds, B. Boulanger, C. Félix, and J. Debray, “Refractive indices, phase-matching directions and third order nonlinear coefficients of rutile TiO2 from third harmonic generation,” Opt. Mater. Express 2, 1797 (2012).</div>
-<div class="line">Notes: The n_e is the y-direction and n_o is the x- and z-direction. Equation takes wavelength in nanometers.</div>
+<div class="line">Notes: The n_e is the z-direction and n_o is the x- and y-direction. Equation takes wavelength in nanometers.</div>
 </div>
 </div></blockquote>
 </dd></dl>
@@ -810,8 +810,8 @@ n_\mathrm{e} &amp;= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#InGaP"><code class="docutils literal notranslate"><span class="pre">InGaP</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#InP"><code class="docutils literal notranslate"><span class="pre">InP</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#InSb"><code class="docutils literal notranslate"><span class="pre">InSb</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#LN_MgO_z"><code class="docutils literal notranslate"><span class="pre">LN_MgO_z</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#LN_z"><code class="docutils literal notranslate"><span class="pre">LN_z</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#LN_MgO"><code class="docutils literal notranslate"><span class="pre">LN_MgO</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#LN"><code class="docutils literal notranslate"><span class="pre">LN</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PMMA_495"><code class="docutils literal notranslate"><span class="pre">PMMA_495</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PMMA_950"><code class="docutils literal notranslate"><span class="pre">PMMA_950</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Si"><code class="docutils literal notranslate"><span class="pre">Si</span></code></a></li>

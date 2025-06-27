@@ -45,19 +45,36 @@ Close EMode and check in the license with:
         
         em.close();
 
-EMode\ :sup:`2D`\  Scripts
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example  Scripts
+^^^^^^^^^^^^^^^^
 
-* :doc:`SOI <examples//SOI>`
-* :doc:`SiN <examples//SiN>`
-* :doc:`LNOI <examples//LNOI>`
-* :doc:`Laser <examples//Laser>`
-* :doc:`Open <examples//Open>`
-* :doc:`Dispersion <examples//Dispersion>`
+.. grid:: 2
+    :gutter: 4
+    :padding: 2
+    :margin: auto
+
+    .. grid-item-card:: EMode\ :sup:`2D`\  Scripts
+        :shadow: md
+        :columns: 6
+
+        * :doc:`SOI <examples//SOI>`
+        * :doc:`SiN <examples//SiN>`
+        * :doc:`LNOI <examples//LNOI>`
+        * :doc:`Laser <examples//Laser>`
+        * :doc:`Open <examples//Open>`
+        * :doc:`Dispersion <examples//Dispersion>`
+
+    .. grid-item-card:: EMode\ :sup:`3D`\  Scripts
+        :shadow: md
+        :columns: 6
+
+        * :doc:`EME: Taper <examples//EME_Taper>`
+        * :doc:`EME: Sweep <examples//EME_Sweep>`
+        * :doc:`EME: GDS <examples//EME_GDS>`
 
 .. toctree::
    :maxdepth: 1
-   :caption: EMode-2D
+   :caption: EMode2D Scripts  
    :hidden:
    
    examples//SOI
@@ -67,16 +84,9 @@ EMode\ :sup:`2D`\  Scripts
    examples//Open
    examples//Dispersion
 
-EMode\ :sup:`3D`\  Scripts
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* :doc:`EME_Taper <examples//EME_Taper>`
-* :doc:`EME_Sweep <examples//EME_Sweep>`
-* :doc:`EME_GDS <examples//EME_GDS>`
-
 .. toctree::
    :maxdepth: 1
-   :caption: EMode-3D
+   :caption: EMode3D Scripts
    :hidden:
    
    examples//EME_Taper

@@ -303,7 +303,7 @@
         <div class="sidebar-primary-item">
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
-  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D</span></p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Scripts</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Basic: SOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SiN.html">Bending: SiN</a></li>
@@ -312,7 +312,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Open.html">Open a Simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dispersion.html">Dispersion Sweep</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Scripts</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="EME_Taper.html">EME: Taper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_Sweep.html">EME: Sweep</a></li>
@@ -377,11 +377,11 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
     <span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">x_resolution</span> <span class="o">=</span> <span class="n">dx</span><span class="p">,</span> <span class="n">y_resolution</span> <span class="o">=</span> <span class="n">dy</span><span class="p">,</span>
     <span class="n">window_width</span> <span class="o">=</span> <span class="n">w_core</span> <span class="o">+</span> <span class="n">w_trench</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="n">h_core</span> <span class="o">+</span> <span class="n">h_clad</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">,</span> <span class="n">background_refractive_index</span> <span class="o">=</span> <span class="s1">&#39;Air&#39;</span><span class="p">)</span>
+    <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">,</span> <span class="n">background_material</span> <span class="o">=</span> <span class="s1">&#39;Air&#39;</span><span class="p">)</span>
 
 <span class="c1">## Draw shapes</span>
-<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;BOX&#39;</span><span class="p">,</span> <span class="n">refractive_index</span> <span class="o">=</span> <span class="s1">&#39;SiO2&#39;</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">h_clad</span><span class="p">)</span>
-<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">refractive_index</span> <span class="o">=</span> <span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">w_core</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">h_core</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;BOX&#39;</span><span class="p">,</span> <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;SiO2&#39;</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">h_clad</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">w_core</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">h_core</span><span class="p">)</span>
 
 <span class="c1">## Launch FDM solver</span>
 <span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">()</span>
@@ -413,11 +413,11 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">em</span><span class="p">.</span><span class="n">settings</span><span class="p">(</span><span class="w"> </span><span class="k">...</span>
 <span class="w">    </span><span class="s">&#39;wavelength&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">wavelength</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;x_resolution&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;y_resolution&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
 <span class="w">    </span><span class="s">&#39;window_width&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">w_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">w_trench</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;window_height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">h_clad</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;num_modes&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;background_refractive_index&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Air&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="s">&#39;num_modes&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;background_material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Air&#39;</span><span class="p">);</span>
 
 <span class="c">% Draw shapes</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;BOX&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;refractive_index&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_clad</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;refractive_index&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Si&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;width&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">w_core</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_core</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;BOX&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_clad</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Si&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;width&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">w_core</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_core</span><span class="p">);</span>
 
 <span class="c">% Launch FDM solver</span>
 <span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">();</span>
@@ -433,18 +433,16 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode</span> <span class="mf">0.1.2</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.1</span> <span class="n">sec</span>
-<span class="n">Solving</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode</span> <span class="mf">0.2.0</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
 
 <span class="n">Wavelength</span><span class="p">:</span> <span class="mf">1550.0</span> <span class="n">nm</span>
 
   <span class="n">Mode</span> <span class="c1">#     n_eff    TE %    Loss (dB/m)</span>
 <span class="o">--------</span>  <span class="o">--------</span>  <span class="o">------</span>  <span class="o">-------------</span>
-    <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">3.026515</span>  <span class="mf">99.7</span> <span class="o">%</span>          <span class="mf">0.000</span>
-    <span class="n">TM</span><span class="o">-</span><span class="mi">1</span>  <span class="mf">2.980822</span>   <span class="mf">0.5</span> <span class="o">%</span>          <span class="mf">0.000</span>
-
-<span class="n">Exited</span> <span class="n">EMode</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">3.013224</span>  <span class="mf">99.6</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">1</span>  <span class="mf">2.966573</span>   <span class="mf">0.6</span> <span class="o">%</span>          <span class="mf">0.000</span>
 </pre></div>
 </div>
 <p>Figures:</p>

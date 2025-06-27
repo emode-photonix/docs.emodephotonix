@@ -34,12 +34,12 @@ The simplest EMode example of an EME simulation.
             window_width = window_width,
             window_height = window_height,
             num_modes = num_modes, boundary_condition=BC,
-            background_refractive_index = 'SiO2')
+            background_material = 'SiO2')
 
         ## Draw shapes
-        em.shape(name = 'BOX', refractive_index = 'SiO2',
+        em.shape(name = 'BOX', material = 'SiO2',
             height = h_clad)
-        em.shape(name = 'core', refractive_index = 'Si',
+        em.shape(name = 'core', material = 'Si',
             height = h_core, etch_depth=h_core*0.90,
             sidewall_angle=10)
 
@@ -73,7 +73,6 @@ The simplest EMode example of an EME simulation.
 
         ## Close EMode
         em.close()
-
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -99,12 +98,12 @@ The simplest EMode example of an EME simulation.
             'window_width', window_width, ...
             'window_height', window_height, ...
             'num_modes', num_modes, 'boundary_condition', BC, ...
-            'background_refractive_index', 'SiO2');
+            'background_material', 'SiO2');
 
         %% Draw shapes
-        em.shape('name', 'BOX', 'refractive_index', 'SiO2', ...
+        em.shape('name', 'BOX', 'material', 'SiO2', ...
             'height', h_clad);
-        em.shape('name', 'core', 'refractive_index', 'Si', ...
+        em.shape('name', 'core', 'material', 'Si', ...
             'height', h_core, 'etch_depth', h_core*0.90, ...
             'sidewall_angle', 10);
 
@@ -139,45 +138,60 @@ The simplest EMode example of an EME simulation.
         %% Close EMode
         em.close();
 
-
 Console output::
 
-    EMode 0.1.2 - email
-    Connected on port 64855 to LM-1.
-    Session type: 3d
-    Successfully logged in to the license manager.
-    Meshing... completed in 0.1 sec
-    Solving... completed in 0.4 sec
+    EMode 0.2.0 - email
+    Connected on port 62000 to LM-1.
+    Meshing completed in 0.4 sec
+    Solving completed in 0.5 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.612962  98.9 %          0.000
-        TE-1  1.590768  99.2 %          0.000
-        TE-2  1.475549  86.6 %          0.000
-        TM-3  1.444024   0.0 %          0.000
+        TE-0  2.549973  98.8 %          0.000
+        TE-1  1.500118  99.3 %          0.000
+        TM-2  1.444024   0.0 %          0.000
+        TM-3  1.404519  12.3 %          0.000
  
-    Meshing... completed in 0.1 sec
-    Solving... completed in 0.2 sec
+    Meshing completed in 0.4 sec
+    Solving completed in 0.3 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.826396  99.9 %          0.000
-        TE-1  2.212096  96.4 %          0.000
-        TM-2  1.849012  10.6 %          0.000
-        TE-3  1.580520  99.2 %          0.000
+        TE-0  2.773467  99.9 %          0.000
+        TE-1  2.134024  96.5 %          0.000
+        TM-2  1.756185  10.4 %          0.000
+        TE-3  1.490376  99.0 %          0.000
  
     Solving S-matrices... 
-    Solving section: 1... completed in 0.5 sec
+    Solving section: 1... Solving completed in 0.4 sec
+    completed in 0.8 sec
 
-    Solving section: 2... completed in 18.1 sec
+    Solving section: 2... Solving completed in 0.4 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    completed in 20.4 sec
 
-    Solving section: 3... completed in 0.4 sec
-    completed in 19.3 sec
-    Exited EMode
+    Solving section: 3... Solving completed in 0.3 sec
+    completed in 0.7 sec
+    completed in 22.1 sec
 
 
 Figures:
@@ -197,7 +211,7 @@ Figures:
     :align: center
     :figwidth: 500
 
-.. figure:: Figures/EME_Taper/EM_S10_abs^2.png
+.. figure:: Figures/EME_Taper/EM_S01_abs^2.png
     :width: 500
     :align: center
     :figwidth: 500

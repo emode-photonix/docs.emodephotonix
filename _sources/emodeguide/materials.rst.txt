@@ -65,7 +65,7 @@ Descriptions of all materials available in built-in material database. This info
     
         | (1) G. Tamošauskas, G. Beresnevičius, D. Gadonas, and A. Dubietis, "Transmittance and phase matching of BBO crystal in the 3−5 μm range and its application for the characterization of mid-infrared laser pulses," Opt. Mater. Express 8, 1410 (2018).
         | (2) G. Tamošauskas, "β-barium borate (BBO) absorption in the 0.188-6.22 μm range," arXiv:2111.01212 [physics.optics] (2021).
-        | Notes: The n_e is the y-direction and n_o is the x- and z-direction.
+        | Notes: The n_e is the z-direction and n_o is the x- and y-direction.
 
 .. data:: GaAs
     
@@ -171,7 +171,7 @@ Descriptions of all materials available in built-in material database. This info
     
         | S. Adachi, "Optical dispersion relations for GaP, GaAs, GaSb, InP, InAs, InSb, AlxGa1−xAs, and In1−xGaxAsyP1−y," J. Appl. Phys. 66, 6030 (1989).
 
-.. data:: LN_MgO_z
+.. data:: LN_MgO
     
     .. math::
         
@@ -181,19 +181,19 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 500 nm to 4000 nm
     
         | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
-        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the x-direction and n_o is the y- and z-direction.
+        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
 
-.. data:: LN_z
+.. data:: LN
     
     .. math::
         
-        n_\mathrm{o} &= \left( 1 + \frac{2.6734}{1 - (0.01764/ \lambda)^2} + \frac{1.2290}{1 - (0.05914/ \lambda)^2}  + \frac{8.9543}{1 - (416.08/ \lambda)^2} \right)^{0.5} \\
+        n_\mathrm{o} &= \left( 1 + \frac{2.6734}{1 - (0.01764/ \lambda)^2} + \frac{1.2290}{1 - (0.05914/ \lambda)^2}  + \frac{12.614}{1 - (474.6/ \lambda)^2} \right)^{0.5} \\
         n_\mathrm{e} &= \left( 1 + \frac{2.9804}{1 - (0.02047/ \lambda)^2} + \frac{0.5981}{1 - (0.0666/ \lambda)^2}  + \frac{8.9543}{1 - (416.08/ \lambda)^2} \right)^{0.5}
     
     Wavelength range: 400 nm to 5000 nm
     
         | D. E. Zelmon, D. L. Small, and D. Jundt, "Infrared corrected Sellmeier coefficients for congruently grown lithium niobate and 5 mol. % magnesium oxide-doped lithium niobate," J. Opt. Soc. Am. B 14, 3319 (1997).
-        | Notes: z-cut lithium niobate. The n_e is the x-direction and n_o is the y- and z-direction.
+        | Notes: z-cut lithium niobate. The n_e is the z-direction and n_o is the x- and y-direction.
 
 .. data:: PMMA_495
     
@@ -280,4 +280,4 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 612 nm to 4449 nm
     
         | A. Borne, P. Segonds, B. Boulanger, C. Félix, and J. Debray, "Refractive indices, phase-matching directions and third order nonlinear coefficients of rutile TiO2 from third harmonic generation," Opt. Mater. Express 2, 1797 (2012).
-        | Notes: The n_e is the y-direction and n_o is the x- and z-direction. Equation takes wavelength in nanometers.
+        | Notes: The n_e is the z-direction and n_o is the x- and y-direction. Equation takes wavelength in nanometers.

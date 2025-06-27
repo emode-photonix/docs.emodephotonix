@@ -11,7 +11,6 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
     .. code-tab:: python
         :caption: Python
         
-
         import emodeconnection as emc
         import numpy as np
 
@@ -36,19 +35,18 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
             window_width = w_core + w_trench*2,
             window_height = h_core + b_clad + h_clad,
             num_modes = num_modes, boundary_condition = boundary,
-            background_refractive_index = 'Air')
+            background_material = 'Air')
 
         ## Draw shapes
-        em.shape(name = 'BOX', refractive_index = 'SiO2', height = b_clad)
-        em.shape(name = 'core', refractive_index = 'Ta2O5', width = w_core, height = h_core)
+        em.shape(name = 'BOX', material = 'SiO2', height = b_clad)
+        em.shape(name = 'core', material = 'Ta2O5', width = w_core, height = h_core)
 
         ## Run wavelength sweep
-        data = em.sweep(key='wavelength', values = wav_nm_,
+        data = em.sweep(key = 'wavelength', values = wav_nm_,
             result = ['effective_index'])
 
         ## Close EMode
         em.close()
-
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -74,11 +72,11 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
             'window_width', w_core + w_trench*2, ...
             'window_height', h_core + b_clad + h_clad, ...
             'num_modes', num_modes, 'boundary_condition', boundary, ...
-            'background_refractive_index', 'Air');
+            'background_material', 'Air');
 
         %% Draw shapes
-        em.shape('name', 'BOX', 'refractive_index', 'SiO2', 'height', b_clad);
-        em.shape('name', 'core', 'refractive_index', 'Ta2O5', 'width', w_core, ...
+        em.shape('name', 'BOX', 'material', 'SiO2', 'height', b_clad);
+        em.shape('name', 'core', 'material', 'Ta2O5', 'width', w_core, ...
             'height', h_core);
 
         %% Run wavelength sweep
@@ -88,13 +86,75 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
         %% Close EMode
         em.close();
 
-
 Console output::
 
-    EMode 0.1.2 - email
+    EMode 0.2.0 - email
 
-    Sweeping setting parameter 'wavelength'... completed in 49.4 sec
-    Exited EMode
+    Sweeping setting parameter 'wavelength'... 
+    Solving FDM: wavelength = 1000... Meshing completed in 1.0 sec
+    Solving completed in 1.8 sec
+    completed in 3.2 sec
+    Solving FDM: wavelength = 1050... Meshing completed in 1.0 sec
+    Solving completed in 1.6 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1100... Meshing completed in 1.0 sec
+    Solving completed in 1.4 sec
+    completed in 2.8 sec
+    Solving FDM: wavelength = 1150... Meshing completed in 1.0 sec
+    Solving completed in 1.4 sec
+    completed in 2.8 sec
+    Solving FDM: wavelength = 1200... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1250... Meshing completed in 1.0 sec
+    Solving completed in 1.4 sec
+    completed in 2.7 sec
+    Solving FDM: wavelength = 1300... Meshing completed in 1.0 sec
+    Solving completed in 1.4 sec
+    completed in 2.8 sec
+    Solving FDM: wavelength = 1350... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1400... Meshing completed in 1.0 sec
+    Solving completed in 1.3 sec
+    completed in 2.7 sec
+    Solving FDM: wavelength = 1450... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1500... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.8 sec
+    Solving FDM: wavelength = 1550... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.8 sec
+    Solving FDM: wavelength = 1600... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1650... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1700... Meshing completed in 1.0 sec
+    Solving completed in 1.4 sec
+    completed in 2.8 sec
+    Solving FDM: wavelength = 1750... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1800... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1850... Meshing completed in 1.0 sec
+    Solving completed in 1.5 sec
+    completed in 2.9 sec
+    Solving FDM: wavelength = 1900... Meshing completed in 1.0 sec
+    Solving completed in 1.3 sec
+    completed in 2.7 sec
+    Solving FDM: wavelength = 1950... Meshing completed in 1.0 sec
+    Solving completed in 1.6 sec
+    completed in 3.0 sec
+    Solving FDM: wavelength = 2000... Meshing completed in 1.1 sec
+    Solving completed in 1.6 sec
+    completed in 3.1 sec
+    completed in 1 min 0.4 sec
 
 
 A separate script can be used to plot the results.
@@ -104,7 +164,6 @@ A separate script can be used to plot the results.
     .. code-tab:: python
         :caption: Python
         
-
         import emodeconnection as emc
         import numpy as np
         from scipy.interpolate import UnivariateSpline
@@ -178,7 +237,6 @@ A separate script can be used to plot the results.
         ax.patch.set_visible(False)
 
         fig.savefig('dispersion.png', dpi=600, bbox_inches='tight')
-
 
 Figures:
 

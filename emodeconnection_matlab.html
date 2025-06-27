@@ -353,14 +353,26 @@
 </td></tr></table>
 <section id="setup">
 <span id="setupmatlab"></span><h2>Setup</h2>
-<p>Before running EMode from MATLAB, you must run the following in your MATLAB command window.</p>
+<section id="windows">
+<h3>Windows</h3>
+<p>The standard installation for Windows automatically includes this step. This is only necessary for Windows users during a manual emodeconnection update or if MATLAB is installed after installing EMode.</p>
+<p>Run the following in your MATLAB command window.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">addpath</span><span class="p">(</span><span class="n">fullfile</span><span class="p">(</span><span class="s1">&#39;C:&#39;</span><span class="p">,</span> <span class="s1">&#39;Program Files&#39;</span><span class="p">,</span> <span class="s1">&#39;EMode Photonix&#39;</span><span class="p">,</span> <span class="s1">&#39;EMode&#39;</span><span class="p">));</span> <span class="n">savepath</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
+<section id="macos-and-linux">
+<h3>MacOs and Linux</h3>
+<p>The setup for macOS and Linux platforms first requires downloading <a class="reference internal" href="#matlab-download"><span class="std std-ref">emodeconnection.m</span></a>.</p>
+<p>Next, run the following to add <code class="docutils literal notranslate"><span class="pre">emodeconnection.m</span></code> to the MATLAB path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">addpath</span><span class="p">(</span><span class="n">fullfile</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;HOME&#39;</span><span class="p">),</span> <span class="s1">&#39;Downloads&#39;</span><span class="p">));</span> <span class="n">savepath</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="emode-login">
 <span id="matlabemodelogin"></span><h2>EMode Login</h2>
-<p>Open MATLAB and run the following in the MATLAB command line. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
+<p>Open MATLAB and run the following in the MATLAB command line. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. <em>Alternatively</em>, you can run <code class="docutils literal notranslate"><span class="pre">emode</span></code> from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">emodeconnection</span><span class="o">.</span><span class="n">EModeLogin</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -370,7 +382,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="emodeconnection">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emodeconnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Opens the EMode software and initializes a local simulation file. The user’s account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run <code class="docutils literal notranslate"><span class="pre">EMode</span> <span class="pre">Login</span></code> from the the start menu.</p>
+<dd><p>Opens the EMode software and initializes a local simulation file. The user’s account must have an active license available to successfully run EMode. If the user has not previously logged in, initializing this class will prompt for the user credentials. To reset the user profile, see <code class="docutils literal notranslate"><span class="pre">EMode</span> <span class="pre">Login</span></code>.</p>
 <p>An existing file can be opened for further analysis by specifying the input name-value pair <code class="docutils literal notranslate"><span class="pre">'open_existing',</span> <span class="pre">true</span></code>. This opened file can be copied to a new file name by specifying the input name-value pair <code class="docutils literal notranslate"><span class="pre">'new_name',</span> <span class="pre">'new_filename'</span></code>.</p>
 <p>By default, calling the <cite>close()</cite> method saves the simulation file as a MATLAB-style .mat file. Adding optional input parameters can override this behavior to either delete the simulation file or save it as a .eph file.</p>
 <div class="admonition note">
@@ -401,13 +413,13 @@
 <div><dl class="py method">
 <dt class="sig sig-object py">
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EModeLogin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Opens the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
+<dd><p>Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">open_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Returns an EMode simulation file name with the extension “.mat” to be passed to the load() function.</p>
+<dd><p>Returns an EMode simulation file name with the extension “.mat” to be passed to the MATLAB load() function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>simulation_name</strong> (<em>str</em>) – Name of the simulation file. The “.mat” extension is optional to include with the name. Default: ‘emode’.</p>
@@ -460,13 +472,49 @@
 
 </div></blockquote>
 </section>
-<section id="updating-the-matlab-interface">
-<h2>Updating the MATLAB Interface</h2>
-<p>The latest version of <code class="docutils literal notranslate"><span class="pre">emodeconnection.m</span></code> can also be downloaded here, which can be added to the EMode directory under Program Files: <a class="reference download internal" download="" href="_downloads/8b0238f48e11d751a10636f13b09caa2/emodeconnection.m"><code class="xref download docutils literal notranslate"><span class="pre">emodeconnection.m</span></code></a>. This is not necessary to setup EMode with MATLAB, and it is only intended for updating this connection package without re-installing EMode.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">EMode</span> <span class="n">Photonix</span>\<span class="n">EMode</span>\<span class="n">emodeconnection</span><span class="o">.</span><span class="n">m</span>
-</pre></div>
-</div>
+<section id="types">
+<h2>Types</h2>
+<p>Two types that can be used for specifying material properties are available as struct attributes of the emodeconnection class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MaterialProperties">
+<span class="sig-name descname"><span class="pre">MaterialProperties</span></span></dt>
+<dd><p>A container for linear and non-linear electromagnetic material parameters. At least one of <cite>n</cite> or <cite>eps</cite> <strong>must</strong> be supplied in any valid instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Scalar or tensor refractive index. Accepts <em>None</em> (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.</p></li>
+<li><p><strong>eps</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Relative permittivity tensor εᵣ. Accepts <em>None</em> (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.</p></li>
+<li><p><strong>mu</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Relative permeability tensor μᵣ. Same shape conventions as <cite>eps</cite>. Default: <em>None</em> (μᵣ = 1).</p></li>
+<li><p><strong>d</strong> (<em>Optional</em><em>[</em><em>~DTensorType</em><em>]</em>) – Second-order nonlinear susceptibility <em>d</em>. Expected shape is 3x6. Use <em>None</em> when the material is linear. Default: <em>None</em>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py attribute">
+<dt class="sig sig-object py" id="MaterialSpec">
+<span class="sig-name descname"><span class="pre">MaterialSpec</span></span></dt>
+<dd><p>A container that defines the adjustable properties of a material being used. All properties default to the materials
+defaults (typically 0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>~MaterialProperties</em><em>]</em>) – Either a <em>str</em> of a material in the Material Database, or a MaterialProperties struct. Required.</p></li>
+<li><p><strong>theta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>y</em> for the material in radians.</p></li>
+<li><p><strong>phi</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>z</em> for the material in radians. This is applied <em>after</em> the theta rotation.</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored for materials without this parameter. Must be between 0 and 1. Default: 0.</p></li>
+<li><p><strong>loss</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The absorption loss of the material in dB/m.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
+<section id="updating-the-matlab-interface">
+<span id="matlab-download"></span><h2>Updating the MATLAB Interface</h2>
+<p>The latest version of <code class="docutils literal notranslate"><span class="pre">emodeconnection.m</span></code> can also be downloaded at the following link, which must be added to the EMode executable directory (or another directory in the MATLAB path). This is not necessary to setup EMode with MATLAB, and it is only intended for updating this connection package without re-installing EMode.</p>
+<a href="https://raw.githubusercontent.com/emode-photonix/emodeconnection/main/emodeconnection_matlab/emodeconnection.m" download="emodeconnection.m">emodeconnection.m</a></section>
 </section>
 
 
@@ -492,7 +540,11 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows">Windows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos-and-linux">MacOs and Linux</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#emode-login">EMode Login</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-emode-class">The EMode class</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#emodeconnection"><code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code></a></li>
@@ -501,6 +553,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get_"><code class="docutils literal notranslate"><span class="pre">get_()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect_"><code class="docutils literal notranslate"><span class="pre">inspect_()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types">Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialProperties"><code class="docutils literal notranslate"><span class="pre">MaterialProperties</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialSpec"><code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-the-matlab-interface">Updating the MATLAB Interface</a></li>

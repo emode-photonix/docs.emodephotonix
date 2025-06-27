@@ -2,7 +2,7 @@
 Python interface
 ================
 
-To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.7, 3.8, 3.9, and 3.10, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.
+To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.9, and 3.10, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.
 
 The source code can be viewed here: `emodeconnection <https://github.com/emode-photonix/emodeconnection>`_
 
@@ -21,29 +21,29 @@ For more information about Python, see these links:
 Setup
 -----
 
-Install the ``emodeconnection`` Python package from the Windows command line.
+Install the ``emodeconnection`` Python package from the command line.
 
 .. code-block::
 
-    pip install emodeconnection
+   pip install emodeconnection
 
 .. _PythonEModeLogin:
 
 EMode Login
 -----------
 
-Open a Python session and run the following. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+Open a Python session and run the following. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. code-block::
 
-    import emodeconnection as emc
-    emc.EModeLogin()
+   import emodeconnection as emc
+   emc.EModeLogin()
 
 
 The EMode class
 ---------------
 
-.. class:: EMode(simulation_name = 'emode', license_type = 'default', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN')
+.. class:: EMode(simulation_name = 'emode', license_type = 'default', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None)
     
     Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``EModeLogin`` from the the start menu.
     
@@ -52,15 +52,16 @@ The EMode class
     .. note::
         All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using keyword arguments for each funtion input parameter.
     
-    :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name.
-    :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available.
-    :param str save_path: Name of the path where the simulation file will be created and saved.
-    :param bool verbose: Whether to run EMode in verbose mode for debugging.
-    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license.
-    :param bool open_existing: Whether to open an existing file or to start a new simulation.
-    :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name.
+    :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
+    :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available. Default: 'default'.
+    :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
+    :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license. Default: False.
+    :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
+    :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
     :type new_name: bool or str
-    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle.
+    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN'.
+    :param list[str] emode_cmd: Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location.
 
 
 Functions
@@ -70,7 +71,7 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
 
 .. function:: EModeLogin()
     
-    Opens the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+    Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. function:: open_file(simulation_name = 'emode')
     
@@ -97,6 +98,124 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
     :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get()` function.
     :rtype: list
 
+Types
+-----
+
+Two types that can be used for specifying material properties are available as classes of the emodeconnection package.
+
+.. py:class:: MaterialProperties
+
+   A container for linear and non-linear electromagnetic material parameters. At least one of `n` or `eps` **must** be supplied in any valid instance.
+
+   :param n: Scalar or tensor refractive index. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.
+   :type n: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param eps: Relative permittivity tensor εᵣ. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.
+   :type eps: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param mu: Relative permeability tensor μᵣ. Same shape conventions as `eps`. Default: *None* (μᵣ = 1).
+   :type mu: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param d: Second-order nonlinear susceptibility *d*. Expected shape is 3x6. Use *None* when the material is linear. Default: *None*.
+   :type d: ~typing.Optional[~DTensorType]
+
+----
+
+.. py:class:: MaterialSpec
+
+   A container that defines the adjustable properties of a material being used. All properties default to the materials
+   defaults (typically 0).
+
+   :param material: Either a *str* pointing to a material in the Material Database, or a MaterialProperties object. Required.
+   :type material: ~typing.Union[str, ~MaterialProperties]
+
+   :param theta: The angle of rotation around *y* for the material in radians.
+   :type theta: ~typing.Optional[float]
+
+   :param phi: The angle of rotation around *z* for the material in radians. This is applied *after* the theta rotation.
+   :type phi: ~typing.Optional[float]
+
+   :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.
+   :type x: ~typing.Optional[float]
+
+   :param loss: The absorption loss of the material in dB/m.
+   :type loss: ~typing.Optional[float]
+
+
+Exceptions
+----------
+
+The ``emodeconnection.types`` module also contains the following exception classes. All errors in EMode are raised and passed back to the user as one of these errors.
+
+.. py:class:: EModeError(*args, **kwargs)
+
+   Base class for all EMode exceptions.
+
+----
+
+.. py:class:: ArgumentError(msg, function=None, argument=None)
+
+   Invalid value passed to *function*.
+
+   :param str msg: Human-readable explanation.
+   :param str function: Function name.
+   :param str argument: Name of the offending argument.
+
+----
+
+.. py:class:: EPHKeyError(msg, filename, key)
+
+   Missing dataset or attribute *key* in the given EPH file.
+
+   :param str msg: Details of the failure.
+   :param str filename: Path to the EPH file.
+   :param str key: Absent key.
+
+----
+
+.. py:class:: FileError(msg, filename)
+
+   Generic file-system or I/O problem.
+
+   :param str msg: Description of the error.
+   :param str filename: File path involved.
+
+----
+
+.. py:class:: LicenseError(msg, license_type)
+
+   Operation not permitted under *license_type*.
+
+   :param str msg: Explanation of the denial.
+   :param LicenseType license_type: Active or required licence class.
+
+----
+
+.. py:class:: ShapeError(msg, shape_name)
+
+   Unexpected tensor or geometry shape.
+
+   :param str msg: Explanation of the mismatch.
+   :param str shape_name: Symbolic name of the offending shape.
+
+----
+
+.. py:class:: NameError(msg, type, name)
+
+   Forbidden *name* within the given *type* category.
+
+   :param str msg: Reason for the failure.
+   :param str type: Category being searched (e.g. ``"section"`` or ``"label"``).
+   :param str name: Forbidden identifier.
+
+----
+
+.. py:class:: NotImplementedError(msg)
+
+   Feature is recognised but not yet implemented.
+
+   :param str msg: Description of the missing capability.
+
 Updating the Python Interface
 -----------------------------
 
@@ -104,4 +223,4 @@ Update the ``emodeconnection`` Python package to the latest version with:
 
 .. code-block::
 
-    pip install -U emodeconnection
+   pip install -U emodeconnection

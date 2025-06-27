@@ -6,8 +6,8 @@ Descriptions of all variables available in the simulation file. Some variables h
 
 .. glossary::
 
-    background_refractive_index
-        (*float*) Refractive index in the background of simulation window, setting the default refractive index where no shapes are defined.
+    background_material
+        (*float*) material in the background of simulation window, setting the default material where no shapes are defined.
 
     bend_radius
         (*float*) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.
@@ -111,32 +111,48 @@ Descriptions of all variables available in the simulation file. Some variables h
     
     shape_materials
         (*list*) A list of materials corresponding to the defined shapes.
-    
-    shape_vertices
-        (*list*) A list of the vertices of the shapes defined by ``shape_materials``.
+
     
     SHAPE['correlation_length']
         (*list*) A list of two values describing the correlation length of the roughness on the vertical and horizontal edges of the shape.
         
         Alias: ``Lc_nm``
-    
-    SHAPE['confinement']
-        (*list*) Confinement factor for each mode in the corresponding shape.
-    
-    SHAPE['edges']
-        (*list*) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from ``SHAPE['scattering_all_edges']``.
 
-    SHAPE['etch_depth']
-        (*float*) The etch depth associated with a 'planar' shape that also has a defined ``SHAPE['mask']``. The shape will have a thickness outside the mask definition equal to the difference between the ``SHAPE['height']`` and ``SHAPE['etch_depth']`` (or zero if this is negative).
-
-    SHAPE['fill_permeability']
-        (*float* or *str*) Either a value or a material name to define the permeability in the etched region of a 'planar' shape.
-
-    SHAPE['fill_refractive_index']
+    SHAPE['fill_material']
         (*float* or *str*) Either a value or a material name to define the refractive index in the etched region of a 'planar' shape.
+    
+    SHAPE['geometry']
+        (*dict*) A dictionary of the parameters of the shapes geometry
+    
+    SHAPE['geometry']['etch_depth']
+        (*float*) The etch depth associated with a 'planar' shape that also has a defined ``SHAPE['geometry']['mask']``. The shape will have a thickness outside the mask definition equal to the difference between the ``SHAPE['geometry']['height']`` and ``SHAPE['geometry']['etch_depth']`` (or zero if this is negative).
 
-    SHAPE['height']
+    SHAPE['geometry']['height']
         (*float*) Maximum size of the shape in the y-direction.
+
+    SHAPE['geometry']['masks']
+        (*list*) The masks for this shape
+    
+    SHAPE['geometry']['mask_offsets']
+        (*list*) The mask offsets for this shape
+    
+    SHAPE['geometry']['position']
+        (*list*) The x- and y-positions of the center point of the shape, constrained by the ``SHAPE['geometry']['width']`` and ``SHAPE['geometry']['height']``.
+
+    SHAPE['geometry']['shape_type']
+        (*str*) The shape type is either 'planar', 'conformal', 'polygon', or 'ellipse'.
+
+    SHAPE['geometry']['sidewall_angle']
+        (*float*) [degrees] Angle of the side wall for a 'planar' shape relative to a vertical at 0 degrees.
+
+    SHAPE['geometry']['tone']
+        (*str*) The tone of the mask ('p' or 'n')
+
+    SHAPE['geometry']['vertices']
+        (*list*) Pairs of [x,y] vertices that define the perimeter of a shape.
+
+    SHAPE['geometry']['width']
+        (*float*) Maximum size of the shape in the x-direction.
 
     SHAPE['loss_dB_per_m']
         (*float*) [dB/m] Absorption coefficient for power loss in the region defined by the shape.
@@ -147,49 +163,34 @@ Descriptions of all variables available in the simulation file. Some variables h
     SHAPE['name']
         (*str*) User-defined name of the shape. This name will be used to reference this shape in subsequent functions.
 
-    SHAPE['permeability']
-        (*float* or *str*) Either a value or a material name to define the permeability of the shape.
-
-    SHAPE['position']
-        (*list*) The x- and y-positions of the center point of the shape, constrained by the ``SHAPE['width']`` and ``SHAPE['width']``.
-
     SHAPE['priority']
         (*float*) A value that defines the order in which the shape is drawn relative to other shapes. A higher value give a higher priority, putting the shape in front of other shapes with lower priority.
 
-    SHAPE['refractive_index']
-        (*float* or *str*) Either a value or a material name to define the refractive index of the shape.
-
-    SHAPE['refractive_index_value']
-        (*float*) The value of the refractive index for the shape. This is useful as a reference when a material name is passed for ``SHAPE['refractive_index']``.
-    
     SHAPE['roughness_rms']
         (*list*) A list of two values describing the rms roughness on the vertical and horizontal edges of the shape.
         
         Alias: ``st_dev_nm``
+
+    SHAPE['metadata']
+        (*dict*) A dictionary of metadata associated with the shape
+
+    SHAPE['metadata']['confinement']
+        (*list*) Confinement factor for each mode in the corresponding shape.
     
-    SHAPE['scattering_all_edges']
+    SHAPE['metadata']['edges']
+        (*list*) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from ``SHAPE['scattering_all_edges']``.
+    
+    SHAPE['metadata']['scattering_all_edges']
         (*list*) Calculated scattering loss for each edge of the shape, defined by ``SHAPE['edges']``.
 
-    SHAPE['scattering_horizontal_edges']
+    SHAPE['metadata']['scattering_horizontal_edges']
         (*list*) Calculated scattering loss for each horizontal edge of the shape.
 
-    SHAPE['scattering_sum']
+    SHAPE['metadata']['scattering_sum']
         (*list*) Total calculated scattering loss for all edges of the shape.
-
-    SHAPE['scattering_vertical_edges']
+    
+    SHAPE['metadata']['scattering_vertical_edges']
         (*list*) Calculated scattering loss for each vertical edge of the shape.
-
-    SHAPE['shape_type']
-        (*str*) The shape type is either 'planar', 'conformal', 'polygon', or 'ellipse'.
-
-    SHAPE['sidewall_angle']
-        (*float*) [degrees] Angle of the side wall for a 'planar' shape relative to a vertical at 0 degrees.
-
-    SHAPE['vertices']
-        (*list*) Pairs of [x,y] vertices that define the perimeter of a shape.
-
-    SHAPE['width']
-        (*float*) Maximum size of the shape in the x-direction.
 
     Sx, Sy, Sz
         (*arrays*) [W/nm] The Poynting vector in the x-, y-, and z-directions.

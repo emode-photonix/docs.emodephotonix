@@ -344,37 +344,57 @@
 </section>
 <section id="download-and-install-emode">
 <h2>2. Download and Install EMode</h2>
-<p><strong>System requirements</strong>: Windows 10, 64-bit, 960 MB free disk space.</p>
-<ul>
+<p><strong>System requirements</strong>: 600 MB free disk space</p>
+<table class="hlist"><tr><td><ul class="simple">
+<li><p><strong>Windows</strong> 10 or higher</p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p><strong>Linux</strong>, Ubuntu 22.04 or higher, x86-64 <strong>(Beta)</strong></p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p><strong>macOS</strong> 13 Ventura or higher <strong>(Beta)</strong></p></li>
+</ul>
+</td></tr></table>
+<p>To install EMode, follow these steps:</p>
+<ol class="arabic">
 <li><p>Login to your <a class="reference external" href="https://emodephotonix.com/my-account/">EMode account</a>.</p></li>
-<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Download</span> <span class="pre">EMode</span></code> button.</p></li>
-<li><p>Run the downloaded installer and follow the prompts to complete the installation.</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><a class="reference external" href="installation/release-notes.html">Release notes</a></p></li>
-<li><p><a class="reference external" href="installation/troubleshooting.html">Troubleshooting</a></p></li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
+<li><p>On your account page, select an operating system (Windows, Linux, or macOS) from the dropdown menu.</p></li>
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Download</span> <span class="pre">EMode</span></code> button to download the appropriate file for your selected operating system (an installer for Windows, an executable for Linux &amp; macOS).</p>
+<ul>
+<li><p><strong>For Windows Users</strong>: Run the downloaded installer and follow the prompts to complete the installation.</p></li>
+<li><p><strong>For Linux and macOS Users</strong>: The downloaded file is an executable, not an installer. You will need to move it to a directory included in your system’s <cite>PATH</cite>. Here is an example command to run from a terminal window.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>mv<span class="w"> </span>~/Downloads/EMode<span class="w"> </span>/usr/local/bin/
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The Linux and macOS versions of EMode are currently in beta. Please <a class="reference external" href="https://emodephotonix.com/contact/">report</a> any problems you find.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><em>Mac users</em>: Try installing a virtual machine to run EMode (<a class="reference external" href="https://www.parallels.com/">Parallels</a> and <a class="reference external" href="https://mac.getutm.app/">UTM</a> are currently being tested).</p>
+<p>On macOS with an ARM processor (Apple Silicon), the first time you run EMode, you may see a prompt asking you to install <strong>Rosetta 2</strong>. Please proceed with this installation as it is required to run EMode on Apple Silicon. This is not necessary for Intel-based macOS machines.</p>
 </div>
+</li>
+</ul>
+</li>
+</ol>
+<table class="hlist"><tr><td><ul class="simple">
+<li><p><a class="reference external" href="installation/release-notes.html">Release notes</a></p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p><a class="reference external" href="installation/troubleshooting.html">Troubleshooting</a></p></li>
+</ul>
+</td></tr></table>
 </section>
-<section id="setup-script-interface-and-login-to-emode">
-<h2>3. Setup Script Interface and Login to EMode</h2>
+<section id="setup-a-scripting-interface">
+<h2>3. Setup a Scripting Interface</h2>
 <div class="sd-container-fluid sd-sphinx-override sd-m-auto sd-p-0 docutils">
 <div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-4 sd-g-xs-4 sd-g-sm-4 sd-g-md-4 sd-g-lg-4 docutils">
 <div class="sd-col sd-d-flex-row docutils">
 <div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
 <div class="sd-card-body docutils">
 <div class="sd-card-title sd-font-weight-bold docutils">
-Python</div>
-<ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="emodeconnection_python.html#setuppython"><span class="std std-ref">Setup Python interface</span></a></p></li>
-<li><p class="sd-card-text"><a class="reference internal" href="emodeconnection_python.html#pythonemodelogin"><span class="std std-ref">EMode Login with Python</span></a></p></li>
-</ul>
+<a class="reference internal" href="emodeconnection_python.html#setuppython"><span class="std std-ref">Python setup</span></a></div>
 </div>
 </div>
 </div>
@@ -382,11 +402,7 @@ Python</div>
 <div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
 <div class="sd-card-body docutils">
 <div class="sd-card-title sd-font-weight-bold docutils">
-MATLAB</div>
-<ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="emodeconnection_matlab.html#setupmatlab"><span class="std std-ref">Setup MATLAB interface</span></a></p></li>
-<li><p class="sd-card-text"><a class="reference internal" href="emodeconnection_matlab.html#matlabemodelogin"><span class="std std-ref">EMode Login with MATLAB</span></a></p></li>
-</ul>
+<a class="reference internal" href="emodeconnection_matlab.html#setupmatlab"><span class="std std-ref">MATLAB setup</span></a></div>
 </div>
 </div>
 </div>
@@ -397,6 +413,7 @@ MATLAB</div>
 <h2>4. Run an EMode Example Script</h2>
 <ul class="simple">
 <li><p>Copy and run the <a class="reference external" href="examples/SOI.html">Basic: SOI</a> example in your scripting environment.</p></li>
+<li><p>An account login window will open when EMode is first initialized. To subsequently access this window, run <code class="docutils literal notranslate"><span class="pre">EMode</span></code> from the command line.</p></li>
 </ul>
 <p>If you have any issues, please contact our <a class="reference external" href="https://emodephotonix.com/contact/">support team</a>.</p>
 </section>
@@ -427,7 +444,7 @@ MATLAB</div>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-an-emode-license">1. Get an EMode License</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#download-and-install-emode">2. Download and Install EMode</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-script-interface-and-login-to-emode">3. Setup Script Interface and Login to EMode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-a-scripting-interface">3. Setup a Scripting Interface</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-an-emode-example-script">4. Run an EMode Example Script</a></li>
 </ul>
   </nav></div>

@@ -2,21 +2,42 @@
 EMode Guide
 ===========
 
-**User profile login**: run ``EModeLogin`` from the start menu or the command line. Entering your username and password will save your EMode user profile.
+**User profile login**: run ``emode`` from the command line. Enter your EMode account credentials to save your profile.
+
+.. grid:: 2
+    :gutter: 4
+    :padding: 2
+    :margin: auto
+
+    .. grid-item-card:: EMode\ :sup:`2D`\  Functions
+        :shadow: md
+        :columns: 6
+
+        * `File Management <emodeguide/file-management.html>`_
+        * `Setup <emodeguide/setup.html>`_
+        * `Solver Analysis <emodeguide/solver-analysis.html>`_
+
+    .. grid-item-card:: EMode\ :sup:`3D`\  Functions
+        :shadow: md
+        :columns: 6
+
+        * `EME <emodeguide/eme.html>`_
 
 .. toctree::
-   :caption: EMode-2D Functions
-   :maxdepth: 1
-   
-   emodeguide/file-management
-   emodeguide/setup
-   emodeguide/solver-analysis
+    :maxdepth: 0
+    :caption: EMode2D Functions
+    :hidden:
+    
+    emodeguide/file-management
+    emodeguide/setup
+    emodeguide/solver-analysis
 
 .. toctree::
-   :caption: EMode-3D Functions
-   :maxdepth: 1
-   
-   emodeguide/eme
+    :maxdepth: 0
+    :caption: EMode3D Functions
+    :hidden:
+    
+    emodeguide/eme
 
 .. toctree::
    :caption: Glossaries
@@ -81,4 +102,4 @@ Citing EMode
 
 If you use EMode for design or analysis in a publication, please use the following citation.
 
-    EMode (version 0.1.2) [Software] from EMode Photonix. Available at `emodephotonix.com <https://www.emodephotonix.com>`_.
+    EMode [Software] from EMode Photonix. Available at `emodephotonix.com <https://www.emodephotonix.com>`_.

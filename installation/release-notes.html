@@ -303,13 +303,13 @@
         <div class="sidebar-primary-item">
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
-  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D Functions</span></p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../emodeguide/file-management.html">File management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../emodeguide/setup.html">Simulation setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../emodeguide/solver-analysis.html">Solver and analysis</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D Functions</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../emodeguide/eme.html">EME</a></li>
 </ul>
@@ -357,6 +357,23 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>0.2.0: June 27, 2024</strong></p>
+<ul class="simple">
+<li><p>Added an explicit restriction on the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter so that it cannot be set to be smaller than the machine precision. The default for <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 1e-12.</p></li>
+<li><p>Removed a bug in EME for symmetric section simulations.</p></li>
+<li><p>Optimized and improved the underlying EME algorithm, improving simulation accuracy.</p></li>
+<li><p>Added beta support for macOS and Linux.</p></li>
+<li><p>Improved the subpixel averaging algorithm.</p></li>
+<li><p>Added general anisotropic solver for straight waveguides, available with EMode3D.</p></li>
+<li><p>The shape() function input <code class="docutils literal notranslate"><span class="pre">refractive_index</span></code> has been changed to <code class="docutils literal notranslate"><span class="pre">material</span></code>. Similarly, the <code class="docutils literal notranslate"><span class="pre">fill_refractive_index</span></code> has been changed to <code class="docutils literal notranslate"><span class="pre">fill_material</span></code>.</p></li>
+<li><p>All scattering loss results are now stored under the <code class="docutils literal notranslate"><span class="pre">meta_data</span></code> dictionary of the shape.</p></li>
+<li><p>Added a progress bar for meshing and solving.</p></li>
+<li><p>Added the ability to return material properties from database materials using <code class="docutils literal notranslate"><span class="pre">get(&quot;material_name&quot;)</span></code>.</p></li>
+<li><p>Added two special types available to the user for defining materials and material properties: <code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code> and <code class="docutils literal notranslate"><span class="pre">MaterialProperties</span></code>.</p></li>
+<li><p>The crystal orientation of a material can now be rotated relative to the simulation window axis by defining a <code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code> and specifying rotation parameters <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p></li>
+<li><p>Changes to biaxial materials: extraordinary index is always aligned with the z-axis (ordinary is aligned with the x and y axes). Rotations can be performed to orient a crystal to the simulation axes as desired. Affected materials: BBO, LN_z –&gt; LN, LN_MgO_z –&gt; LN_MgO, TiO2_rutile.</p></li>
+<li><p>When EMode encounters errors, emodeconnection.py (1.0.11) will now raise an exception instead of just printing an error message.</p></li>
+</ul>
 <p><strong>0.1.2: March 16, 2024</strong></p>
 <ul class="simple">
 <li><p>Fixed a bug where <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> was reset after modes are automatically removed from the pml regions.</p></li>

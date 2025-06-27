@@ -39,20 +39,20 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
             window_width = window_width, window_height = window_height,
-            num_modes = num_modes, background_refractive_index = 'SiO2',
+            num_modes = num_modes, background_material = 'SiO2',
             boundary_condition = boundary)
 
         ## Draw shapes
-        em.shape(name = 'BOX', refractive_index = 'SiO2', height = h_clad)
-        em.shape(name = 'core', refractive_index = 'Si', height = h_core,
-            mask = w_core, etch = h_core*0.5, fill_refractive_index = 'Air',
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad)
+        em.shape(name = 'core', material = 'Si', height = h_core,
+            mask = w_core, etch_depth = h_core*0.5, fill_material = 'Air',
             roughness_rms = [5, 0.2], correlation_length = [100, 80])
-        em.shape(name = 'SL', refractive_index = 3.20, height = h_SL)
-        em.shape(name = 'n-contact', refractive_index = 3.17, height = h_n)
-        em.shape(name = 'SCH1', refractive_index = 3.43, height = h_SCH)
-        em.shape(name = 'QW', refractive_index = 3.41, height = h_QW)
-        em.shape(name = 'SCH2', refractive_index = 3.43, height = h_SCH)
-        em.shape(name = 'uclad', refractive_index = 3.17, height = h_uclad)
+        em.shape(name = 'SL', material = emc.MaterialProperties(n=3.20), height = h_SL)
+        em.shape(name = 'n-contact', material = emc.MaterialProperties(n=3.17), height = h_n)
+        em.shape(name = 'SCH1', material = emc.MaterialProperties(n=3.43), height = h_SCH)
+        em.shape(name = 'QW', material = emc.MaterialProperties(n=3.41), height = h_QW)
+        em.shape(name = 'SCH2', material = emc.MaterialProperties(n=3.43), height = h_SCH)
+        em.shape(name = 'uclad', material = emc.MaterialProperties(n=3.17), height = h_uclad)
 
         ## Launch FDM solver
         em.FDM()
@@ -64,15 +64,15 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
         ## Display scattering loss details from the core
         shape_core = em.get('shape_core')
-        sv = shape_core['scattering_vertical_edges']
-        sh = shape_core['scattering_horizontal_edges']
-        sT = shape_core['scattering_sum']
-        print('Scattering loss from all vertical edges: %0.1f dB/m' % sv)
-        print('Scattering loss from all horizontal edges: %0.1f dB/m' % sh)
-        print('Total scattering loss: %0.1f dB/m\n' % sT)
+        sv = shape_core['metadata']['scattering_vertical_edges']
+        sh = shape_core['metadata']['scattering_horizontal_edges']
+        sT = shape_core['metadata']['scattering_sum']
+        print('Scattering loss from all vertical edges: %0.1f dB/m' % sv[0])
+        print('Scattering loss from all horizontal edges: %0.1f dB/m' % sh[0])
+        print('Total scattering loss: %0.1f dB/m\n' % sT[0])
 
-        edges = shape_core['edges']
-        sa = shape_core['scattering_all_edges']
+        edges = shape_core['metadata']['edges']
+        sa = shape_core['metadata']['scattering_all_edges']
         for kk in range(len(edges)):
             print('From', edges[kk][0], 'to', edges[kk][1])
             print('    scattering loss = %0.1f dB/m\n' % sa[0][kk])
@@ -110,20 +110,26 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
         em.settings( ...
             'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
             'window_width', window_width, 'window_height', window_height, ...
-            'num_modes', num_modes, 'background_refractive_index', 'SiO2', ...
+            'num_modes', num_modes, 'background_material', 'SiO2', ...
             'boundary_condition', boundary);
 
         % Draw shapes
-        em.shape('name', 'BOX', 'refractive_index', 'SiO2', 'height', h_clad);
-        em.shape('name', 'core', 'refractive_index', 'Si', 'height', h_core, ...
-            'mask', w_core, 'etch', h_core*0.5, 'fill_refractive_index', 'Air', ...
+        em.shape('name', 'BOX', 'material', 'SiO2', 'height', h_clad);
+        em.shape('name', 'core', 'material', 'Si', 'height', h_core, ...
+            'mask', w_core, 'etch_depth', h_core*0.5, 'fill_material', 'Air', ...
             'roughness_rms', [5, 0.2], 'correlation_length', [100, 80]);
-        em.shape('name', 'SL', 'refractive_index', 3.20, 'height', h_SL);
-        em.shape('name', 'n-contact', 'refractive_index', 3.17, 'height', h_n);
-        em.shape('name', 'SCH1', 'refractive_index', 3.43, 'height', h_SCH);
-        em.shape('name', 'QW', 'refractive_index', 3.41, 'height', h_QW);
-        em.shape('name', 'SCH2', 'refractive_index', 3.43, 'height', h_SCH);
-        em.shape('name', 'uclad', 'refractive_index', 3.17, 'height', h_uclad);
+        em.MaterialProperties.n = 3.20
+        em.shape('name', 'SL', 'material', em.MaterialProperties, 'height', h_SL);
+        em.MaterialProperties.n = 3.17
+        em.shape('name', 'n-contact', 'material', em.MaterialProperties, 'height', h_n);
+        em.MaterialProperties.n = 3.43
+        em.shape('name', 'SCH1', 'material', em.MaterialProperties, 'height', h_SCH);
+        em.MaterialProperties.n = 3.41
+        em.shape('name', 'QW', 'material', em.MaterialProperties, 'height', h_QW);
+        em.MaterialProperties.n = 3.43
+        em.shape('name', 'SCH2', 'material', em.MaterialProperties, 'height', h_SCH);
+        em.MaterialProperties.n = 3.17
+        em.shape('name', 'uclad', 'material', em.MaterialProperties, 'height', h_uclad);
 
         % Launch FDM solver
         em.FDM();
@@ -135,15 +141,15 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
         % Display scattering loss details from the core
         shape_core = em.get('shape_core');
-        sv = shape_core.scattering_vertical_edges;
-        sh = shape_core.scattering_horizontal_edges;
-        sT = shape_core.scattering_sum;
+        sv = shape_core.metadata.scattering_vertical_edges;
+        sh = shape_core.metadata.scattering_horizontal_edges;
+        sT = shape_core.metadata.scattering_sum;
         fprintf('Scattering loss from all vertical edges: %0.1f dB/m\n', sv)
         fprintf('Scattering loss from all horizontal edges: %0.1f dB/m\n', sh)
         fprintf('Total scattering loss: %0.1f dB/m\n\n', sT)
 
-        edges = shape_core.edges;
-        sa = shape_core.scattering_all_edges;
+        edges = shape_core.metadata.edges;
+        sa = shape_core.metadata.scattering_all_edges;
         for kk = 1:length(edges)
             fprintf('From (%s) to (%s):', num2str(edges(kk,:,1)), num2str(edges(kk,:,2)))
             fprintf('    scattering loss = %0.1f dB/m\n', sa(kk))
@@ -155,29 +161,27 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
         % Close EMode
         em.close();
 
-
 Console output::
 
-    EMode 0.1.2 - email
-    Meshing... completed in 3.8 sec
-    Solving... completed in 12.7 sec
+    EMode 0.2.0 - email
+    Meshing completed in 6.0 sec
+    Solving completed in 11.9 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement    core scattering (dB/m)
     --------  --------  ------  -------------  ------------------  ------------------------
-        TE-0  3.291912  99.8 %          0.000              50.4 %                   416.628
+        TE-0  3.290919  99.8 %          0.000              49.7 %                   437.506
  
-    Exited EMode
-    Scattering loss from all vertical edges: 414.6 dB/m
+    Scattering loss from all vertical edges: 435.5 dB/m
     Scattering loss from all horizontal edges: 2.0 dB/m
-    Total scattering loss: 416.6 dB/m
+    Total scattering loss: 437.5 dB/m
 
     From [-500.0, 1250.0] to [-500.0, 1500.0]
-        scattering loss = 207.3 dB/m
+        scattering loss = 217.8 dB/m
 
     From [500.0, 1500.0] to [500.0, 1250.0]
-        scattering loss = 207.3 dB/m
+        scattering loss = 217.8 dB/m
 
     From [-500.0, 1500.0] to [500.0, 1500.0]
         scattering loss = 0.5 dB/m

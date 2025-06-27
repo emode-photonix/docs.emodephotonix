@@ -304,13 +304,13 @@
         <div class="sidebar-primary-item">
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
-  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-2D Functions</span></p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="file-management.html">File management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Simulation setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solver-analysis.html">Solver and analysis</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode-3D Functions</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
 </ul>
@@ -360,7 +360,7 @@
 <h1>Variable Descriptions</h1>
 <p>Descriptions of all variables available in the simulation file. Some variables have an alias, which is a copy of the data from the primary variable name for enhanced compatability with previous versions of EMode. For shapes, SHAPE indicates the name defined by the user.</p>
 <dl class="glossary">
-<dt id="term-background_refractive_index">background_refractive_index</dt><dd><p>(<em>float</em>) Refractive index in the background of simulation window, setting the default refractive index where no shapes are defined.</p>
+<dt id="term-background_material">background_material</dt><dd><p>(<em>float</em>) material in the background of simulation window, setting the default material where no shapes are defined.</p>
 </dd>
 <dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
@@ -431,22 +431,32 @@
 </dd>
 <dt id="term-shape_materials">shape_materials</dt><dd><p>(<em>list</em>) A list of materials corresponding to the defined shapes.</p>
 </dd>
-<dt id="term-shape_vertices">shape_vertices</dt><dd><p>(<em>list</em>) A list of the vertices of the shapes defined by <code class="docutils literal notranslate"><span class="pre">shape_materials</span></code>.</p>
-</dd>
 <dt id="term-SHAPE-correlation_length">SHAPE[‘correlation_length’]</dt><dd><p>(<em>list</em>) A list of two values describing the correlation length of the roughness on the vertical and horizontal edges of the shape.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">Lc_nm</span></code></p>
 </dd>
-<dt id="term-SHAPE-confinement">SHAPE[‘confinement’]</dt><dd><p>(<em>list</em>) Confinement factor for each mode in the corresponding shape.</p>
+<dt id="term-SHAPE-fill_material">SHAPE[‘fill_material’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the refractive index in the etched region of a ‘planar’ shape.</p>
 </dd>
-<dt id="term-SHAPE-edges">SHAPE[‘edges’]</dt><dd><p>(<em>list</em>) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_all_edges']</span></code>.</p>
+<dt id="term-SHAPE-geometry">SHAPE[‘geometry’]</dt><dd><p>(<em>dict</em>) A dictionary of the parameters of the shapes geometry</p>
 </dd>
-<dt id="term-SHAPE-etch_depth">SHAPE[‘etch_depth’]</dt><dd><p>(<em>float</em>) The etch depth associated with a ‘planar’ shape that also has a defined <code class="docutils literal notranslate"><span class="pre">SHAPE['mask']</span></code>. The shape will have a thickness outside the mask definition equal to the difference between the <code class="docutils literal notranslate"><span class="pre">SHAPE['height']</span></code> and <code class="docutils literal notranslate"><span class="pre">SHAPE['etch_depth']</span></code> (or zero if this is negative).</p>
+<dt id="term-SHAPE-geometry-etch_depth">SHAPE[‘geometry’][‘etch_depth’]</dt><dd><p>(<em>float</em>) The etch depth associated with a ‘planar’ shape that also has a defined <code class="docutils literal notranslate"><span class="pre">SHAPE['geometry']['mask']</span></code>. The shape will have a thickness outside the mask definition equal to the difference between the <code class="docutils literal notranslate"><span class="pre">SHAPE['geometry']['height']</span></code> and <code class="docutils literal notranslate"><span class="pre">SHAPE['geometry']['etch_depth']</span></code> (or zero if this is negative).</p>
 </dd>
-<dt id="term-SHAPE-fill_permeability">SHAPE[‘fill_permeability’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the permeability in the etched region of a ‘planar’ shape.</p>
+<dt id="term-SHAPE-geometry-height">SHAPE[‘geometry’][‘height’]</dt><dd><p>(<em>float</em>) Maximum size of the shape in the y-direction.</p>
 </dd>
-<dt id="term-SHAPE-fill_refractive_index">SHAPE[‘fill_refractive_index’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the refractive index in the etched region of a ‘planar’ shape.</p>
+<dt id="term-SHAPE-geometry-masks">SHAPE[‘geometry’][‘masks’]</dt><dd><p>(<em>list</em>) The masks for this shape</p>
 </dd>
-<dt id="term-SHAPE-height">SHAPE[‘height’]</dt><dd><p>(<em>float</em>) Maximum size of the shape in the y-direction.</p>
+<dt id="term-SHAPE-geometry-mask_offsets">SHAPE[‘geometry’][‘mask_offsets’]</dt><dd><p>(<em>list</em>) The mask offsets for this shape</p>
+</dd>
+<dt id="term-SHAPE-geometry-position">SHAPE[‘geometry’][‘position’]</dt><dd><p>(<em>list</em>) The x- and y-positions of the center point of the shape, constrained by the <code class="docutils literal notranslate"><span class="pre">SHAPE['geometry']['width']</span></code> and <code class="docutils literal notranslate"><span class="pre">SHAPE['geometry']['height']</span></code>.</p>
+</dd>
+<dt id="term-SHAPE-geometry-shape_type">SHAPE[‘geometry’][‘shape_type’]</dt><dd><p>(<em>str</em>) The shape type is either ‘planar’, ‘conformal’, ‘polygon’, or ‘ellipse’.</p>
+</dd>
+<dt id="term-SHAPE-geometry-sidewall_angle">SHAPE[‘geometry’][‘sidewall_angle’]</dt><dd><p>(<em>float</em>) [degrees] Angle of the side wall for a ‘planar’ shape relative to a vertical at 0 degrees.</p>
+</dd>
+<dt id="term-SHAPE-geometry-tone">SHAPE[‘geometry’][‘tone’]</dt><dd><p>(<em>str</em>) The tone of the mask (‘p’ or ‘n’)</p>
+</dd>
+<dt id="term-SHAPE-geometry-vertices">SHAPE[‘geometry’][‘vertices’]</dt><dd><p>(<em>list</em>) Pairs of [x,y] vertices that define the perimeter of a shape.</p>
+</dd>
+<dt id="term-SHAPE-geometry-width">SHAPE[‘geometry’][‘width’]</dt><dd><p>(<em>float</em>) Maximum size of the shape in the x-direction.</p>
 </dd>
 <dt id="term-SHAPE-loss_dB_per_m">SHAPE[‘loss_dB_per_m’]</dt><dd><p>(<em>float</em>) [dB/m] Absorption coefficient for power loss in the region defined by the shape.</p>
 </dd>
@@ -454,34 +464,24 @@
 </dd>
 <dt id="term-SHAPE-name">SHAPE[‘name’]</dt><dd><p>(<em>str</em>) User-defined name of the shape. This name will be used to reference this shape in subsequent functions.</p>
 </dd>
-<dt id="term-SHAPE-permeability">SHAPE[‘permeability’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the permeability of the shape.</p>
-</dd>
-<dt id="term-SHAPE-position">SHAPE[‘position’]</dt><dd><p>(<em>list</em>) The x- and y-positions of the center point of the shape, constrained by the <code class="docutils literal notranslate"><span class="pre">SHAPE['width']</span></code> and <code class="docutils literal notranslate"><span class="pre">SHAPE['width']</span></code>.</p>
-</dd>
 <dt id="term-SHAPE-priority">SHAPE[‘priority’]</dt><dd><p>(<em>float</em>) A value that defines the order in which the shape is drawn relative to other shapes. A higher value give a higher priority, putting the shape in front of other shapes with lower priority.</p>
-</dd>
-<dt id="term-SHAPE-refractive_index">SHAPE[‘refractive_index’]</dt><dd><p>(<em>float</em> or <em>str</em>) Either a value or a material name to define the refractive index of the shape.</p>
-</dd>
-<dt id="term-SHAPE-refractive_index_value">SHAPE[‘refractive_index_value’]</dt><dd><p>(<em>float</em>) The value of the refractive index for the shape. This is useful as a reference when a material name is passed for <code class="docutils literal notranslate"><span class="pre">SHAPE['refractive_index']</span></code>.</p>
 </dd>
 <dt id="term-SHAPE-roughness_rms">SHAPE[‘roughness_rms’]</dt><dd><p>(<em>list</em>) A list of two values describing the rms roughness on the vertical and horizontal edges of the shape.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">st_dev_nm</span></code></p>
 </dd>
-<dt id="term-SHAPE-scattering_all_edges">SHAPE[‘scattering_all_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each edge of the shape, defined by <code class="docutils literal notranslate"><span class="pre">SHAPE['edges']</span></code>.</p>
+<dt id="term-SHAPE-metadata">SHAPE[‘metadata’]</dt><dd><p>(<em>dict</em>) A dictionary of metadata associated with the shape</p>
 </dd>
-<dt id="term-SHAPE-scattering_horizontal_edges">SHAPE[‘scattering_horizontal_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each horizontal edge of the shape.</p>
+<dt id="term-SHAPE-metadata-confinement">SHAPE[‘metadata’][‘confinement’]</dt><dd><p>(<em>list</em>) Confinement factor for each mode in the corresponding shape.</p>
 </dd>
-<dt id="term-SHAPE-scattering_sum">SHAPE[‘scattering_sum’]</dt><dd><p>(<em>list</em>) Total calculated scattering loss for all edges of the shape.</p>
+<dt id="term-SHAPE-metadata-edges">SHAPE[‘metadata’][‘edges’]</dt><dd><p>(<em>list</em>) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_all_edges']</span></code>.</p>
 </dd>
-<dt id="term-SHAPE-scattering_vertical_edges">SHAPE[‘scattering_vertical_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each vertical edge of the shape.</p>
+<dt id="term-SHAPE-metadata-scattering_all_edges">SHAPE[‘metadata’][‘scattering_all_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each edge of the shape, defined by <code class="docutils literal notranslate"><span class="pre">SHAPE['edges']</span></code>.</p>
 </dd>
-<dt id="term-SHAPE-shape_type">SHAPE[‘shape_type’]</dt><dd><p>(<em>str</em>) The shape type is either ‘planar’, ‘conformal’, ‘polygon’, or ‘ellipse’.</p>
+<dt id="term-SHAPE-metadata-scattering_horizontal_edges">SHAPE[‘metadata’][‘scattering_horizontal_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each horizontal edge of the shape.</p>
 </dd>
-<dt id="term-SHAPE-sidewall_angle">SHAPE[‘sidewall_angle’]</dt><dd><p>(<em>float</em>) [degrees] Angle of the side wall for a ‘planar’ shape relative to a vertical at 0 degrees.</p>
+<dt id="term-SHAPE-metadata-scattering_sum">SHAPE[‘metadata’][‘scattering_sum’]</dt><dd><p>(<em>list</em>) Total calculated scattering loss for all edges of the shape.</p>
 </dd>
-<dt id="term-SHAPE-vertices">SHAPE[‘vertices’]</dt><dd><p>(<em>list</em>) Pairs of [x,y] vertices that define the perimeter of a shape.</p>
-</dd>
-<dt id="term-SHAPE-width">SHAPE[‘width’]</dt><dd><p>(<em>float</em>) Maximum size of the shape in the x-direction.</p>
+<dt id="term-SHAPE-metadata-scattering_vertical_edges">SHAPE[‘metadata’][‘scattering_vertical_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each vertical edge of the shape.</p>
 </dd>
 <dt id="term-Sx-Sy-Sz">Sx, Sy, Sz</dt><dd><p>(<em>arrays</em>) [W/nm] The Poynting vector in the x-, y-, and z-directions.</p>
 </dd>

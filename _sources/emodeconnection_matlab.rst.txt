@@ -16,18 +16,34 @@ For more information about MATLAB, check out this link:
 Setup
 -----
 
-Before running EMode from MATLAB, you must run the following in your MATLAB command window.
+Windows
+^^^^^^^
+
+The standard installation for Windows automatically includes this step. This is only necessary for Windows users during a manual emodeconnection update or if MATLAB is installed after installing EMode.
+
+Run the following in your MATLAB command window.
 
 .. code-block::
 
     addpath(fullfile('C:', 'Program Files', 'EMode Photonix', 'EMode')); savepath;
+
+MacOs and Linux
+^^^^^^^^^^^^^^^
+
+The setup for macOS and Linux platforms first requires downloading :ref:`emodeconnection.m<MATLAB Download>`.
+
+Next, run the following to add ``emodeconnection.m`` to the MATLAB path.
+
+.. code-block::
+
+    addpath(fullfile(getenv('HOME'), 'Downloads')); savepath;
 
 .. _MATLABEModeLogin:
 
 EMode Login
 -----------
 
-Open MATLAB and run the following in the MATLAB command line. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+Open MATLAB and run the following in the MATLAB command line. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. code-block::
 
@@ -39,7 +55,7 @@ The EMode class
 
 .. class:: emodeconnection(name, value)
     
-    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``EMode Login`` from the the start menu.
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, initializing this class will prompt for the user credentials. To reset the user profile, see ``EMode Login``.
     
     An existing file can be opened for further analysis by specifying the input name-value pair ``'open_existing', true``. This opened file can be copied to a new file name by specifying the input name-value pair ``'new_name', 'new_filename'``.
     
@@ -66,12 +82,12 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
     .. staticmethod:: EModeLogin()
         :noindex:
         
-        Opens the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+        Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
 
     .. staticmethod:: open_file(simulation_name)
         :noindex:
         
-        Returns an EMode simulation file name with the extension ".mat" to be passed to the load() function.
+        Returns an EMode simulation file name with the extension ".mat" to be passed to the MATLAB load() function.
         
         :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name. Default: 'emode'.
         :return: Name of the specified EMode simulation file if it is available.
@@ -94,11 +110,56 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
         :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get_()` function.
         :rtype: list
 
+Types
+-----
+
+Two types that can be used for specifying material properties are available as struct attributes of the emodeconnection class.
+
+.. py:attribute:: MaterialProperties
+
+   A container for linear and non-linear electromagnetic material parameters. At least one of `n` or `eps` **must** be supplied in any valid instance.
+
+   :param n: Scalar or tensor refractive index. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.
+   :type n: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param eps: Relative permittivity tensor εᵣ. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.
+   :type eps: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param mu: Relative permeability tensor μᵣ. Same shape conventions as `eps`. Default: *None* (μᵣ = 1).
+   :type mu: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param d: Second-order nonlinear susceptibility *d*. Expected shape is 3x6. Use *None* when the material is linear. Default: *None*.
+   :type d: ~typing.Optional[~DTensorType]
+
+----
+
+.. py:attribute:: MaterialSpec
+
+   A container that defines the adjustable properties of a material being used. All properties default to the materials
+   defaults (typically 0).
+
+   :param material: Either a *str* of a material in the Material Database, or a MaterialProperties struct. Required.
+   :type material: ~typing.Union[str, ~MaterialProperties]
+
+   :param theta: The angle of rotation around *y* for the material in radians.
+   :type theta: ~typing.Optional[float]
+
+   :param phi: The angle of rotation around *z* for the material in radians. This is applied *after* the theta rotation.
+   :type phi: ~typing.Optional[float]
+
+   :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored for materials without this parameter. Must be between 0 and 1. Default: 0.
+   :type x: ~typing.Optional[float]
+   
+   :param loss: The absorption loss of the material in dB/m.
+   :type loss: ~typing.Optional[float]
+
+.. _MATLAB Download:
+
 Updating the MATLAB Interface
 -----------------------------
 
-The latest version of ``emodeconnection.m`` can also be downloaded here, which can be added to the EMode directory under Program Files: :download:`emodeconnection.m <_static/emodeconnection.m>`. This is not necessary to setup EMode with MATLAB, and it is only intended for updating this connection package without re-installing EMode.
+The latest version of ``emodeconnection.m`` can also be downloaded at the following link, which must be added to the EMode executable directory (or another directory in the MATLAB path). This is not necessary to setup EMode with MATLAB, and it is only intended for updating this connection package without re-installing EMode.
 
-.. code-block::
-    
-    C:\Program Files\EMode Photonix\EMode\emodeconnection.m
+.. raw:: html
+
+   <a href="https://raw.githubusercontent.com/emode-photonix/emodeconnection/main/emodeconnection_matlab/emodeconnection.m" download="emodeconnection.m">emodeconnection.m</a>

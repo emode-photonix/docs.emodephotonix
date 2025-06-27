@@ -14,40 +14,58 @@ Use this page to set up EMode and run a simple example.
 2. Download and Install EMode
 -----------------------------
 
-**System requirements**: Windows 10, 64-bit, 960 MB free disk space.
+**System requirements**: 600 MB free disk space
 
-- Login to your `EMode account <https://emodephotonix.com/my-account/>`_.
-- Click the ``Download EMode`` button.
-- Run the downloaded installer and follow the prompts to complete the installation.
+.. hlist::
+    :columns: 3
 
-    - `Release notes <installation/release-notes.html>`_
-    - `Troubleshooting <installation/troubleshooting.html>`_
+    * **Windows** 10 or higher
+    * **Linux**, Ubuntu 22.04 or higher, x86-64 **(Beta)**
+    * **macOS** 13 Ventura or higher **(Beta)**
 
-.. tip::
-    *Mac users*: Try installing a virtual machine to run EMode (`Parallels <https://www.parallels.com/>`_ and `UTM <https://mac.getutm.app/>`_ are currently being tested).
+To install EMode, follow these steps:
+
+#.  Login to your `EMode account <https://emodephotonix.com/my-account/>`_.
+#.  On your account page, select an operating system (Windows, Linux, or macOS) from the dropdown menu.
+#.  Click the ``Download EMode`` button to download the appropriate file for your selected operating system (an installer for Windows, an executable for Linux & macOS).
+
+    * **For Windows Users**: Run the downloaded installer and follow the prompts to complete the installation.
+    * **For Linux and macOS Users**: The downloaded file is an executable, not an installer. You will need to move it to a directory included in your system's `PATH`. Here is an example command to run from a terminal window.
+
+      .. code-block:: bash
+
+        sudo mv ~/Downloads/EMode /usr/local/bin/
+
+      .. warning::
+        The Linux and macOS versions of EMode are currently in beta. Please `report <https://emodephotonix.com/contact/>`_ any problems you find.
+
+      .. tip::
+        On macOS with an ARM processor (Apple Silicon), the first time you run EMode, you may see a prompt asking you to install **Rosetta 2**. Please proceed with this installation as it is required to run EMode on Apple Silicon. This is not necessary for Intel-based macOS machines.
+
+.. hlist::
+   :columns: 2
+
+   * `Release notes <installation/release-notes.html>`_
+   * `Troubleshooting <installation/troubleshooting.html>`_
 
 
-3. Setup Script Interface and Login to EMode
---------------------------------------------
+3. Setup a Scripting Interface
+------------------------------
 
 .. grid:: 2
     :gutter: 4
     :padding: 0
     :margin: auto
 
-    .. grid-item-card:: Python
+    .. grid-item-card:: :ref:`Python setup <SetupPython>`
 
-        - :ref:`Setup Python interface <SetupPython>`
-        - :ref:`EMode Login with Python <PythonEModeLogin>`
+    .. grid-item-card:: :ref:`MATLAB setup <SetupMATLAB>`
 
-    .. grid-item-card:: MATLAB
-
-        - :ref:`Setup MATLAB interface <SetupMATLAB>`
-        - :ref:`EMode Login with MATLAB <MATLABEModeLogin>`
 
 4. Run an EMode Example Script
 ------------------------------
 
 - Copy and run the `Basic: SOI <examples/SOI.html>`_ example in your scripting environment.
+- An account login window will open when EMode is first initialized. To subsequently access this window, run ``EMode`` from the command line.
 
 If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.

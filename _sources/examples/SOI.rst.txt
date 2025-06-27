@@ -29,11 +29,11 @@ The simplest EMode simulation example.
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
             window_width = w_core + w_trench*2, window_height = h_core + h_clad*2,
-            num_modes = num_modes, background_refractive_index = 'Air')
+            num_modes = num_modes, background_material = 'Air')
 
         ## Draw shapes
-        em.shape(name = 'BOX', refractive_index = 'SiO2', height = h_clad)
-        em.shape(name = 'core', refractive_index = 'Si', width = w_core, height = h_core)
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad)
+        em.shape(name = 'core', material = 'Si', width = w_core, height = h_core)
 
         ## Launch FDM solver
         em.FDM()
@@ -50,8 +50,6 @@ The simplest EMode simulation example.
     .. code-tab:: matlab
         :caption: MATLAB
         
-
-
         % Set simulation parameters
         wavelength = 1550; % [nm] wavelength
         dx = 10; dy = 10; % [nm] resolution
@@ -68,11 +66,11 @@ The simplest EMode simulation example.
         em.settings( ...
             'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
             'window_width', w_core + w_trench*2, 'window_height', h_core + h_clad*2, ...
-            'num_modes', num_modes, 'background_refractive_index', 'Air');
+            'num_modes', num_modes, 'background_material', 'Air');
 
         % Draw shapes
-        em.shape('name', 'BOX', 'refractive_index', 'SiO2', 'height', h_clad);
-        em.shape('name', 'core', 'refractive_index', 'Si', 'width', w_core, 'height', h_core);
+        em.shape('name', 'BOX', 'material', 'SiO2', 'height', h_clad);
+        em.shape('name', 'core', 'material', 'Si', 'width', w_core, 'height', h_core);
 
         % Launch FDM solver
         em.FDM();
@@ -88,18 +86,17 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode 0.1.2 - email
-    Meshing... completed in 0.1 sec
-    Solving... completed in 0.8 sec
+    EMode 0.2.0 - email
+    Meshing completed in 0.5 sec
+    Solving completed in 0.7 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  3.026515  99.7 %          0.000
-        TM-1  2.980822   0.5 %          0.000
+        TE-0  3.013224  99.6 %          0.000
+        TM-1  2.966573   0.6 %          0.000
  
-    Exited EMode
 
 
 Figures:

@@ -2,6 +2,23 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**0.2.0: June 27, 2024**
+
+* Added an explicit restriction on the ``tolerance`` parameter so that it cannot be set to be smaller than the machine precision. The default for ``tolerance`` is 1e-12.
+* Removed a bug in EME for symmetric section simulations.
+* Optimized and improved the underlying EME algorithm, improving simulation accuracy.
+* Added beta support for macOS and Linux.
+* Improved the subpixel averaging algorithm.
+* Added general anisotropic solver for straight waveguides, available with EMode3D.
+* The shape() function input ``refractive_index`` has been changed to ``material``. Similarly, the ``fill_refractive_index`` has been changed to ``fill_material``.
+* All scattering loss results are now stored under the ``meta_data`` dictionary of the shape.
+* Added a progress bar for meshing and solving.
+* Added the ability to return material properties from database materials using ``get("material_name")``.
+* Added two special types available to the user for defining materials and material properties: ``MaterialSpec`` and ``MaterialProperties``.
+* The crystal orientation of a material can now be rotated relative to the simulation window axis by defining a ``MaterialSpec`` and specifying rotation parameters ``theta`` and ``phi``.
+* Changes to biaxial materials: extraordinary index is always aligned with the z-axis (ordinary is aligned with the x and y axes). Rotations can be performed to orient a crystal to the simulation axes as desired. Affected materials: BBO, LN_z --> LN, LN_MgO_z --> LN_MgO, TiO2_rutile.
+* When EMode encounters errors, emodeconnection.py (1.0.11) will now raise an exception instead of just printing an error message.
+
 **0.1.2: March 16, 2024**
 
 * Fixed a bug where ``num_modes`` was reset after modes are automatically removed from the pml regions.
