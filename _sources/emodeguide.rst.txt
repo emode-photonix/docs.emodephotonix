@@ -22,6 +22,7 @@ EMode Guide
         :columns: 6
 
         * `EME <emodeguide/eme.html>`_
+        * `FEM <emodeguide/fem.html>`_
 
 .. toctree::
     :maxdepth: 0

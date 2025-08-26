@@ -30,11 +30,12 @@ To install EMode, follow these steps:
 #.  Click the ``Download EMode`` button to download the appropriate file for your selected operating system (an installer for Windows, an executable for Linux & macOS).
 
     * **For Windows Users**: Run the downloaded installer and follow the prompts to complete the installation.
-    * **For Linux and macOS Users**: The downloaded file is an executable, not an installer. You will need to move it to a directory included in your system's `PATH`. Here is an example command to run from a terminal window.
+    * **For Linux and macOS Users**: The downloaded file is an executable, not an installer. You will need to unzip it and move it to a directory included in your system's `PATH`. Here is an example command to run from a terminal window.
 
       .. code-block:: bash
 
-        sudo mv ~/Downloads/EMode /usr/local/bin/
+        unzip emode-notarized.zip
+        sudo mv ~/Downloads/emode /usr/local/bin/
 
       .. warning::
         The Linux and macOS versions of EMode are currently in beta. Please `report <https://emodephotonix.com/contact/>`_ any problems you find.

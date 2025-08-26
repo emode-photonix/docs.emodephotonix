@@ -211,7 +211,7 @@ Figures:
     :align: center
     :figwidth: 500
 
-.. figure:: Figures/EME_Taper/EM_S01_abs^2.png
+.. figure:: Figures/EME_Taper/EM_S10_abs2.png
     :width: 500
     :align: center
     :figwidth: 500
