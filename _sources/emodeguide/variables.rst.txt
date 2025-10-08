@@ -222,8 +222,5 @@ Descriptions of all variables available in the simulation file. Some variables h
     x, y
         (*complex arrays*) Arrays that define the x and y grid **center** points of the mesh. These can be complex when pml layers are introduced.
 
-    x_edge, y_edge
-        (*complex arrays*) Arrays that define the x and y grid **edge** points of the mesh. These can be complex when pml layers are introduced.
-
     x_resolution, y_resolution
         (*float*) [nm] Mesh grid step in the x- and y-directions.

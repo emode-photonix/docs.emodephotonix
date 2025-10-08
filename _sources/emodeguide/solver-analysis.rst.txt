@@ -4,7 +4,7 @@ Solver and analysis
 
 .. data:: FDM
     
-    Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``x_edge``, ``y_edge``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
+    Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
     
     .. math::
         \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
@@ -15,8 +15,9 @@ Solver and analysis
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y} 
     
     :param str label: dataset label name to automatically create a dataset after running ``FDM()``, no dataset is created if blank, default: ''
-    :param str simulation_name: simulation name, default: 'emode'
+    :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
     :param bool force_isotropic: if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.
+    :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: sweep
     
@@ -26,9 +27,8 @@ Solver and analysis
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
     :param str solve_type: either 'Mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
-    :param result: the parameters to save from each iteration of the sweep, default: 'effective_index'
+    :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. default: 'effective_index'
     :type result: str or list
-    :param str label: dataset label to use in the parameter sweep, default: ''
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: confinement
@@ -75,11 +75,11 @@ Solver and analysis
     :param str file_type: file type to save, 'txt', 'latex', or 'csv', default: 'txt'
     :param str simulation_name: simulation name, default: 'emode'
 
-.. data:: label
+.. data:: label_profile
     
-    Creates a labeled dataset from the current settings and field data, saved as a Python dictionary or a MATLAB structure array called ``dataset_LABEL``. It can be used to run different simulations and compare the outputs. Also, it is used in conjunction with ``calc_overlap``.
+    Creates a labeled dataset from the current settings and field data, saved as a Python dictionary or a MATLAB structure array called ``dataset_NAME``. It can be used to run different simulations and compare the outputs. Also, it is used in conjunction with certain functions like ``overlap`` and ``orthogonality``.
     
-    :param str label: label added to current mode set, default: '0'
+    :param str name: save the current simulation state to this name, default: '0'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: overlap
@@ -104,7 +104,8 @@ Solver and analysis
     
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
     
-    :param str shape: name of the shape for calculating the interfacial scattering
+    :param str shape: name of the shape for calculating the interfacial scattering, can also be a list of shapes or None (which calculates scattering for all shapes), default: None
+    :param str shapes: alias for shape
     :param mode_list: mode number, list of mode numbers, or 'all', default: 'all'
     :type mode: int, list, or str
     :param str simulation_name: simulation name for the second mode set, default: 'emode'
@@ -123,7 +124,7 @@ Solver and analysis
     :param bool mesh_display: setting mesh display, default: False
     :param bool window_display: setting window display, default: False
     :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
-    :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, default: False
+    :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
     :param str file_type: file type for saving a plot, 'pdf' or 'png', default: 'pdf'
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -156,7 +157,7 @@ Solver and analysis
 
 .. data:: mesh
     
-    Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape (``shape_name_vertices``), the actual refractive index for each shape (``shape_NAME_refractive_index_value``), arrays to define the edges (``x_edge``, ``y_edge``) and center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
+    Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
     
     :param str simulation_name: simulation name, default: 'emode'
 

@@ -75,35 +75,36 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         dx = 10; dy = 10; % [nm] resolution
         w_core = 2000; % [nm] waveguide core width
         w_trench = 2250; % [nm] waveguide side trench width
-        x_off = 500; % [nm] waveguide x-offset
         h_core = 200; % [nm] waveguide core height
         h_clad = 2250; % [nm] waveguide top and bottom clad
         window_width = w_core + w_trench*2; % [nm]
         window_height = h_core + h_clad*2; % [nm]
         num_modes = 1; % [-] number of modes
         boundary = 'TE'; % boundary condition
+
         bend_radius = 100e3; % [nm] bend radius
+        x_off = 500; % [nm] waveguide x-offset for applying the bend radius at the center of the waveguide core rather than the center of the window
 
         % Connect and initialize EMode
         em = emodeconnection();
 
         % Add custom material
         equation = '(1 + 0.6961663/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2) + 0.8974794/(1 - (9.896161/x)^2))^0.5';
-        em.add_material('name', 'custom_SiO2', ...
-            'refractive_index_equation', equation, 'wavelength_unit', 'um');
+        em.add_material(name = 'custom_SiO2', ...
+            refractive_index_equation = equation, wavelength_unit = 'um');
 
         % Settings
         em.settings( ...
-            'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
-            'window_width', window_width, 'window_height', window_height, ...
-            'num_modes', num_modes, 'background_material', 'custom_SiO2', ...
-            'boundary_condition', boundary, 'bend_radius', bend_radius + x_off, ...
-            'pml_NSEW_bool', [0,0,1,1], 'num_pml_layers', 20, ...
-            'max_effective_index', 1.7);
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
+            window_width = window_width, window_height = window_height, ...
+            num_modes = num_modes, background_material = 'custom_SiO2', ...
+            boundary_condition = boundary, bend_radius = bend_radius + x_off, ...
+            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 20, ...
+            max_effective_index = 1.7);
 
         % Draw shapes
-        em.shape('name', 'core', 'material', 'SiN', 'width', w_core, ...
-                'height', h_core, 'position', [-x_off, window_height/2]);
+        em.shape(name = 'core', material = 'SiN', width = w_core, ...
+                height = h_core, position = [-x_off, window_height/2]);
 
         % Launch FDM solver
         em.FDM();
@@ -113,8 +114,8 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         em.report();
 
         % Plot the field and refractive index profiles
-        em.plot('component', 'Ex', 'file_name', 'field_plot', 'file_type', 'png');
-        em.plot('component', 'Index', 'file_name', 'index_plot', 'file_type', 'png');
+        em.plot(component = 'Ex', file_name = 'field_plot', file_type = 'png');
+        em.plot(component = 'Index', file_name = 'index_plot', file_type = 'png');
 
         % Plot the field and refractive index profiles
         em.plot();
@@ -125,15 +126,15 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode 0.2.0 - email
-    Meshing completed in 0.8 sec
-    Solving completed in 3.7 sec
+    EMode 0.2.1 - email
+    Meshing completed in 0.4 sec
+    Solving completed in 1.5 sec
 
     Wavelength: 980.0 nm
  
-      Mode #     n_eff     TE %    Loss (dB/m)    core confinement
-    --------  --------  -------  -------------  ------------------
-        TE-0  1.679910  100.0 %          0.000              61.7 %
+      Mode #     n_eff     TE %    Loss (dB/m)    background confinement    core confinement
+    --------  --------  -------  -------------  ------------------------  ------------------
+        TE-0  1.679910  100.0 %          0.000                    38.3 %              61.7 %
  
 
 

@@ -39,6 +39,7 @@ EMode Guide
     :hidden:
     
     emodeguide/eme
+    emodeguide/fem
 
 .. toctree::
    :caption: Glossaries
@@ -88,7 +89,7 @@ Symmetric or asymmetric boundary conditions can be applied to the south and west
 Meshing
 ^^^^^^^
 
-Shapes define the refractive index profile of the waveguide and a meshing algorithm using contour-path effective permittivities is implemented. On the Yee grid, the permittivity and permeability arrays are unique for each x, y, and z direction. The plot of the refractive index shows the exact shapes that are defined, and the actual permittivity and permeability arrays are available using the ``get`` method. Calculated fields correspond to the center points of the meshed grid (``x`` and ``y``), while the edges of the mesh are defined by the parameters ``x_edge`` and ``y_edge``.
+Shapes define the refractive index profile of the waveguide and a meshing algorithm using contour-path effective permittivities is implemented. On the Yee grid, the permittivity and permeability arrays are unique for each x, y, and z direction. The plot of the refractive index shows the exact shapes that are defined, and the actual permittivity and permeability arrays are available using the ``get`` method. Calculated fields correspond to the center points of the meshed grid (``x`` and ``y``).
 
     A. Mohammadi, H. Nadgaran, and M. Agio, ''Contour-path effective permittivities for the two-dimensional finite-difference time-domain method,'' Opt. Express **13**, 10367 (2005).
 

@@ -39,7 +39,8 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
         ## Draw shapes
         em.shape(name = 'BOX', material = 'SiO2', height = b_clad)
-        em.shape(name = 'core', material = 'Ta2O5', width = w_core, height = h_core)
+        em.shape(name = 'core', material = 'Ta2O5', width = w_core,
+            height = h_core)
 
         ## Run wavelength sweep
         data = em.sweep(key = 'wavelength', values = wav_nm_,
@@ -64,97 +65,97 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
         wav_nm_ = 1000:50:2000; % [nm]
 
         %% Connect and initialize EMode
-        em = emodeconnection('simulation_name', 'dispersion');
+        em = emodeconnection(simulation_name = 'dispersion');
 
         %% Settings
         em.settings( ...
-            'x_resolution', dx, 'y_resolution', dy, ...
-            'window_width', w_core + w_trench*2, ...
-            'window_height', h_core + b_clad + h_clad, ...
-            'num_modes', num_modes, 'boundary_condition', boundary, ...
-            'background_material', 'Air');
+            x_resolution = dx, y_resolution = dy, ...
+            window_width = w_core + w_trench*2, ...
+            window_height = h_core + b_clad + h_clad, ...
+            num_modes = num_modes, boundary_condition = boundary, ...
+            background_material = 'Air');
 
         %% Draw shapes
-        em.shape('name', 'BOX', 'material', 'SiO2', 'height', b_clad);
-        em.shape('name', 'core', 'material', 'Ta2O5', 'width', w_core, ...
-            'height', h_core);
+        em.shape(name = 'BOX', material = 'SiO2', height = b_clad);
+        em.shape(name = 'core', material = 'Ta2O5', width = w_core, ...
+            height = h_core);
 
         %% Run wavelength sweep
-        data = em.sweep('key', 'wavelength', 'values', wav_nm_, ...
-            'result', ['effective_index']);
+        data = em.sweep(key = 'wavelength', values = wav_nm_, ...
+            result = ['effective_index']);
 
         %% Close EMode
         em.close();
 
 Console output::
 
-    EMode 0.2.0 - email
+    EMode 0.2.1 - email
 
     Sweeping setting parameter 'wavelength'... 
-    Solving FDM: wavelength = 1000... Meshing completed in 1.0 sec
-    Solving completed in 1.8 sec
-    completed in 3.2 sec
-    Solving FDM: wavelength = 1050... Meshing completed in 1.0 sec
-    Solving completed in 1.6 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1100... Meshing completed in 1.0 sec
-    Solving completed in 1.4 sec
-    completed in 2.8 sec
-    Solving FDM: wavelength = 1150... Meshing completed in 1.0 sec
-    Solving completed in 1.4 sec
-    completed in 2.8 sec
-    Solving FDM: wavelength = 1200... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1250... Meshing completed in 1.0 sec
-    Solving completed in 1.4 sec
-    completed in 2.7 sec
-    Solving FDM: wavelength = 1300... Meshing completed in 1.0 sec
-    Solving completed in 1.4 sec
-    completed in 2.8 sec
-    Solving FDM: wavelength = 1350... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1400... Meshing completed in 1.0 sec
-    Solving completed in 1.3 sec
-    completed in 2.7 sec
-    Solving FDM: wavelength = 1450... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1500... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.8 sec
-    Solving FDM: wavelength = 1550... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.8 sec
-    Solving FDM: wavelength = 1600... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1650... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1700... Meshing completed in 1.0 sec
-    Solving completed in 1.4 sec
-    completed in 2.8 sec
-    Solving FDM: wavelength = 1750... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1800... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1850... Meshing completed in 1.0 sec
-    Solving completed in 1.5 sec
-    completed in 2.9 sec
-    Solving FDM: wavelength = 1900... Meshing completed in 1.0 sec
-    Solving completed in 1.3 sec
-    completed in 2.7 sec
-    Solving FDM: wavelength = 1950... Meshing completed in 1.0 sec
-    Solving completed in 1.6 sec
-    completed in 3.0 sec
-    Solving FDM: wavelength = 2000... Meshing completed in 1.1 sec
-    Solving completed in 1.6 sec
-    completed in 3.1 sec
-    completed in 1 min 0.4 sec
+    Solving FDM: wavelength = 1000... Meshing completed in 0.6 sec
+    Solving completed in 1.2 sec
+    completed in 1.9 sec
+    Solving FDM: wavelength = 1050... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.7 sec
+    Solving FDM: wavelength = 1100... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1150... Meshing completed in 0.5 sec
+    Solving completed in 0.9 sec
+    completed in 1.5 sec
+    Solving FDM: wavelength = 1200... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.7 sec
+    Solving FDM: wavelength = 1250... Meshing completed in 0.5 sec
+    Solving completed in 0.9 sec
+    completed in 1.5 sec
+    Solving FDM: wavelength = 1300... Meshing completed in 0.5 sec
+    Solving completed in 0.9 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1350... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1400... Meshing completed in 0.5 sec
+    Solving completed in 0.8 sec
+    completed in 1.5 sec
+    Solving FDM: wavelength = 1450... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1500... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1550... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1600... Meshing completed in 0.5 sec
+    Solving completed in 1.1 sec
+    completed in 1.7 sec
+    Solving FDM: wavelength = 1650... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1700... Meshing completed in 0.5 sec
+    Solving completed in 0.9 sec
+    completed in 1.5 sec
+    Solving FDM: wavelength = 1750... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 1800... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.7 sec
+    Solving FDM: wavelength = 1850... Meshing completed in 0.5 sec
+    Solving completed in 1.1 sec
+    completed in 1.7 sec
+    Solving FDM: wavelength = 1900... Meshing completed in 0.5 sec
+    Solving completed in 0.9 sec
+    completed in 1.5 sec
+    Solving FDM: wavelength = 1950... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    Solving FDM: wavelength = 2000... Meshing completed in 0.5 sec
+    Solving completed in 1.0 sec
+    completed in 1.6 sec
+    completed in 33.9 sec
 
 
 A separate script can be used to plot the results.
@@ -165,12 +166,12 @@ A separate script can be used to plot the results.
         :caption: Python
         
         import emodeconnection as emc
+        from emodeconnection import constants
         import numpy as np
         from scipy.interpolate import UnivariateSpline
 
         ## Extract sweep results without an EMode license
-        data = emc.get(variable = 'sweep_data',
-            simulation_name = 'dispersion')
+        data = emc.get(variable = 'sweep_data', simulation_name = 'dispersion')
 
         ## Calculate dispersion
         ind = np.argsort(data['values'])
@@ -179,15 +180,14 @@ A separate script can be used to plot the results.
 
         n_eff_spl_2d = n_eff_spl.derivative(n = 2)
         wav_nm_fit = np.arange(800, 2501, 1) # [nm]
-        c = 299792458 # [m/s]
-        D = -wav_nm_fit/c*n_eff_spl_2d(wav_nm_fit)*1e12/1e-3 # [ps/nm/km]
+        D = -wav_nm_fit/constants.c*n_eff_spl_2d(wav_nm_fit)*1e12/1e-3 # [ps/nm/km]
 
         ## Plot
         import matplotlib.pyplot as plt
         from matplotlib import rc as mplrc
 
         fw, LW = 8/2.54, 0.5
-        mplrc('font',**{'family':'sans-serif','sans-serif':['Arial'],'size':7})
+        mplrc('font',**{'family':'sans-serif','size':7})
         mplrc('axes', linewidth=LW, axisbelow=True)
         mplrc('xtick', bottom=True, top=True, direction='in')
         mplrc('ytick', left=True, right=True, direction='in')
@@ -232,11 +232,11 @@ A separate script can be used to plot the results.
         ax3.set_xlim(ax.get_xlim())
         ax3.set_xlabel('Frequency (THz)')
         ax3.set_xticks(xticks_nm)
-        ax3.set_xticklabels(['%0.0f' % x for x in c/xticks_nm*1e-3])
+        ax3.set_xticklabels(['%0.0f' % x for x in constants.c/xticks_nm*1e-3])
         ax.set_zorder(ax2.get_zorder()+1)
         ax.patch.set_visible(False)
 
-        fig.savefig('dispersion.png', dpi=600, bbox_inches='tight')
+        fig.savefig('dispersion.png', dpi = 600, bbox_inches = 'tight')
 
 Figures:
 

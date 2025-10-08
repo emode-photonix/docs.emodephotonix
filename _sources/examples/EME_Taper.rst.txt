@@ -19,52 +19,50 @@ The simplest EMode example of an EME simulation.
         h_core = 220 # [nm] waveguide core height
         h_clad = 1000 # [nm] waveguide top and bottom clad
 
-        window_width = 3200
+        window_width = 3400
         window_height = h_core + h_clad*2
 
-        num_modes = 4 # [-] number of modes
+        num_modes = 22 # [-] number of modes
         BC = 'TE'
 
         ## Connect and initialize EMode
         em = emc.EMode(verbose = True)
 
         ## Settings
-        em.settings(wavelength = wavelength,
-            x_resolution = dx, y_resolution = dy,
-            window_width = window_width,
-            window_height = window_height,
-            num_modes = num_modes, boundary_condition=BC,
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = window_width, window_height = window_height,
+            num_modes = num_modes, boundary_condition = BC,
             background_material = 'SiO2')
 
         ## Draw shapes
         em.shape(name = 'BOX', material = 'SiO2',
             height = h_clad)
         em.shape(name = 'core', material = 'Si',
-            height = h_core, etch_depth=h_core*0.90,
-            sidewall_angle=10)
+            height = h_core, etch_depth = h_core*0.90,
+            sidewall_angle = 10)
 
         ## Launch FDM solver and label profiles
-        em.shape(name = 'core', mask = 600)
-        em.FDM(label = 'a')
+        em.shape(name = 'core', mask = 1000)
+        em.FDM(profile = 'a')
         em.report()
         em.plot()
 
-        em.shape(name = 'core', mask = 1200)
-        em.FDM(label = 'b')
+        em.shape(name = 'core', mask = 2000)
+        em.FDM(profile = 'b')
         em.report()
         em.plot()
 
         ## Draw EME sections
         em.section(profile = 'a', section_type = 'straight',
-            length = 2e3, num_modes = num_modes)
+            length = 2e3)
 
         em.section(section_type = 'taper',
             profile = 'a', profile_end = 'b',
-            length = 5000, num_modes = num_modes,
-            minimum_z_step = 200, overlap_variation = 0.01)
+            length = 4000)
 
         em.section(profile = 'b', section_type = 'straight',
-            length = 2e3, num_modes = num_modes)
+            length = 2e3)
 
         ## Run EME and plot results
         em.EME()
@@ -83,52 +81,50 @@ The simplest EMode example of an EME simulation.
         h_core = 220; % [nm] waveguide core height
         h_clad = 1000; % [nm] waveguide top and bottom clad
 
-        window_width = 3000;
+        window_width = 3400;
         window_height = h_core + h_clad*2;
 
-        num_modes = 4; % [-] number of modes
+        num_modes = 22; % [-] number of modes
         BC = 'TE';
 
         %% Connect and initialize EMode
-        em = emodeconnection('verbose', true);
+        em = emodeconnection(verbose = true);
 
         %% Settings
-        em.settings('wavelength', wavelength, ...
-            'x_resolution', dx, 'y_resolution', dy, ...
-            'window_width', window_width, ...
-            'window_height', window_height, ...
-            'num_modes', num_modes, 'boundary_condition', BC, ...
-            'background_material', 'SiO2');
+        em.settings( ...
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
+            window_width = window_width, window_height = window_height, ...
+            num_modes = num_modes, boundary_condition = BC, ...
+            background_material = 'SiO2');
 
         %% Draw shapes
-        em.shape('name', 'BOX', 'material', 'SiO2', ...
-            'height', h_clad);
-        em.shape('name', 'core', 'material', 'Si', ...
-            'height', h_core, 'etch_depth', h_core*0.90, ...
-            'sidewall_angle', 10);
+        em.shape(name = 'BOX', material = 'SiO2', ...
+            height = h_clad);
+        em.shape(name = 'core', material = 'Si', ...
+            height = h_core, etch_depth = h_core*0.90, ...
+            sidewall_angle = 10);
 
         %% Launch FDM solver and label profiles
-        em.shape('name', 'core', 'mask', 600);
-        em.FDM('label', 'a');
+        em.shape(name = 'core', mask = 1000);
+        em.FDM(profile = 'a');
         em.report();
         em.plot();
 
-        em.shape('name', 'core', 'mask', 1200);
-        em.FDM('label', 'b');
+        em.shape(name = 'core', mask = 2000);
+        em.FDM(profile = 'b');
         em.report();
         em.plot();
 
         %% Draw EME sections
-        em.section('profile', 'a', 'section_type', 'straight', ...
-            'length', 2e3, 'num_modes', num_modes);
+        em.section(profile = 'a', section_type = 'straight', ...
+            length = 2e3);
 
-        em.section('section_type', 'taper', ...
-            'profile', 'a', 'profile_end', 'b', ...
-            'length', 5000, 'num_modes', num_modes, ...
-            'minimum_z_step', 200, 'overlap_variation', 0.01);
+        em.section(section_type = 'taper', ...
+            profile = 'a', profile_end = 'b', ...
+            length = 4000);
 
-        em.section('profile', 'b', 'section_type', 'straight', ...
-            'length', 2e3, 'num_modes', num_modes);
+        em.section(profile = 'b', section_type = 'straight', ...
+            length = 2e3);
 
         %% Run EME and plot results
         em.EME();
@@ -140,37 +136,77 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode 0.2.0 - email
-    Connected on port 62000 to LM-1.
-    Meshing completed in 0.4 sec
+    EMode 0.2.1 - email
+    Connected on port 63000 to LM-2.
+    Meshing completed in 0.2 sec
     Solving completed in 0.5 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.549973  98.8 %          0.000
-        TE-1  1.500118  99.3 %          0.000
-        TM-2  1.444024   0.0 %          0.000
-        TM-3  1.404519  12.3 %          0.000
+        TE-0  2.740878  99.8 %          0.000
+        TE-1  1.834948  86.3 %          0.000
+        TM-2  1.648371  14.6 %          0.000
+        TE-3  1.480289  99.8 %          0.000
+        TM-4  1.444024   0.0 %          0.000
+        TE-5  1.380997  99.0 %          0.000
+        TM-6  1.333974   3.8 %          0.000
+        TE-7  1.313224  98.9 %          0.000
+        TM-8  1.260780   9.1 %          0.000
+        TE-9  1.245872  93.8 %          0.000
+       TE-10  1.205712  96.3 %          0.000
+       TE-11  1.141695  98.8 %          0.000
+       TM-12  1.098826   2.3 %          0.000
+       TM-13  1.059658   6.2 %          0.000
+       TE-14  1.046256  99.4 %          0.000
+       TE-15  0.908818  90.9 %          0.000
+       TM-16  0.884647  13.2 %          0.000
+       TE-17  0.836617  92.4 %          0.000
+       TM-18  0.750209  29.3 %          0.000
+       TE-19  0.712955  92.6 %          0.000
+       TM-20  0.639715  17.8 %          0.000
+       TE-21  0.557145  76.4 %          0.000
  
-    Meshing completed in 0.4 sec
+    Meshing completed in 0.2 sec
     Solving completed in 0.3 sec
 
     Wavelength: 1550.0 nm
  
-      Mode #     n_eff    TE %    Loss (dB/m)
-    --------  --------  ------  -------------
-        TE-0  2.773467  99.9 %          0.000
-        TE-1  2.134024  96.5 %          0.000
-        TM-2  1.756185  10.4 %          0.000
-        TE-3  1.490376  99.0 %          0.000
+      Mode #     n_eff     TE %    Loss (dB/m)
+    --------  --------  -------  -------------
+        TE-0  2.820614  100.0 %          0.000
+        TE-1  2.601685   99.7 %          0.000
+        TE-2  2.117344   97.1 %          0.000
+        TM-3  1.937158    5.2 %          0.000
+        TM-4  1.565193   21.8 %          0.000
+        TE-5  1.512582   84.1 %          0.000
+        TM-6  1.444024    0.0 %          0.000
+        TE-7  1.394522   95.1 %          0.000
+        TM-8  1.347977   40.3 %          0.000
+        TE-9  1.316026   64.5 %          0.000
+       TE-10  1.267170   86.3 %          0.000
+       TE-11  1.248576   81.1 %          0.000
+       TM-12  1.193778   18.6 %          0.000
+       TE-13  1.145446   99.4 %          0.000
+       TM-14  1.079657    7.7 %          0.000
+       TE-15  1.058558   76.3 %          0.000
+       TM-16  1.046977   21.7 %          0.000
+       TE-17  0.990949   95.2 %          0.000
+       TE-18  0.865006   79.2 %          0.000
+       TM-19  0.847538    5.0 %          0.000
+       TM-20  0.837589   11.2 %          0.000
+       TE-21  0.736539   90.2 %          0.000
  
     Solving S-matrices... 
-    Solving section: 1... Solving completed in 0.4 sec
-    completed in 0.8 sec
+    Solving section: 1... Solving completed in 0.3 sec
+    Meshing completed in 0.2 sec
+    completed in 0.7 sec
+    Meshing completed in 0.2 sec
+    Solving completed in 0.4 sec
 
-    Solving section: 2... Solving completed in 0.4 sec
+    Solving section: 2... Solving completed in 0.3 sec
+    Meshing completed in 0.2 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
@@ -187,11 +223,14 @@ Console output::
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
-    completed in 20.4 sec
+    completed in 11.4 sec
+    Meshing completed in 0.2 sec
+    Solving completed in 0.3 sec
 
     Solving section: 3... Solving completed in 0.3 sec
+    Meshing completed in 0.2 sec
     completed in 0.7 sec
-    completed in 22.1 sec
+    completed in 15.9 sec
 
 
 Figures:

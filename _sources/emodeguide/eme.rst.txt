@@ -4,14 +4,14 @@ EME
 
 .. data:: section
     
-    Define a waveguide section used in the EME solver. This function is analagous to the ``shape`` function for defining the shapes of a profile, but instead defined the shapes of an EME simulation.
+    Define a waveguide section used in the EME solver. This function is analagous to the ``shape`` function for 2D simulations, but instead sequentially defines the sections of an EME simulation.
     
     :param str name: section name, default: an auto-generated number
     :param str section_type: either 'straight', 'taper', 'gds', or 'copy', and each section type corresponds with only a subset of other input parameters:
     
         * **'straight'**: ``name``, ``profile``, ``order``, ``num_modes``, ``length``, ``offset``, ``simulation_name``
-        * **'taper'**: ``name``, ``profile``, ``profile_end``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``simulation_name``
-        * **'gds'**: ``name``, ``gds``, ``cell_index``, ``unit``, ``profile``, ``shape_to_mask``, ``etch_depth``, ``sidewall_angle``, ``tone``, ``window_width``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``simulation_name``
+        * **'taper'**: ``name``, ``profile``, ``profile_end``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
+        * **'gds'**: ``name``, ``gds``, ``cell_index``, ``unit``, ``profile``, ``shape_to_mask``, ``etch_depth``, ``sidewall_angle``, ``tone``, ``window_width``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
         * **'copy'**: ``name``, ``section_name``, ``mirror``, ``order``, ``simulation_name``
     
     :param str profile: label of the profile to define the entire section (**'straight'** and **'gds'**) or section beginning (**'taper'**)
@@ -23,9 +23,10 @@ EME
     :type offset: float or list
     :param z_slices: manually specify the ``z_slices`` that will be solved in sections with variations in the z-direction (**'taper'** and **'gds'**), by specifying this parameter the ``z_option`` is forced to be 'custom', default: None
     :type z_slices: list or array
-    :param float overlap_variation: threshold of mode list overlap between ``z_slices`` when solving with ``z_option`` of 'auto', this will use a bisection optimization limited by this ``overlap_variation`` parameter and ``minimum_z_step`` to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 0.01
-    :param float minimum_z_step: the minimum allowed step size in the z-direction for the ``z_slices`` determined by the bisection optimization for the ``z_option`` of 'auto' (**'taper'** and **'gds'**), default: 250
+    :param float overlap_variation: threshold of mode list overlap between ``z_slices`` when solving with ``z_option`` of 'auto', this will use a bisection optimization limited by this ``overlap_variation`` parameter and ``minimum_z_step`` to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 0.02
+    :param float minimum_z_step: the minimum allowed step size in the z-direction for the ``z_slices`` determined by the bisection optimization for the ``z_option`` of 'auto' (**'taper'** and **'gds'**), 'auto' reverts to 1/8th of the wavelength, default: 'auto'
     :param str z_option: either 'custom' or 'auto' to manually specify the ``z_slices`` or use the automatic bisection optimization algorithm to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 'auto'
+    :param str taper_algorithm: either 'staircase' or 'smooth', where 'staircase' is the standard method and 'smooth' is intended for slowly varying structures that are known to be adiabatic, default: 'staircase'
     :param str gds: name of the gds file used to mask a shape in the designated profile, this options allows for more complex section geometries using third party layout tools to define the mask (**'gds'**)
     :param int cell_index: the cell index in the specified gds file (**'gds'**), default: 0
     :param str unit: either 'um' or 'nm' to specify the units used in the gds file (**'gds'**), default: 'um'
@@ -46,6 +47,12 @@ EME
 
 .. data:: plot_S_matrix
     
-    Colormap plot of the transmission or reflection component of the complete scattering matrix.
+    Colormap plot of the transmission or reflection component of the EME scattering matrix.
     
+    :param input: input field (first number of the scattering matrix identifier), default: 0
+    :type input: int or str
+    :param output: output field (second number of the scattering matrix identifier), default: 1
+    :type output: int or str
+    :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
+    :param str file_type: file type for saving a plot, ‘pdf’ or ‘png’, default: ‘pdf’
     :param str simulation_name: simulation name, default: 'emode'

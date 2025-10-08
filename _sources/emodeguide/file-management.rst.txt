@@ -2,7 +2,7 @@
 File management
 ---------------
 
-Simulation data is stored in an EMode Photonix file with the extension '.eph'. This file is created when a simulation is initialized, and existing simulation files can be opened by EMode for further analysis.
+Simulation data are stored in an EMode Photonix file with the extension '.eph'. This file is created when a simulation is initialized, and existing simulation files can be opened by EMode for further analysis.
 
 .. data:: init
     
@@ -29,7 +29,7 @@ Simulation data is stored in an EMode Photonix file with the extension '.eph'. T
 
 .. data:: clear_field_data
     
-    Deletes the following data to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x_edge``, ``y_edge``, ``x``, ``y``, ``permittivity``, ``permeability``.
+    Deletes the following data to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
     
     :param str simulation_name: simulation name, default: 'emode'
 

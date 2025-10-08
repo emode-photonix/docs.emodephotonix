@@ -64,13 +64,13 @@ The simplest EMode simulation example.
 
         % Settings
         em.settings( ...
-            'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
-            'window_width', w_core + w_trench*2, 'window_height', h_core + h_clad*2, ...
-            'num_modes', num_modes, 'background_material', 'Air');
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
+            window_width = w_core + w_trench*2, window_height = h_core + h_clad*2, ...
+            num_modes = num_modes, background_material = 'Air');
 
         % Draw shapes
-        em.shape('name', 'BOX', 'material', 'SiO2', 'height', h_clad);
-        em.shape('name', 'core', 'material', 'Si', 'width', w_core, 'height', h_core);
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad);
+        em.shape(name = 'core', material = 'Si', width = w_core, height = h_core);
 
         % Launch FDM solver
         em.FDM();
@@ -86,9 +86,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode 0.2.0 - email
-    Meshing completed in 0.5 sec
-    Solving completed in 0.7 sec
+    EMode 0.2.1 - email
+    Meshing completed in 0.2 sec
+    Solving completed in 0.5 sec
 
     Wavelength: 1550.0 nm
  

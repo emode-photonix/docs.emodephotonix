@@ -38,10 +38,11 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
             window_width = window_width, window_height = window_height,
             num_modes = num_modes, background_material = 'Air',
             boundary_condition = boundary,
-            expansion_resolution = 20, expansion_size = 1500)
+            expansion_resolution = 20, expansion_size = 1500,
+            pml_NSEW_bool = [1,1,1,1], num_pml_layers = 20)
 
         ## Draw shapes
-        ln_mgo = emc.MaterialSpec(material='LN_MgO', theta = np.pi/2)
+        ln_mgo = emc.MaterialSpec(material = 'LN_MgO', theta = np.pi/2)
 
         em.shape(name = 'BOX', material = 'SiO2', height = h_clad)
         em.shape(name = 'core', material = ln_mgo, height = h_core,
@@ -51,7 +52,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         em.FDM()
         em.confinement(shape_list = 'core')
         em.report()
-        em.label(label = '0') # save the data from the first mode
+        em.label_profile(name = '0') # save the data from the first mode
 
         ## Solve the second mode
         em.shape(name = 'core', mask = w_core + 100)
@@ -60,8 +61,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         em.report()
 
         ## Calculate the overlap integral
-        em.overlap(label_a = '0', mode_a = 0, mode_b = 0)
-        overlap = em.get('overlap')
+        overlap = em.overlap(label_a = '0', mode_a = 0, mode_b = 0)
         print('Power overlap: %0.3f %%' % (overlap*100))
 
         ## Plot the field and refractive index profiles
@@ -100,44 +100,42 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
         % Settings
         em.settings( ...
-            'wavelength', wavelength, 'x_resolution', dx, 'y_resolution', dy, ...
-            'window_width', window_width, 'window_height', window_height, ...
-            'num_modes', num_modes, 'background_material', 'Air', ...
-            'boundary_condition', boundary, ...
-            'expansion_resolution', 20, 'expansion_size', 1500);
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
+            window_width = window_width, window_height = window_height, ...
+            num_modes = num_modes, background_material = 'Air', ...
+            boundary_condition = boundary, ...
+            expansion_resolution = 20, expansion_size = 1500);
 
         % Draw shapes
         em.MaterialSpec.material = 'LN_MgO';
         em.MaterialSpec.theta = pi/2;
 
-        em.shape('name', 'BOX', 'material', 'SiO2', 'height', h_clad);
-        em.shape('name', 'core', ...
-            'material', em.MaterialSpec, 'height', h_core, ...
-            'etch_depth', h_core*3/4, 'mask', w_core, 'sidewall_angle', 15);
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad);
+        em.shape(name = 'core', material = em.MaterialSpec, height = h_core, ...
+            etch_depth = h_core*3/4, mask = w_core, sidewall_angle = 15);
 
         % Solve the first mode
         em.FDM();
-        em.confinement('shape_list', 'core');
+        em.confinement(shape_list = 'core');
         em.report();
-        em.label(label = '0'); % save the data from the first mode
+        em.label_profile(name = '0'); % save the data from the first mode
 
         % Solve the second mode
-        em.shape('name', 'core', 'mask', w_core + 100);
+        em.shape(name = 'core', mask = w_core + 100);
         em.FDM();
-        em.confinement('shape_list', 'core');
+        em.confinement(shape_list = 'core');
         em.report();
 
         % Calculate the overlap integral
-        em.overlap('label_a', '0', 'mode_a', 0, 'mode_b', 0);
-        overlap = em.get('overlap');
+        overlap = em.overlap(label_a = '0', mode_a = 0, mode_b = 0);
         fprintf('Power overlap: %0.3f %%', (overlap*100));
 
         % Plot the field and refractive index profiles
-        em.plot('window_display', true);
+        em.plot(window_display = true);
 
         % Get the refractive index of the core
-        res = em.refractive_index('material', emodeconnection.MaterialSpec, ...
-            'wavelength', wavelength, 'reference', true);
+        res = em.refractive_index(material = em.MaterialSpec, ...
+            wavelength = wavelength, reference = true);
         n_LN = res{1};
         ref = res{2};
         fprintf('\nRefractive index of LN: [%0.6f, %0.6f, %0.6f]\n', n_LN);
@@ -151,33 +149,30 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode 0.2.0 - email
-    Meshing completed in 0.7 sec
-    Solving completed in 1.8 sec
+    EMode 0.2.1 - email
+    Meshing completed in 0.4 sec
+    Solving completed in 1.6 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
-        TE-0  1.767903  98.8 %          0.000              82.1 %
+        TE-0  1.767903  98.8 %          0.000              82.2 %
  
-    Meshing completed in 0.8 sec
-    Solving completed in 1.7 sec
+    Meshing completed in 0.4 sec
+    Solving completed in 1.2 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
-        TE-0  1.789641  99.1 %          0.000              83.3 %
+        TE-0  1.789641  99.1 %          0.000              83.4 %
  
-    Power overlap: 98.645 %
+    Power overlap: 99.836 %
 
     Refractive index of LN: [2.13057033 2.20881269 2.20881269]
     O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
-
     Notes: x-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
-
-
 
     Wavelength range: 500 nm to 4000 nm
 

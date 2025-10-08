@@ -92,11 +92,9 @@ Next, the directional coupler device is created and simulated for a short couple
         em = emc.EMode()
 
         ## Settings
-        em.settings(wavelength = wavelength,
-            x_resolution = dx, y_resolution = dy,
-            window_height = window_height,
-            num_modes = num_modes, boundary_condition = BC,
-            background_material = 'SiO2')
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_height = window_height, num_modes = num_modes, boundary_condition = BC, background_material = 'SiO2')
 
         ## Draw shapes
         em.shape(name = 'BOX', material = 'SiO2',
@@ -106,39 +104,37 @@ Next, the directional coupler device is created and simulated for a short couple
             height = h_core, etch_depth = h_core)
 
         ## Create profiles
-        em.settings(window_width = 5200)
-        em.label(label = 'slab')
+        em.settings(window_width = 6200)
+        em.label_profile(name = 'slab')
 
         em.settings(window_width = 2600)
         em.shape(name = 'core', mask = width_wg)
-        em.label(label = 'io_waveguide')
+        em.label_profile(name = 'io_waveguide')
 
-        em.settings(window_width = 3200)
+        em.settings(window_width = 2600)
         em.shape(name = 'core', mask = [width_wg, width_wg],
             mask_offset = [-gap/2-width_wg/2, gap/2+width_wg/2])
-        em.label(label = 'coupler')
+        em.label_profile(name = 'coupler')
 
         ## Draw EME sections
-        em.section(name = "input", section_type = "straight",
-            profile = "io_waveguide", length = 1000,
-            offset = input_gap/2 + width_wg/2, num_modes = num_modes)
+        em.section(name = 'input', section_type = 'straight',
+            profile = 'io_waveguide', length = 1000,
+            offset = input_gap/2 + width_wg/2)
 
         em.section(name = 'sbend', section_type = 'gds',
             gds = 'sbend.gds', profile = 'slab',
-            shape_to_mask = 'core', num_modes = num_modes,
-            length = 10e3, # modify length of gds
-            minimum_z_step = 50, overlap_variation = 0.02)
+            shape_to_mask = 'core',
+            length = 10e3) # modify length of gds
 
         em.section(name = 'coupler', section_type = 'straight',
-            profile = 'coupler', length = 30e3,
-            num_modes = num_modes)
+            profile = 'coupler', length = 30e3)
 
         em.section(section_type = 'copy',
             section_name = 'sbend', mirror = True)
 
-        em.section(name = "output", section_type = "straight",
-            profile = "io_waveguide", length = 1000,
-            offset = -input_gap/2 - width_wg/2, num_modes = num_modes)
+        em.section(name = 'output', section_type = 'straight',
+            profile = 'io_waveguide', length = 1000,
+            offset = -input_gap/2 - width_wg/2)
 
         ## Run EME and plot results
         em.EME()
@@ -146,16 +142,16 @@ Next, the directional coupler device is created and simulated for a short couple
 
         ## Sweep the coupler length and plot results
         data = em.sweep(key = 'section, coupler, length',
-            values = np.arange(0, 200.1e3, 5000),
+            values = np.arange(0, 200.1e3, 10000),
             result = ['S_matrix'])
 
         S = data['S_matrix']
         plt.plot(data['values']*1e-3, np.abs(S[:,1,0,0])**2*100)
         plt.xlabel("Coupler length (\u03BCm)")
         plt.ylabel("Transmission (%)")
-        plt.autoscale(enable=True, axis='x', tight=True)
+        plt.autoscale(enable = True, axis = 'x', tight = True)
         plt.ylim([0,100])
-        plt.show()
+        plt.savefig('transmission_plot.png', dpi = 300, bbox_inches = 'tight')
 
         ## Plot final design for 100 % coupler
         em.section(name = 'coupler', length = 180e3)
@@ -170,7 +166,7 @@ Next, the directional coupler device is created and simulated for a short couple
         
         %% Set simulation parameters
         wavelength = 1550; % [nm] wavelength
-        dx = 10; dy = 10; % [nm] resolution
+        dx = 20; dy = 20; % [nm] resolution
         h_core = 220; % [nm] waveguide core height
         h_clad = 1200; % [nm] waveguide top and bottom clad
         width_wg = 600; % [nm]
@@ -179,78 +175,78 @@ Next, the directional coupler device is created and simulated for a short couple
 
         window_height = h_core + h_clad*2;
 
-        num_modes = 4; % [-] number of modes
+        num_modes = 2; % [-] number of modes
         BC = 'TE-v';
 
         %% Connect and initialize EMode
         em = emodeconnection();
 
         %% Settings
-        em.settings('wavelength', wavelength, ...
-            'x_resolution', dx, 'y_resolution', dy, ...
-            'window_height', window_height, ...
-            'num_modes', num_modes, 'boundary_condition', BC, ...
-            'background_material', 'SiO2');
+        em.settings( ...
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
+            window_height = window_height, num_modes = num_modes, ...
+            boundary_condition = BC, background_material = 'SiO2');
 
         %% Draw shapes
-        em.shape('name', 'BOX', 'material', 'SiO2', ...
-            'height', h_clad);
+        em.shape(name = 'BOX', material = 'SiO2', ...
+            height = h_clad);
 
-        em.shape('name', 'core', 'material', 'Si', ...
-            'height', h_core, 'etch_depth', h_core);
+        em.shape(name = 'core', material = 'Si', ...
+            height = h_core, etch_depth = h_core);
 
         %% Create profiles
-        em.settings('window_width', 5200);
-        em.label('label', 'slab');
+        em.settings(window_width = 6200);
+        em.label_profile(name = 'slab');
 
-        em.settings('window_width', 2600);
-        em.shape('name', 'core', 'mask', width_wg);
-        em.label('label', 'input_waveguide');
+        em.settings(window_width = 2600);
+        em.shape(name = 'core', mask = width_wg);
+        em.label_profile(name = 'io_waveguide');
 
-        em.settings('window_width', 3200);
-        em.shape('name', 'core', 'mask', [width_wg, width_wg], ...
-            'mask_offset', [-gap/2-width_wg/2, gap/2+width_wg/2]);
-        em.label('label', 'coupler');
+        em.settings(window_width = 2600);
+        em.shape(name = 'core', mask = [width_wg, width_wg], ...
+            mask_offset = [-gap/2-width_wg/2, gap/2+width_wg/2]);
+        em.label_profile(name = 'coupler');
 
         %% Draw EME sections
-        em.section('name', 'input', 'section_type', 'straight', ...
-            'profile', 'input_waveguide', 'length', 1000, ...
-            'offset', input_gap/2 + width_wg/2, 'num_modes', num_modes);
+        em.section(name = 'input', section_type = 'straight', ...
+            profile = 'io_waveguide', length = 1000, ...
+            offset = input_gap/2 + width_wg/2);
 
-        em.section('name', 'sbend', 'section_type', 'gds', ...
-            'gds', 'sbend.gds', 'profile', 'slab', ...
-            'shape_to_mask', 'core', 'num_modes', num_modes, ...
-            'length', 10e3, ... % modify length of gds
-            'minimum_z_step', 50, 'overlap_variation', 0.05);
+        em.section(name = 'sbend', section_type = 'gds', ...
+            gds = 'sbend.gds', profile = 'slab', ...
+            shape_to_mask = 'core', ...
+            length = 10e3); % modify length of gds
 
-        em.section('name', 'coupler', 'section_type', 'straight', ...
-            'profile', 'coupler', 'length', 30e3, ...
-            'num_modes', num_modes);
+        em.section(name = 'coupler', section_type = 'straight', ...
+            profile = 'coupler', length = 30e3);
 
-        em.section('section_type', 'copy', ...
-            'section_name', 'sbend', 'mirror', true);
+        em.section(section_type = 'copy', ...
+            section_name = 'sbend', mirror = true);
+
+        em.section(name = 'output', section_type = 'straight', ...
+            profile = 'io_waveguide', length = 1000, ...
+            offset = -input_gap/2 - width_wg/2);
 
         %% Run EME and plot results
         em.EME();
         em.plot();
 
         %% Sweep the coupler length and plot results
-        data = em.sweep('key', 'section, coupler, length', ...
-            'values', 0:5000:200e3, ...
-            'result', ['S_matrix']);
+        data = em.sweep(key = 'section, coupler, length', ...
+            values = 0:10000:200e3, ...
+            result = ['S_matrix']);
 
         S = data.S_matrix;
         figure;
-        plot(squeeze(data.values)*1e-3, abs(squeeze(S(1,1,1,2,:))).^2*100);
+        plot(double(data.values)*1e-3, abs(squeeze(S(1,1,2,1,:))).^2*100);
         hold on;
-        plot(squeeze(data.values)*1e-3, abs(squeeze(S(1,2,1,2,:))).^2*100);
         xlabel(append('Coupler length (', char(181), 'm)'));
         ylabel('Transmission (%)');
         xlim([min(data.values*1e-3) max(data.values*1e-3)]);
         ylim([0 100]);
 
         %% Plot final design for 100 % coupler
-        em.section('name', 'coupler', 'length', 180e3);
+        em.section(name = 'coupler', length = 180e3);
         em.EME();
         em.plot();
 
@@ -259,129 +255,98 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode 0.2.0 - email
+    EMode 0.2.1 - email
+    Meshing completed in 0.4 sec
+    Meshing completed in 0.1 sec
+    Meshing completed in 0.1 sec
     Solving S-matrices... 
-    Solving section: input... Solving completed in 0.5 sec
-    completed in 0.8 sec
-    Solving completed in 0.6 sec
+    Solving section: input... Solving completed in 0.4 sec
+    Meshing completed in 0.1 sec
+    completed in 0.9 sec
+    Solving completed in 0.4 sec
+    Meshing completed in 0.3 sec
+    Meshing completed in 0.3 sec
+    Solving completed in 0.4 sec
 
-    Solving section: sbend... Solving completed in 0.6 sec
+    Solving section: sbend... Solving completed in 0.4 sec
+    Meshing completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
     Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.6 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.6 sec
-    completed in 1 min 18.8 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
     Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    completed in 27.5 sec
+    Meshing completed in 0.1 sec
+    Solving completed in 0.1 sec
 
-    Solving section: coupler... Solving completed in 0.3 sec
+    Solving section: coupler... Solving completed in 0.1 sec
+    Meshing completed in 0.2 sec
     completed in 0.7 sec
 
-    Solving section: 1... completed in 10.8 sec
+    Solving section: 1... completed in 2.7 sec
+    Meshing completed in 0.1 sec
+    Solving completed in 0.2 sec
 
-    Solving section: output... Solving completed in 0.3 sec
-    completed in 0.6 sec
-    completed in 1 min 34.1 sec
+    Solving section: output... Solving completed in 0.2 sec
+    Meshing completed in 0.1 sec
+    completed in 0.7 sec
+    completed in 36.4 sec
 
     Sweeping section parameter 'length'... 
-    Solving EME: length = 200000.0... completed in 0.7 sec
-    Solving EME: length = 195000.0... completed in 0.7 sec
-    Solving EME: length = 190000.0... completed in 0.7 sec
-    Solving EME: length = 185000.0... completed in 0.6 sec
-    Solving EME: length = 180000.0... completed in 0.6 sec
-    Solving EME: length = 175000.0... completed in 0.6 sec
-    Solving EME: length = 170000.0... completed in 0.6 sec
-    Solving EME: length = 165000.0... completed in 0.6 sec
-    Solving EME: length = 160000.0... completed in 0.6 sec
-    Solving EME: length = 155000.0... completed in 0.6 sec
-    Solving EME: length = 150000.0... completed in 0.6 sec
-    Solving EME: length = 145000.0... completed in 0.6 sec
-    Solving EME: length = 140000.0... completed in 0.6 sec
-    Solving EME: length = 135000.0... completed in 0.6 sec
-    Solving EME: length = 130000.0... completed in 0.6 sec
-    Solving EME: length = 125000.0... completed in 0.6 sec
-    Solving EME: length = 120000.0... completed in 0.6 sec
-    Solving EME: length = 115000.0... completed in 0.6 sec
-    Solving EME: length = 110000.0... completed in 0.6 sec
-    Solving EME: length = 105000.0... completed in 0.6 sec
-    Solving EME: length = 100000.0... completed in 0.6 sec
-    Solving EME: length = 95000.0... completed in 0.6 sec
-    Solving EME: length = 90000.0... completed in 0.6 sec
-    Solving EME: length = 85000.0... completed in 0.6 sec
-    Solving EME: length = 80000.0... completed in 0.6 sec
-    Solving EME: length = 75000.0... completed in 0.6 sec
-    Solving EME: length = 70000.0... completed in 0.6 sec
-    Solving EME: length = 65000.0... completed in 0.6 sec
-    Solving EME: length = 60000.0... completed in 0.6 sec
-    Solving EME: length = 55000.0... completed in 0.6 sec
-    Solving EME: length = 50000.0... completed in 0.6 sec
-    Solving EME: length = 45000.0... completed in 0.6 sec
-    Solving EME: length = 40000.0... completed in 0.6 sec
-    Solving EME: length = 35000.0... completed in 0.6 sec
-    Solving EME: length = 30000.0... completed in 0.6 sec
-    Solving EME: length = 25000.0... completed in 0.6 sec
-    Solving EME: length = 20000.0... completed in 0.6 sec
-    Solving EME: length = 15000.0... completed in 0.6 sec
-    Solving EME: length = 10000.0... completed in 0.6 sec
-    Solving EME: length = 5000.0... completed in 0.7 sec
-    Solving EME: length = 0.0... completed in 0.7 sec
-    completed in 26.0 sec
+    Solving EME: length = 200000.0... completed in 1.3 sec
+    Solving EME: length = 190000.0... completed in 1.4 sec
+    Solving EME: length = 180000.0... completed in 1.3 sec
+    Solving EME: length = 170000.0... completed in 1.4 sec
+    Solving EME: length = 160000.0... completed in 1.4 sec
+    Solving EME: length = 150000.0... completed in 1.3 sec
+    Solving EME: length = 140000.0... completed in 1.4 sec
+    Solving EME: length = 130000.0... completed in 1.4 sec
+    Solving EME: length = 120000.0... completed in 1.3 sec
+    Solving EME: length = 110000.0... completed in 1.4 sec
+    Solving EME: length = 100000.0... completed in 1.3 sec
+    Solving EME: length = 90000.0... completed in 1.4 sec
+    Solving EME: length = 80000.0... completed in 1.4 sec
+    Solving EME: length = 70000.0... completed in 1.4 sec
+    Solving EME: length = 60000.0... completed in 1.3 sec
+    Solving EME: length = 50000.0... completed in 1.3 sec
+    Solving EME: length = 40000.0... completed in 1.4 sec
+    Solving EME: length = 30000.0... completed in 1.4 sec
+    Solving EME: length = 20000.0... completed in 1.4 sec
+    Solving EME: length = 10000.0... completed in 1.3 sec
+    Solving EME: length = 0.0... completed in 1.3 sec
+    completed in 28.4 sec
     Solving S-matrices... 
-    Solving section: input... completed in 0.0 sec
+    Solving section: input... completed in 0.1 sec
 
     Solving section: sbend... completed in 0.1 sec
 
-    Solving section: coupler... completed in 0.0 sec
+    Solving section: coupler... completed in 0.1 sec
 
     Solving section: 1... completed in 0.1 sec
 
-    Solving section: output... completed in 0.0 sec
-    completed in 0.6 sec
+    Solving section: output... completed in 0.1 sec
+    completed in 1.3 sec
 
 
 Figures:

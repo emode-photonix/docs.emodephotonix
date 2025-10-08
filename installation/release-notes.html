@@ -312,6 +312,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../emodeguide/eme.html">EME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/fem.html">FEM</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
 <ul class="nav bd-sidenav">
@@ -357,6 +358,27 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>0.2.1: October 8, 2025</strong></p>
+<ul class="simple">
+<li><p>Updated the general anisotropic solver to support bend waveguides and all types of settings like symmetric boundaries, expansion, and PMLs, available with EMode3D.</p></li>
+<li><p>Added an input parameter to <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> called <code class="docutils literal notranslate"><span class="pre">mode_filter</span></code>. By default, this is set to ‘forward’, but it can also be set to ‘backward’ or ‘none’. This will filter the mode list to select only forward or backward propagating modes (or don’t filter) for the anisotropic mode solver.</p></li>
+<li><p>Improved EME stability and accuracy.</p></li>
+<li><p>Added a new parameter to <code class="docutils literal notranslate"><span class="pre">settings</span></code> called <code class="docutils literal notranslate"><span class="pre">eme_scattering</span></code>, which specifies whether or not to automatically calculate all scattering losses within the EME calculation, defaults to False.</p></li>
+<li><p>Fixed a bug in the MATLAB connection.</p></li>
+<li><p>To use MATLAB on macOS, users must install .NET (<a class="reference external" href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0">https://dotnet.microsoft.com/en-us/download/dotnet/9.0</a>). Installation instructions have been updated to include this detail.</p></li>
+<li><p>Added support for directly saving EME plots with <code class="docutils literal notranslate"><span class="pre">plot()</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_S_matrix()</span></code>.</p></li>
+<li><p>Fixed bug with conformal layers defined over multi-masked layers.</p></li>
+<li><p>Fixed bug with the <code class="docutils literal notranslate"><span class="pre">reset()</span></code> function for resetting shapes.</p></li>
+<li><p>Removed input parameter <code class="docutils literal notranslate"><span class="pre">label</span></code> from <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> because it has not been implement yet.</p></li>
+<li><p>Updated the <code class="docutils literal notranslate"><span class="pre">confinement()</span></code> function, which now includes the background shape and returns a dictionary of the confinement factors for each mode.</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">orthogonality()</span></code> so that it returns the orthogonality value.</p></li>
+<li><p>For taper and gds section types, the default <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code> is now ‘auto’, which uses 1/8th of the wavelength.</p></li>
+<li><p>Default <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> is now 0.02.</p></li>
+<li><p>Added option <code class="docutils literal notranslate"><span class="pre">lossless</span></code> to taper and gds section types. Defaults to False.</p></li>
+<li><p>Added the following parameters to the <code class="docutils literal notranslate"><span class="pre">add_material()</span></code> function: thermal_conductivity, resistivity, dn_dT, eps_r_dc, phi, and theta. See the documentation for details.</p></li>
+<li><p>Added the following parametrs to the <code class="docutils literal notranslate"><span class="pre">shape()</span></code> function: fem_resolution, current, voltage, and heat_only. See the documentation for details.</p></li>
+<li><p>Added a parameter <code class="docutils literal notranslate"><span class="pre">taper_algorithm</span></code> for the taper and gds section types. This is intended to be used for slowly varying structures that are known to be adiabatic.</p></li>
+</ul>
 <p><strong>0.2.0: June 27, 2025</strong></p>
 <ul class="simple">
 <li><p>Added an explicit restriction on the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter so that it cannot be set to be smaller than the machine precision. The default for <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 1e-12.</p></li>

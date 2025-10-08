@@ -14,7 +14,7 @@ Use this page to set up EMode and run a simple example.
 2. Download and Install EMode
 -----------------------------
 
-**System requirements**: 600 MB free disk space
+**System requirements**: 840 MB free disk space
 
 .. hlist::
     :columns: 3
@@ -29,19 +29,19 @@ To install EMode, follow these steps:
 #.  On your account page, select an operating system (Windows, Linux, or macOS) from the dropdown menu.
 #.  Click the ``Download EMode`` button to download the appropriate file for your selected operating system (an installer for Windows, an executable for Linux & macOS).
 
-    * **For Windows Users**: Run the downloaded installer and follow the prompts to complete the installation.
+    * **For Windows Users**: Unzip and run the downloaded installer and follow the prompts to complete the installation.
     * **For Linux and macOS Users**: The downloaded file is an executable, not an installer. You will need to unzip it and move it to a directory included in your system's `PATH`. Here is an example command to run from a terminal window.
 
       .. code-block:: bash
 
-        unzip emode-notarized.zip
+        unzip emode.zip
         sudo mv ~/Downloads/emode /usr/local/bin/
 
       .. warning::
         The Linux and macOS versions of EMode are currently in beta. Please `report <https://emodephotonix.com/contact/>`_ any problems you find.
 
       .. tip::
-        On macOS with an ARM processor (Apple Silicon), the first time you run EMode, you may see a prompt asking you to install **Rosetta 2**. Please proceed with this installation as it is required to run EMode on Apple Silicon. This is not necessary for Intel-based macOS machines.
+        On macOS with an ARM processor (Apple Silicon), the first time you run EMode, you may see a prompt asking you to install **Rosetta 2**. Please proceed with this installation.
 
 .. hlist::
    :columns: 2

@@ -29,7 +29,8 @@ Simulation setup
     :type expansion_resolution: float or list
     :param expansion_size: [nm] single value or list of 4 values for the approximate stretched distance; [north, south, east, west], default: 0
     :type expansion_size: float or list
-    :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/25
+    :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/10
+    :param bool eme_scattering: whether or not to automatically calculate scattering for all possible shapes within EME calculations, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: add_material
@@ -42,6 +43,12 @@ Simulation setup
     :param list wavelength_range: [um] list of the minimum and maximum wavelength recommended for the refractive index equation, default: [0.2, 2.0]
     :param str citation: reference displayed in material explorer for the custom material, default: 'User defined.'
     :param float loss: the loss of the material in 'dB/m', default: 0.
+    :param float thermal_conductivity: [W/m·K] thermal conductivity of the material, default: 1e-10
+    :param float resistivity: [Ohm-nm] resistivity of the material, default: infinity
+    :param float dn_dT: [K^-1] change in refractive index per change in temperature, relative to 298 K, default: 0
+    :param float eps_r_dc: [-] relative permittivity at ~1 kHz, default: 1.0
+    :param float phi: phi angle of the crystal orientation in cylidrical coordinates, default: 0
+    :param float theta: theta angle of the crystal orientation in cylidrical coordinates, default: 0
     :param str simulation_name: simulation name, default: 'emode'
     
 .. data:: import_database
@@ -78,7 +85,7 @@ Simulation setup
     :param str name: shape name, default: an auto-generated number
     :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
     :type material: ~MaterialSpec, ~MaterialProperties, or str
-    :param float loss_dB_per_m: [dB/m] material propagation loss, default: 0
+    :param float loss_dB_per_m: [dB/m] material propagation loss, if not set by the ``material`` parameter, default: 0
     :param vertices: list of N vertices that define a closed polygon, if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
     :type vertices: list (N,2) or int
     :param float width: shape width, gets set to the ``window_width`` if not specified, default: None
@@ -101,6 +108,10 @@ Simulation setup
     :type roughness_rms: float or list
     :param str shape_type: set shape type as 'planar', 'conformal' (only uses ``name``, ``material``, ``height``, and ``priority``), 'polygon' (only uses ``name``, ``vertices``, ``material`` and ``priority``), or 'ellipse' (only uses ``name``, ``material``, ``width``, ``height``, ``position``, ``sidewall_angle`` (the angle of the ellipse), and ``priority``), default: 'planar'
     :param float priority: a number that signifies the order in which shapes will be drawn, a higher priority gets drawn over a lower number priority, default: auto-generated integer based on order called
+    :param float fem_resolution: [nm] approximate resolution to target for triangular meshing used by FEM functions, default: 500
+    :param float current: [A] current flowing through the cross-section of the shape, which can generate heat, default: 0
+    :param float voltage: [V] voltage of the shape, None for floating, default: None
+    :param bool heat_only: specifies a shape that will only be rendered when meshing for a heat calculation, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: reset

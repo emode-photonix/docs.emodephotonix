@@ -24,12 +24,12 @@ Next, EMode functions are called with:
     .. code-tab:: python
         :caption: Python
         
-        em.function_name('keyword 1' = value_1, 'keyword 2' = value_2, ... )
+        em.function_name(keyword_1 = value_1, keyword_2 = value_2, ... )
     
     .. code-tab:: matlab
         :caption: MATLAB
         
-        em.function_name('keyword 1', value_1, 'keyword 2', value_2, ... );
+        em.function_name(keyword_1 = value_1, keyword_2 = value_2, ... );
 
 Close EMode and check in the license with:
 

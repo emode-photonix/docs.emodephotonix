@@ -317,6 +317,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem.html">FEM</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
 <ul class="nav bd-sidenav">
@@ -365,7 +366,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="FDM">
 <span class="sig-name descname"><span class="pre">FDM</span></span></dt>
-<dd><p>Calculate the waveguide modes using the finite difference method. It automatically runs <code class="docutils literal notranslate"><span class="pre">EM_mesh</span></code> as needed (generating <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">x_edge</span></code>, <code class="docutils literal notranslate"><span class="pre">y_edge</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>). After solving the mode, the effective index (<code class="docutils literal notranslate"><span class="pre">effective_index</span></code>), mode propagation loss (<code class="docutils literal notranslate"><span class="pre">loss_dB_per_m</span></code>), and field components (<code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>) are available, where the fields are normalized to the equation below.</p>
+<dd><p>Calculate the waveguide modes using the finite difference method. It automatically runs <code class="docutils literal notranslate"><span class="pre">EM_mesh</span></code> as needed (generating <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>). After solving the mode, the effective index (<code class="docutils literal notranslate"><span class="pre">effective_index</span></code>), mode propagation loss (<code class="docutils literal notranslate"><span class="pre">loss_dB_per_m</span></code>), and field components (<code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>) are available, where the fields are normalized to the equation below.</p>
 <div class="math notranslate nohighlight">
 \[\frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}\]</div>
 <p>It also calculates the TE fraction of each mode (<code class="docutils literal notranslate"><span class="pre">TE_fraction</span></code>) with the following equation, and it saves the indices of the TE and TM modes (<code class="docutils literal notranslate"><span class="pre">TE_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">TM_indices</span></code>).</p>
@@ -375,8 +376,9 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>label</strong> (<em>str</em>) – dataset label name to automatically create a dataset after running <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, no dataset is created if blank, default: ‘’</p></li>
-<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+<li><p><strong>mode_filter</strong> (<em>str</em>) – choose to filter the mode list for propagation direction of ‘forward’, ‘backward’, or ‘none’, default: ‘forward’</p></li>
 <li><p><strong>force_isotropic</strong> (<em>bool</em>) – if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
 </dl>
@@ -392,8 +394,7 @@
 <li><p><strong>key</strong> (<em>str</em>) – any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify ‘shape, SHAPE_NAME, SHAPE_KEY’ to specify shape the SHAPE_KEY of SHAPE_NAME, specify ‘section, SECTION_NAME, SECTION_KEY’ to specify the SECTION_KEY of SECTION_NAME</p></li>
 <li><p><strong>values</strong> (<em>list</em><em> or </em><em>array</em>) – the values that define the <code class="docutils literal notranslate"><span class="pre">key</span></code> during the sweep</p></li>
 <li><p><strong>solve_type</strong> (<em>str</em>) – either ‘Mesh’, ‘FDM’, or ‘EME’ to specify which solver to run at each sweep step, default: automatically chosen based on the <code class="docutils literal notranslate"><span class="pre">key</span></code> and <code class="docutils literal notranslate"><span class="pre">result</span></code> selection</p></li>
-<li><p><strong>result</strong> (<em>str</em><em> or </em><em>list</em>) – the parameters to save from each iteration of the sweep, default: ‘effective_index’</p></li>
-<li><p><strong>label</strong> (<em>str</em>) – dataset label to use in the parameter sweep, default: ‘’</p></li>
+<li><p><strong>result</strong> (<em>str</em><em> or </em><em>list</em>) – the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls <code class="docutils literal notranslate"><span class="pre">get</span></code>, so if you can read the value with <code class="docutils literal notranslate"><span class="pre">get</span></code> you can collect it with <code class="docutils literal notranslate"><span class="pre">sweep</span></code>. default: ‘effective_index’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -472,13 +473,13 @@
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="label">
-<span class="sig-name descname"><span class="pre">label</span></span></dt>
-<dd><p>Creates a labeled dataset from the current settings and field data, saved as a Python dictionary or a MATLAB structure array called <code class="docutils literal notranslate"><span class="pre">dataset_LABEL</span></code>. It can be used to run different simulations and compare the outputs. Also, it is used in conjunction with <code class="docutils literal notranslate"><span class="pre">calc_overlap</span></code>.</p>
+<dt class="sig sig-object py" id="label_profile">
+<span class="sig-name descname"><span class="pre">label_profile</span></span></dt>
+<dd><p>Creates a labeled dataset from the current settings and field data, saved as a Python dictionary or a MATLAB structure array called <code class="docutils literal notranslate"><span class="pre">dataset_NAME</span></code>. It can be used to run different simulations and compare the outputs. Also, it is used in conjunction with certain functions like <code class="docutils literal notranslate"><span class="pre">overlap</span></code> and <code class="docutils literal notranslate"><span class="pre">orthogonality</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>label</strong> (<em>str</em>) – label added to current mode set, default: ‘0’</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – save the current simulation state to this name, default: ‘0’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -516,7 +517,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>shape</strong> (<em>str</em>) – name of the shape for calculating the interfacial scattering</p></li>
+<li><p><strong>shape</strong> (<em>str</em>) – name of the shape for calculating the interfacial scattering, can also be a list of shapes or None (which calculates scattering for all shapes), default: None</p></li>
+<li><p><strong>shapes</strong> (<em>str</em>) – alias for shape</p></li>
 <li><p><strong>mode_list</strong> – mode number, list of mode numbers, or ‘all’, default: ‘all’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name for the second mode set, default: ‘emode’</p></li>
 </ul>
@@ -540,7 +542,7 @@
 <li><p><strong>mesh_display</strong> (<em>bool</em>) – setting mesh display, default: False</p></li>
 <li><p><strong>window_display</strong> (<em>bool</em>) – setting window display, default: False</p></li>
 <li><p><strong>legend</strong> (<em>bool</em>) – setting inclusion of a legend on the index and shape plots, default: True</p></li>
-<li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, default: False</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None</p></li>
 <li><p><strong>file_type</strong> (<em>str</em>) – file type for saving a plot, ‘pdf’ or ‘png’, default: ‘pdf’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
@@ -598,7 +600,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="mesh">
 <span class="sig-name descname"><span class="pre">mesh</span></span></dt>
-<dd><p>Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by <code class="docutils literal notranslate"><span class="pre">FDM</span></code> if it has not already been called by the user. Generates vertices for each shape (<code class="docutils literal notranslate"><span class="pre">shape_name_vertices</span></code>), the actual refractive index for each shape (<code class="docutils literal notranslate"><span class="pre">shape_NAME_refractive_index_value</span></code>), arrays to define the edges (<code class="docutils literal notranslate"><span class="pre">x_edge</span></code>, <code class="docutils literal notranslate"><span class="pre">y_edge</span></code>) and center points (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>) of the mesh grid, and the relative permittivity and permeability matrices (<code class="docutils literal notranslate"><span class="pre">permittivity</span></code> and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>).</p>
+<dd><p>Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by <code class="docutils literal notranslate"><span class="pre">FDM</span></code> if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>) of the mesh grid, and the relative permittivity and permeability matrices (<code class="docutils literal notranslate"><span class="pre">permittivity</span></code> and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p>
@@ -638,7 +640,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality"><code class="docutils literal notranslate"><span class="pre">orthogonality</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group_index"><code class="docutils literal notranslate"><span class="pre">group_index</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#report"><code class="docutils literal notranslate"><span class="pre">report</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#label"><code class="docutils literal notranslate"><span class="pre">label</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#label_profile"><code class="docutils literal notranslate"><span class="pre">label_profile</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overlap"><code class="docutils literal notranslate"><span class="pre">overlap</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scattering"><code class="docutils literal notranslate"><span class="pre">scattering</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot"><code class="docutils literal notranslate"><span class="pre">plot</span></code></a></li>

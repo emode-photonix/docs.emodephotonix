@@ -367,52 +367,50 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">h_core</span> <span class="o">=</span> <span class="mi">220</span> <span class="c1"># [nm] waveguide core height</span>
 <span class="n">h_clad</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1"># [nm] waveguide top and bottom clad</span>
 
-<span class="n">window_width</span> <span class="o">=</span> <span class="mi">3200</span>
+<span class="n">window_width</span> <span class="o">=</span> <span class="mi">3400</span>
 <span class="n">window_height</span> <span class="o">=</span> <span class="n">h_core</span> <span class="o">+</span> <span class="n">h_clad</span><span class="o">*</span><span class="mi">2</span>
 
-<span class="n">num_modes</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># [-] number of modes</span>
+<span class="n">num_modes</span> <span class="o">=</span> <span class="mi">22</span> <span class="c1"># [-] number of modes</span>
 <span class="n">BC</span> <span class="o">=</span> <span class="s1">&#39;TE&#39;</span>
 
 <span class="c1">## Connect and initialize EMode</span>
 <span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">(</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
 <span class="c1">## Settings</span>
-<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span><span class="p">,</span>
-    <span class="n">x_resolution</span> <span class="o">=</span> <span class="n">dx</span><span class="p">,</span> <span class="n">y_resolution</span> <span class="o">=</span> <span class="n">dy</span><span class="p">,</span>
-    <span class="n">window_width</span> <span class="o">=</span> <span class="n">window_width</span><span class="p">,</span>
-    <span class="n">window_height</span> <span class="o">=</span> <span class="n">window_height</span><span class="p">,</span>
-    <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">,</span> <span class="n">boundary_condition</span><span class="o">=</span><span class="n">BC</span><span class="p">,</span>
+<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
+    <span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">x_resolution</span> <span class="o">=</span> <span class="n">dx</span><span class="p">,</span> <span class="n">y_resolution</span> <span class="o">=</span> <span class="n">dy</span><span class="p">,</span>
+    <span class="n">window_width</span> <span class="o">=</span> <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="n">window_height</span><span class="p">,</span>
+    <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">,</span> <span class="n">boundary_condition</span> <span class="o">=</span> <span class="n">BC</span><span class="p">,</span>
     <span class="n">background_material</span> <span class="o">=</span> <span class="s1">&#39;SiO2&#39;</span><span class="p">)</span>
 
 <span class="c1">## Draw shapes</span>
 <span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;BOX&#39;</span><span class="p">,</span> <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;SiO2&#39;</span><span class="p">,</span>
     <span class="n">height</span> <span class="o">=</span> <span class="n">h_clad</span><span class="p">)</span>
 <span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;Si&#39;</span><span class="p">,</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="n">h_core</span><span class="p">,</span> <span class="n">etch_depth</span><span class="o">=</span><span class="n">h_core</span><span class="o">*</span><span class="mf">0.90</span><span class="p">,</span>
-    <span class="n">sidewall_angle</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">h_core</span><span class="p">,</span> <span class="n">etch_depth</span> <span class="o">=</span> <span class="n">h_core</span><span class="o">*</span><span class="mf">0.90</span><span class="p">,</span>
+    <span class="n">sidewall_angle</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
 
 <span class="c1">## Launch FDM solver and label profiles</span>
-<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="mi">600</span><span class="p">)</span>
-<span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">(</span><span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">(</span><span class="n">profile</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
 <span class="n">em</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
 <span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
-<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="mi">1200</span><span class="p">)</span>
-<span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">(</span><span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">(</span><span class="n">profile</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">em</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
 <span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
 <span class="c1">## Draw EME sections</span>
 <span class="n">em</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">profile</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">section_type</span> <span class="o">=</span> <span class="s1">&#39;straight&#39;</span><span class="p">,</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="mf">2e3</span><span class="p">,</span> <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mf">2e3</span><span class="p">)</span>
 
 <span class="n">em</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">section_type</span> <span class="o">=</span> <span class="s1">&#39;taper&#39;</span><span class="p">,</span>
     <span class="n">profile</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">profile_end</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">,</span> <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">,</span>
-    <span class="n">minimum_z_step</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">overlap_variation</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mi">4000</span><span class="p">)</span>
 
 <span class="n">em</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">profile</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">section_type</span> <span class="o">=</span> <span class="s1">&#39;straight&#39;</span><span class="p">,</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="mf">2e3</span><span class="p">,</span> <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mf">2e3</span><span class="p">)</span>
 
 <span class="c1">## Run EME and plot results</span>
 <span class="n">em</span><span class="o">.</span><span class="n">EME</span><span class="p">()</span>
@@ -430,52 +428,50 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">h_core</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">220</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide core height</span>
 <span class="n">h_clad</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide top and bottom clad</span>
 
-<span class="n">window_width</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">3000</span><span class="p">;</span>
+<span class="n">window_width</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">3400</span><span class="p">;</span>
 <span class="n">window_height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">h_clad</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span>
 
-<span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="c">% [-] number of modes</span>
+<span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">22</span><span class="p">;</span><span class="w"> </span><span class="c">% [-] number of modes</span>
 <span class="n">BC</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;TE&#39;</span><span class="p">;</span>
 
 <span class="c">%% Connect and initialize EMode</span>
-<span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="s">&#39;verbose&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="n">verbose</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 
 <span class="c">%% Settings</span>
-<span class="n">em</span><span class="p">.</span><span class="n">settings</span><span class="p">(</span><span class="s">&#39;wavelength&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">wavelength</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;x_resolution&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;y_resolution&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;window_width&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">window_width</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;window_height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">window_height</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;num_modes&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;boundary_condition&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">BC</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;background_material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">settings</span><span class="p">(</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">wavelength</span><span class="p">,</span><span class="w"> </span><span class="n">x_resolution</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">y_resolution</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="n">window_width</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">window_width</span><span class="p">,</span><span class="w"> </span><span class="n">window_height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">window_height</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">num_modes</span><span class="p">,</span><span class="w"> </span><span class="n">boundary_condition</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">BC</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="n">background_material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">);</span>
 
 <span class="c">%% Draw shapes</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;BOX&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_clad</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Si&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;height&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_core</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;etch_depth&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">h_core</span><span class="o">*</span><span class="mf">0.90</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;sidewall_angle&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;BOX&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="nb">height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_clad</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;Si&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="nb">height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="p">,</span><span class="w"> </span><span class="n">etch_depth</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="o">*</span><span class="mf">0.90</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="n">sidewall_angle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
 
 <span class="c">%% Launch FDM solver and label profiles</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;mask&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">600</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">(</span><span class="nb">profile</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p">);</span>
 <span class="n">em</span><span class="p">.</span><span class="n">report</span><span class="p">();</span>
 <span class="n">em</span><span class="p">.</span><span class="n">plot</span><span class="p">();</span>
 
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;mask&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1200</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2000</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">(</span><span class="nb">profile</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p">);</span>
 <span class="n">em</span><span class="p">.</span><span class="n">report</span><span class="p">();</span>
 <span class="n">em</span><span class="p">.</span><span class="n">plot</span><span class="p">();</span>
 
 <span class="c">%% Draw EME sections</span>
-<span class="n">em</span><span class="p">.</span><span class="n">section</span><span class="p">(</span><span class="s">&#39;profile&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;section_type&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;straight&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;length&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">2e3</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;num_modes&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">section</span><span class="p">(</span><span class="nb">profile</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">section_type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;straight&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="nb">length</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">2e3</span><span class="p">);</span>
 
-<span class="n">em</span><span class="p">.</span><span class="n">section</span><span class="p">(</span><span class="s">&#39;section_type&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;taper&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;profile&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;profile_end&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;length&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;num_modes&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;minimum_z_step&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;overlap_variation&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">section</span><span class="p">(</span><span class="n">section_type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;taper&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="nb">profile</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">profile_end</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="nb">length</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">4000</span><span class="p">);</span>
 
-<span class="n">em</span><span class="p">.</span><span class="n">section</span><span class="p">(</span><span class="s">&#39;profile&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;section_type&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;straight&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="s">&#39;length&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">2e3</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;num_modes&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="p">);</span>
+<span class="n">em</span><span class="p">.</span><span class="n">section</span><span class="p">(</span><span class="nb">profile</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">section_type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;straight&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="nb">length</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">2e3</span><span class="p">);</span>
 
 <span class="c">%% Run EME and plot results</span>
 <span class="n">em</span><span class="p">.</span><span class="n">EME</span><span class="p">();</span>
@@ -487,37 +483,77 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode</span> <span class="mf">0.2.0</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Connected</span> <span class="n">on</span> <span class="n">port</span> <span class="mi">62000</span> <span class="n">to</span> <span class="n">LM</span><span class="o">-</span><span class="mf">1.</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode</span> <span class="mf">0.2.1</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Connected</span> <span class="n">on</span> <span class="n">port</span> <span class="mi">63000</span> <span class="n">to</span> <span class="n">LM</span><span class="o">-</span><span class="mf">2.</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
 
 <span class="n">Wavelength</span><span class="p">:</span> <span class="mf">1550.0</span> <span class="n">nm</span>
 
   <span class="n">Mode</span> <span class="c1">#     n_eff    TE %    Loss (dB/m)</span>
 <span class="o">--------</span>  <span class="o">--------</span>  <span class="o">------</span>  <span class="o">-------------</span>
-    <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">2.549973</span>  <span class="mf">98.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
-    <span class="n">TE</span><span class="o">-</span><span class="mi">1</span>  <span class="mf">1.500118</span>  <span class="mf">99.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
-    <span class="n">TM</span><span class="o">-</span><span class="mi">2</span>  <span class="mf">1.444024</span>   <span class="mf">0.0</span> <span class="o">%</span>          <span class="mf">0.000</span>
-    <span class="n">TM</span><span class="o">-</span><span class="mi">3</span>  <span class="mf">1.404519</span>  <span class="mf">12.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">2.740878</span>  <span class="mf">99.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">1</span>  <span class="mf">1.834948</span>  <span class="mf">86.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">2</span>  <span class="mf">1.648371</span>  <span class="mf">14.6</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">3</span>  <span class="mf">1.480289</span>  <span class="mf">99.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">4</span>  <span class="mf">1.444024</span>   <span class="mf">0.0</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">5</span>  <span class="mf">1.380997</span>  <span class="mf">99.0</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">6</span>  <span class="mf">1.333974</span>   <span class="mf">3.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">7</span>  <span class="mf">1.313224</span>  <span class="mf">98.9</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">8</span>  <span class="mf">1.260780</span>   <span class="mf">9.1</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">9</span>  <span class="mf">1.245872</span>  <span class="mf">93.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">10</span>  <span class="mf">1.205712</span>  <span class="mf">96.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">11</span>  <span class="mf">1.141695</span>  <span class="mf">98.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">12</span>  <span class="mf">1.098826</span>   <span class="mf">2.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">13</span>  <span class="mf">1.059658</span>   <span class="mf">6.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">14</span>  <span class="mf">1.046256</span>  <span class="mf">99.4</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">15</span>  <span class="mf">0.908818</span>  <span class="mf">90.9</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">16</span>  <span class="mf">0.884647</span>  <span class="mf">13.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">17</span>  <span class="mf">0.836617</span>  <span class="mf">92.4</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">18</span>  <span class="mf">0.750209</span>  <span class="mf">29.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">19</span>  <span class="mf">0.712955</span>  <span class="mf">92.6</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">20</span>  <span class="mf">0.639715</span>  <span class="mf">17.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">21</span>  <span class="mf">0.557145</span>  <span class="mf">76.4</span> <span class="o">%</span>          <span class="mf">0.000</span>
 
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
 
 <span class="n">Wavelength</span><span class="p">:</span> <span class="mf">1550.0</span> <span class="n">nm</span>
 
-  <span class="n">Mode</span> <span class="c1">#     n_eff    TE %    Loss (dB/m)</span>
-<span class="o">--------</span>  <span class="o">--------</span>  <span class="o">------</span>  <span class="o">-------------</span>
-    <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">2.773467</span>  <span class="mf">99.9</span> <span class="o">%</span>          <span class="mf">0.000</span>
-    <span class="n">TE</span><span class="o">-</span><span class="mi">1</span>  <span class="mf">2.134024</span>  <span class="mf">96.5</span> <span class="o">%</span>          <span class="mf">0.000</span>
-    <span class="n">TM</span><span class="o">-</span><span class="mi">2</span>  <span class="mf">1.756185</span>  <span class="mf">10.4</span> <span class="o">%</span>          <span class="mf">0.000</span>
-    <span class="n">TE</span><span class="o">-</span><span class="mi">3</span>  <span class="mf">1.490376</span>  <span class="mf">99.0</span> <span class="o">%</span>          <span class="mf">0.000</span>
+  <span class="n">Mode</span> <span class="c1">#     n_eff     TE %    Loss (dB/m)</span>
+<span class="o">--------</span>  <span class="o">--------</span>  <span class="o">-------</span>  <span class="o">-------------</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">2.820614</span>  <span class="mf">100.0</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">1</span>  <span class="mf">2.601685</span>   <span class="mf">99.7</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">2</span>  <span class="mf">2.117344</span>   <span class="mf">97.1</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">3</span>  <span class="mf">1.937158</span>    <span class="mf">5.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">4</span>  <span class="mf">1.565193</span>   <span class="mf">21.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">5</span>  <span class="mf">1.512582</span>   <span class="mf">84.1</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">6</span>  <span class="mf">1.444024</span>    <span class="mf">0.0</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">7</span>  <span class="mf">1.394522</span>   <span class="mf">95.1</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TM</span><span class="o">-</span><span class="mi">8</span>  <span class="mf">1.347977</span>   <span class="mf">40.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+    <span class="n">TE</span><span class="o">-</span><span class="mi">9</span>  <span class="mf">1.316026</span>   <span class="mf">64.5</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">10</span>  <span class="mf">1.267170</span>   <span class="mf">86.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">11</span>  <span class="mf">1.248576</span>   <span class="mf">81.1</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">12</span>  <span class="mf">1.193778</span>   <span class="mf">18.6</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">13</span>  <span class="mf">1.145446</span>   <span class="mf">99.4</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">14</span>  <span class="mf">1.079657</span>    <span class="mf">7.7</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">15</span>  <span class="mf">1.058558</span>   <span class="mf">76.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">16</span>  <span class="mf">1.046977</span>   <span class="mf">21.7</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">17</span>  <span class="mf">0.990949</span>   <span class="mf">95.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">18</span>  <span class="mf">0.865006</span>   <span class="mf">79.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">19</span>  <span class="mf">0.847538</span>    <span class="mf">5.0</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TM</span><span class="o">-</span><span class="mi">20</span>  <span class="mf">0.837589</span>   <span class="mf">11.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
+   <span class="n">TE</span><span class="o">-</span><span class="mi">21</span>  <span class="mf">0.736539</span>   <span class="mf">90.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
 
 <span class="n">Solving</span> <span class="n">S</span><span class="o">-</span><span class="n">matrices</span><span class="o">...</span>
-<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="mf">1.</span><span class="o">..</span> <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
-<span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="mf">1.</span><span class="o">..</span> <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
+<span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
 
-<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="mf">2.</span><span class="o">..</span> <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="mf">2.</span><span class="o">..</span> <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
@@ -534,11 +570,14 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
-<span class="n">completed</span> <span class="ow">in</span> <span class="mf">20.4</span> <span class="n">sec</span>
+<span class="n">completed</span> <span class="ow">in</span> <span class="mf">11.4</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
 
 <span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="mf">3.</span><span class="o">..</span> <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
 <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
-<span class="n">completed</span> <span class="ow">in</span> <span class="mf">22.1</span> <span class="n">sec</span>
+<span class="n">completed</span> <span class="ow">in</span> <span class="mf">15.9</span> <span class="n">sec</span>
 </pre></div>
 </div>
 <p>Figures:</p>

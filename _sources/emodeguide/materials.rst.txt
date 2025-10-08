@@ -281,3 +281,11 @@ Descriptions of all materials available in built-in material database. This info
     
         | A. Borne, P. Segonds, B. Boulanger, C. Félix, and J. Debray, "Refractive indices, phase-matching directions and third order nonlinear coefficients of rutile TiO2 from third harmonic generation," Opt. Mater. Express 2, 1797 (2012).
         | Notes: The n_e is the z-direction and n_o is the x- and y-direction. Equation takes wavelength in nanometers.
+
+.. data:: Vacuum
+    
+    .. math::
+        
+        n = 1.0
+    
+    Wavelength range: 0.0001 nm to 100000 nm

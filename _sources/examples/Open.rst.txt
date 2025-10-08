@@ -43,8 +43,9 @@ How to open an existing EMode simulation.
             background_material = "Air")
 
         # Draw shapes
-        em.shape(name = "BOX", material = "SiO2", height=b_clad)
-        em.shape(name = "core", material = "GaAs", angle=angle, mask=w_core, height=h_core, etch_depth=h_core-h_slab)
+        em.shape(name = "BOX", material = "SiO2", height = b_clad)
+        em.shape(name = "core", material = "GaAs", sidewall_angle = angle,
+            mask = w_core, height = h_core, etch_depth = h_core - h_slab)
 
         # Launch FDM solver
         em.FDM()
@@ -56,7 +57,7 @@ How to open an existing EMode simulation.
 
         # Open existing simulation file
         em = emc.EMode(simulation_name = 'GaAs_SHG',
-            open_existing= True, new_name = 'GaAs_SHG-TM')
+            open_existing = True, new_name = 'GaAs_SHG-TM')
 
         # Get the previous wavelength setting and convert it to the second harmonic wavelength
         wavelength = em.get('wavelength')/2
@@ -76,16 +77,14 @@ How to open an existing EMode simulation.
         ## When opening an existing file to only retrieve and plot data, a new simulation name is not needed since the simulation data will not be modified.
 
         # Plot from existing simulation file - pump mode
-        em = emc.EMode(simulation_name = 'GaAs_SHG',
-            open_existing= True)
+        em = emc.EMode(simulation_name = 'GaAs_SHG', open_existing = True)
 
         E_p = em.get(key = ['Ex', 'Ey', 'Ez'])
         em.plot()
         em.close()
 
         # Plot from existing simulation file - signal mode
-        em = emc.EMode(simulation_name = 'GaAs_SHG-TM',
-            open_existing= True)
+        em = emc.EMode(simulation_name = 'GaAs_SHG-TM', open_existing = True)
 
         E_s = em.get(key = ['Ex', 'Ey', 'Ez'])
         TM_indices = em.get('TM_indices')
@@ -118,16 +117,16 @@ How to open an existing EMode simulation.
 
         % Settings
         em.settings( ...
-            'wavelength', wavelength, ...
-            'x_resolution', dx, 'y_resolution', dy, ...
-            'window_width', width, 'window_height', height, ...
-            'boundary_condition', boundary, 'num_modes', num_modes, ...
-            'background_material', 'Air');
+            wavelength = wavelength, ...
+            x_resolution = dx, y_resolution = dy, ...
+            window_width = width, window_height = height, ...
+            boundary_condition = boundary, num_modes = num_modes, ...
+            background_material = 'Air');
 
         % Draw shapes
-        em.shape('name', 'BOX', 'material', 'SiO2', 'height', b_clad);
-        em.shape('name', 'core', 'material', 'GaAs', 'angle', angle, ...
-            'mask', w_core, 'height', h_core, 'etch_depth', h_core-h_slab);
+        em.shape(name = 'BOX', material = 'SiO2', height = b_clad);
+        em.shape(name = 'core', material = 'GaAs', sidewall_angle = angle, ...
+            mask = w_core, height = h_core, etch_depth = h_core - h_slab);
 
         % Launch FDM solver
         em.FDM();
@@ -138,17 +137,17 @@ How to open an existing EMode simulation.
         %% The previous simulated can be opened again, modified, and saved with a new name.
 
         % Open existing simulation file
-        em = emodeconnection('simulation_name', 'GaAs_SHG', ...
-            'open_existing', true, 'new_name', 'GaAs_SHG-TM');
+        em = emodeconnection(simulation_name = 'GaAs_SHG', ...
+            open_existing = true, new_name = 'GaAs_SHG-TM');
 
         % Get the previous wavelength setting and convert it to the second harmonic wavelength
         wavelength = em.get('wavelength')/2;
         n_eff = em.get('effective_index');
 
         % Update the settings
-        em.settings('wavelength', wavelength, ...
-            'boundary_condition', 'TM', 'num_modes', 1, ...
-            'max_effective_index', n_eff(1));
+        em.settings(wavelength = wavelength, ...
+            boundary_condition = 'TM', num_modes = 1, ...
+            max_effective_index = n_eff(1));
 
         % Launch FDM solver
         em.FDM();
@@ -159,27 +158,25 @@ How to open an existing EMode simulation.
         %% When opening an existing file to only retrieve and plot data, a new simulation name is not needed since the simulation data will not be modified.
 
         % Plot from existing simulation file - pump mode
-        em = emodeconnection('simulation_name', 'GaAs_SHG', ...
-            'open_existing', true);
+        em = emodeconnection(simulation_name = 'GaAs_SHG', open_existing = true);
 
-        E_p = em.get('key', ['Ex', 'Ey', 'Ez']);
+        E_p = em.get(key = {'Ex', 'Ey', 'Ez'});
         em.plot();
         em.close();
 
         % Plot from existing simulation file - signal mode
-        em = emodeconnection('simulation_name', 'GaAs_SHG-TM', ...
-            'open_existing', true);
+        em = emodeconnection(simulation_name = 'GaAs_SHG-TM', open_existing = true);
 
-        E_s = em.get('key', ['Ex', 'Ey', 'Ez']);
+        E_s = em.get(key = {'Ex', 'Ey', 'Ez'});
         TM_indices = em.get('TM_indices');
         em.plot('component', 'Ey', 'mode', TM_indices(1));
         em.close();
 
 Console output::
 
-    EMode 0.2.0 - email
-    Meshing completed in 1.0 sec
-    Solving completed in 2.1 sec
+    EMode 0.2.1 - email
+    Meshing completed in 0.6 sec
+    Solving completed in 1.2 sec
 
     Wavelength: 1970.0 nm
  
@@ -187,9 +184,9 @@ Console output::
     --------  --------  ------  -------------
         TE-0  2.094190  99.8 %          0.000
  
-    EMode 0.2.0 - email
-    Meshing completed in 1.3 sec
-    Solving completed in 1.5 sec
+    EMode 0.2.1 - email
+    Meshing completed in 0.6 sec
+    Solving completed in 0.9 sec
 
     Wavelength: 985.0 nm
  
@@ -197,8 +194,8 @@ Console output::
     --------  --------  ------  -------------
         TM-0  2.067847   1.2 %          0.000
  
-    EMode 0.2.0 - email
-    EMode 0.2.0 - email
+    EMode 0.2.1 - email
+    EMode 0.2.1 - email
 
 
 Figures:

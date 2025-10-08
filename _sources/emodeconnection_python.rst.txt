@@ -2,7 +2,7 @@
 Python interface
 ================
 
-To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.9, and 3.10, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.
+To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.9 through 3.13, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.
 
 The source code can be viewed here: `emodeconnection <https://github.com/emode-photonix/emodeconnection>`_
 

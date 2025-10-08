@@ -20,20 +20,19 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         h_core = 220 # [nm] waveguide core height
         h_clad = 1000 # [nm] waveguide top and bottom clad
 
-        window_width = 3200
+        window_width = 3400
         window_height = h_core + h_clad*2
 
-        num_modes = 10 # [-] number of modes
-        BC = 'TE-v'
+        num_modes = 22 # [-] number of modes
+        BC = 'TE'
 
         ## Connect and initialize EMode
         em = emc.EMode(simulation_name = 'taper', verbose = True)
 
         ## Settings
-        em.settings(wavelength = wavelength,
-            x_resolution = dx, y_resolution = dy,
-            window_width = window_width,
-            window_height = window_height,
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = window_width, window_height = window_height,
             num_modes = num_modes, boundary_condition = BC,
             background_material = 'SiO2')
 
@@ -41,30 +40,29 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         em.shape(name = 'BOX', material = 'SiO2',
             height = h_clad)
         em.shape(name = 'core', material = 'Si',
-            height = h_core, etch_depth = h_core)
+        height = h_core, etch_depth = h_core)
 
         ## Launch FDM solver and label profiles
-        em.shape(name = 'core', mask = 600)
-        em.label(label = 'a') # skips solving the modes here
+        em.shape(name = 'core', mask = 1000)
+        em.label_profile(name = 'a') # skips solving the modes here
 
-        em.shape(name = 'core', mask = 1200)
-        em.label(label = 'b') # skips solving the modes here
+        em.shape(name = 'core', mask = 2000)
+        em.label_profile(name = 'b') # skips solving the modes here
 
         ## Draw EME sections
         em.section(profile = 'a', section_type = 'straight',
-            length = 2e3, num_modes = num_modes)
+            length = 2e3)
 
         em.section(name = 'taper', section_type = 'taper',
             profile = 'a', profile_end = 'b',
-            length = 6000, num_modes = num_modes,
-            minimum_z_step = 10, overlap_variation = 0.01)
+            length = 4000)
 
         em.section(profile = 'b', section_type = 'straight',
-            length = 2e3, num_modes = num_modes)
+            length = 2e3)
 
         ## Run EME sweep
-        data = em.sweep(key='section, taper, length',
-            values=np.arange(0, 6001, 100),
+        data = em.sweep(key = 'section, taper, length',
+            values = np.arange(0, 8001, 250),
             result = ['S_matrix'])
 
         ## Close EMode
@@ -79,51 +77,49 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         h_core = 220; % [nm] waveguide core height
         h_clad = 1000; % [nm] waveguide top and bottom clad
 
-        window_width = 3200;
+        window_width = 3400;
         window_height = h_core + h_clad*2;
 
-        num_modes = 10; % [-] number of modes
-        BC = 'TE-v';
+        num_modes = 22; % [-] number of modes
+        BC = 'TE';
 
         %% Connect and initialize EMode
-        em = emodeconnection('simulation_name', 'taper', 'verbose', true);
+        em = emodeconnection(simulation_name = 'taper', verbose = true);
 
         %% Settings
-        em.settings('wavelength', wavelength, ...
-            'x_resolution', dx, 'y_resolution', dy, ...
-            'window_width', window_width, ...
-            'window_height', window_height, ...
-            'num_modes', num_modes, 'boundary_condition', BC, ...
-            'background_material', 'SiO2');
+        em.settings( ...
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
+            window_width = window_width, window_height = window_height, ...
+            num_modes = num_modes, boundary_condition = BC, ...
+            background_material = 'SiO2');
 
         %% Draw shapes
-        em.shape('name', 'BOX', 'material', 'SiO2', ...
-            'height', h_clad);
-        em.shape('name', 'core', 'material', 'Si', ...
-            'height', h_core, 'etch_depth', h_core);
+        em.shape(name = 'BOX', material = 'SiO2', ...
+            height = h_clad);
+        em.shape(name = 'core', material = 'Si', ...
+            height = h_core, etch_depth = h_core);
 
         %% Launch FDM solver and label profiles
-        em.shape('name', 'core', 'mask', 600);
-        em.label('label', 'a'); % skips solving the modes here
+        em.shape(name = 'core', mask = 1000);
+        em.label_profile(name = 'a'); % skips solving the modes here
 
-        em.shape('name', 'core', 'mask', 1200);
-        em.label('label', 'b'); % skips solving the modes here
+        em.shape(name = 'core', mask = 2000);
+        em.label_profile(name = 'b'); % skips solving the modes here
 
         %% Draw EME sections
-        em.section('profile', 'a', 'section_type', 'straight', ...
-            'length', 2e3, 'num_modes', num_modes);
+        em.section(profile = 'a', section_type = 'straight', ...
+            length = 2e3);
 
-        em.section('name', 'taper', 'section_type', 'taper', ...
-            'profile', 'a', 'profile_end', 'b', ...
-            'length', 6000, 'num_modes', num_modes, ...
-            'minimum_z_step', 10, 'overlap_variation', 0.01);
+        em.section(name = 'taper', section_type = 'taper', ...
+            profile = 'a', profile_end = 'b', ...
+            length = 4000);
 
-        em.section('profile', 'b', 'section_type', 'straight', ...
-            'length', 2e3, 'num_modes', num_modes);
+        em.section(profile = 'b', section_type = 'straight', ...
+            length = 2e3);
 
         %% Run EME sweep
-        data = em.sweep('key', 'section, taper, length', ...
-            'values', 0:100:6000, ...
+        data = em.sweep(key = 'section, taper, length', ...
+            values = 0:250:8000, ...
             result = ['S_matrix']);
 
         %% Close EMode
@@ -131,121 +127,79 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode 0.2.0 - email
+    EMode 0.2.1 - email
     Connected on port 63000 to LM-2.
+    Meshing completed in 0.2 sec
+    Meshing completed in 0.2 sec
 
     Sweeping section parameter 'length'... 
-    Solving EME: length = 6000... Solving completed in 1.0 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 1.0 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 1.0 sec
-    Solving completed in 0.9 sec
-    Solving completed in 1.0 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 1.0 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    Solving completed in 0.9 sec
-    completed in 2 min 18.1 sec
-    Solving EME: length = 5900... completed in 0.9 sec
-    Solving EME: length = 5800... completed in 0.8 sec
-    Solving EME: length = 5700... completed in 0.8 sec
-    Solving EME: length = 5600... completed in 0.8 sec
-    Solving EME: length = 5500... completed in 0.8 sec
-    Solving EME: length = 5400... completed in 0.8 sec
-    Solving EME: length = 5300... completed in 0.8 sec
-    Solving EME: length = 5200... completed in 0.8 sec
-    Solving EME: length = 5100... completed in 0.8 sec
-    Solving EME: length = 5000... completed in 0.8 sec
-    Solving EME: length = 4900... completed in 0.8 sec
-    Solving EME: length = 4800... completed in 0.8 sec
-    Solving EME: length = 4700... completed in 0.9 sec
-    Solving EME: length = 4600... completed in 0.8 sec
-    Solving EME: length = 4500... completed in 0.9 sec
-    Solving EME: length = 4400... completed in 0.8 sec
-    Solving EME: length = 4300... completed in 0.8 sec
-    Solving EME: length = 4200... completed in 0.8 sec
-    Solving EME: length = 4100... completed in 0.8 sec
-    Solving EME: length = 4000... completed in 0.8 sec
-    Solving EME: length = 3900... completed in 0.8 sec
-    Solving EME: length = 3800... completed in 0.8 sec
-    Solving EME: length = 3700... completed in 0.8 sec
-    Solving EME: length = 3600... completed in 0.8 sec
-    Solving EME: length = 3500... completed in 0.8 sec
-    Solving EME: length = 3400... completed in 0.8 sec
-    Solving EME: length = 3300... completed in 0.8 sec
-    Solving EME: length = 3200... completed in 0.8 sec
-    Solving EME: length = 3100... completed in 0.8 sec
-    Solving EME: length = 3000... completed in 0.8 sec
-    Solving EME: length = 2900... completed in 0.8 sec
-    Solving EME: length = 2800... completed in 0.8 sec
-    Solving EME: length = 2700... completed in 0.8 sec
-    Solving EME: length = 2600... completed in 0.8 sec
-    Solving EME: length = 2500... completed in 0.8 sec
-    Solving EME: length = 2400... completed in 0.8 sec
-    Solving EME: length = 2300... completed in 0.8 sec
-    Solving EME: length = 2200... completed in 0.8 sec
-    Solving EME: length = 2100... completed in 0.8 sec
-    Solving EME: length = 2000... completed in 0.8 sec
-    Solving EME: length = 1900... completed in 0.8 sec
-    Solving EME: length = 1800... completed in 0.8 sec
-    Solving EME: length = 1700... completed in 0.8 sec
-    Solving EME: length = 1600... completed in 0.8 sec
-    Solving EME: length = 1500... completed in 0.8 sec
-    Solving EME: length = 1400... completed in 0.8 sec
-    Solving EME: length = 1300... completed in 0.8 sec
-    Solving EME: length = 1200... completed in 0.8 sec
-    Solving EME: length = 1100... completed in 0.8 sec
-    Solving EME: length = 1000... completed in 0.8 sec
-    Solving EME: length = 900... completed in 0.8 sec
-    Solving EME: length = 800... completed in 0.8 sec
-    Solving EME: length = 700... completed in 0.8 sec
-    Solving EME: length = 600... completed in 0.8 sec
-    Solving EME: length = 500... completed in 0.8 sec
-    Solving EME: length = 400... completed in 0.8 sec
-    Solving EME: length = 300... completed in 0.8 sec
-    Solving EME: length = 200... completed in 0.8 sec
-    Solving EME: length = 100... completed in 0.8 sec
-    Solving EME: length = 0... completed in 0.8 sec
-    completed in 3 min 7.4 sec
+    Solving EME: length = 8000... Solving completed in 0.6 sec
+    Meshing completed in 0.2 sec
+    Meshing completed in 0.1 sec
+    Solving completed in 0.5 sec
+    Solving completed in 0.8 sec
+    Meshing completed in 0.1 sec
+    Solving completed in 0.5 sec
+    Solving completed in 0.6 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Meshing completed in 0.2 sec
+    Solving completed in 0.3 sec
+    Meshing completed in 0.2 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Meshing completed in 0.2 sec
+    completed in 21.5 sec
+    Solving EME: length = 7750... completed in 2.0 sec
+    Solving EME: length = 7500... completed in 2.0 sec
+    Solving EME: length = 7250... completed in 2.0 sec
+    Solving EME: length = 7000... completed in 2.1 sec
+    Solving EME: length = 6750... completed in 2.0 sec
+    Solving EME: length = 6500... completed in 2.0 sec
+    Solving EME: length = 6250... completed in 2.0 sec
+    Solving EME: length = 6000... completed in 2.0 sec
+    Solving EME: length = 5750... completed in 1.9 sec
+    Solving EME: length = 5500... completed in 1.9 sec
+    Solving EME: length = 5250... completed in 1.9 sec
+    Solving EME: length = 5000... completed in 2.0 sec
+    Solving EME: length = 4750... completed in 1.9 sec
+    Solving EME: length = 4500... completed in 1.9 sec
+    Solving EME: length = 4250... completed in 2.0 sec
+    Solving EME: length = 4000... completed in 1.9 sec
+    Solving EME: length = 3750... completed in 1.9 sec
+    Solving EME: length = 3500... completed in 1.9 sec
+    Solving EME: length = 3250... completed in 1.9 sec
+    Solving EME: length = 3000... completed in 1.9 sec
+    Solving EME: length = 2750... completed in 1.9 sec
+    Solving EME: length = 2500... completed in 1.9 sec
+    Solving EME: length = 2250... completed in 1.9 sec
+    Solving EME: length = 2000... completed in 1.9 sec
+    Solving EME: length = 1750... completed in 2.0 sec
+    Solving EME: length = 1500... completed in 2.0 sec
+    Solving EME: length = 1250... completed in 2.0 sec
+    Solving EME: length = 1000... completed in 1.9 sec
+    Solving EME: length = 750... completed in 1.9 sec
+    Solving EME: length = 500... completed in 2.0 sec
+    Solving EME: length = 250... completed in 2.0 sec
+    Solving EME: length = 0... completed in 2.1 sec
+    completed in 1 min 24.4 sec
 
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -259,15 +213,14 @@ While no figures are generated in the EMode script, a separate script can be use
         import numpy as np
 
         ## Extract sweep results without an EMode license
-        data = emc.get(variable = 'sweep_data',
-            simulation_name = 'taper')
+        data = emc.get(variable = 'sweep_data', simulation_name = 'taper')
 
         ## Plot
         import matplotlib.pyplot as plt
         from matplotlib import rc as mplrc
 
         fw, LW = 8/2.54, 0.5
-        mplrc('font',**{'family':'sans-serif','sans-serif':['Arial'],'size':7})
+        mplrc('font',**{'family':'sans-serif','size':7})
         mplrc('axes', linewidth=LW, axisbelow=True)
         mplrc('xtick', bottom=True, top=True, direction='in')
         mplrc('ytick', left=True, right=True, direction='in')
@@ -297,10 +250,10 @@ While no figures are generated in the EMode script, a separate script can be use
         lg = ax.legend(handles = lines[0:1], loc = 'center right')
         lg.get_frame().set_linewidth(LW/2)
         lg.get_frame().set_edgecolor('k')
-        ax.set_ylim([80, 100])
+        ax.set_ylim([70, 101])
         fig.savefig('taper_1.png', dpi=600, bbox_inches='tight')
 
-        lg = ax.legend(handles = lines[1:], loc = 'upper right')
+        lg = ax.legend(handles = lines[1:10], loc = 'upper right')
         lg.get_frame().set_linewidth(LW/2)
         lg.get_frame().set_edgecolor('k')
         ax.set_ylim([-1, 16])
