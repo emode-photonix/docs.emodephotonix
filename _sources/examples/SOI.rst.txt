@@ -86,7 +86,7 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode 0.2.1 - email
+    EMode 0.2.2 - email
     Meshing completed in 0.2 sec
     Solving completed in 0.5 sec
 

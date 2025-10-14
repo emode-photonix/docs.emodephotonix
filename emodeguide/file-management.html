@@ -408,6 +408,41 @@
 </dd></dl>
 
 <dl class="py data">
+<dt class="sig sig-object py" id="get_fields">
+<span class="sig-name descname"><span class="pre">get_fields</span></span></dt>
+<dd><p>Extract field data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Field object, and in MATLAB it returns a struct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>]</em>) – name of the field to extract a list of fields of any combination of [<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>].</p></li>
+<li><p><strong>include_expand</strong> (<em>bool</em>) – whether to include the expanded region, default: True</p></li>
+<li><p><strong>include_pml</strong> (<em>bool</em>) – whether to include the PML region, default: True</p></li>
+<li><p><strong>unfold</strong> (<em>bool</em>) – whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – name of labeled dataset to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code>, default: ‘’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="get_grid">
+<span class="sig-name descname"><span class="pre">get_grid</span></span></dt>
+<dd><p>Extract grid data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Grid object, and in MATLAB it returns a struct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_expand</strong> (<em>bool</em>) – whether to include the expanded region, default: True</p></li>
+<li><p><strong>include_pml</strong> (<em>bool</em>) – whether to include the PML region, default: True</p></li>
+<li><p><strong>unfold</strong> (<em>bool</em>) – whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – name of labeled dataset to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code>, default: ‘’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="clear_field_data">
 <span class="sig-name descname"><span class="pre">clear_field_data</span></span></dt>
 <dd><p>Deletes the following data to reduce the ‘.eph’ file size: <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, <code class="docutils literal notranslate"><span class="pre">permeability</span></code>.</p>
@@ -478,6 +513,8 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#init"><code class="docutils literal notranslate"><span class="pre">init</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open"><code class="docutils literal notranslate"><span class="pre">open</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get"><code class="docutils literal notranslate"><span class="pre">get</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_fields"><code class="docutils literal notranslate"><span class="pre">get_fields</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_grid"><code class="docutils literal notranslate"><span class="pre">get_grid</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clear_field_data"><code class="docutils literal notranslate"><span class="pre">clear_field_data</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save"><code class="docutils literal notranslate"><span class="pre">save</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#close"><code class="docutils literal notranslate"><span class="pre">close</span></code></a></li>

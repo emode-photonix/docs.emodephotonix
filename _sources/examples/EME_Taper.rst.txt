@@ -136,10 +136,10 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode 0.2.1 - email
-    Connected on port 63000 to LM-2.
+    EMode 0.2.2 - email
+    Connected on port 62000 to LM-1.
     Meshing completed in 0.2 sec
-    Solving completed in 0.5 sec
+    Solving completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -199,7 +199,7 @@ Console output::
        TE-21  0.736539   90.2 %          0.000
  
     Solving S-matrices... 
-    Solving section: 1... Solving completed in 0.3 sec
+    Solving section: 1... Solving completed in 0.4 sec
     Meshing completed in 0.2 sec
     completed in 0.7 sec
     Meshing completed in 0.2 sec
@@ -212,25 +212,25 @@ Console output::
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.3 sec
+    Solving completed in 0.4 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
     Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    completed in 11.4 sec
+    Solving completed in 0.4 sec
+    completed in 11.6 sec
     Meshing completed in 0.2 sec
     Solving completed in 0.3 sec
 
     Solving section: 3... Solving completed in 0.3 sec
     Meshing completed in 0.2 sec
     completed in 0.7 sec
-    completed in 15.9 sec
+    completed in 16.2 sec
 
 
 Figures:

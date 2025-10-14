@@ -427,14 +427,14 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="c1"># Plot from existing simulation file - pump mode</span>
 <span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">(</span><span class="n">simulation_name</span> <span class="o">=</span> <span class="s1">&#39;GaAs_SHG&#39;</span><span class="p">,</span> <span class="n">open_existing</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
-<span class="n">E_p</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">])</span>
+<span class="n">E_p</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">])</span>
 <span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <span class="c1"># Plot from existing simulation file - signal mode</span>
 <span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">(</span><span class="n">simulation_name</span> <span class="o">=</span> <span class="s1">&#39;GaAs_SHG-TM&#39;</span><span class="p">,</span> <span class="n">open_existing</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
-<span class="n">E_s</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">])</span>
+<span class="n">E_s</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="s1">&#39;Ez&#39;</span><span class="p">])</span>
 <span class="n">TM_indices</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TM_indices&#39;</span><span class="p">)</span>
 <span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">component</span> <span class="o">=</span> <span class="s1">&#39;Ey&#39;</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">TM_indices</span><span class="p">)</span>
 <span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -507,21 +507,21 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="c">% Plot from existing simulation file - pump mode</span>
 <span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="n">simulation_name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs_SHG&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">open_existing</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 
-<span class="n">E_p</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;Ex&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ez&#39;</span><span class="p">});</span>
+<span class="n">E_p</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;Ex&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ez&#39;</span><span class="p">});</span>
 <span class="n">em</span><span class="p">.</span><span class="n">plot</span><span class="p">();</span>
 <span class="n">em</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
 
 <span class="c">% Plot from existing simulation file - signal mode</span>
 <span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="n">simulation_name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs_SHG-TM&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">open_existing</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 
-<span class="n">E_s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;Ex&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ez&#39;</span><span class="p">});</span>
+<span class="n">E_s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;Ex&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ez&#39;</span><span class="p">});</span>
 <span class="n">TM_indices</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;TM_indices&#39;</span><span class="p">);</span>
 <span class="n">em</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="s">&#39;component&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;mode&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">TM_indices</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
 <span class="n">em</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode</span> <span class="mf">0.2.1</span> <span class="o">-</span> <span class="n">email</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode</span> <span class="mf">0.2.2</span> <span class="o">-</span> <span class="n">email</span>
 <span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.6</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.2</span> <span class="n">sec</span>
 
@@ -531,9 +531,9 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="o">--------</span>  <span class="o">--------</span>  <span class="o">------</span>  <span class="o">-------------</span>
     <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">2.094190</span>  <span class="mf">99.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
 
-<span class="n">EMode</span> <span class="mf">0.2.1</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">EMode</span> <span class="mf">0.2.2</span> <span class="o">-</span> <span class="n">email</span>
 <span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.6</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.9</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.0</span> <span class="n">sec</span>
 
 <span class="n">Wavelength</span><span class="p">:</span> <span class="mf">985.0</span> <span class="n">nm</span>
 
@@ -541,8 +541,8 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="o">--------</span>  <span class="o">--------</span>  <span class="o">------</span>  <span class="o">-------------</span>
     <span class="n">TM</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">2.067847</span>   <span class="mf">1.2</span> <span class="o">%</span>          <span class="mf">0.000</span>
 
-<span class="n">EMode</span> <span class="mf">0.2.1</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">EMode</span> <span class="mf">0.2.1</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">EMode</span> <span class="mf">0.2.2</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">EMode</span> <span class="mf">0.2.2</span> <span class="o">-</span> <span class="n">email</span>
 </pre></div>
 </div>
 <p>Figures:</p>

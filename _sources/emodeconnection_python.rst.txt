@@ -141,6 +141,44 @@ Two types that can be used for specifying material properties are available as c
    :param loss: The absorption loss of the material in dB/m.
    :type loss: ~typing.Optional[float]
 
+----
+
+.. py:class:: Field
+
+   A container for field data.
+
+   :param field: An array of all of the fields, including all modes.
+   :type field: array-like
+
+   :param field_names: A list of the field names, corresponding to the fields in the ``field`` array.
+   :type field_names: list[str]
+
+   :param num_modes: The number of modes.
+   :type num_modes: int
+
+   :param grid: A grid object associated with the fields.
+   :type grid: Grid
+
+----
+
+.. py:class:: Grid
+
+   A container that defines the simulation grid.
+
+   :param x: Array of the x grid center points of the mesh.
+   :type x: array-like
+
+   :param y: Array of the y grid center points of the mesh.
+   :type y: array-like
+
+   :param is_pml: Whether the grid includes a PML region.
+   :type is_pml: bool
+
+   :param is_expanded: Whether the grid includes an expansion region.
+   :type is_expanded: bool
+
+   :param is_bc: Whether the grid represents a base-grid, which omits boundary condition modifications, PMLs, and expansions.
+   :type is_bc: bool
 
 Exceptions
 ----------

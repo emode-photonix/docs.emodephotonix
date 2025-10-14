@@ -126,7 +126,7 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode 0.2.1 - email
+    EMode 0.2.2 - email
     Meshing completed in 0.4 sec
     Solving completed in 1.5 sec
 

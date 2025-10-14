@@ -27,6 +27,28 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
     :param str simulation_name: simulation name, default: 'emode'
 
+.. data:: get_fields
+    
+    Extract field data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Field object, and in MATLAB it returns a struct.
+    
+    :param str key: name of the field to extract a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``].
+    :type key: str or list[str]
+    :param bool include_expand: whether to include the expanded region, default: True
+    :param bool include_pml: whether to include the PML region, default: True
+    :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
+    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: get_grid
+    
+    Extract grid data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Grid object, and in MATLAB it returns a struct.
+
+    :param bool include_expand: whether to include the expanded region, default: True
+    :param bool include_pml: whether to include the PML region, default: True
+    :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
+    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str simulation_name: simulation name, default: 'emode'
+
 .. data:: clear_field_data
     
     Deletes the following data to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.

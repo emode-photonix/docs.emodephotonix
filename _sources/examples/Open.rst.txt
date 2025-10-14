@@ -79,14 +79,14 @@ How to open an existing EMode simulation.
         # Plot from existing simulation file - pump mode
         em = emc.EMode(simulation_name = 'GaAs_SHG', open_existing = True)
 
-        E_p = em.get(key = ['Ex', 'Ey', 'Ez'])
+        E_p = em.get_fields(key = ['Ex', 'Ey', 'Ez'])
         em.plot()
         em.close()
 
         # Plot from existing simulation file - signal mode
         em = emc.EMode(simulation_name = 'GaAs_SHG-TM', open_existing = True)
 
-        E_s = em.get(key = ['Ex', 'Ey', 'Ez'])
+        E_s = em.get_fields(key = ['Ex', 'Ey', 'Ez'])
         TM_indices = em.get('TM_indices')
         em.plot(component = 'Ey', mode = TM_indices)
         em.close()
@@ -160,21 +160,21 @@ How to open an existing EMode simulation.
         % Plot from existing simulation file - pump mode
         em = emodeconnection(simulation_name = 'GaAs_SHG', open_existing = true);
 
-        E_p = em.get(key = {'Ex', 'Ey', 'Ez'});
+        E_p = em.get_fields(key = {'Ex', 'Ey', 'Ez'});
         em.plot();
         em.close();
 
         % Plot from existing simulation file - signal mode
         em = emodeconnection(simulation_name = 'GaAs_SHG-TM', open_existing = true);
 
-        E_s = em.get(key = {'Ex', 'Ey', 'Ez'});
+        E_s = em.get_fields(key = {'Ex', 'Ey', 'Ez'});
         TM_indices = em.get('TM_indices');
         em.plot('component', 'Ey', 'mode', TM_indices(1));
         em.close();
 
 Console output::
 
-    EMode 0.2.1 - email
+    EMode 0.2.2 - email
     Meshing completed in 0.6 sec
     Solving completed in 1.2 sec
 
@@ -184,9 +184,9 @@ Console output::
     --------  --------  ------  -------------
         TE-0  2.094190  99.8 %          0.000
  
-    EMode 0.2.1 - email
+    EMode 0.2.2 - email
     Meshing completed in 0.6 sec
-    Solving completed in 0.9 sec
+    Solving completed in 1.0 sec
 
     Wavelength: 985.0 nm
  
@@ -194,8 +194,8 @@ Console output::
     --------  --------  ------  -------------
         TM-0  2.067847   1.2 %          0.000
  
-    EMode 0.2.1 - email
-    EMode 0.2.1 - email
+    EMode 0.2.2 - email
+    EMode 0.2.2 - email
 
 
 Figures:

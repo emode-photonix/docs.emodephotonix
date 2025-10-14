@@ -503,6 +503,41 @@ defaults (typically 0).</p>
 </dl>
 </dd></dl>
 
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Field">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Field</span></span></dt>
+<dd><p>A container for field data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field</strong> (<em>array-like</em>) – An array of all of the fields, including all modes.</p></li>
+<li><p><strong>field_names</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A list of the field names, corresponding to the fields in the <code class="docutils literal notranslate"><span class="pre">field</span></code> array.</p></li>
+<li><p><strong>num_modes</strong> (<em>int</em>) – The number of modes.</p></li>
+<li><p><strong>grid</strong> (<a class="reference internal" href="#Grid" title="Grid"><em>Grid</em></a>) – A grid object associated with the fields.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Grid">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Grid</span></span></dt>
+<dd><p>A container that defines the simulation grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like</em>) – Array of the x grid center points of the mesh.</p></li>
+<li><p><strong>y</strong> (<em>array-like</em>) – Array of the y grid center points of the mesh.</p></li>
+<li><p><strong>is_pml</strong> (<em>bool</em>) – Whether the grid includes a PML region.</p></li>
+<li><p><strong>is_expanded</strong> (<em>bool</em>) – Whether the grid includes an expansion region.</p></li>
+<li><p><strong>is_bc</strong> (<em>bool</em>) – Whether the grid represents a base-grid, which omits boundary condition modifications, PMLs, and expansions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="exceptions">
 <h2>Exceptions</h2>
@@ -667,6 +702,8 @@ defaults (typically 0).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types">Types</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialProperties"><code class="docutils literal notranslate"><span class="pre">MaterialProperties</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialSpec"><code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Grid"><code class="docutils literal notranslate"><span class="pre">Grid</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a><ul class="nav section-nav flex-column">
