@@ -8,6 +8,7 @@ Release Notes
 * Using the ``get()`` function to extract 'x' and 'y' now returns the full-window variables.
 * Using the ``get()`` function to extract a single field variable returns all modes for that field.
 * Added ``get_field()`` and ``get_grid()`` functions to extract Field and Grid classes (see the Python Interface documentation updates).
+* Fixed a bug when ``shape()`` is called after meshing.
 
 **0.2.1: October 8, 2025**
 
