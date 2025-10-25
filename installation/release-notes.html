@@ -358,6 +358,15 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>0.2.3: October 24, 2025</strong></p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">effective_area()</span></code> function now returns the effective area values. The effective area is in units of um^2.</p></li>
+<li><p>The shape vertices are now available to the user in the form of Well-Known Binary (WKB). The Shapely package in Python is required to decode this representation of the vertices into a Shapely geometry.</p></li>
+<li><p>Shape names are now automatically generated if not specified.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function, scattering losses are now available in the ‘result’ parameter. Use ‘scattering_loss’ to get a sum of all the shapes, or specify any of the scattering loss metadata keys to get them for each shape.</p></li>
+<li><p>Mode tracking has been added to the <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function. Specify ‘mode_order’ in the ‘results’ parameter to get a list of the mode orders relative to the first solution.</p></li>
+<li><p>The Field dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.</p></li>
+</ul>
 <p><strong>0.2.2: October 14, 2025</strong></p>
 <ul class="simple">
 <li><p>Hotfix on the previous version to remedy a few bugs.</p></li>

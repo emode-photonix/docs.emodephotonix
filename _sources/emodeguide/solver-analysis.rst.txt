@@ -21,13 +21,13 @@ Solver and analysis
 
 .. data:: sweep
     
-    This function sweeps a calculation as a function of any available setting, shape parameter, or section parameter (EMode\ :sup:`3D`\  only). Run a parameter sweep of ``key`` over defined ``values`` by solving ``solve_type`` for each value and saving a list of parameters defined by 'result' that correspond to the ``values``. After running a sweep, the data will be available from a parameter called ``sweep_data``, which includes all of the specified parameters of this funcion and the data specified by the ``result`` parameter.
+    This function sweeps a calculation as a function of any available setting, shape parameter, or section parameter (EMode\ :sup:`3D`\  only). Run a parameter sweep of ``key`` over defined ``values`` by solving ``solve_type`` for each value and saving a list of parameters defined by 'result' that correspond to the ``values``. After running a sweep, the data will be available from a parameter called ``sweep_data``, which includes all of the specified parameters of this funcion and the data specified by the ``result`` parameter. The ``result`` parameter can include any parameter that is listed in the ``inspect()`` output (after running the desired simulation). Additionally, the ``result`` parameter can include 'scattering_loss' (a sum of all scattering losses for each mode) or 'mode_order' (a list of mode indices used for tracking the order of the modes).
     
     :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
     :param str solve_type: either 'Mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
-    :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. default: 'effective_index'
+    :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
     :type result: str or list
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -46,10 +46,10 @@ Solver and analysis
 
 .. data:: effective_area
     
-    Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas.
+    Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas. The ``effective_area`` is also returned by this function and is in units of :math:`\mu\text{m}^2`.
     
     .. math::
-        A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y}
+        A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2
     
     :param str simulation_name: simulation name, default: 'emode'
 

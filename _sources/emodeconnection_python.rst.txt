@@ -98,6 +98,31 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
     :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get()` function.
     :rtype: list
 
+Constants
+---------
+
+The ``emodeconnection.constants`` module contains the following constants.
+
+.. py:attribute:: c
+
+   The speed of light in vacuum in m/s.
+
+.. py:attribute:: eps_0
+
+   The vacuum permittivity in F/m.
+
+.. py:attribute:: mu_0
+
+   The vacuum permeability in H/m.
+
+.. py:attribute:: eta
+
+   The impedance of free space in Ohms.
+
+.. py:attribute:: e
+
+   The elementary charge in C.
+
 Types
 -----
 
