@@ -174,9 +174,9 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode 0.2.2 - email
+    EMode 0.2.3 - email
     Meshing completed in 0.6 sec
-    Solving completed in 1.2 sec
+    Solving completed in 4.1 sec
 
     Wavelength: 1970.0 nm
  
@@ -184,9 +184,10 @@ Console output::
     --------  --------  ------  -------------
         TE-0  2.094190  99.8 %          0.000
  
-    EMode 0.2.2 - email
+    Exited EMode
+    EMode 0.2.3 - email
     Meshing completed in 0.6 sec
-    Solving completed in 1.0 sec
+    Solving completed in 1.9 sec
 
     Wavelength: 985.0 nm
  
@@ -194,8 +195,11 @@ Console output::
     --------  --------  ------  -------------
         TM-0  2.067847   1.2 %          0.000
  
-    EMode 0.2.2 - email
-    EMode 0.2.2 - email
+    Exited EMode
+    EMode 0.2.3 - email
+    Exited EMode
+    EMode 0.2.3 - email
+    Exited EMode
 
 
 Figures:

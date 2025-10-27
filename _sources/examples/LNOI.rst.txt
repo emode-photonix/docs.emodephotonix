@@ -149,9 +149,9 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode 0.2.2 - email
+    EMode 0.2.3 - email
     Meshing completed in 0.4 sec
-    Solving completed in 1.6 sec
+    Solving completed in 3.5 sec
 
     Wavelength: 1550.0 nm
  
@@ -160,7 +160,7 @@ Console output::
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
     Meshing completed in 0.4 sec
-    Solving completed in 1.2 sec
+    Solving completed in 3.0 sec
 
     Wavelength: 1550.0 nm
  
@@ -175,6 +175,7 @@ Console output::
     Notes: x-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
 
     Wavelength range: 500 nm to 4000 nm
+    Exited EMode
 
 
 Figures:

@@ -127,79 +127,80 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode 0.2.2 - email
+    EMode 0.2.3 - email
     Connected on port 63000 to LM-2.
     Meshing completed in 0.2 sec
     Meshing completed in 0.2 sec
 
     Sweeping section parameter 'length'... 
-    Solving EME: length = 8000... Solving completed in 0.6 sec
-    Meshing completed in 0.1 sec
-    Meshing completed in 0.1 sec
-    Solving completed in 0.5 sec
-    Solving completed in 0.4 sec
-    Meshing completed in 0.1 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.3 sec
+    Solving EME: length = 8000... Solving completed in 3.4 sec
     Meshing completed in 0.2 sec
-    Solving completed in 0.4 sec
+    Meshing completed in 0.1 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.7 sec
     Meshing completed in 0.2 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
+    Solving completed in 2.9 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.8 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.4 sec
+    Solving completed in 2.6 sec
+    Solving completed in 3.0 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.9 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.7 sec
     Meshing completed in 0.2 sec
-    completed in 20.6 sec
-    Solving EME: length = 7750... completed in 2.1 sec
-    Solving EME: length = 7500... completed in 2.0 sec
-    Solving EME: length = 7250... completed in 2.0 sec
-    Solving EME: length = 7000... completed in 2.0 sec
-    Solving EME: length = 6750... completed in 2.0 sec
-    Solving EME: length = 6500... completed in 1.9 sec
-    Solving EME: length = 6250... completed in 1.9 sec
-    Solving EME: length = 6000... completed in 1.9 sec
-    Solving EME: length = 5750... completed in 1.9 sec
-    Solving EME: length = 5500... completed in 1.9 sec
-    Solving EME: length = 5250... completed in 1.9 sec
-    Solving EME: length = 5000... completed in 1.9 sec
-    Solving EME: length = 4750... completed in 1.9 sec
-    Solving EME: length = 4500... completed in 1.9 sec
-    Solving EME: length = 4250... completed in 1.9 sec
-    Solving EME: length = 4000... completed in 1.9 sec
-    Solving EME: length = 3750... completed in 1.9 sec
-    Solving EME: length = 3500... completed in 1.9 sec
-    Solving EME: length = 3250... completed in 1.9 sec
-    Solving EME: length = 3000... completed in 1.9 sec
-    Solving EME: length = 2750... completed in 1.9 sec
-    Solving EME: length = 2500... completed in 2.0 sec
-    Solving EME: length = 2250... completed in 2.0 sec
-    Solving EME: length = 2000... completed in 1.9 sec
-    Solving EME: length = 1750... completed in 2.0 sec
-    Solving EME: length = 1500... completed in 1.9 sec
-    Solving EME: length = 1250... completed in 2.0 sec
-    Solving EME: length = 1000... completed in 2.0 sec
-    Solving EME: length = 750... completed in 2.0 sec
-    Solving EME: length = 500... completed in 2.0 sec
-    Solving EME: length = 250... completed in 2.0 sec
-    Solving EME: length = 0... completed in 1.9 sec
-    completed in 1 min 23.3 sec
+    Solving completed in 2.7 sec
+    Meshing completed in 0.2 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.6 sec
+    Meshing completed in 0.2 sec
+    completed in 1 min 26.0 sec
+    Solving EME: length = 7750... completed in 3.6 sec
+    Solving EME: length = 7500... completed in 3.5 sec
+    Solving EME: length = 7250... completed in 3.5 sec
+    Solving EME: length = 7000... completed in 3.5 sec
+    Solving EME: length = 6750... completed in 3.5 sec
+    Solving EME: length = 6500... completed in 3.5 sec
+    Solving EME: length = 6250... completed in 3.5 sec
+    Solving EME: length = 6000... completed in 3.5 sec
+    Solving EME: length = 5750... completed in 3.5 sec
+    Solving EME: length = 5500... completed in 3.5 sec
+    Solving EME: length = 5250... completed in 3.5 sec
+    Solving EME: length = 5000... completed in 3.5 sec
+    Solving EME: length = 4750... completed in 3.5 sec
+    Solving EME: length = 4500... completed in 3.5 sec
+    Solving EME: length = 4250... completed in 3.5 sec
+    Solving EME: length = 4000... completed in 3.5 sec
+    Solving EME: length = 3750... completed in 3.5 sec
+    Solving EME: length = 3500... completed in 3.5 sec
+    Solving EME: length = 3250... completed in 3.5 sec
+    Solving EME: length = 3000... completed in 3.5 sec
+    Solving EME: length = 2750... completed in 3.5 sec
+    Solving EME: length = 2500... completed in 3.5 sec
+    Solving EME: length = 2250... completed in 3.5 sec
+    Solving EME: length = 2000... completed in 3.5 sec
+    Solving EME: length = 1750... completed in 3.5 sec
+    Solving EME: length = 1500... completed in 3.5 sec
+    Solving EME: length = 1250... completed in 3.5 sec
+    Solving EME: length = 1000... completed in 3.5 sec
+    Solving EME: length = 750... completed in 3.6 sec
+    Solving EME: length = 500... completed in 3.6 sec
+    Solving EME: length = 250... completed in 3.6 sec
+    Solving EME: length = 0... completed in 3.6 sec
+    completed in 3 min 18.9 sec
+    Exited EMode
 
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.

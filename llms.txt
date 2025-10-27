@@ -1,0 +1,32 @@
+# EMode
+
+> EMode is a software product by EMode Photonix, offering a solution for photonics simulation and device design.
+
+## Docs
+
+- [EMode Documentation](/index.html)
+- [Installation](/installation.html)
+- [Interface](/interface.html)
+- [Python interface](/emodeconnection_python.html)
+- [MATLAB interface](/emodeconnection_matlab.html)
+- [EMode Guide](/emodeguide.html)
+- [File management](/emodeguide/file-management.html)
+- [EMode 0.0.5-b3 Updates](/emodeguide/EMode_0.0.5-b3_Updates.html)
+- [EME](/emodeguide/eme.html)
+- [FEM](/emodeguide/fem.html)
+- [Material Database](/emodeguide/materials.html)
+- [Simulation setup](/emodeguide/setup.html)
+- [Solver and analysis](/emodeguide/solver-analysis.html)
+- [Variable Descriptions](/emodeguide/variables.html)
+- [Release Notes](/installation/release-notes.html)
+- [Troubleshooting](/installation/troubleshooting.html)
+- [Examples](/examples.html)
+- [Basic: SOI](/examples/SOI.html)
+- [Bending: SiN](/examples/SiN.html)
+- [Angled: LNOI](/examples/LNOI.html)
+- [Scattering loss: Laser](/examples/Laser.html)
+- [Open a Simulation](/examples/Open.html)
+- [Dispersion Sweep](/examples/Dispersion.html)
+- [EME: Taper](/examples/EME_Taper.html)
+- [EME: Sweep](/examples/EME_Sweep.html)
+- [EME: GDS](/examples/EME_GDS.html)

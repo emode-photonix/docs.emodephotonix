@@ -163,9 +163,9 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode 0.2.2 - email
+    EMode 0.2.3 - email
     Meshing completed in 3.4 sec
-    Solving completed in 7.7 sec
+    Solving completed in 20.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -201,6 +201,7 @@ Console output::
     From [3500.0, 1000.0] to [-3500.0, 1000.0]
         scattering loss = 1.2 dB/m
 
+    Exited EMode
 
 
 Figures:

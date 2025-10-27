@@ -136,10 +136,10 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode 0.2.2 - email
+    EMode 0.2.3 - email
     Connected on port 62000 to LM-1.
     Meshing completed in 0.2 sec
-    Solving completed in 0.6 sec
+    Solving completed in 2.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -169,7 +169,7 @@ Console output::
        TE-21  0.557145  76.4 %          0.000
  
     Meshing completed in 0.2 sec
-    Solving completed in 0.3 sec
+    Solving completed in 2.1 sec
 
     Wavelength: 1550.0 nm
  
@@ -199,38 +199,39 @@ Console output::
        TE-21  0.736539   90.2 %          0.000
  
     Solving S-matrices... 
-    Solving section: 1... Solving completed in 0.4 sec
+    Solving section: 0... Solving completed in 2.4 sec
     Meshing completed in 0.2 sec
-    completed in 0.7 sec
+    completed in 2.8 sec
     Meshing completed in 0.2 sec
-    Solving completed in 0.4 sec
+    Solving completed in 2.4 sec
 
-    Solving section: 2... Solving completed in 0.3 sec
+    Solving section: 1... Solving completed in 2.6 sec
     Meshing completed in 0.2 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.3 sec
-    Solving completed in 0.4 sec
-    completed in 11.6 sec
+    Solving completed in 2.3 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.7 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.5 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.3 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.6 sec
+    Solving completed in 2.9 sec
+    Solving completed in 2.6 sec
+    completed in 49.2 sec
     Meshing completed in 0.2 sec
-    Solving completed in 0.3 sec
+    Solving completed in 3.8 sec
 
-    Solving section: 3... Solving completed in 0.3 sec
+    Solving section: 2... Solving completed in 3.6 sec
     Meshing completed in 0.2 sec
-    completed in 0.7 sec
-    completed in 16.2 sec
+    completed in 4.0 sec
+    completed in 1 min 6.3 sec
+    Exited EMode
 
 
 Figures:

@@ -86,9 +86,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode 0.2.2 - email
-    Meshing completed in 0.2 sec
-    Solving completed in 0.5 sec
+    EMode 0.2.3 - email
+    Meshing completed in 0.7 sec
+    Solving completed in 5.1 sec
 
     Wavelength: 1550.0 nm
  
@@ -97,6 +97,7 @@ Console output::
         TE-0  3.013224  99.6 %          0.000
         TM-1  2.966573   0.6 %          0.000
  
+    Exited EMode
 
 
 Figures:

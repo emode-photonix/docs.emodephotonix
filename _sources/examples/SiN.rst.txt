@@ -126,9 +126,9 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode 0.2.2 - email
+    EMode 0.2.3 - email
     Meshing completed in 0.4 sec
-    Solving completed in 1.5 sec
+    Solving completed in 2.7 sec
 
     Wavelength: 980.0 nm
  
@@ -136,6 +136,7 @@ Console output::
     --------  --------  -------  -------------  ------------------------  ------------------
         TE-0  1.679910  100.0 %          0.000                    38.3 %              61.7 %
  
+    Exited EMode
 
 
 Figures:
