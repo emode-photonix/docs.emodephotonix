@@ -542,6 +542,9 @@
 <li><p><strong>mesh_display</strong> (<em>bool</em>) – setting mesh display, default: False</p></li>
 <li><p><strong>window_display</strong> (<em>bool</em>) – setting window display, default: False</p></li>
 <li><p><strong>legend</strong> (<em>bool</em>) – setting inclusion of a legend on the index and shape plots, default: True</p></li>
+<li><p><strong>port</strong> (<em>int</em><em> or </em><em>str</em>) – (EME) input port setting, default: 0</p></li>
+<li><p><strong>plane</strong> (<em>str</em>) – (EME) plot cross-section plane setting. For 2D simulations, this defaults to ‘x-y’. For 3D simulations, it accepts ‘x-y’, ‘z-x’, or ‘z-y’, default: ‘z-x’</p></li>
+<li><p><strong>slice_position</strong> (<em>float</em><em> or </em><em>None</em>) – (EME) location of the third dimension for a cross-section display. For example, if <cite>plane</cite> is ‘z-x’, then the <cite>slice_position</cite> refers to the y-position of the cross-section. If None, it calculates an average of the third dimension, default: None</p></li>
 <li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None</p></li>
 <li><p><strong>file_type</strong> (<em>str</em>) – file type for saving a plot, ‘pdf’ or ‘png’, default: ‘pdf’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>

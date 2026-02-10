@@ -19,10 +19,10 @@ The simplest EMode example of an EME simulation.
         h_core = 220 # [nm] waveguide core height
         h_clad = 1000 # [nm] waveguide top and bottom clad
 
-        window_width = 3400
+        window_width = 4000
         window_height = h_core + h_clad*2
 
-        num_modes = 22 # [-] number of modes
+        num_modes = 10 # [-] number of modes
         BC = 'TE'
 
         ## Connect and initialize EMode
@@ -39,8 +39,7 @@ The simplest EMode example of an EME simulation.
         em.shape(name = 'BOX', material = 'SiO2',
             height = h_clad)
         em.shape(name = 'core', material = 'Si',
-            height = h_core, etch_depth = h_core*0.90,
-            sidewall_angle = 10)
+            height = h_core, etch_depth = h_core)
 
         ## Launch FDM solver and label profiles
         em.shape(name = 'core', mask = 1000)
@@ -55,14 +54,14 @@ The simplest EMode example of an EME simulation.
 
         ## Draw EME sections
         em.section(profile = 'a', section_type = 'straight',
-            length = 2e3)
+            length = 2000)
 
         em.section(section_type = 'taper',
             profile = 'a', profile_end = 'b',
-            length = 4000)
+            length = 8000)
 
         em.section(profile = 'b', section_type = 'straight',
-            length = 2e3)
+            length = 2000)
 
         ## Run EME and plot results
         em.EME()
@@ -71,6 +70,7 @@ The simplest EMode example of an EME simulation.
 
         ## Close EMode
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -81,10 +81,10 @@ The simplest EMode example of an EME simulation.
         h_core = 220; % [nm] waveguide core height
         h_clad = 1000; % [nm] waveguide top and bottom clad
 
-        window_width = 3400;
+        window_width = 4000;
         window_height = h_core + h_clad*2;
 
-        num_modes = 22; % [-] number of modes
+        num_modes = 10; % [-] number of modes
         BC = 'TE';
 
         %% Connect and initialize EMode
@@ -101,8 +101,7 @@ The simplest EMode example of an EME simulation.
         em.shape(name = 'BOX', material = 'SiO2', ...
             height = h_clad);
         em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core*0.90, ...
-            sidewall_angle = 10);
+            height = h_core, etch_depth = h_core);
 
         %% Launch FDM solver and label profiles
         em.shape(name = 'core', mask = 1000);
@@ -117,14 +116,14 @@ The simplest EMode example of an EME simulation.
 
         %% Draw EME sections
         em.section(profile = 'a', section_type = 'straight', ...
-            length = 2e3);
+            length = 2000);
 
         em.section(section_type = 'taper', ...
             profile = 'a', profile_end = 'b', ...
-            length = 4000);
+            length = 8000);
 
         em.section(profile = 'b', section_type = 'straight', ...
-            length = 2e3);
+            length = 2000);
 
         %% Run EME and plot results
         em.EME();
@@ -134,103 +133,57 @@ The simplest EMode example of an EME simulation.
         %% Close EMode
         em.close();
 
+
 Console output::
 
-    EMode 0.2.3 - email
+    EMode 0.2.4 - email
     Connected on port 62000 to LM-1.
-    Meshing completed in 0.2 sec
-    Solving completed in 2.6 sec
+    Meshing  completed in 0.2 sec
+    Solving modes... completed in 0.5 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.740878  99.8 %          0.000
-        TE-1  1.834948  86.3 %          0.000
-        TM-2  1.648371  14.6 %          0.000
-        TE-3  1.480289  99.8 %          0.000
-        TM-4  1.444024   0.0 %          0.000
-        TE-5  1.380997  99.0 %          0.000
-        TM-6  1.333974   3.8 %          0.000
-        TE-7  1.313224  98.9 %          0.000
-        TM-8  1.260780   9.1 %          0.000
-        TE-9  1.245872  93.8 %          0.000
-       TE-10  1.205712  96.3 %          0.000
-       TE-11  1.141695  98.8 %          0.000
-       TM-12  1.098826   2.3 %          0.000
-       TM-13  1.059658   6.2 %          0.000
-       TE-14  1.046256  99.4 %          0.000
-       TE-15  0.908818  90.9 %          0.000
-       TM-16  0.884647  13.2 %          0.000
-       TE-17  0.836617  92.4 %          0.000
-       TM-18  0.750209  29.3 %          0.000
-       TE-19  0.712955  92.6 %          0.000
-       TM-20  0.639715  17.8 %          0.000
-       TE-21  0.557145  76.4 %          0.000
+        TE-0  2.744942  99.8 %          0.000
+        TE-1  1.819117  92.4 %          0.000
+        TM-2  1.665347  11.8 %          0.000
+        TE-3  1.421518  99.9 %          0.000
+        TE-4  1.368426  88.0 %          0.000
+        TM-5  1.359634  12.8 %          0.000
+        TE-6  1.321504  99.9 %          0.000
+        TM-7  1.279963   2.4 %          0.000
+        TE-8  1.250897  98.7 %          0.000
+        TE-9  1.189492  95.8 %          0.000
  
-    Meshing completed in 0.2 sec
-    Solving completed in 2.1 sec
+    Meshing  completed in 0.2 sec
+    Solving modes... completed in 0.3 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff     TE %    Loss (dB/m)
     --------  --------  -------  -------------
-        TE-0  2.820614  100.0 %          0.000
-        TE-1  2.601685   99.7 %          0.000
-        TE-2  2.117344   97.1 %          0.000
-        TM-3  1.937158    5.2 %          0.000
-        TM-4  1.565193   21.8 %          0.000
-        TE-5  1.512582   84.1 %          0.000
-        TM-6  1.444024    0.0 %          0.000
-        TE-7  1.394522   95.1 %          0.000
-        TM-8  1.347977   40.3 %          0.000
-        TE-9  1.316026   64.5 %          0.000
-       TE-10  1.267170   86.3 %          0.000
-       TE-11  1.248576   81.1 %          0.000
-       TM-12  1.193778   18.6 %          0.000
-       TE-13  1.145446   99.4 %          0.000
-       TM-14  1.079657    7.7 %          0.000
-       TE-15  1.058558   76.3 %          0.000
-       TM-16  1.046977   21.7 %          0.000
-       TE-17  0.990949   95.2 %          0.000
-       TE-18  0.865006   79.2 %          0.000
-       TM-19  0.847538    5.0 %          0.000
-       TM-20  0.837589   11.2 %          0.000
-       TE-21  0.736539   90.2 %          0.000
+        TE-0  2.821143  100.0 %          0.000
+        TE-1  2.606186   99.7 %          0.000
+        TE-2  2.123806   98.2 %          0.000
+        TM-3  1.939095    4.9 %          0.000
+        TM-4  1.565613   16.9 %          0.000
+        TE-5  1.441070   89.8 %          0.000
+        TE-6  1.391478   82.7 %          0.000
+        TE-7  1.362128   66.6 %          0.000
+        TM-8  1.333348   48.1 %          0.000
+        TE-9  1.285430   69.6 %          0.000
  
-    Solving S-matrices... 
-    Solving section: 0... Solving completed in 2.4 sec
-    Meshing completed in 0.2 sec
-    completed in 2.8 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 2.4 sec
+    Solving S-matrices...
+    Solving section: 0...Meshing  completed in 0.1 sec
+     completed in 0.9 sec
 
-    Solving section: 1... Solving completed in 2.6 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 2.3 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.3 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.9 sec
-    Solving completed in 2.6 sec
-    completed in 49.2 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 3.8 sec
+    Solving section: 1...
+     completed in 25.4 sec
 
-    Solving section: 2... Solving completed in 3.6 sec
-    Meshing completed in 0.2 sec
-    completed in 4.0 sec
-    completed in 1 min 6.3 sec
+    Solving section: 2...Meshing  completed in 0.2 sec
+     completed in 0.6 sec
+     completed in 0.6 sec
     Exited EMode
 
 

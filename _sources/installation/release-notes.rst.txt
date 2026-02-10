@@ -2,6 +2,19 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**0.2.4: February 10, 2026**
+
+* Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.
+* Improved EME junction algorithm for robustness.
+* Implemented speed improvements, leading to a 60% speedup in our taper example.
+* Added an input to the ``settings()`` function called ``frequency`` as an alternative way to set the simulation wavelength. Internally, the ``wavelength`` is calculated from the ``frequency`` parameter as ``wavelength`` = c/``frequency``.
+* Improved error handling when keywords are used incorrectly.
+* Fixed a bug with scattering loss for films smaller than the mesh size.
+* Added functionality to automatically clear all mode data at each call to ``mesh()`` and ``FDM()``.
+* Added support for layers with zero thickness.
+* Fixed a bug with conformal layers that extend outside the simulation window.
+* Improved PML parameters for better accuracy and stability.
+
 **0.2.3: October 24, 2025**
 
 * The ``effective_area()`` function now returns the effective area values. The effective area is in units of um^2.
@@ -9,14 +22,14 @@ Release Notes
 * Shape names are now automatically generated if not specified.
 * In the ``sweep()`` function, scattering losses are now available in the 'result' parameter. Use 'scattering_loss' to get a sum of all the shapes, or specify any of the scattering loss metadata keys to get them for each shape.
 * Mode tracking has been added to the ``sweep()`` function. Specify 'mode_order' in the 'results' parameter to get a list of the mode orders relative to the first solution.
-* The Field dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.
+* The ``Field`` dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.
 
 **0.2.2: October 14, 2025**
 
 * Hotfix on the previous version to remedy a few bugs.
 * Using the ``get()`` function to extract 'x' and 'y' now returns the full-window variables.
 * Using the ``get()`` function to extract a single field variable returns all modes for that field.
-* Added ``get_field()`` and ``get_grid()`` functions to extract Field and Grid classes (see the Python Interface documentation updates).
+* Added ``get_fields()`` and ``get_grid()`` functions to extract `Field` and `Grid` class information (see documentation updates) from a simulation (using ``get()`` for this is now deprecated).
 * Fixed a bug when ``shape()`` is called after meshing.
 
 **0.2.1: October 8, 2025**

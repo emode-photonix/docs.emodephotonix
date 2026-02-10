@@ -3,10 +3,11 @@ Simulation setup
 ----------------
 
 .. data:: settings
-    
+
     Specify the simulation settings.
-    
-    :param float wavelength: [nm] wavelength, default: 1550
+
+    :param float wavelength: [nm] simulation wavelength, default: 1550
+    :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
     :param float x_resolution: [nm] resolution in the x-direction, default: 10
     :param float y_resolution: [nm] resolution in the y-direction, default: 10
     :param float window_width: [nm] simulation window width
@@ -34,9 +35,9 @@ Simulation setup
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: add_material
-    
+
     Add a custom material by specifying a wavelength dependent equation.
-    
+
     :param str name: material name, this will override the built-in material name if an idential name is used; a variable ``user_material_[name]`` will be created
     :param str refractive_index_equation: refractive index equation to evaluate as a function of the wavelength parameter 'x', where imaginary numbers are specified with a preceding 'j'; only the following characters are allowed in the equation string: "0123456789 x j . + - ^ * / ( ) [ ]"; a list of three equations can also be specified for non-isotropic materials, like '[n_xx, n_yy, n_zz]'; the string must have less than 1000 characters
     :param str wavelength_unit: either 'nm' or 'um' to specify the unit for the wavelength parameter 'x', default: 'um'
@@ -50,18 +51,18 @@ Simulation setup
     :param float phi: phi angle of the crystal orientation in cylidrical coordinates, default: 0
     :param float theta: theta angle of the crystal orientation in cylidrical coordinates, default: 0
     :param str simulation_name: simulation name, default: 'emode'
-    
+
 .. data:: import_database
-    
+
     Import a custom material database by specifying custom materials in a text file.
-        
+
     :param str filename: name of text file to be imported
     :param str simulation_name: simulation name, default: 'emode'
-    
+
     Here is an example of several custom materials in the database text file to be imported. See the ``add_material`` function for parameter details. Each custom material must contain the ``name`` and ``refractive_index_equation``, separated by a new line. Comments can be added with '#' or '%'.
-    
-        | name = custom_name_1 
-        | refractive_index_equation = equation_1 
+
+        | name = custom_name_1
+        | refractive_index_equation = equation_1
         | wavelength_unit = um (optional)
         | wavelength_range = [0.2, 2.0] (optional)
         | citation = reference_1 (optional, default: "User defined by database import.")
@@ -69,19 +70,19 @@ Simulation setup
         | # comment about my custom_SiO2 material
         | name = custom_SiO2
         | refractive_index_equation = (1 + 0.696166/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2) + 0.8974794/(1 - (9.896161/x)^2))^0.5
-        | wavelength_unit = um 
+        | wavelength_unit = um
         | wavelength_range = [0.21, 6.7]
         | citation = '(1) I. H. Malitson, "Interspecimen comparison of the refractive index of fused silica," J. Opt. Soc. Am. 55, 1205 (1965). (2) C. Z. Tan, "Determination of refractive index of silica glass for infrared wavelengths by IR spectroscopy," J. Non-Cryst. Solids 223, 158 (1998).'
-        | 
+        |
         | % comment about my custom_name_3 material
         | name = custom_name_3
         | refractive_index_equation = equation_3
         | wavelength_unit = nm
 
 .. data:: shape
-    
+
     Create or update a shape with attributes. These parameters are saved with 'shape\_'+name+'/' preceding the attribute name. If a name is not given, a number will be allocated as the shape name.
-    
+
     :param str name: shape name, default: an auto-generated number
     :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
     :type material: ~MaterialSpec, ~MaterialProperties, or str

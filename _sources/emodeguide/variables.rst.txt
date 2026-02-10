@@ -23,9 +23,6 @@ Descriptions of all variables available in the simulation file. Some variables h
     confinement_window
         (*list*) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.
     
-    dataset_LABEL
-        (*dictionary*) Labeled dataset with settings and simulation results.
-    
     effective_area
         (*list*) The effective area of each waveguide mode in units of square microns (:math:`\mu \mathrm{m}^2`), calculated by the following equation.
         

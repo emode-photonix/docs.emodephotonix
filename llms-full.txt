@@ -1096,21 +1096,22 @@ EME
 ---
 
 .. data:: section
-    
+
     Define a waveguide section used in the EME solver. This function is analagous to the ``shape`` function for 2D simulations, but instead sequentially defines the sections of an EME simulation.
-    
+
     :param str name: section name, default: an auto-generated number
     :param str section_type: either 'straight', 'taper', 'gds', or 'copy', and each section type corresponds with only a subset of other input parameters:
-    
+
         * **'straight'**: ``name``, ``profile``, ``order``, ``num_modes``, ``length``, ``offset``, ``simulation_name``
-        * **'taper'**: ``name``, ``profile``, ``profile_end``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
-        * **'gds'**: ``name``, ``gds``, ``cell_index``, ``unit``, ``profile``, ``shape_to_mask``, ``etch_depth``, ``sidewall_angle``, ``tone``, ``window_width``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
+        * **'taper'**: ``name``, ``profile``, ``profile_end``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``
+        ``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
+        * **'gds'**: ``name``, ``gds``, ``cell_index``, ``unit``, ``profile``, ``shape_to_mask``, ``etch_depth``, ``sidewall_angle``, ``tone``, ``window_width``, ``window_height``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
         * **'copy'**: ``name``, ``section_name``, ``mirror``, ``order``, ``simulation_name``
-    
+
     :param str profile: label of the profile to define the entire section (**'straight'** and **'gds'**) or section beginning (**'taper'**)
     :param str profile_end: label of the profile to define the section ending (**'taper'**)
     :param float order: a number that signifies the order in which section will be placed in the z-direction, default: auto-generated integer based on the order each section is called
-    :param str num_modes: how many modes to solve in the section (**'straight'**, **'taper'**, and **'gds'**)
+    :param str num_modes: how many modes to solve in the section (**'straight'**, **'taper'**, and **'gds'**), default: inherited from the profile definition
     :param float length: the length of the section (in nanometers) (**'straight'**, **'taper'**, and **'gds'**)
     :param offset: the x- and y-offset of the section (**'straight'**, **'taper'**, and **'gds'**), if only a single value is specified then it is assumed to be the x-offset: (``offset``, 0), default: (0,0)
     :type offset: float or list
@@ -1119,7 +1120,6 @@ EME
     :param float overlap_variation: threshold of mode list overlap between ``z_slices`` when solving with ``z_option`` of 'auto', this will use a bisection optimization limited by this ``overlap_variation`` parameter and ``minimum_z_step`` to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 0.02
     :param float minimum_z_step: the minimum allowed step size in the z-direction for the ``z_slices`` determined by the bisection optimization for the ``z_option`` of 'auto' (**'taper'** and **'gds'**), 'auto' reverts to 1/8th of the wavelength, default: 'auto'
     :param str z_option: either 'custom' or 'auto' to manually specify the ``z_slices`` or use the automatic bisection optimization algorithm to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 'auto'
-    :param str taper_algorithm: either 'staircase' or 'smooth', where 'staircase' is the standard method and 'smooth' is intended for slowly varying structures that are known to be adiabatic, default: 'staircase'
     :param str gds: name of the gds file used to mask a shape in the designated profile, this options allows for more complex section geometries using third party layout tools to define the mask (**'gds'**)
     :param int cell_index: the cell index in the specified gds file (**'gds'**), default: 0
     :param str unit: either 'um' or 'nm' to specify the units used in the gds file (**'gds'**), default: 'um'
@@ -1128,24 +1128,27 @@ EME
     :param float sidewall_angle: the sidewall angle of the etch for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
     :param str tone: either 'p' or 'n' to specify the etch mask tone for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
     :param float window_width: the simulation window width (**'gds'**), default: inherited from the original profile definition
+    :param float window_height: the simulation window height (**'gds'**), default: inherited from the original profile definition
     :param str section_name: name of the section to copy (**'copy'**)
     :param bool mirror: whether or not to mirror the copied shape (**'copy'**), default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: EME
-    
-    Calculate the complete scattering matrix of the defined sections using the eigenmode expansion method (EME).
-    
+
+    Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME).
+
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: plot_S_matrix
-    
+
     Colormap plot of the transmission or reflection component of the EME scattering matrix.
-    
+
     :param input: input field (first number of the scattering matrix identifier), default: 0
     :type input: int or str
     :param output: output field (second number of the scattering matrix identifier), default: 1
     :type output: int or str
+    :param plot_function: specify the function to apply to the plot data ('abs^2', 'angle', 'real', 'imag'), default: 'abs^2'
+    :type plot_function: str or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
     :param str file_type: file type for saving a plot, ‘pdf’ or ‘png’, default: ‘pdf’
     :param str simulation_name: simulation name, default: 'emode'
@@ -1494,10 +1497,11 @@ Simulation setup
 ----------------
 
 .. data:: settings
-    
+
     Specify the simulation settings.
-    
-    :param float wavelength: [nm] wavelength, default: 1550
+
+    :param float wavelength: [nm] simulation wavelength, default: 1550
+    :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
     :param float x_resolution: [nm] resolution in the x-direction, default: 10
     :param float y_resolution: [nm] resolution in the y-direction, default: 10
     :param float window_width: [nm] simulation window width
@@ -1525,9 +1529,9 @@ Simulation setup
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: add_material
-    
+
     Add a custom material by specifying a wavelength dependent equation.
-    
+
     :param str name: material name, this will override the built-in material name if an idential name is used; a variable ``user_material_[name]`` will be created
     :param str refractive_index_equation: refractive index equation to evaluate as a function of the wavelength parameter 'x', where imaginary numbers are specified with a preceding 'j'; only the following characters are allowed in the equation string: "0123456789 x j . + - ^ * / ( ) [ ]"; a list of three equations can also be specified for non-isotropic materials, like '[n_xx, n_yy, n_zz]'; the string must have less than 1000 characters
     :param str wavelength_unit: either 'nm' or 'um' to specify the unit for the wavelength parameter 'x', default: 'um'
@@ -1541,18 +1545,18 @@ Simulation setup
     :param float phi: phi angle of the crystal orientation in cylidrical coordinates, default: 0
     :param float theta: theta angle of the crystal orientation in cylidrical coordinates, default: 0
     :param str simulation_name: simulation name, default: 'emode'
-    
+
 .. data:: import_database
-    
+
     Import a custom material database by specifying custom materials in a text file.
-        
+
     :param str filename: name of text file to be imported
     :param str simulation_name: simulation name, default: 'emode'
-    
+
     Here is an example of several custom materials in the database text file to be imported. See the ``add_material`` function for parameter details. Each custom material must contain the ``name`` and ``refractive_index_equation``, separated by a new line. Comments can be added with '#' or '%'.
-    
-        | name = custom_name_1 
-        | refractive_index_equation = equation_1 
+
+        | name = custom_name_1
+        | refractive_index_equation = equation_1
         | wavelength_unit = um (optional)
         | wavelength_range = [0.2, 2.0] (optional)
         | citation = reference_1 (optional, default: "User defined by database import.")
@@ -1560,19 +1564,19 @@ Simulation setup
         | # comment about my custom_SiO2 material
         | name = custom_SiO2
         | refractive_index_equation = (1 + 0.696166/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2) + 0.8974794/(1 - (9.896161/x)^2))^0.5
-        | wavelength_unit = um 
+        | wavelength_unit = um
         | wavelength_range = [0.21, 6.7]
         | citation = '(1) I. H. Malitson, "Interspecimen comparison of the refractive index of fused silica," J. Opt. Soc. Am. 55, 1205 (1965). (2) C. Z. Tan, "Determination of refractive index of silica glass for infrared wavelengths by IR spectroscopy," J. Non-Cryst. Solids 223, 158 (1998).'
-        | 
+        |
         | % comment about my custom_name_3 material
         | name = custom_name_3
         | refractive_index_equation = equation_3
         | wavelength_unit = nm
 
 .. data:: shape
-    
+
     Create or update a shape with attributes. These parameters are saved with 'shape\_'+name+'/' preceding the attribute name. If a name is not given, a number will be allocated as the shape name.
-    
+
     :param str name: shape name, default: an auto-generated number
     :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
     :type material: ~MaterialSpec, ~MaterialProperties, or str
@@ -1618,26 +1622,26 @@ Solver and analysis
 -------------------
 
 .. data:: FDM
-    
+
     Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
-    
+
     .. math::
         \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
-    
-    It also calculates the TE fraction of each mode (``TE_fraction``) with the following equation, and it saves the indices of the TE and TM modes (``TE_indices`` and ``TM_indices``). 
-    
+
+    It also calculates the TE fraction of each mode (``TE_fraction``) with the following equation, and it saves the indices of the TE and TM modes (``TE_indices`` and ``TM_indices``).
+
     .. math::
-        \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y} 
-    
+        \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
+
     :param str label: dataset label name to automatically create a dataset after running ``FDM()``, no dataset is created if blank, default: ''
     :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
     :param bool force_isotropic: if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: sweep
-    
+
     This function sweeps a calculation as a function of any available setting, shape parameter, or section parameter (EMode\ :sup:`3D`\  only). Run a parameter sweep of ``key`` over defined ``values`` by solving ``solve_type`` for each value and saving a list of parameters defined by 'result' that correspond to the ``values``. After running a sweep, the data will be available from a parameter called ``sweep_data``, which includes all of the specified parameters of this funcion and the data specified by the ``result`` parameter. The ``result`` parameter can include any parameter that is listed in the ``inspect()`` output (after running the desired simulation). Additionally, the ``result`` parameter can include 'scattering_loss' (a sum of all scattering losses for each mode) or 'mode_order' (a list of mode indices used for tracking the order of the modes).
-    
+
     :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
@@ -1647,9 +1651,9 @@ Solver and analysis
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: confinement
-    
+
     Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included.
-    
+
     :param shape_list: name (from ``shape``) or list of names of shapes to include in confinement or 'all' for all shapes, default: 'all'
     :type shapes: str or list
     :param mode_list: desired modes to calculate confinement, 'all', 'TE', 'TM', or a list of the desired mode indices, default: 'all'
@@ -1660,52 +1664,52 @@ Solver and analysis
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: effective_area
-    
+
     Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas. The ``effective_area`` is also returned by this function and is in units of :math:`\mu\text{m}^2`.
-    
+
     .. math::
         A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2
-    
+
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: orthogonality
-    
+
     Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available either in the simulation data or in the labeled dataset if specified. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
-    
+
     :param str label: dataset label, default: ''
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: group_index
-    
+
     Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index.
-    
+
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: report
-    
+
     Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); confinement factors (if calculated); effective areas (if calculated).
-    
+
     :param bool save: whether to save the table to a file or not, default: False
     :param str file_name: name of the file to save, default: 'mode_report'
     :param str file_type: file type to save, 'txt', 'latex', or 'csv', default: 'txt'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: label_profile
-    
+
     Creates a labeled dataset from the current settings and field data, saved as a Python dictionary or a MATLAB structure array called ``dataset_NAME``. It can be used to run different simulations and compare the outputs. Also, it is used in conjunction with certain functions like ``overlap`` and ``orthogonality``.
-    
+
     :param str name: save the current simulation state to this name, default: '0'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: overlap
-    
+
     Calculate overlap integral between two modes. The result is saved as ``overlap``.
-    
+
         Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
-    
+
     .. math::
         \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
-    
+
     :param str label_a: label of first mode set, or a blank string for the current mode set, default: ''
     :param int mode_a: mode number from the first mode set, default: 0
     :param str simulation_name_a: simulation name for the first mode set, default: 'emode'
@@ -1714,11 +1718,11 @@ Solver and analysis
     :param str simulation_name_b: simulation name for the second mode set, default: 'emode'
 
 .. data:: scattering
-    
+
     Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE['scattering_sum']`` (total scattering loss), ``SHAPE['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.
-    
+
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
-    
+
     :param str shape: name of the shape for calculating the interfacial scattering, can also be a list of shapes or None (which calculates scattering for all shapes), default: None
     :param str shapes: alias for shape
     :param mode_list: mode number, list of mode numbers, or 'all', default: 'all'
@@ -1726,9 +1730,9 @@ Solver and analysis
     :param str simulation_name: simulation name for the second mode set, default: 'emode'
 
 .. data:: plot
-    
+
     Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.
-    
+
     :param str component: field component or index, 'Ex/y/z'; 'Hx/y/z'; 'Sx/y/z'; 'Index'; 'Shapes', default: 'Ex'
     :param str plot_function: plotting function, 'real'; 'imag'; 'abs'; 'abs^2'; 'log', default: 'real'
     :param int mode: mode number, default: 0
@@ -1739,18 +1743,23 @@ Solver and analysis
     :param bool mesh_display: setting mesh display, default: False
     :param bool window_display: setting window display, default: False
     :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
+    :param port: (EME) input port setting, default: 0
+    :type port: int or str
+    :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
+    :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it calculates an average of the third dimension, default: None
+    :type slice_position: float or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
     :param str file_type: file type for saving a plot, 'pdf' or 'png', default: 'pdf'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: material_explorer
-    
+
     Interactive material explorer to plot the refractive indices of all available materials. The default wavelength range in the plot corresponds to the recommended range from the material reference listed below the plot. If wavelengths are specified outside this range, the model will be plotted with a dashed line instead of a solid line. User defined materials are also available.
-    
+
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: refractive_index
-    
+
     Returns the refractive index from a material name (retrieved from the internal reference list) or from a custom refractive index value. Optionally, the material's reference (or citation) may be returned.
 
     :param material: material name; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: "AlGaAs, 0.2" for a Al_{0.2}Ga_{0.8}As.
@@ -1760,9 +1769,9 @@ Solver and analysis
     :return: [n_x, n_y, n_z] or ([n_x, n_y, n_z], reference)
 
 .. data:: permeability
-    
+
     Returns the relative permeability from a material name (retrieved from the internal reference list) or from a custom permeability value. Optionally, the material's reference (or citation) may be returned.
-    
+
     :param material: material name
     :type material: str
     :param float wavelength: [nm] wavelength, default: 1550
@@ -1770,11 +1779,10 @@ Solver and analysis
     :return: [permeability_x, permeability_y, permeability_z] or ([permeability_x, permeability_y, permeability_z], reference)
 
 .. data:: mesh
-    
-    Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
-    
-    :param str simulation_name: simulation name, default: 'emode'
 
+    Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
+
+    :param str simulation_name: simulation name, default: 'emode'
 
 
 
@@ -1801,9 +1809,6 @@ Descriptions of all variables available in the simulation file. Some variables h
     
     confinement_window
         (*list*) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.
-    
-    dataset_LABEL
-        (*dictionary*) Labeled dataset with settings and simulation results.
     
     effective_area
         (*list*) The effective area of each waveguide mode in units of square microns (:math:`\mu \mathrm{m}^2`), calculated by the following equation.
@@ -2009,6 +2014,19 @@ Descriptions of all variables available in the simulation file. Some variables h
 Release Notes
 ^^^^^^^^^^^^^
 
+**0.2.4: February 10, 2026**
+
+* Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.
+* Improved EME junction algorithm for robustness.
+* Implemented speed improvements, leading to a 60% speedup in our taper example.
+* Added an input to the ``settings()`` function called ``frequency`` as an alternative way to set the simulation wavelength. Internally, the ``wavelength`` is calculated from the ``frequency`` parameter as ``wavelength`` = c/``frequency``.
+* Improved error handling when keywords are used incorrectly.
+* Fixed a bug with scattering loss for films smaller than the mesh size.
+* Added functionality to automatically clear all mode data at each call to ``mesh()`` and ``FDM()``.
+* Added support for layers with zero thickness.
+* Fixed a bug with conformal layers that extend outside the simulation window.
+* Improved PML parameters for better accuracy and stability.
+
 **0.2.3: October 24, 2025**
 
 * The ``effective_area()`` function now returns the effective area values. The effective area is in units of um^2.
@@ -2016,14 +2034,14 @@ Release Notes
 * Shape names are now automatically generated if not specified.
 * In the ``sweep()`` function, scattering losses are now available in the 'result' parameter. Use 'scattering_loss' to get a sum of all the shapes, or specify any of the scattering loss metadata keys to get them for each shape.
 * Mode tracking has been added to the ``sweep()`` function. Specify 'mode_order' in the 'results' parameter to get a list of the mode orders relative to the first solution.
-* The Field dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.
+* The ``Field`` dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.
 
 **0.2.2: October 14, 2025**
 
 * Hotfix on the previous version to remedy a few bugs.
 * Using the ``get()`` function to extract 'x' and 'y' now returns the full-window variables.
 * Using the ``get()`` function to extract a single field variable returns all modes for that field.
-* Added ``get_field()`` and ``get_grid()`` functions to extract Field and Grid classes (see the Python Interface documentation updates).
+* Added ``get_fields()`` and ``get_grid()`` functions to extract `Field` and `Grid` class information (see documentation updates) from a simulation (using ``get()`` for this is now deprecated).
 * Fixed a bug when ``shape()`` is called after meshing.
 
 **0.2.1: October 8, 2025**
@@ -2348,9 +2366,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode 0.2.3 - email
-    Meshing completed in 0.7 sec
-    Solving completed in 5.1 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 0.2 sec
+    Solving modes... completed in 0.7 sec
 
     Wavelength: 1550.0 nm
  
@@ -2398,15 +2416,15 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         wavelength = 980 # [nm] wavelength
         dx, dy = 10, 10 # [nm] resolution
         w_core = 2000 # [nm] waveguide core width
-        w_trench = 2250 # [nm] waveguide side trench width
+        w_trench = 2500 # [nm] waveguide side trench width
         h_core = 200 # [nm] waveguide core height
-        h_clad = 2250 # [nm] waveguide top and bottom clad
+        h_clad = 2500 # [nm] waveguide top and bottom clad
         window_width = w_core + w_trench*2 # [nm]
         window_height = h_core + h_clad*2 # [nm]
         num_modes = 1 # [-] number of modes
         boundary = 'TE' # boundary condition
 
-        bend_radius = 100e3 # [nm] bend radius
+        bend_radius = 20e3 # [nm] bend radius
         x_off = 500 # [nm] waveguide x-offset for applying the bend radius at the center of the waveguide core rather than the center of the window
 
         ## Connect and initialize EMode
@@ -2423,7 +2441,7 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
             window_width = window_width, window_height = window_height,
             num_modes = num_modes, background_material = 'custom_SiO2',
             boundary_condition = boundary, bend_radius = bend_radius + x_off,
-            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 20,
+            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 10,
             max_effective_index = 1.7)
 
         ## Draw shapes
@@ -2447,6 +2465,7 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         ## Collect all variable names and close EMode
         variables = em.inspect()
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -2455,9 +2474,9 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         wavelength = 980; % [nm] wavelength
         dx = 10; dy = 10; % [nm] resolution
         w_core = 2000; % [nm] waveguide core width
-        w_trench = 2250; % [nm] waveguide side trench width
+        w_trench = 2500; % [nm] waveguide side trench width
         h_core = 200; % [nm] waveguide core height
-        h_clad = 2250; % [nm] waveguide top and bottom clad
+        h_clad = 2500; % [nm] waveguide top and bottom clad
         window_width = w_core + w_trench*2; % [nm]
         window_height = h_core + h_clad*2; % [nm]
         num_modes = 1; % [-] number of modes
@@ -2480,7 +2499,7 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
             window_width = window_width, window_height = window_height, ...
             num_modes = num_modes, background_material = 'custom_SiO2', ...
             boundary_condition = boundary, bend_radius = bend_radius + x_off, ...
-            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 20, ...
+            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 10, ...
             max_effective_index = 1.7);
 
         % Draw shapes
@@ -2507,16 +2526,16 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode 0.2.3 - email
-    Meshing completed in 0.4 sec
-    Solving completed in 2.7 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 0.4 sec
+    Solving modes... completed in 22.8 sec
 
     Wavelength: 980.0 nm
- 
-      Mode #     n_eff     TE %    Loss (dB/m)    background confinement    core confinement
-    --------  --------  -------  -------------  ------------------------  ------------------
-        TE-0  1.679910  100.0 %          0.000                    38.3 %              61.7 %
- 
+
+      Mode #     n_eff    TE %    Loss (dB/m)    background confinement    core confinement
+    --------  --------  ------  -------------  ------------------------  ------------------
+        TE-0  1.665877  99.9 %          0.030                    39.3 %              60.7 %
+
     Exited EMode
 
 Figures:
@@ -2572,8 +2591,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
             window_width = window_width, window_height = window_height,
             num_modes = num_modes, background_material = 'Air',
             boundary_condition = boundary,
-            expansion_resolution = 20, expansion_size = 1500,
-            pml_NSEW_bool = [1,1,1,1], num_pml_layers = 20)
+            expansion_resolution = 20, expansion_size = 1500)
 
         ## Draw shapes
         ln_mgo = emc.MaterialSpec(material = 'LN_MgO', theta = np.pi/2)
@@ -2610,6 +2628,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
         ## Close EMode
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -2683,9 +2702,9 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode 0.2.3 - email
-    Meshing completed in 0.4 sec
-    Solving completed in 3.5 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 0.4 sec
+    Solving modes... completed in 1.5 sec
 
     Wavelength: 1550.0 nm
  
@@ -2693,8 +2712,8 @@ Console output::
     --------  --------  ------  -------------  ------------------
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
-    Meshing completed in 0.4 sec
-    Solving completed in 3.0 sec
+    Meshing  completed in 0.4 sec
+    Solving modes... completed in 1.1 sec
 
     Wavelength: 1550.0 nm
  
@@ -2894,34 +2913,34 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode 0.2.3 - email
-    Meshing completed in 3.4 sec
-    Solving completed in 20.6 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 3.3 sec
+    Solving modes... completed in 8.3 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement    core scattering (dB/m)
     --------  --------  ------  -------------  ------------------  ------------------------
-        TE-0  3.290919  99.8 %          0.000              49.8 %                   418.834
+        TE-0  3.290919  99.8 %          0.000              49.8 %                   218.753
  
-    Scattering loss from all vertical edges: 416.8 dB/m
-    Scattering loss from all horizontal edges: 2.0 dB/m
-    Total scattering loss: 418.8 dB/m
+    Scattering loss from all vertical edges: 217.8 dB/m
+    Scattering loss from all horizontal edges: 1.0 dB/m
+    Total scattering loss: 218.8 dB/m
 
     From [-500.0, 1250.0] to [-500.0, 1500.0]
-        scattering loss = 208.4 dB/m
+        scattering loss = 108.9 dB/m
 
     From [500.0, 1500.0] to [500.0, 1250.0]
-        scattering loss = 208.4 dB/m
+        scattering loss = 108.9 dB/m
 
     From [-3500.0, 1250.0] to [-500.0, 1250.0]
-        scattering loss = 0.2 dB/m
+        scattering loss = 0.1 dB/m
 
     From [-500.0, 1500.0] to [500.0, 1500.0]
-        scattering loss = 0.5 dB/m
+        scattering loss = 0.3 dB/m
 
     From [500.0, 1250.0] to [3500.0, 1250.0]
-        scattering loss = 0.2 dB/m
+        scattering loss = 0.1 dB/m
 
     From [3500.0, 1250.0] to [4200.0, 1250.0]
         scattering loss = 0.0 dB/m
@@ -2930,9 +2949,7 @@ Console output::
         scattering loss = 0.0 dB/m
 
     From [3500.0, 1000.0] to [-3500.0, 1000.0]
-        scattering loss = 1.2 dB/m
-
-    Exited EMode
+        scattering loss = 0.5 dB/m
 
 Figures:
 
@@ -3013,7 +3030,7 @@ How to open an existing EMode simulation.
 
         # Update the settings
         em.settings(wavelength = wavelength,
-            boundary_condition = 'TM', num_modes = 1,
+            boundary_condition = 'TM', num_modes = 4,
             max_effective_index = n_eff[0])
 
         # Launch FDM solver
@@ -3037,6 +3054,7 @@ How to open an existing EMode simulation.
         TM_indices = em.get('TM_indices')
         em.plot(component = 'Ey', mode = TM_indices)
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -3092,7 +3110,7 @@ How to open an existing EMode simulation.
 
         % Update the settings
         em.settings(wavelength = wavelength, ...
-            boundary_condition = 'TM', num_modes = 1, ...
+            boundary_condition = 'TM', num_modes = 4, ...
             max_effective_index = n_eff(1));
 
         % Launch FDM solver
@@ -3119,9 +3137,9 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode 0.2.3 - email
-    Meshing completed in 0.6 sec
-    Solving completed in 4.1 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 0.5 sec
+    Solving modes... completed in 1.5 sec
 
     Wavelength: 1970.0 nm
  
@@ -3130,20 +3148,23 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode 0.2.3 - email
-    Meshing completed in 0.6 sec
-    Solving completed in 1.9 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 0.6 sec
+    Solving modes... completed in 1.8 sec
 
     Wavelength: 985.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TM-0  2.067847   1.2 %          0.000
+        TE-0  2.863080  99.9 %          0.000
+        TE-1  2.684545  99.7 %          0.000
+        TE-2  2.362233  98.6 %          0.000
+        TM-3  2.067847   1.2 %          0.000
  
     Exited EMode
-    EMode 0.2.3 - email
+    EMode 0.2.4 - email
     Exited EMode
-    EMode 0.2.3 - email
+    EMode 0.2.4 - email
     Exited EMode
 
 Figures:
@@ -3250,73 +3271,52 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode 0.2.3 - email
+    EMode 0.2.4 - email
 
-    Sweeping setting parameter 'wavelength'... 
-    Solving FDM: wavelength = 1000... Meshing completed in 0.6 sec
-    Solving completed in 2.7 sec
-    completed in 3.5 sec
-    Solving FDM: wavelength = 1050... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1100... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.6 sec
-    Solving FDM: wavelength = 1150... Meshing completed in 0.6 sec
-    Solving completed in 1.7 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1200... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1250... Meshing completed in 0.6 sec
-    Solving completed in 1.7 sec
-    completed in 2.4 sec
-    Solving FDM: wavelength = 1300... Meshing completed in 0.6 sec
-    Solving completed in 1.7 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1350... Meshing completed in 0.7 sec
-    Solving completed in 1.9 sec
-    completed in 2.6 sec
-    Solving FDM: wavelength = 1400... Meshing completed in 0.6 sec
-    Solving completed in 1.6 sec
-    completed in 2.4 sec
-    Solving FDM: wavelength = 1450... Meshing completed in 0.6 sec
-    Solving completed in 1.7 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1500... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.6 sec
-    Solving FDM: wavelength = 1550... Meshing completed in 0.7 sec
-    Solving completed in 1.7 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1600... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.6 sec
-    Solving FDM: wavelength = 1650... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1700... Meshing completed in 0.7 sec
-    Solving completed in 1.9 sec
-    completed in 2.7 sec
-    Solving FDM: wavelength = 1750... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1800... Meshing completed in 0.6 sec
-    Solving completed in 1.8 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 1850... Meshing completed in 0.7 sec
-    Solving completed in 1.8 sec
-    completed in 2.6 sec
-    Solving FDM: wavelength = 1900... Meshing completed in 0.6 sec
-    Solving completed in 1.6 sec
-    completed in 2.4 sec
-    Solving FDM: wavelength = 1950... Meshing completed in 0.6 sec
-    Solving completed in 1.7 sec
-    completed in 2.5 sec
-    Solving FDM: wavelength = 2000... Meshing completed in 0.6 sec
-    Solving completed in 1.7 sec
-    completed in 2.5 sec
-    completed in 53.7 sec
+    Sweeping setting parameter 'wavelength'...
+    Solving FDM: wavelength = 1000...Meshing  completed in 0.6 sec
+     completed in 2.1 sec
+    Solving FDM: wavelength = 1050...Meshing  completed in 0.5 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 1100...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1150...Meshing  completed in 0.5 sec
+     completed in 1.5 sec
+    Solving FDM: wavelength = 1200...Meshing  completed in 0.5 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 1250...Meshing  completed in 0.5 sec
+     completed in 1.5 sec
+    Solving FDM: wavelength = 1300...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1350...Meshing  completed in 0.5 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 1400...Meshing  completed in 0.5 sec
+     completed in 1.5 sec
+    Solving FDM: wavelength = 1450...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1500...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1550...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1600...Meshing  completed in 0.5 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 1650...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1700...Meshing  completed in 0.6 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1750...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1800...Meshing  completed in 0.6 sec
+     completed in 1.8 sec
+    Solving FDM: wavelength = 1850...Meshing  completed in 0.5 sec
+     completed in 1.8 sec
+    Solving FDM: wavelength = 1900...Meshing  completed in 0.6 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1950...Meshing  completed in 0.6 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 2000...Meshing  completed in 0.5 sec
+     completed in 1.8 sec
+     completed in 34.8 sec
     Exited EMode
 
 A separate script can be used to plot the results.
@@ -3429,10 +3429,10 @@ The simplest EMode example of an EME simulation.
         h_core = 220 # [nm] waveguide core height
         h_clad = 1000 # [nm] waveguide top and bottom clad
 
-        window_width = 3400
+        window_width = 4000
         window_height = h_core + h_clad*2
 
-        num_modes = 22 # [-] number of modes
+        num_modes = 10 # [-] number of modes
         BC = 'TE'
 
         ## Connect and initialize EMode
@@ -3449,8 +3449,7 @@ The simplest EMode example of an EME simulation.
         em.shape(name = 'BOX', material = 'SiO2',
             height = h_clad)
         em.shape(name = 'core', material = 'Si',
-            height = h_core, etch_depth = h_core*0.90,
-            sidewall_angle = 10)
+            height = h_core, etch_depth = h_core)
 
         ## Launch FDM solver and label profiles
         em.shape(name = 'core', mask = 1000)
@@ -3465,14 +3464,14 @@ The simplest EMode example of an EME simulation.
 
         ## Draw EME sections
         em.section(profile = 'a', section_type = 'straight',
-            length = 2e3)
+            length = 2000)
 
         em.section(section_type = 'taper',
             profile = 'a', profile_end = 'b',
-            length = 4000)
+            length = 8000)
 
         em.section(profile = 'b', section_type = 'straight',
-            length = 2e3)
+            length = 2000)
 
         ## Run EME and plot results
         em.EME()
@@ -3481,6 +3480,7 @@ The simplest EMode example of an EME simulation.
 
         ## Close EMode
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -3491,10 +3491,10 @@ The simplest EMode example of an EME simulation.
         h_core = 220; % [nm] waveguide core height
         h_clad = 1000; % [nm] waveguide top and bottom clad
 
-        window_width = 3400;
+        window_width = 4000;
         window_height = h_core + h_clad*2;
 
-        num_modes = 22; % [-] number of modes
+        num_modes = 10; % [-] number of modes
         BC = 'TE';
 
         %% Connect and initialize EMode
@@ -3511,8 +3511,7 @@ The simplest EMode example of an EME simulation.
         em.shape(name = 'BOX', material = 'SiO2', ...
             height = h_clad);
         em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core*0.90, ...
-            sidewall_angle = 10);
+            height = h_core, etch_depth = h_core);
 
         %% Launch FDM solver and label profiles
         em.shape(name = 'core', mask = 1000);
@@ -3527,14 +3526,14 @@ The simplest EMode example of an EME simulation.
 
         %% Draw EME sections
         em.section(profile = 'a', section_type = 'straight', ...
-            length = 2e3);
+            length = 2000);
 
         em.section(section_type = 'taper', ...
             profile = 'a', profile_end = 'b', ...
-            length = 4000);
+            length = 8000);
 
         em.section(profile = 'b', section_type = 'straight', ...
-            length = 2e3);
+            length = 2000);
 
         %% Run EME and plot results
         em.EME();
@@ -3546,101 +3545,54 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode 0.2.3 - email
+    EMode 0.2.4 - email
     Connected on port 62000 to LM-1.
-    Meshing completed in 0.2 sec
-    Solving completed in 2.6 sec
+    Meshing  completed in 0.2 sec
+    Solving modes... completed in 0.5 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.740878  99.8 %          0.000
-        TE-1  1.834948  86.3 %          0.000
-        TM-2  1.648371  14.6 %          0.000
-        TE-3  1.480289  99.8 %          0.000
-        TM-4  1.444024   0.0 %          0.000
-        TE-5  1.380997  99.0 %          0.000
-        TM-6  1.333974   3.8 %          0.000
-        TE-7  1.313224  98.9 %          0.000
-        TM-8  1.260780   9.1 %          0.000
-        TE-9  1.245872  93.8 %          0.000
-       TE-10  1.205712  96.3 %          0.000
-       TE-11  1.141695  98.8 %          0.000
-       TM-12  1.098826   2.3 %          0.000
-       TM-13  1.059658   6.2 %          0.000
-       TE-14  1.046256  99.4 %          0.000
-       TE-15  0.908818  90.9 %          0.000
-       TM-16  0.884647  13.2 %          0.000
-       TE-17  0.836617  92.4 %          0.000
-       TM-18  0.750209  29.3 %          0.000
-       TE-19  0.712955  92.6 %          0.000
-       TM-20  0.639715  17.8 %          0.000
-       TE-21  0.557145  76.4 %          0.000
+        TE-0  2.744942  99.8 %          0.000
+        TE-1  1.819117  92.4 %          0.000
+        TM-2  1.665347  11.8 %          0.000
+        TE-3  1.421518  99.9 %          0.000
+        TE-4  1.368426  88.0 %          0.000
+        TM-5  1.359634  12.8 %          0.000
+        TE-6  1.321504  99.9 %          0.000
+        TM-7  1.279963   2.4 %          0.000
+        TE-8  1.250897  98.7 %          0.000
+        TE-9  1.189492  95.8 %          0.000
  
-    Meshing completed in 0.2 sec
-    Solving completed in 2.1 sec
+    Meshing  completed in 0.2 sec
+    Solving modes... completed in 0.3 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff     TE %    Loss (dB/m)
     --------  --------  -------  -------------
-        TE-0  2.820614  100.0 %          0.000
-        TE-1  2.601685   99.7 %          0.000
-        TE-2  2.117344   97.1 %          0.000
-        TM-3  1.937158    5.2 %          0.000
-        TM-4  1.565193   21.8 %          0.000
-        TE-5  1.512582   84.1 %          0.000
-        TM-6  1.444024    0.0 %          0.000
-        TE-7  1.394522   95.1 %          0.000
-        TM-8  1.347977   40.3 %          0.000
-        TE-9  1.316026   64.5 %          0.000
-       TE-10  1.267170   86.3 %          0.000
-       TE-11  1.248576   81.1 %          0.000
-       TM-12  1.193778   18.6 %          0.000
-       TE-13  1.145446   99.4 %          0.000
-       TM-14  1.079657    7.7 %          0.000
-       TE-15  1.058558   76.3 %          0.000
-       TM-16  1.046977   21.7 %          0.000
-       TE-17  0.990949   95.2 %          0.000
-       TE-18  0.865006   79.2 %          0.000
-       TM-19  0.847538    5.0 %          0.000
-       TM-20  0.837589   11.2 %          0.000
-       TE-21  0.736539   90.2 %          0.000
+        TE-0  2.821143  100.0 %          0.000
+        TE-1  2.606186   99.7 %          0.000
+        TE-2  2.123806   98.2 %          0.000
+        TM-3  1.939095    4.9 %          0.000
+        TM-4  1.565613   16.9 %          0.000
+        TE-5  1.441070   89.8 %          0.000
+        TE-6  1.391478   82.7 %          0.000
+        TE-7  1.362128   66.6 %          0.000
+        TM-8  1.333348   48.1 %          0.000
+        TE-9  1.285430   69.6 %          0.000
  
-    Solving S-matrices... 
-    Solving section: 0... Solving completed in 2.4 sec
-    Meshing completed in 0.2 sec
-    completed in 2.8 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 2.4 sec
+    Solving S-matrices...
+    Solving section: 0...Meshing  completed in 0.1 sec
+     completed in 0.9 sec
 
-    Solving section: 1... Solving completed in 2.6 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 2.3 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.3 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.9 sec
-    Solving completed in 2.6 sec
-    completed in 49.2 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 3.8 sec
+    Solving section: 1...
+     completed in 25.4 sec
 
-    Solving section: 2... Solving completed in 3.6 sec
-    Meshing completed in 0.2 sec
-    completed in 4.0 sec
-    completed in 1 min 6.3 sec
+    Solving section: 2...Meshing  completed in 0.2 sec
+     completed in 0.6 sec
+     completed in 0.6 sec
     Exited EMode
 
 Figures:
@@ -3688,10 +3640,10 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         h_core = 220 # [nm] waveguide core height
         h_clad = 1000 # [nm] waveguide top and bottom clad
 
-        window_width = 3400
+        window_width = 4000
         window_height = h_core + h_clad*2
 
-        num_modes = 22 # [-] number of modes
+        num_modes = 10 # [-] number of modes
         BC = 'TE'
 
         ## Connect and initialize EMode
@@ -3719,14 +3671,14 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
         ## Draw EME sections
         em.section(profile = 'a', section_type = 'straight',
-            length = 2e3)
+            length = 2000)
 
         em.section(name = 'taper', section_type = 'taper',
             profile = 'a', profile_end = 'b',
-            length = 4000)
+            length = 8000)
 
         em.section(profile = 'b', section_type = 'straight',
-            length = 2e3)
+            length = 2000)
 
         ## Run EME sweep
         data = em.sweep(key = 'section, taper, length',
@@ -3735,6 +3687,7 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
         ## Close EMode
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -3745,10 +3698,10 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         h_core = 220; % [nm] waveguide core height
         h_clad = 1000; % [nm] waveguide top and bottom clad
 
-        window_width = 3400;
+        window_width = 4000;
         window_height = h_core + h_clad*2;
 
-        num_modes = 22; % [-] number of modes
+        num_modes = 10; % [-] number of modes
         BC = 'TE';
 
         %% Connect and initialize EMode
@@ -3776,14 +3729,14 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
         %% Draw EME sections
         em.section(profile = 'a', section_type = 'straight', ...
-            length = 2e3);
+            length = 2000);
 
         em.section(name = 'taper', section_type = 'taper', ...
             profile = 'a', profile_end = 'b', ...
-            length = 4000);
+            length = 8000);
 
         em.section(profile = 'b', section_type = 'straight', ...
-            length = 2e3);
+            length = 2000);
 
         %% Run EME sweep
         data = em.sweep(key = 'section, taper, length', ...
@@ -3795,79 +3748,150 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode 0.2.3 - email
+    EMode 0.2.4 - email
     Connected on port 63000 to LM-2.
-    Meshing completed in 0.2 sec
-    Meshing completed in 0.2 sec
+    Session type: 3d
+    Successfully logged in to the license manager.
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
 
-    Sweeping section parameter 'length'... 
-    Solving EME: length = 8000... Solving completed in 3.4 sec
-    Meshing completed in 0.2 sec
-    Meshing completed in 0.1 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.7 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 2.9 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.8 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.4 sec
-    Solving completed in 2.6 sec
-    Solving completed in 3.0 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.5 sec
-    Solving completed in 2.6 sec
-    Solving completed in 2.9 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.7 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 2.7 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 2.7 sec
-    Solving completed in 2.6 sec
-    Meshing completed in 0.2 sec
-    completed in 1 min 26.0 sec
-    Solving EME: length = 7750... completed in 3.6 sec
-    Solving EME: length = 7500... completed in 3.5 sec
-    Solving EME: length = 7250... completed in 3.5 sec
-    Solving EME: length = 7000... completed in 3.5 sec
-    Solving EME: length = 6750... completed in 3.5 sec
-    Solving EME: length = 6500... completed in 3.5 sec
-    Solving EME: length = 6250... completed in 3.5 sec
-    Solving EME: length = 6000... completed in 3.5 sec
-    Solving EME: length = 5750... completed in 3.5 sec
-    Solving EME: length = 5500... completed in 3.5 sec
-    Solving EME: length = 5250... completed in 3.5 sec
-    Solving EME: length = 5000... completed in 3.5 sec
-    Solving EME: length = 4750... completed in 3.5 sec
-    Solving EME: length = 4500... completed in 3.5 sec
-    Solving EME: length = 4250... completed in 3.5 sec
-    Solving EME: length = 4000... completed in 3.5 sec
-    Solving EME: length = 3750... completed in 3.5 sec
-    Solving EME: length = 3500... completed in 3.5 sec
-    Solving EME: length = 3250... completed in 3.5 sec
-    Solving EME: length = 3000... completed in 3.5 sec
-    Solving EME: length = 2750... completed in 3.5 sec
-    Solving EME: length = 2500... completed in 3.5 sec
-    Solving EME: length = 2250... completed in 3.5 sec
-    Solving EME: length = 2000... completed in 3.5 sec
-    Solving EME: length = 1750... completed in 3.5 sec
-    Solving EME: length = 1500... completed in 3.5 sec
-    Solving EME: length = 1250... completed in 3.5 sec
-    Solving EME: length = 1000... completed in 3.5 sec
-    Solving EME: length = 750... completed in 3.6 sec
-    Solving EME: length = 500... completed in 3.6 sec
-    Solving EME: length = 250... completed in 3.6 sec
-    Solving EME: length = 0... completed in 3.6 sec
-    completed in 3 min 18.9 sec
+    Sweeping section parameter 'length'...
+    Meshing  completed in 0.1 sec
+
+    Solving slice at 0.0 nm... completed in 0.6 sec
+    Solving slice at 8000.0 nm... completed in 0.5 sec
+    Solving slice at 4000.0 nm... completed in 0.5 sec
+    Solving slice at 2000.0 nm... completed in 0.5 sec
+    Solving slice at 1000.0 nm... completed in 0.4 sec
+    Solving slice at 500.0 nm... completed in 0.5 sec
+    Solving slice at 1500.0 nm... completed in 0.4 sec
+    Solving slice at 1750.0 nm... completed in 0.4 sec
+    Solving slice at 3000.0 nm... completed in 0.5 sec
+    Solving slice at 2500.0 nm... completed in 0.4 sec
+    Solving slice at 2250.0 nm... completed in 0.5 sec
+    Solving slice at 2750.0 nm... completed in 0.4 sec
+    Reached minimum_z_step!
+    Solving slice at 3500.0 nm... completed in 0.5 sec
+    Solving slice at 3250.0 nm... completed in 0.4 sec
+    Solving slice at 3750.0 nm... completed in 0.5 sec
+    Reached minimum_z_step!
+    Solving slice at 6000.0 nm... completed in 0.5 sec
+    Solving slice at 5000.0 nm... completed in 0.5 sec
+    Solving slice at 4500.0 nm... completed in 0.5 sec
+    Solving slice at 4250.0 nm... completed in 0.5 sec
+    Reached minimum_z_step!
+    Solving slice at 4750.0 nm... completed in 0.5 sec
+    Solving slice at 5500.0 nm... completed in 0.4 sec
+    Solving slice at 5250.0 nm... completed in 0.5 sec
+    Reached minimum_z_step!
+    Solving slice at 5750.0 nm... completed in 0.5 sec
+    Solving slice at 7000.0 nm... completed in 0.5 sec
+    Solving slice at 6500.0 nm... completed in 0.5 sec
+    Solving slice at 6250.0 nm... completed in 0.5 sec
+    Solving slice at 7500.0 nm... completed in 0.5 sec
+    Solving slice at 7250.0 nm... completed in 0.5 sec
+    Solving slice at 7750.0 nm... completed in 0.5 sec
+    Slice solving complete.
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 26.1 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.8 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.7 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.7 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.7 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.7 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.8 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.8 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 2.3 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 2.0 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 2.0 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.8 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.8 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.9 sec
+    Meshing  completed in 0.2 sec
+    Meshing  completed in 0.2 sec
+     completed in 1.8 sec
+     completed in 1 min 26.3 sec
     Exited EMode
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -3924,7 +3948,7 @@ While no figures are generated in the EMode script, a separate script can be use
         lg = ax.legend(handles = lines[1:10], loc = 'upper right')
         lg.get_frame().set_linewidth(LW/2)
         lg.get_frame().set_edgecolor('k')
-        ax.set_ylim([-1, 16])
+        ax.set_ylim([-1, 25])
         fig.savefig('taper_2.png', dpi=600, bbox_inches='tight')
 
 Figures:
@@ -4197,98 +4221,88 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode 0.2.3 - email
-    Meshing completed in 0.4 sec
-    Meshing completed in 0.1 sec
-    Meshing completed in 0.1 sec
-    Solving S-matrices... 
-    Solving section: input... Solving completed in 1.1 sec
-    Meshing completed in 0.2 sec
-    completed in 1.7 sec
-    Solving completed in 1.8 sec
-    Meshing completed in 0.3 sec
-    Meshing completed in 0.2 sec
-    Solving completed in 1.9 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 0.3 sec
+    Meshing  completed in 0.1 sec
+    Meshing  completed in 0.1 sec
+    Solving S-matrices...
+    Meshing  completed in 0.1 sec
+     completed in 1.5 sec
 
-    Solving section: sbend... Solving completed in 2.0 sec
-    Meshing completed in 0.3 sec
-    Solving completed in 1.4 sec
-    Solving completed in 1.8 sec
-    Solving completed in 1.8 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.6 sec
-    Solving completed in 1.6 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.8 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.3 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.8 sec
-    Solving completed in 1.9 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.3 sec
-    Solving completed in 1.7 sec
-    Solving completed in 1.8 sec
-    Solving completed in 1.5 sec
-    Solving completed in 1.5 sec
-    Solving completed in 1.9 sec
-    Solving completed in 1.3 sec
-    completed in 1 min 2.5 sec
-    Meshing completed in 0.1 sec
-    Solving completed in 0.3 sec
+    Solving section: sbend...
+    Solving slice at 0.0 nm... completed in 0.7 sec
+    Solving slice at 10000.0 nm... completed in 0.6 sec
+    Solving slice at 5000.0 nm... completed in 0.6 sec
+    Solving slice at 2500.0 nm... completed in 0.6 sec
+    Solving slice at 1250.0 nm... completed in 0.6 sec
+    Solving slice at 1875.0 nm... completed in 0.6 sec
+    Solving slice at 1562.5 nm... completed in 0.7 sec
+    Solving slice at 2187.5 nm... completed in 0.6 sec
+    Solving slice at 3750.0 nm... completed in 0.7 sec
+    Solving slice at 3125.0 nm... completed in 0.7 sec
+    Solving slice at 2812.5 nm... completed in 0.6 sec
+    Solving slice at 3437.5 nm... completed in 0.6 sec
+    Solving slice at 4375.0 nm... completed in 0.6 sec
+    Solving slice at 4062.5 nm... completed in 0.6 sec
+    Solving slice at 4687.5 nm... completed in 0.6 sec
+    Solving slice at 7500.0 nm... completed in 0.6 sec
+    Solving slice at 6250.0 nm... completed in 0.6 sec
+    Solving slice at 5625.0 nm... completed in 0.7 sec
+    Solving slice at 5312.5 nm... completed in 0.7 sec
+    Solving slice at 5937.5 nm... completed in 0.7 sec
+    Solving slice at 6875.0 nm... completed in 0.6 sec
+    Solving slice at 6562.5 nm... completed in 0.7 sec
+    Solving slice at 7187.5 nm... completed in 0.6 sec
+    Solving slice at 8750.0 nm... completed in 0.7 sec
+    Solving slice at 8125.0 nm... completed in 0.6 sec
+    Solving slice at 7812.5 nm... completed in 0.7 sec
+    Solving slice at 8437.5 nm... completed in 0.6 sec
+    Meshing  completed in 0.1 sec
+     completed in 29.7 sec
 
-    Solving section: coupler... Solving completed in 0.3 sec
-    Meshing completed in 0.3 sec
-    completed in 1.0 sec
+    Solving section: coupler... completed in 0.2 sec
 
-    Solving section: 3... completed in 2.7 sec
-    Meshing completed in 0.1 sec
-    Solving completed in 1.0 sec
+    Solving section: 3...
+     completed in 4.4 sec
 
-    Solving section: output... Solving completed in 0.9 sec
-    Meshing completed in 0.2 sec
-    completed in 1.4 sec
-    completed in 1 min 17.4 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 0.0 sec
+    Meshing  completed in 0.1 sec
 
-    Sweeping section parameter 'length'... 
-    Solving EME: length = 200000.0... completed in 1.5 sec
-    Solving EME: length = 190000.0... completed in 1.5 sec
-    Solving EME: length = 180000.0... completed in 1.5 sec
-    Solving EME: length = 170000.0... completed in 1.5 sec
-    Solving EME: length = 160000.0... completed in 1.5 sec
-    Solving EME: length = 150000.0... completed in 1.5 sec
-    Solving EME: length = 140000.0... completed in 1.5 sec
-    Solving EME: length = 130000.0... completed in 1.5 sec
-    Solving EME: length = 120000.0... completed in 1.5 sec
-    Solving EME: length = 110000.0... completed in 1.5 sec
-    Solving EME: length = 100000.0... completed in 1.5 sec
-    Solving EME: length = 90000.0... completed in 1.5 sec
-    Solving EME: length = 80000.0... completed in 1.5 sec
-    Solving EME: length = 70000.0... completed in 1.5 sec
-    Solving EME: length = 60000.0... completed in 1.5 sec
-    Solving EME: length = 50000.0... completed in 1.5 sec
-    Solving EME: length = 40000.0... completed in 1.5 sec
-    Solving EME: length = 30000.0... completed in 1.5 sec
-    Solving EME: length = 20000.0... completed in 1.5 sec
-    Solving EME: length = 10000.0... completed in 1.5 sec
-    Solving EME: length = 0.0... completed in 1.5 sec
-    completed in 31.6 sec
-    Solving S-matrices... 
-    Solving section: input... completed in 0.1 sec
+    Sweeping section parameter 'length'...
+    Solving EME: length = 200000.0... completed in 0.8 sec
+    Solving EME: length = 190000.0... completed in 0.8 sec
+    Solving EME: length = 180000.0... completed in 0.8 sec
+    Solving EME: length = 170000.0... completed in 0.8 sec
+    Solving EME: length = 160000.0... completed in 0.8 sec
+    Solving EME: length = 150000.0... completed in 0.8 sec
+    Solving EME: length = 140000.0... completed in 0.8 sec
+    Solving EME: length = 130000.0... completed in 0.8 sec
+    Solving EME: length = 120000.0... completed in 0.8 sec
+    Solving EME: length = 110000.0... completed in 0.8 sec
+    Solving EME: length = 100000.0... completed in 0.8 sec
+    Solving EME: length = 90000.0... completed in 0.8 sec
+    Solving EME: length = 80000.0... completed in 0.8 sec
+    Solving EME: length = 70000.0... completed in 0.8 sec
+    Solving EME: length = 60000.0... completed in 0.8 sec
+    Solving EME: length = 50000.0... completed in 0.8 sec
+    Solving EME: length = 40000.0... completed in 0.8 sec
+    Solving EME: length = 30000.0... completed in 0.8 sec
+    Solving EME: length = 20000.0... completed in 0.9 sec
+    Solving EME: length = 10000.0... completed in 0.8 sec
+    Solving EME: length = 0.0... completed in 0.8 sec
+     completed in 17.0 sec
+    Solving S-matrices...
+    Solving section: input... completed in 0.2 sec
 
-    Solving section: sbend... completed in 0.1 sec
+    Solving section: sbend... completed in 0.2 sec
 
-    Solving section: coupler... completed in 0.1 sec
+    Solving section: coupler... completed in 0.2 sec
 
-    Solving section: 3... completed in 0.1 sec
+    Solving section: 3... completed in 0.2 sec
 
-    Solving section: output... completed in 0.1 sec
-    completed in 1.4 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 0.0 sec
     Exited EMode
 
 Figures:

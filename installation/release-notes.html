@@ -358,6 +358,19 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>0.2.4: February 10, 2026</strong></p>
+<ul class="simple">
+<li><p>Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.</p></li>
+<li><p>Improved EME junction algorithm for robustness.</p></li>
+<li><p>Implemented speed improvements, leading to a 60% speedup in our taper example.</p></li>
+<li><p>Added an input to the <code class="docutils literal notranslate"><span class="pre">settings()</span></code> function called <code class="docutils literal notranslate"><span class="pre">frequency</span></code> as an alternative way to set the simulation wavelength. Internally, the <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> is calculated from the <code class="docutils literal notranslate"><span class="pre">frequency</span></code> parameter as <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> = c/<code class="docutils literal notranslate"><span class="pre">frequency</span></code>.</p></li>
+<li><p>Improved error handling when keywords are used incorrectly.</p></li>
+<li><p>Fixed a bug with scattering loss for films smaller than the mesh size.</p></li>
+<li><p>Added functionality to automatically clear all mode data at each call to <code class="docutils literal notranslate"><span class="pre">mesh()</span></code> and <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>.</p></li>
+<li><p>Added support for layers with zero thickness.</p></li>
+<li><p>Fixed a bug with conformal layers that extend outside the simulation window.</p></li>
+<li><p>Improved PML parameters for better accuracy and stability.</p></li>
+</ul>
 <p><strong>0.2.3: October 24, 2025</strong></p>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">effective_area()</span></code> function now returns the effective area values. The effective area is in units of um^2.</p></li>
@@ -365,14 +378,14 @@
 <li><p>Shape names are now automatically generated if not specified.</p></li>
 <li><p>In the <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function, scattering losses are now available in the ‘result’ parameter. Use ‘scattering_loss’ to get a sum of all the shapes, or specify any of the scattering loss metadata keys to get them for each shape.</p></li>
 <li><p>Mode tracking has been added to the <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function. Specify ‘mode_order’ in the ‘results’ parameter to get a list of the mode orders relative to the first solution.</p></li>
-<li><p>The Field dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Field</span></code> dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.</p></li>
 </ul>
 <p><strong>0.2.2: October 14, 2025</strong></p>
 <ul class="simple">
 <li><p>Hotfix on the previous version to remedy a few bugs.</p></li>
 <li><p>Using the <code class="docutils literal notranslate"><span class="pre">get()</span></code> function to extract ‘x’ and ‘y’ now returns the full-window variables.</p></li>
 <li><p>Using the <code class="docutils literal notranslate"><span class="pre">get()</span></code> function to extract a single field variable returns all modes for that field.</p></li>
-<li><p>Added <code class="docutils literal notranslate"><span class="pre">get_field()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_grid()</span></code> functions to extract Field and Grid classes (see the Python Interface documentation updates).</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">get_fields()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_grid()</span></code> functions to extract <cite>Field</cite> and <cite>Grid</cite> class information (see documentation updates) from a simulation (using <code class="docutils literal notranslate"><span class="pre">get()</span></code> for this is now deprecated).</p></li>
 <li><p>Fixed a bug when <code class="docutils literal notranslate"><span class="pre">shape()</span></code> is called after meshing.</p></li>
 </ul>
 <p><strong>0.2.1: October 8, 2025</strong></p>

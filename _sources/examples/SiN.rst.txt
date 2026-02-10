@@ -17,15 +17,15 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         wavelength = 980 # [nm] wavelength
         dx, dy = 10, 10 # [nm] resolution
         w_core = 2000 # [nm] waveguide core width
-        w_trench = 2250 # [nm] waveguide side trench width
+        w_trench = 2500 # [nm] waveguide side trench width
         h_core = 200 # [nm] waveguide core height
-        h_clad = 2250 # [nm] waveguide top and bottom clad
+        h_clad = 2500 # [nm] waveguide top and bottom clad
         window_width = w_core + w_trench*2 # [nm]
         window_height = h_core + h_clad*2 # [nm]
         num_modes = 1 # [-] number of modes
         boundary = 'TE' # boundary condition
 
-        bend_radius = 100e3 # [nm] bend radius
+        bend_radius = 20e3 # [nm] bend radius
         x_off = 500 # [nm] waveguide x-offset for applying the bend radius at the center of the waveguide core rather than the center of the window
 
         ## Connect and initialize EMode
@@ -42,7 +42,7 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
             window_width = window_width, window_height = window_height,
             num_modes = num_modes, background_material = 'custom_SiO2',
             boundary_condition = boundary, bend_radius = bend_radius + x_off,
-            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 20,
+            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 10,
             max_effective_index = 1.7)
 
         ## Draw shapes
@@ -66,6 +66,7 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         ## Collect all variable names and close EMode
         variables = em.inspect()
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -74,9 +75,9 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         wavelength = 980; % [nm] wavelength
         dx = 10; dy = 10; % [nm] resolution
         w_core = 2000; % [nm] waveguide core width
-        w_trench = 2250; % [nm] waveguide side trench width
+        w_trench = 2500; % [nm] waveguide side trench width
         h_core = 200; % [nm] waveguide core height
-        h_clad = 2250; % [nm] waveguide top and bottom clad
+        h_clad = 2500; % [nm] waveguide top and bottom clad
         window_width = w_core + w_trench*2; % [nm]
         window_height = h_core + h_clad*2; % [nm]
         num_modes = 1; % [-] number of modes
@@ -99,7 +100,7 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
             window_width = window_width, window_height = window_height, ...
             num_modes = num_modes, background_material = 'custom_SiO2', ...
             boundary_condition = boundary, bend_radius = bend_radius + x_off, ...
-            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 20, ...
+            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 10, ...
             max_effective_index = 1.7);
 
         % Draw shapes
@@ -124,18 +125,19 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         variables = em.inspect();
         em.close();
 
+
 Console output::
 
-    EMode 0.2.3 - email
-    Meshing completed in 0.4 sec
-    Solving completed in 2.7 sec
+    EMode 0.2.4 - email
+    Meshing  completed in 0.4 sec
+    Solving modes... completed in 22.8 sec
 
     Wavelength: 980.0 nm
- 
-      Mode #     n_eff     TE %    Loss (dB/m)    background confinement    core confinement
-    --------  --------  -------  -------------  ------------------------  ------------------
-        TE-0  1.679910  100.0 %          0.000                    38.3 %              61.7 %
- 
+
+      Mode #     n_eff    TE %    Loss (dB/m)    background confinement    core confinement
+    --------  --------  ------  -------------  ------------------------  ------------------
+        TE-0  1.665877  99.9 %          0.030                    39.3 %              60.7 %
+
     Exited EMode
 
 
