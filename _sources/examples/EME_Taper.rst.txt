@@ -53,14 +53,16 @@ The simplest EMode example of an EME simulation.
         em.plot()
 
         ## Draw EME sections
-        em.section(profile = 'a', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'a',
             length = 2000)
 
         em.section(section_type = 'taper',
             profile = 'a', profile_end = 'b',
             length = 8000)
 
-        em.section(profile = 'b', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'b',
             length = 2000)
 
         ## Run EME and plot results
@@ -136,10 +138,9 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode 0.2.4 - email
-    Connected on port 62000 to LM-1.
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.5 sec
+    Solving modes... completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -157,7 +158,7 @@ Console output::
         TE-9  1.189492  95.8 %          0.000
  
     Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.3 sec
+    Solving modes... completed in 0.4 sec
 
     Wavelength: 1550.0 nm
  
@@ -176,14 +177,14 @@ Console output::
  
     Solving S-matrices...
     Solving section: 0...Meshing  completed in 0.1 sec
-     completed in 0.9 sec
+     completed in 0.8 sec
 
     Solving section: 1...
-     completed in 25.4 sec
+     completed in 23.0 sec
 
     Solving section: 2...Meshing  completed in 0.2 sec
-     completed in 0.6 sec
-     completed in 0.6 sec
+     completed in 0.5 sec
+     completed in 0.5 sec
     Exited EMode
 
 

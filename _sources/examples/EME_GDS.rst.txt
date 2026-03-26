@@ -94,7 +94,8 @@ Next, the directional coupler device is created and simulated for a short couple
         ## Settings
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
-            window_height = window_height, num_modes = num_modes, boundary_condition = BC, background_material = 'SiO2')
+            window_height = window_height, num_modes = num_modes,
+            boundary_condition = BC, background_material = 'SiO2')
 
         ## Draw shapes
         em.shape(name = 'BOX', material = 'SiO2',
@@ -160,6 +161,7 @@ Next, the directional coupler device is created and simulated for a short couple
 
         ## Close EMode
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -255,77 +257,50 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.3 sec
     Meshing  completed in 0.1 sec
     Meshing  completed in 0.1 sec
     Solving S-matrices...
-    Meshing  completed in 0.1 sec
+    Solving section: input...Meshing  completed in 0.1 sec
      completed in 1.5 sec
 
     Solving section: sbend...
-    Solving slice at 0.0 nm... completed in 0.7 sec
-    Solving slice at 10000.0 nm... completed in 0.6 sec
-    Solving slice at 5000.0 nm... completed in 0.6 sec
-    Solving slice at 2500.0 nm... completed in 0.6 sec
-    Solving slice at 1250.0 nm... completed in 0.6 sec
-    Solving slice at 1875.0 nm... completed in 0.6 sec
-    Solving slice at 1562.5 nm... completed in 0.7 sec
-    Solving slice at 2187.5 nm... completed in 0.6 sec
-    Solving slice at 3750.0 nm... completed in 0.7 sec
-    Solving slice at 3125.0 nm... completed in 0.7 sec
-    Solving slice at 2812.5 nm... completed in 0.6 sec
-    Solving slice at 3437.5 nm... completed in 0.6 sec
-    Solving slice at 4375.0 nm... completed in 0.6 sec
-    Solving slice at 4062.5 nm... completed in 0.6 sec
-    Solving slice at 4687.5 nm... completed in 0.6 sec
-    Solving slice at 7500.0 nm... completed in 0.6 sec
-    Solving slice at 6250.0 nm... completed in 0.6 sec
-    Solving slice at 5625.0 nm... completed in 0.7 sec
-    Solving slice at 5312.5 nm... completed in 0.7 sec
-    Solving slice at 5937.5 nm... completed in 0.7 sec
-    Solving slice at 6875.0 nm... completed in 0.6 sec
-    Solving slice at 6562.5 nm... completed in 0.7 sec
-    Solving slice at 7187.5 nm... completed in 0.6 sec
-    Solving slice at 8750.0 nm... completed in 0.7 sec
-    Solving slice at 8125.0 nm... completed in 0.6 sec
-    Solving slice at 7812.5 nm... completed in 0.7 sec
-    Solving slice at 8437.5 nm... completed in 0.6 sec
     Meshing  completed in 0.1 sec
-     completed in 29.7 sec
+     completed in 30.1 sec
 
     Solving section: coupler... completed in 0.2 sec
 
     Solving section: 3...
-     completed in 4.4 sec
+     completed in 3.9 sec
 
-    Solving section: output... completed in 0.0 sec
-     completed in 0.0 sec
+    Solving section: output... completed in 0.1 sec
+     completed in 0.1 sec
     Meshing  completed in 0.1 sec
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 200000.0... completed in 0.8 sec
-    Solving EME: length = 190000.0... completed in 0.8 sec
-    Solving EME: length = 180000.0... completed in 0.8 sec
-    Solving EME: length = 170000.0... completed in 0.8 sec
-    Solving EME: length = 160000.0... completed in 0.8 sec
-    Solving EME: length = 150000.0... completed in 0.8 sec
-    Solving EME: length = 140000.0... completed in 0.8 sec
-    Solving EME: length = 130000.0... completed in 0.8 sec
-    Solving EME: length = 120000.0... completed in 0.8 sec
-    Solving EME: length = 110000.0... completed in 0.8 sec
-    Solving EME: length = 100000.0... completed in 0.8 sec
-    Solving EME: length = 90000.0... completed in 0.8 sec
-    Solving EME: length = 80000.0... completed in 0.8 sec
-    Solving EME: length = 70000.0... completed in 0.8 sec
-    Solving EME: length = 60000.0... completed in 0.8 sec
-    Solving EME: length = 50000.0... completed in 0.8 sec
-    Solving EME: length = 40000.0... completed in 0.8 sec
-    Solving EME: length = 30000.0... completed in 0.8 sec
-    Solving EME: length = 20000.0... completed in 0.9 sec
-    Solving EME: length = 10000.0... completed in 0.8 sec
-    Solving EME: length = 0.0... completed in 0.8 sec
-     completed in 17.0 sec
+    Solving EME: length = 200000.0... completed in 1.1 sec
+    Solving EME: length = 190000.0... completed in 1.1 sec
+    Solving EME: length = 180000.0... completed in 1.1 sec
+    Solving EME: length = 170000.0... completed in 1.1 sec
+    Solving EME: length = 160000.0... completed in 1.1 sec
+    Solving EME: length = 150000.0... completed in 1.1 sec
+    Solving EME: length = 140000.0... completed in 1.1 sec
+    Solving EME: length = 130000.0... completed in 1.1 sec
+    Solving EME: length = 120000.0... completed in 1.1 sec
+    Solving EME: length = 110000.0... completed in 1.1 sec
+    Solving EME: length = 100000.0... completed in 1.1 sec
+    Solving EME: length = 90000.0... completed in 1.1 sec
+    Solving EME: length = 80000.0... completed in 1.1 sec
+    Solving EME: length = 70000.0... completed in 1.2 sec
+    Solving EME: length = 60000.0... completed in 1.1 sec
+    Solving EME: length = 50000.0... completed in 1.1 sec
+    Solving EME: length = 40000.0... completed in 1.2 sec
+    Solving EME: length = 30000.0... completed in 1.1 sec
+    Solving EME: length = 20000.0... completed in 1.2 sec
+    Solving EME: length = 10000.0... completed in 1.1 sec
+    Solving EME: length = 0.0... completed in 1.1 sec
+     completed in 23.7 sec
     Solving S-matrices...
     Solving section: input... completed in 0.2 sec
 
@@ -333,10 +308,10 @@ Console output::
 
     Solving section: coupler... completed in 0.2 sec
 
-    Solving section: 3... completed in 0.2 sec
+    Solving section: 3... completed in 0.3 sec
 
-    Solving section: output... completed in 0.0 sec
-     completed in 0.0 sec
+    Solving section: output... completed in 0.1 sec
+     completed in 0.1 sec
     Exited EMode
 
 

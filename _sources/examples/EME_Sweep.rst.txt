@@ -50,14 +50,16 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         em.label_profile(name = 'b') # skips solving the modes here
 
         ## Draw EME sections
-        em.section(profile = 'a', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'a',
             length = 2000)
 
         em.section(name = 'taper', section_type = 'taper',
             profile = 'a', profile_end = 'b',
             length = 8000)
 
-        em.section(profile = 'b', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'b',
             length = 2000)
 
         ## Run EME sweep
@@ -129,151 +131,113 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode 0.2.4 - email
-    Connected on port 63000 to LM-2.
-    Session type: 3d
-    Successfully logged in to the license manager.
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
 
     Sweeping section parameter 'length'...
-    Meshing  completed in 0.1 sec
+    Solving EME: length = 8000...Meshing  completed in 0.1 sec
 
-
-    Solving slice at 0.0 nm... completed in 0.6 sec
-    Solving slice at 8000.0 nm... completed in 0.5 sec
-    Solving slice at 4000.0 nm... completed in 0.5 sec
-    Solving slice at 2000.0 nm... completed in 0.5 sec
-    Solving slice at 1000.0 nm... completed in 0.4 sec
-    Solving slice at 500.0 nm... completed in 0.5 sec
-    Solving slice at 1500.0 nm... completed in 0.4 sec
-    Solving slice at 1750.0 nm... completed in 0.4 sec
-    Solving slice at 3000.0 nm... completed in 0.5 sec
-    Solving slice at 2500.0 nm... completed in 0.4 sec
-    Solving slice at 2250.0 nm... completed in 0.5 sec
-    Solving slice at 2750.0 nm... completed in 0.4 sec
-    Reached minimum_z_step!
-    Solving slice at 3500.0 nm... completed in 0.5 sec
-    Solving slice at 3250.0 nm... completed in 0.4 sec
-    Solving slice at 3750.0 nm... completed in 0.5 sec
-    Reached minimum_z_step!
-    Solving slice at 6000.0 nm... completed in 0.5 sec
-    Solving slice at 5000.0 nm... completed in 0.5 sec
-    Solving slice at 4500.0 nm... completed in 0.5 sec
-    Solving slice at 4250.0 nm... completed in 0.5 sec
-    Reached minimum_z_step!
-    Solving slice at 4750.0 nm... completed in 0.5 sec
-    Solving slice at 5500.0 nm... completed in 0.4 sec
-    Solving slice at 5250.0 nm... completed in 0.5 sec
-    Reached minimum_z_step!
-    Solving slice at 5750.0 nm... completed in 0.5 sec
-    Solving slice at 7000.0 nm... completed in 0.5 sec
-    Solving slice at 6500.0 nm... completed in 0.5 sec
-    Solving slice at 6250.0 nm... completed in 0.5 sec
-    Solving slice at 7500.0 nm... completed in 0.5 sec
-    Solving slice at 7250.0 nm... completed in 0.5 sec
-    Solving slice at 7750.0 nm... completed in 0.5 sec
-    Slice solving complete.
     Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 26.1 sec
+     completed in 29.6 sec
+    Solving EME: length = 7750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 7500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 7250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 7000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 6750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 6500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 6250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 6000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 5750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 5500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 5250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 5000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 4750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 4500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 4250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 4000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
+     completed in 1.5 sec
+    Solving EME: length = 3750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 3500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
+     completed in 1.5 sec
+    Solving EME: length = 3250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 3000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 2.3 sec
+     completed in 1.5 sec
+    Solving EME: length = 2750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 2500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
+     completed in 1.5 sec
+    Solving EME: length = 2250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 2000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 2.0 sec
+     completed in 1.5 sec
+    Solving EME: length = 1750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 1500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 2.0 sec
+     completed in 1.5 sec
+    Solving EME: length = 1250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 1000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 0...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.8 sec
-     completed in 1 min 26.3 sec
+     completed in 1.5 sec
+     completed in 1 min 17.3 sec
     Exited EMode
 
 

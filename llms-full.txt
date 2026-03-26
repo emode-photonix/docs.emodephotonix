@@ -154,11 +154,12 @@ EMode requires either Python or MATLAB as an interface to run EMode with script-
    :margin: 3
 
 
+.. _python-interface:
 
-Python interface
+Python Interface
 ================
 
-To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.9 through 3.13, including the Anaconda distribution and iPython terminals. Tested Python IDEs include Notepad++/Command Prompt, PyCharm, Spyder, and Visual Studio Code.
+To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.9 through 3.13, including the Anaconda distribution, iPython terminals, and numerous IDEs.
 
 The source code can be viewed here: `emodeconnection <https://github.com/emode-photonix/emodeconnection>`_
 
@@ -166,7 +167,7 @@ For more information about Python, see these links:
 
 .. hlist::
    :columns: 2
-   
+
    - `Python documentation <https://docs.python.org/3/tutorial/>`_
    - `Download Python <https://www.python.org/downloads/>`_
    - `Real Python <https://realpython.com/>`_
@@ -198,17 +199,18 @@ Open a Python session and run the following. This will open the EMode Login GUI 
 The EMode class
 ---------------
 
-.. class:: EMode(simulation_name = 'emode', license_type = 'default', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None)
-    
-    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``EModeLogin`` from the the start menu.
-    
+.. class:: EMode(simulation_name = 'emode', license_type = 'default', clear = 'none', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None)
+
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode`` from the the command line.
+
     An existing file can be opened for further analysis by specifying the input argument ``open_existing = True``. This opened file can be copied to a new file name by specifying the input argument ``new_name = 'new_filename'``.
-    
+
     .. note::
         All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using keyword arguments for each funtion input parameter.
-    
+
     :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
     :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available. Default: 'default'.
+    :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all', 'latest', 'oldest', and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
     :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
     :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
     :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license. Default: False.
@@ -224,30 +226,30 @@ Functions
 The ``emodeconnection`` package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.
 
 .. function:: EModeLogin()
-    
+
     Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. function:: open_file(simulation_name = 'emode')
-    
+
     Opens an EMode simulation file with the extension '.eph' or '.mat' and returns a dictionary with the file contents.
-    
+
     :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
     :return: Dictionary with all keys and data from the specified EMode simulation file.
     :rtype: dict
 
 .. function:: get(variable, simulation_name = 'emode')
-    
+
     Returns the contents of a specified variable from an EMode simulation file with the extension '.eph' or '.mat'.
-    
+
     :param str variable: Name of the variable to return from EMode.
     :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
     :return: Requested item from EMode.
     :rtype: int, float, str, or array-like
 
 .. function:: inspect(simulation_name = 'emode')
-    
+
     Get the names of all variables from EMode simulation file with the extension '.eph' or '.mat'.
-    
+
     :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
     :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get()` function.
     :rtype: list
@@ -444,7 +446,7 @@ Update the ``emodeconnection`` Python package to the latest version with:
 
 
 
-MATLAB interface
+MATLAB Interface
 ================
 
 To control EMode directly from a MATLAB script (version R2021a or higher), we supply a class file called ``emodeconnection.m`` that is automatically installed alongside EMode.
@@ -453,7 +455,7 @@ For more information about MATLAB, check out this link:
 
 .. hlist::
    :columns: 1
-   
+
    - `Get Started with MATLAB <https://www.mathworks.com/help/matlab/getting-started-with-matlab.html/>`_
 
 .. _SetupMATLAB:
@@ -506,16 +508,16 @@ The EMode class
 ---------------
 
 .. class:: emodeconnection(name, value)
-    
+
     Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, initializing this class will prompt for the user credentials. To reset the user profile, see ``EMode Login``.
-    
+
     An existing file can be opened for further analysis by specifying the input name-value pair ``'open_existing', true`` or ``open_existing = true``. This opened file can be copied to a new file name by specifying the input name-value pair ``'new_name', 'new_filename'`` or ``new_name = 'new_filename'``.
-    
+
     By default, calling the `close()` method saves the simulation file as a MATLAB-style .mat file. Adding optional input parameters can override this behavior to either delete the simulation file or save it as a .eph file.
-    
+
     .. note::
         All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using name-value pair input arguments for each funtion input parameter, in the format of ("name_1", value_1, "name_2", value_2, "name_3", value_3, ...) or (name_1 = value_1, name_2 = value_2, name_3 = value_3, ...).
-    
+
     :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
     :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available. Default: 'default'.
     :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
@@ -530,34 +532,34 @@ Functions
 ---------
 
 The ``emodeconnection`` package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.
-    
+
     .. staticmethod:: EModeLogin()
         :noindex:
-        
+
         Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
 
     .. staticmethod:: open_file(simulation_name)
         :noindex:
-        
+
         Returns an EMode simulation file name with the extension ".mat" to be passed to the MATLAB load() function.
-        
+
         :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name. Default: 'emode'.
         :return: Name of the specified EMode simulation file if it is available.
         :rtype: char array
 
     .. staticmethod:: get_(variable, simulation_name)
-        
+
         Returns the contents of a specified variable from an EMode simulation file with the extension ".mat".
-        
+
         :param str variable: Name of the variable to return from EMode. Default: 'emode'.
         :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name.
         :return: Requested item from EMode.
         :rtype: int, float, str, or array-like
 
     .. staticmethod:: inspect_(simulation_name)
-        
+
         Get the names of all variables from EMode simulation file with the extension ".mat".
-        
+
         :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name. Default: 'emode'.
         :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get_()` function.
         :rtype: list
@@ -601,7 +603,7 @@ Two types that can be used for specifying material properties are available as s
 
    :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored for materials without this parameter. Must be between 0 and 1. Default: 0.
    :type x: ~typing.Optional[float]
-   
+
    :param loss: The absorption loss of the material in dB/m.
    :type loss: ~typing.Optional[float]
 
@@ -2014,6 +2016,11 @@ Descriptions of all variables available in the simulation file. Some variables h
 Release Notes
 ^^^^^^^^^^^^^
 
+**0.2.5: March 25, 2026**
+
+* Updated license manager connection to use a standard REST API (https).
+* Users now have the ability to clear existing EMode sessions in case a simulation crash locks up a license. By default, stale licenses will be cleared every 9 minutes (24 hours with roaming enabled). Users can clear non-roaming stale sessions. See the :ref:`python-interface` page for details.
+
 **0.2.4: February 10, 2026**
 
 * Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.
@@ -2366,7 +2373,7 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.2 sec
     Solving modes... completed in 0.7 sec
 
@@ -2526,16 +2533,16 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.4 sec
-    Solving modes... completed in 22.8 sec
+    Solving modes... completed in 20.5 sec
 
     Wavelength: 980.0 nm
-
+ 
       Mode #     n_eff    TE %    Loss (dB/m)    background confinement    core confinement
     --------  --------  ------  -------------  ------------------------  ------------------
         TE-0  1.665877  99.9 %          0.030                    39.3 %              60.7 %
-
+ 
     Exited EMode
 
 Figures:
@@ -2702,7 +2709,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.4 sec
     Solving modes... completed in 1.5 sec
 
@@ -2712,7 +2719,7 @@ Console output::
     --------  --------  ------  -------------  ------------------
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
-    Meshing  completed in 0.4 sec
+    Meshing  completed in 0.3 sec
     Solving modes... completed in 1.1 sec
 
     Wavelength: 1550.0 nm
@@ -2721,6 +2728,7 @@ Console output::
     --------  --------  ------  -------------  ------------------
         TE-0  1.789641  99.1 %          0.000              83.4 %
  
+    Exited EMode
     Power overlap: 99.836 %
 
     Refractive index of LN: [2.13057033 2.20881269 2.20881269]
@@ -2728,7 +2736,6 @@ Console output::
     Notes: x-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
 
     Wavelength range: 500 nm to 4000 nm
-    Exited EMode
 
 Figures:
 
@@ -2913,8 +2920,8 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode 0.2.4 - email
-    Meshing  completed in 3.3 sec
+    EMode3D 0.2.5 - email
+    Meshing  completed in 3.1 sec
     Solving modes... completed in 8.3 sec
 
     Wavelength: 1550.0 nm
@@ -2923,6 +2930,7 @@ Console output::
     --------  --------  ------  -------------  ------------------  ------------------------
         TE-0  3.290919  99.8 %          0.000              49.8 %                   218.753
  
+    Exited EMode
     Scattering loss from all vertical edges: 217.8 dB/m
     Scattering loss from all horizontal edges: 1.0 dB/m
     Total scattering loss: 218.8 dB/m
@@ -3137,9 +3145,9 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.5 sec
-    Solving modes... completed in 1.5 sec
+    Solving modes... completed in 1.4 sec
 
     Wavelength: 1970.0 nm
  
@@ -3148,9 +3156,9 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode 0.2.4 - email
-    Meshing  completed in 0.6 sec
-    Solving modes... completed in 1.8 sec
+    EMode3D 0.2.5 - email
+    Meshing  completed in 0.5 sec
+    Solving modes... completed in 1.6 sec
 
     Wavelength: 985.0 nm
  
@@ -3162,9 +3170,9 @@ Console output::
         TM-3  2.067847   1.2 %          0.000
  
     Exited EMode
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Exited EMode
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Exited EMode
 
 Figures:
@@ -3271,52 +3279,52 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
 
     Sweeping setting parameter 'wavelength'...
     Solving FDM: wavelength = 1000...Meshing  completed in 0.6 sec
-     completed in 2.1 sec
-    Solving FDM: wavelength = 1050...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
+     completed in 2.3 sec
+    Solving FDM: wavelength = 1050...Meshing  completed in 0.6 sec
+     completed in 1.8 sec
     Solving FDM: wavelength = 1100...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
+     completed in 1.7 sec
     Solving FDM: wavelength = 1150...Meshing  completed in 0.5 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving FDM: wavelength = 1200...Meshing  completed in 0.5 sec
      completed in 1.7 sec
     Solving FDM: wavelength = 1250...Meshing  completed in 0.5 sec
      completed in 1.5 sec
-    Solving FDM: wavelength = 1300...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1350...Meshing  completed in 0.5 sec
+    Solving FDM: wavelength = 1300...Meshing  completed in 0.6 sec
      completed in 1.7 sec
-    Solving FDM: wavelength = 1400...Meshing  completed in 0.5 sec
-     completed in 1.5 sec
+    Solving FDM: wavelength = 1350...Meshing  completed in 0.6 sec
+     completed in 1.9 sec
+    Solving FDM: wavelength = 1400...Meshing  completed in 0.6 sec
+     completed in 1.7 sec
     Solving FDM: wavelength = 1450...Meshing  completed in 0.5 sec
      completed in 1.6 sec
-    Solving FDM: wavelength = 1500...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1550...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1600...Meshing  completed in 0.5 sec
+    Solving FDM: wavelength = 1500...Meshing  completed in 0.6 sec
      completed in 1.7 sec
-    Solving FDM: wavelength = 1650...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
+    Solving FDM: wavelength = 1550...Meshing  completed in 0.5 sec
+     completed in 1.9 sec
+    Solving FDM: wavelength = 1600...Meshing  completed in 0.7 sec
+     completed in 2.4 sec
+    Solving FDM: wavelength = 1650...Meshing  completed in 0.6 sec
+     completed in 1.7 sec
     Solving FDM: wavelength = 1700...Meshing  completed in 0.6 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1750...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1800...Meshing  completed in 0.6 sec
      completed in 1.8 sec
-    Solving FDM: wavelength = 1850...Meshing  completed in 0.5 sec
+    Solving FDM: wavelength = 1750...Meshing  completed in 0.6 sec
+     completed in 2.1 sec
+    Solving FDM: wavelength = 1800...Meshing  completed in 0.6 sec
+     completed in 1.9 sec
+    Solving FDM: wavelength = 1850...Meshing  completed in 0.6 sec
      completed in 1.8 sec
     Solving FDM: wavelength = 1900...Meshing  completed in 0.6 sec
      completed in 1.6 sec
     Solving FDM: wavelength = 1950...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 2000...Meshing  completed in 0.5 sec
-     completed in 1.8 sec
-     completed in 34.8 sec
+     completed in 1.9 sec
+    Solving FDM: wavelength = 2000...Meshing  completed in 0.6 sec
+     completed in 1.9 sec
+     completed in 38.4 sec
     Exited EMode
 
 A separate script can be used to plot the results.
@@ -3463,14 +3471,16 @@ The simplest EMode example of an EME simulation.
         em.plot()
 
         ## Draw EME sections
-        em.section(profile = 'a', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'a',
             length = 2000)
 
         em.section(section_type = 'taper',
             profile = 'a', profile_end = 'b',
             length = 8000)
 
-        em.section(profile = 'b', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'b',
             length = 2000)
 
         ## Run EME and plot results
@@ -3545,10 +3555,9 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode 0.2.4 - email
-    Connected on port 62000 to LM-1.
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.5 sec
+    Solving modes... completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -3566,7 +3575,7 @@ Console output::
         TE-9  1.189492  95.8 %          0.000
  
     Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.3 sec
+    Solving modes... completed in 0.4 sec
 
     Wavelength: 1550.0 nm
  
@@ -3585,14 +3594,14 @@ Console output::
  
     Solving S-matrices...
     Solving section: 0...Meshing  completed in 0.1 sec
-     completed in 0.9 sec
+     completed in 0.8 sec
 
     Solving section: 1...
-     completed in 25.4 sec
+     completed in 23.0 sec
 
     Solving section: 2...Meshing  completed in 0.2 sec
-     completed in 0.6 sec
-     completed in 0.6 sec
+     completed in 0.5 sec
+     completed in 0.5 sec
     Exited EMode
 
 Figures:
@@ -3670,14 +3679,16 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         em.label_profile(name = 'b') # skips solving the modes here
 
         ## Draw EME sections
-        em.section(profile = 'a', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'a',
             length = 2000)
 
         em.section(name = 'taper', section_type = 'taper',
             profile = 'a', profile_end = 'b',
             length = 8000)
 
-        em.section(profile = 'b', section_type = 'straight',
+        em.section(section_type = 'straight',
+            profile = 'b',
             length = 2000)
 
         ## Run EME sweep
@@ -3748,150 +3759,113 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode 0.2.4 - email
-    Connected on port 63000 to LM-2.
-    Session type: 3d
-    Successfully logged in to the license manager.
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
 
     Sweeping section parameter 'length'...
-    Meshing  completed in 0.1 sec
+    Solving EME: length = 8000...Meshing  completed in 0.1 sec
 
-    Solving slice at 0.0 nm... completed in 0.6 sec
-    Solving slice at 8000.0 nm... completed in 0.5 sec
-    Solving slice at 4000.0 nm... completed in 0.5 sec
-    Solving slice at 2000.0 nm... completed in 0.5 sec
-    Solving slice at 1000.0 nm... completed in 0.4 sec
-    Solving slice at 500.0 nm... completed in 0.5 sec
-    Solving slice at 1500.0 nm... completed in 0.4 sec
-    Solving slice at 1750.0 nm... completed in 0.4 sec
-    Solving slice at 3000.0 nm... completed in 0.5 sec
-    Solving slice at 2500.0 nm... completed in 0.4 sec
-    Solving slice at 2250.0 nm... completed in 0.5 sec
-    Solving slice at 2750.0 nm... completed in 0.4 sec
-    Reached minimum_z_step!
-    Solving slice at 3500.0 nm... completed in 0.5 sec
-    Solving slice at 3250.0 nm... completed in 0.4 sec
-    Solving slice at 3750.0 nm... completed in 0.5 sec
-    Reached minimum_z_step!
-    Solving slice at 6000.0 nm... completed in 0.5 sec
-    Solving slice at 5000.0 nm... completed in 0.5 sec
-    Solving slice at 4500.0 nm... completed in 0.5 sec
-    Solving slice at 4250.0 nm... completed in 0.5 sec
-    Reached minimum_z_step!
-    Solving slice at 4750.0 nm... completed in 0.5 sec
-    Solving slice at 5500.0 nm... completed in 0.4 sec
-    Solving slice at 5250.0 nm... completed in 0.5 sec
-    Reached minimum_z_step!
-    Solving slice at 5750.0 nm... completed in 0.5 sec
-    Solving slice at 7000.0 nm... completed in 0.5 sec
-    Solving slice at 6500.0 nm... completed in 0.5 sec
-    Solving slice at 6250.0 nm... completed in 0.5 sec
-    Solving slice at 7500.0 nm... completed in 0.5 sec
-    Solving slice at 7250.0 nm... completed in 0.5 sec
-    Solving slice at 7750.0 nm... completed in 0.5 sec
-    Slice solving complete.
     Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 26.1 sec
+     completed in 29.6 sec
+    Solving EME: length = 7750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 7500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 7250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 7000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 6750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 6500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 6250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 6000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 5750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 5500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.7 sec
+     completed in 1.5 sec
+    Solving EME: length = 5250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 5000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 4750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 4500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 4250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 4000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
+     completed in 1.5 sec
+    Solving EME: length = 3750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 3500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
+     completed in 1.5 sec
+    Solving EME: length = 3250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 3000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 2.3 sec
+     completed in 1.5 sec
+    Solving EME: length = 2750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 2500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
+     completed in 1.5 sec
+    Solving EME: length = 2250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 2000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 2.0 sec
+     completed in 1.5 sec
+    Solving EME: length = 1750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 1500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 2.0 sec
+     completed in 1.5 sec
+    Solving EME: length = 1250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 1000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.8 sec
+     completed in 1.5 sec
+    Solving EME: length = 250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
+     completed in 1.5 sec
+    Solving EME: length = 0...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.8 sec
-     completed in 1 min 26.3 sec
+     completed in 1.5 sec
+     completed in 1 min 17.3 sec
     Exited EMode
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -4060,7 +4034,8 @@ Next, the directional coupler device is created and simulated for a short couple
         ## Settings
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
-            window_height = window_height, num_modes = num_modes, boundary_condition = BC, background_material = 'SiO2')
+            window_height = window_height, num_modes = num_modes,
+            boundary_condition = BC, background_material = 'SiO2')
 
         ## Draw shapes
         em.shape(name = 'BOX', material = 'SiO2',
@@ -4126,6 +4101,7 @@ Next, the directional coupler device is created and simulated for a short couple
 
         ## Close EMode
         em.close()
+
     
     .. code-tab:: matlab
         :caption: MATLAB
@@ -4221,77 +4197,50 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.3 sec
     Meshing  completed in 0.1 sec
     Meshing  completed in 0.1 sec
     Solving S-matrices...
-    Meshing  completed in 0.1 sec
+    Solving section: input...Meshing  completed in 0.1 sec
      completed in 1.5 sec
 
     Solving section: sbend...
-    Solving slice at 0.0 nm... completed in 0.7 sec
-    Solving slice at 10000.0 nm... completed in 0.6 sec
-    Solving slice at 5000.0 nm... completed in 0.6 sec
-    Solving slice at 2500.0 nm... completed in 0.6 sec
-    Solving slice at 1250.0 nm... completed in 0.6 sec
-    Solving slice at 1875.0 nm... completed in 0.6 sec
-    Solving slice at 1562.5 nm... completed in 0.7 sec
-    Solving slice at 2187.5 nm... completed in 0.6 sec
-    Solving slice at 3750.0 nm... completed in 0.7 sec
-    Solving slice at 3125.0 nm... completed in 0.7 sec
-    Solving slice at 2812.5 nm... completed in 0.6 sec
-    Solving slice at 3437.5 nm... completed in 0.6 sec
-    Solving slice at 4375.0 nm... completed in 0.6 sec
-    Solving slice at 4062.5 nm... completed in 0.6 sec
-    Solving slice at 4687.5 nm... completed in 0.6 sec
-    Solving slice at 7500.0 nm... completed in 0.6 sec
-    Solving slice at 6250.0 nm... completed in 0.6 sec
-    Solving slice at 5625.0 nm... completed in 0.7 sec
-    Solving slice at 5312.5 nm... completed in 0.7 sec
-    Solving slice at 5937.5 nm... completed in 0.7 sec
-    Solving slice at 6875.0 nm... completed in 0.6 sec
-    Solving slice at 6562.5 nm... completed in 0.7 sec
-    Solving slice at 7187.5 nm... completed in 0.6 sec
-    Solving slice at 8750.0 nm... completed in 0.7 sec
-    Solving slice at 8125.0 nm... completed in 0.6 sec
-    Solving slice at 7812.5 nm... completed in 0.7 sec
-    Solving slice at 8437.5 nm... completed in 0.6 sec
     Meshing  completed in 0.1 sec
-     completed in 29.7 sec
+     completed in 30.1 sec
 
     Solving section: coupler... completed in 0.2 sec
 
     Solving section: 3...
-     completed in 4.4 sec
+     completed in 3.9 sec
 
-    Solving section: output... completed in 0.0 sec
-     completed in 0.0 sec
+    Solving section: output... completed in 0.1 sec
+     completed in 0.1 sec
     Meshing  completed in 0.1 sec
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 200000.0... completed in 0.8 sec
-    Solving EME: length = 190000.0... completed in 0.8 sec
-    Solving EME: length = 180000.0... completed in 0.8 sec
-    Solving EME: length = 170000.0... completed in 0.8 sec
-    Solving EME: length = 160000.0... completed in 0.8 sec
-    Solving EME: length = 150000.0... completed in 0.8 sec
-    Solving EME: length = 140000.0... completed in 0.8 sec
-    Solving EME: length = 130000.0... completed in 0.8 sec
-    Solving EME: length = 120000.0... completed in 0.8 sec
-    Solving EME: length = 110000.0... completed in 0.8 sec
-    Solving EME: length = 100000.0... completed in 0.8 sec
-    Solving EME: length = 90000.0... completed in 0.8 sec
-    Solving EME: length = 80000.0... completed in 0.8 sec
-    Solving EME: length = 70000.0... completed in 0.8 sec
-    Solving EME: length = 60000.0... completed in 0.8 sec
-    Solving EME: length = 50000.0... completed in 0.8 sec
-    Solving EME: length = 40000.0... completed in 0.8 sec
-    Solving EME: length = 30000.0... completed in 0.8 sec
-    Solving EME: length = 20000.0... completed in 0.9 sec
-    Solving EME: length = 10000.0... completed in 0.8 sec
-    Solving EME: length = 0.0... completed in 0.8 sec
-     completed in 17.0 sec
+    Solving EME: length = 200000.0... completed in 1.1 sec
+    Solving EME: length = 190000.0... completed in 1.1 sec
+    Solving EME: length = 180000.0... completed in 1.1 sec
+    Solving EME: length = 170000.0... completed in 1.1 sec
+    Solving EME: length = 160000.0... completed in 1.1 sec
+    Solving EME: length = 150000.0... completed in 1.1 sec
+    Solving EME: length = 140000.0... completed in 1.1 sec
+    Solving EME: length = 130000.0... completed in 1.1 sec
+    Solving EME: length = 120000.0... completed in 1.1 sec
+    Solving EME: length = 110000.0... completed in 1.1 sec
+    Solving EME: length = 100000.0... completed in 1.1 sec
+    Solving EME: length = 90000.0... completed in 1.1 sec
+    Solving EME: length = 80000.0... completed in 1.1 sec
+    Solving EME: length = 70000.0... completed in 1.2 sec
+    Solving EME: length = 60000.0... completed in 1.1 sec
+    Solving EME: length = 50000.0... completed in 1.1 sec
+    Solving EME: length = 40000.0... completed in 1.2 sec
+    Solving EME: length = 30000.0... completed in 1.1 sec
+    Solving EME: length = 20000.0... completed in 1.2 sec
+    Solving EME: length = 10000.0... completed in 1.1 sec
+    Solving EME: length = 0.0... completed in 1.1 sec
+     completed in 23.7 sec
     Solving S-matrices...
     Solving section: input... completed in 0.2 sec
 
@@ -4299,10 +4248,10 @@ Console output::
 
     Solving section: coupler... completed in 0.2 sec
 
-    Solving section: 3... completed in 0.2 sec
+    Solving section: 3... completed in 0.3 sec
 
-    Solving section: output... completed in 0.0 sec
-     completed in 0.0 sec
+    Solving section: output... completed in 0.1 sec
+     completed in 0.1 sec
     Exited EMode
 
 Figures:

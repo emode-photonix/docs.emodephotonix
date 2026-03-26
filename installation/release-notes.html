@@ -358,6 +358,11 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>0.2.5: March 25, 2026</strong></p>
+<ul class="simple">
+<li><p>Updated license manager connection to use a standard REST API (https).</p></li>
+<li><p>Users now have the ability to clear existing EMode sessions in case a simulation crash locks up a license. By default, stale licenses will be cleared every 9 minutes (24 hours with roaming enabled). Users can clear non-roaming stale sessions. See the <a class="reference internal" href="../emodeconnection_python.html#python-interface"><span class="std std-ref">Python Interface</span></a> page for details.</p></li>
+</ul>
 <p><strong>0.2.4: February 10, 2026</strong></p>
 <ul class="simple">
 <li><p>Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.</p></li>

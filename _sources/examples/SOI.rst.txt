@@ -86,7 +86,7 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode 0.2.4 - email
+    EMode3D 0.2.5 - email
     Meshing  completed in 0.2 sec
     Solving modes... completed in 0.7 sec
 
