@@ -357,8 +357,7 @@
 <div class="tabs docutils container" data-tabgroup="">
 <ul class="tabbar">
 <li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
-Python</li><li class="tabbutton" data-id="1" onclick="sphinx_code_tabs_onclick(this)">
-MATLAB</li></ul><div class="tab codetab selected" data-id="0">
+Python</li></ul><div class="tab codetab selected" data-id="0">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -423,75 +422,6 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 
 <span class="c1">## Close EMode</span>
 <span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-</div>
-</div><div class="tab codetab" data-id="1">
-<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Set simulation parameters</span>
-<span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1550</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] wavelength</span>
-<span class="n">dx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] resolution</span>
-<span class="n">w_core</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide core width</span>
-<span class="n">w_trench</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide side trench width</span>
-<span class="n">h_core</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide core height</span>
-<span class="n">h_clad</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide top and bottom clad</span>
-<span class="n">window_width</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">w_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">w_trench</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm]</span>
-<span class="n">window_height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">h_clad</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm]</span>
-<span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c">% [-] number of modes</span>
-<span class="nb">boundary</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;0S&#39;</span><span class="p">;</span><span class="w"> </span><span class="c">% boundary condition</span>
-
-<span class="c">% Connect and initialize EMode</span>
-<span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">();</span>
-
-<span class="c">% View material database</span>
-<span class="n">em</span><span class="p">.</span><span class="n">material_explorer</span><span class="p">();</span>
-
-<span class="c">% Settings</span>
-<span class="n">em</span><span class="p">.</span><span class="n">settings</span><span class="p">(</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">wavelength</span><span class="p">,</span><span class="w"> </span><span class="n">x_resolution</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">y_resolution</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">window_width</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">window_width</span><span class="p">,</span><span class="w"> </span><span class="n">window_height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">window_height</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">num_modes</span><span class="p">,</span><span class="w"> </span><span class="n">background_material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;Air&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">boundary_condition</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">boundary</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">expansion_resolution</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="n">expansion_size</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1500</span><span class="p">);</span>
-
-<span class="c">% Draw shapes</span>
-<span class="n">em</span><span class="p">.</span><span class="n">MaterialSpec</span><span class="p">.</span><span class="n">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;LN_MgO&#39;</span><span class="p">;</span>
-<span class="n">em</span><span class="p">.</span><span class="n">MaterialSpec</span><span class="p">.</span><span class="n">theta</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
-
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;BOX&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_clad</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">MaterialSpec</span><span class="p">,</span><span class="w"> </span><span class="nb">height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">etch_depth</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="o">*</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">w_core</span><span class="p">,</span><span class="w"> </span><span class="n">sidewall_angle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">15</span><span class="p">);</span>
-
-<span class="c">% Solve the first mode</span>
-<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">confinement</span><span class="p">(</span><span class="n">shape_list</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">report</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">label_profile</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;0&#39;</span><span class="p">);</span><span class="w"> </span><span class="c">% save the data from the first mode</span>
-
-<span class="c">% Solve the second mode</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">w_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">confinement</span><span class="p">(</span><span class="n">shape_list</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">report</span><span class="p">();</span>
-
-<span class="c">% Calculate the overlap integral</span>
-<span class="n">overlap</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">label_a</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;0&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mode_a</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">mode_b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;Power overlap: %0.3f %%&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">overlap</span><span class="o">*</span><span class="mi">100</span><span class="p">));</span>
-
-<span class="c">% Plot the field and refractive index profiles</span>
-<span class="n">em</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">window_display</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-
-<span class="c">% Get the refractive index of the core</span>
-<span class="n">res</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">refractive_index</span><span class="p">(</span><span class="nb">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">MaterialSpec</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">wavelength</span><span class="p">,</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="n">n_LN</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">res</span><span class="p">{</span><span class="mi">1</span><span class="p">};</span>
-<span class="n">ref</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">res</span><span class="p">{</span><span class="mi">2</span><span class="p">};</span>
-<span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;\nRefractive index of LN: [%0.6f, %0.6f, %0.6f]\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">n_LN</span><span class="p">);</span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">find</span><span class="p">(</span><span class="n">ref</span><span class="o">==</span><span class="s">&#39;%&#39;</span><span class="p">))</span>
-<span class="w">    </span><span class="n">ref</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="n">ref</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="nb">find</span><span class="p">(</span><span class="n">ref</span><span class="o">==</span><span class="s">&#39;%&#39;</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="s">&#39;%&#39;</span><span class="w"> </span><span class="n">ref</span><span class="p">(</span><span class="nb">find</span><span class="p">(</span><span class="n">ref</span><span class="o">==</span><span class="s">&#39;%&#39;</span><span class="p">):</span><span class="k">end</span><span class="p">)];</span>
-<span class="k">end</span>
-<span class="nb">fprintf</span><span class="p">([</span><span class="n">ref</span><span class="w"> </span><span class="s">&#39;\n&#39;</span><span class="p">]);</span>
-
-<span class="c">% Close EMode</span>
-<span class="n">em</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
@@ -570,7 +500,7 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 
   <p class="copyright">
     
-      © Copyright EMode Photonix LLC. All rights reserved.
+      © Copyright EMode, Inc. All rights reserved.
       <br/>
     
   </p>

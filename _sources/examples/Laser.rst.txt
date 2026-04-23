@@ -9,10 +9,10 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
 
         ## Set simulation parameters
@@ -82,84 +82,6 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
         ## Close EMode
         em.close()
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        % Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 10; dy = 5; % [nm] resolution
-        w_core = 1000; % [nm] waveguide core width
-        w_trench = 3000; % [nm] waveguide side trench width
-        h_core = 500; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-        h_SL = 35; % [nm] superlattice height
-        h_n = 110; % [nm] n-contact height
-        h_SCH = 125; % [nm] SCH height
-        h_QW = 55; % [nm] quantum well height
-        h_uclad = 2000; % [nm] upper cladding height
-        window_width = w_core + w_trench*2; % [nm]
-        window_height = h_core + h_clad + h_SL + h_n + h_SCH*2 + h_QW + h_uclad; % [nm]
-        num_modes = 1; % [-] number of modes
-        boundary = '00'; % boundary condition
-
-        % Connect and initialize EMode
-        em = emodeconnection(simulation_name = 'laser'); % custom file name instead of the default 'emode.eph'
-
-        % Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, background_material = 'SiO2', ...
-            boundary_condition = boundary);
-
-        % Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', height = h_clad);
-        em.shape(name = 'core', material = 'Si', height = h_core, ...
-            mask = w_core, etch_depth = h_core*0.5, fill_material = 'Air', ...
-            roughness_rms = [5, 0.2], correlation_length = [100, 80]);
-        em.MaterialProperties.n = 3.20;
-        em.shape(name = 'SL', material = em.MaterialProperties, height = h_SL);
-        em.MaterialProperties.n = 3.17;
-        em.shape(name = 'n-contact', material = em.MaterialProperties, height = h_n);
-        em.MaterialProperties.n = 3.43;
-        em.shape(name = 'SCH1', material = em.MaterialProperties, height = h_SCH);
-        em.MaterialProperties.n = 3.41;
-        em.shape(name = 'QW', material = em.MaterialProperties, height = h_QW);
-        em.MaterialProperties.n = 3.43;
-        em.shape(name = 'SCH2', material = em.MaterialProperties, height = h_SCH);
-        em.MaterialProperties.n = 3.17;
-        em.shape(name = 'uclad', material = em.MaterialProperties, height = h_uclad);
-
-        % Launch FDM solver
-        em.FDM();
-
-        % Display the effective indices, TE fractions, core confinement, and scattering loss
-        em.confinement(shape_list = 'core');
-        em.scattering(shape = 'core');
-        em.report();
-
-        % Display scattering loss details from the core
-        shape_core = em.get('shape_core');
-        sv = shape_core.metadata.scattering_vertical_edges;
-        sh = shape_core.metadata.scattering_horizontal_edges;
-        sT = shape_core.metadata.scattering_sum;
-        fprintf('Scattering loss from all vertical edges: %0.1f dB/m\n', sv)
-        fprintf('Scattering loss from all horizontal edges: %0.1f dB/m\n', sh)
-        fprintf('Total scattering loss: %0.1f dB/m\n\n', sT)
-
-        edges = shape_core.metadata.edges;
-        sa = shape_core.metadata.scattering_all_edges;
-        for kk = 1:length(edges)
-            fprintf('From (%s) to (%s):', num2str(edges(kk,:,1)), num2str(edges(kk,:,2)))
-            fprintf('    scattering loss = %0.1f dB/m\n', sa(kk))
-        end
-
-        % Plot the field and refractive index profiles
-        em.plot();
-
-        % Close EMode
-        em.close();
 
 Console output::
 

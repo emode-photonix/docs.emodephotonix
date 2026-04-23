@@ -357,8 +357,7 @@
 <div class="tabs docutils container" data-tabgroup="">
 <ul class="tabbar">
 <li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
-Python</li><li class="tabbutton" data-id="1" onclick="sphinx_code_tabs_onclick(this)">
-MATLAB</li></ul><div class="tab codetab selected" data-id="0">
+Python</li></ul><div class="tab codetab selected" data-id="0">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
 
 <span class="c1">## Run an initial session with a unique simulation name.</span>
@@ -440,86 +439,6 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-</div><div class="tab codetab" data-id="1">
-<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">%% Run an initial session with a unique simulation name.</span>
-
-<span class="c">% Set simulation parameters</span>
-<span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1970</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] wavelength</span>
-<span class="n">dx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] resolution</span>
-<span class="n">trench</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1200</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide side trench width</span>
-<span class="n">t_clad</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1200</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide top/bot clad</span>
-<span class="n">b_clad</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1500</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide top/bot clad</span>
-<span class="n">w_core</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1734</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide core width</span>
-<span class="n">h_core</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">150</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] waveguide core height</span>
-<span class="n">h_slab</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] slab thickness in etched areas</span>
-<span class="nb">angle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span><span class="w"> </span><span class="c">% [degrees] waveguide sidewall angle</span>
-
-<span class="nb">width</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">w_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">trench</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] window width</span>
-<span class="nb">height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b_clad</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t_clad</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] window height</span>
-<span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c">% [nm] number of modes</span>
-<span class="nb">boundary</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;TE&#39;</span><span class="p">;</span>
-
-<span class="c">% Connect and initialize EMode</span>
-<span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="n">simulation_name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs_SHG&#39;</span><span class="p">);</span>
-
-<span class="c">% Settings</span>
-<span class="n">em</span><span class="p">.</span><span class="n">settings</span><span class="p">(</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">wavelength</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">x_resolution</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">y_resolution</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">window_width</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">width</span><span class="p">,</span><span class="w"> </span><span class="n">window_height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">height</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">boundary_condition</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">boundary</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">num_modes</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">background_material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;Air&#39;</span><span class="p">);</span>
-
-<span class="c">% Draw shapes</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;BOX&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;SiO2&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">b_clad</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;core&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">material</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">sidewall_angle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">angle</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">mask</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">w_core</span><span class="p">,</span><span class="w"> </span><span class="nb">height</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="p">,</span><span class="w"> </span><span class="n">etch_depth</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">h_core</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">h_slab</span><span class="p">);</span>
-
-<span class="c">% Launch FDM solver</span>
-<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">report</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
-
-
-<span class="c">%% The previous simulated can be opened again, modified, and saved with a new name.</span>
-
-<span class="c">% Open existing simulation file</span>
-<span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="n">simulation_name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs_SHG&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">open_existing</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">new_name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs_SHG-TM&#39;</span><span class="p">);</span>
-
-<span class="c">% Get the previous wavelength setting and convert it to the second harmonic wavelength</span>
-<span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;wavelength&#39;</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
-<span class="n">n_eff</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;effective_index&#39;</span><span class="p">);</span>
-
-<span class="c">% Update the settings</span>
-<span class="n">em</span><span class="p">.</span><span class="n">settings</span><span class="p">(</span><span class="n">wavelength</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">wavelength</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">boundary_condition</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;TM&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_modes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
-<span class="w">    </span><span class="n">max_effective_index</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n_eff</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-
-<span class="c">% Launch FDM solver</span>
-<span class="n">em</span><span class="p">.</span><span class="n">FDM</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">report</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
-
-
-<span class="c">%% When opening an existing file to only retrieve and plot data, a new simulation name is not needed since the simulation data will not be modified.</span>
-
-<span class="c">% Plot from existing simulation file - pump mode</span>
-<span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="n">simulation_name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs_SHG&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">open_existing</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-
-<span class="n">E_p</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;Ex&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ez&#39;</span><span class="p">});</span>
-<span class="n">em</span><span class="p">.</span><span class="n">plot</span><span class="p">();</span>
-<span class="n">em</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
-
-<span class="c">% Plot from existing simulation file - signal mode</span>
-<span class="n">em</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">emodeconnection</span><span class="p">(</span><span class="n">simulation_name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;GaAs_SHG-TM&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">open_existing</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-
-<span class="n">E_s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;Ex&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ez&#39;</span><span class="p">});</span>
-<span class="n">TM_indices</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">em</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;TM_indices&#39;</span><span class="p">);</span>
-<span class="n">em</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="s">&#39;component&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Ey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;mode&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">TM_indices</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-<span class="n">em</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
-</pre></div>
-</div>
 </div></div><p>Console output:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">0.2.5</span> <span class="o">-</span> <span class="n">email</span>
 <span class="n">Meshing</span>  <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
@@ -595,7 +514,7 @@ MATLAB</li></ul><div class="tab codetab selected" data-id="0">
 
   <p class="copyright">
     
-      © Copyright EMode Photonix LLC. All rights reserved.
+      © Copyright EMode, Inc. All rights reserved.
       <br/>
     
   </p>

@@ -317,7 +317,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fem.html">FEM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem.html">Multi-Physics</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
 <ul class="nav bd-sidenav">
@@ -368,7 +368,7 @@
 <span class="sig-name descname"><span class="pre">FDM</span></span></dt>
 <dd><p>Calculate the waveguide modes using the finite difference method. It automatically runs <code class="docutils literal notranslate"><span class="pre">EM_mesh</span></code> as needed (generating <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>). After solving the mode, the effective index (<code class="docutils literal notranslate"><span class="pre">effective_index</span></code>), mode propagation loss (<code class="docutils literal notranslate"><span class="pre">loss_dB_per_m</span></code>), and field components (<code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>) are available, where the fields are normalized to the equation below.</p>
 <div class="math notranslate nohighlight">
-\[\frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}\]</div>
+\[\frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}\]</div>
 <p>It also calculates the TE fraction of each mode (<code class="docutils literal notranslate"><span class="pre">TE_fraction</span></code>) with the following equation, and it saves the indices of the TE and TM modes (<code class="docutils literal notranslate"><span class="pre">TE_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">TM_indices</span></code>).</p>
 <div class="math notranslate nohighlight">
 \[\mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}\]</div>
@@ -489,12 +489,12 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="overlap">
 <span class="sig-name descname"><span class="pre">overlap</span></span></dt>
-<dd><p>Calculate overlap integral between two modes. The result is saved as <code class="docutils literal notranslate"><span class="pre">overlap</span></code>.</p>
+<dd><p>Calculate overlap integral between two modes. The result is saved in the profile metadata as <code class="docutils literal notranslate"><span class="pre">overlap</span></code> and is returned by this function.</p>
 <blockquote>
 <div><p>Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ‘’Diode lasers and photonic integrated circuits,’’ John Wiley &amp; Sons, 2012.</p>
 </div></blockquote>
 <div class="math notranslate nohighlight">
-\[\mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}\]</div>
+\[\mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_1 \times \vec H_2 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \times \vec H_1 \right| \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \times \vec H_2 \right| \, \mathrm{d}x \, \mathrm{d}y}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -512,7 +512,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="scattering">
 <span class="sig-name descname"><span class="pre">scattering</span></span></dt>
-<dd><p>Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_vertical_edges']</span></code> (total loss from all vertical interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_horizontal_edges']</span></code> (total loss from all horizontal interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_sum']</span></code> (total scattering loss), <code class="docutils literal notranslate"><span class="pre">SHAPE['edges']</span></code> (list of edge points for calculating scattering loss), and <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_all_edges']</span></code> (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.</p>
+<dd><p>Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_vertical_edges']</span></code> (total loss from all vertical interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_horizontal_edges']</span></code> (total loss from all horizontal interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_sum']</span></code> (total scattering loss), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['edges']</span></code> (list of edge points for calculating scattering loss), and <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_all_edges']</span></code> (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.</p>
 <p>[1] T. Barwicz and H. A. Haus, “Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides,” J. Lightwave Technol. 23, 2719 (2005).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -567,7 +567,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="refractive_index">
 <span class="sig-name descname"><span class="pre">refractive_index</span></span></dt>
-<dd><p>Returns the refractive index from a material name (retrieved from the internal reference list) or from a custom refractive index value. Optionally, the material’s reference (or citation) may be returned.</p>
+<dd><p>Returns the refractive index from a material name (retrieved from the internal reference list), a MaterialSpec object, or from a custom refractive index value. Optionally, the material’s reference (or citation) may be returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -679,7 +679,7 @@
 
   <p class="copyright">
     
-      © Copyright EMode Photonix LLC. All rights reserved.
+      © Copyright EMode, Inc. All rights reserved.
       <br/>
     
   </p>

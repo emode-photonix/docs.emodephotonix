@@ -7,10 +7,10 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 
@@ -48,44 +48,6 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
         ## Close EMode
         em.close()
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        dx = 10; dy = 10; % [nm] resolution
-        h_core = 750; % [nm] waveguide core height
-        b_clad = 2500; % [nm] waveguide top and bottom clad
-        h_clad = 1500; % [nm] waveguide top and bottom clad
-        w_core = h_core*1.25; % [nm] waveguide core width
-        w_trench = 2500; % [nm] waveguide side trench width
-        num_modes = 1; % [-] number of modes
-        boundary = 'TE';
-
-        wav_nm_ = 1000:50:2000; % [nm]
-
-        %% Connect and initialize EMode
-        em = emodeconnection(simulation_name = 'dispersion');
-
-        %% Settings
-        em.settings( ...
-            x_resolution = dx, y_resolution = dy, ...
-            window_width = w_core + w_trench*2, ...
-            window_height = h_core + b_clad + h_clad, ...
-            num_modes = num_modes, boundary_condition = boundary, ...
-            background_material = 'Air');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', height = b_clad);
-        em.shape(name = 'core', material = 'Ta2O5', width = w_core, ...
-            height = h_core);
-
-        %% Run wavelength sweep
-        data = em.sweep(key = 'wavelength', values = wav_nm_, ...
-            result = {'effective_index'});
-
-        %% Close EMode
-        em.close();
 
 Console output::
 
@@ -141,10 +103,10 @@ Console output::
 A separate script can be used to plot the results.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         from emodeconnection import constants
         import numpy as np
@@ -224,4 +186,3 @@ Figures:
     :width: 500
     :align: center
     :figwidth: 500
-

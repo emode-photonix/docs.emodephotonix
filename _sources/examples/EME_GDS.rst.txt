@@ -9,10 +9,10 @@ To simulate more complex structures, a GDS import function is used to support an
 First, the GDS is created.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         from phidl import CrossSection, Device
         import phidl.path as pp
         from phidl import quickplot as qp
@@ -66,10 +66,10 @@ First, the GDS is created.
 Next, the directional coupler device is created and simulated for a short coupler length. The sweep function is used to optimize  the coupler length for 100 % coupling, and the propagation is re-plotted.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         from matplotlib import pyplot as plt
         import numpy as np
@@ -162,98 +162,6 @@ Next, the directional coupler device is created and simulated for a short couple
         ## Close EMode
         em.close()
 
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 20; dy = 20; % [nm] resolution
-        h_core = 220; % [nm] waveguide core height
-        h_clad = 1200; % [nm] waveguide top and bottom clad
-        width_wg = 600; % [nm]
-        gap = 300; % [nm]
-        input_gap = 2000; % [nm]
-
-        window_height = h_core + h_clad*2;
-
-        num_modes = 2; % [-] number of modes
-        BC = 'TE-v';
-
-        %% Connect and initialize EMode
-        em = emodeconnection();
-
-        %% Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_height = window_height, num_modes = num_modes, ...
-            boundary_condition = BC, background_material = 'SiO2');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', ...
-            height = h_clad);
-
-        em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core);
-
-        %% Create profiles
-        em.settings(window_width = 6200);
-        em.label_profile(name = 'slab');
-
-        em.settings(window_width = 2600);
-        em.shape(name = 'core', mask = width_wg);
-        em.label_profile(name = 'io_waveguide');
-
-        em.settings(window_width = 2600);
-        em.shape(name = 'core', mask = [width_wg, width_wg], ...
-            mask_offset = [-gap/2-width_wg/2, gap/2+width_wg/2]);
-        em.label_profile(name = 'coupler');
-
-        %% Draw EME sections
-        em.section(name = 'input', section_type = 'straight', ...
-            profile = 'io_waveguide', length = 1000, ...
-            offset = input_gap/2 + width_wg/2);
-
-        em.section(name = 'sbend', section_type = 'gds', ...
-            gds = 'sbend.gds', profile = 'slab', ...
-            shape_to_mask = 'core', ...
-            length = 10e3); % modify length of gds
-
-        em.section(name = 'coupler', section_type = 'straight', ...
-            profile = 'coupler', length = 30e3);
-
-        em.section(section_type = 'copy', ...
-            section_name = 'sbend', mirror = true);
-
-        em.section(name = 'output', section_type = 'straight', ...
-            profile = 'io_waveguide', length = 1000, ...
-            offset = -input_gap/2 - width_wg/2);
-
-        %% Run EME and plot results
-        em.EME();
-        em.plot();
-
-        %% Sweep the coupler length and plot results
-        data = em.sweep(key = 'section, coupler, length', ...
-            values = 0:10000:200e3, ...
-            result = {'S_matrix'});
-
-        S = data.S_matrix;
-        figure;
-        plot(double(data.values)*1e-3, abs(squeeze(S(1,1,2,1,:))).^2*100);
-        hold on;
-        xlabel(append('Coupler length (', char(181), 'm)'));
-        ylabel('Transmission (%)');
-        xlim([min(data.values*1e-3) max(data.values*1e-3)]);
-        ylim([0 100]);
-
-        %% Plot final design for 100 % coupler
-        em.section(name = 'coupler', length = 180e3);
-        em.EME();
-        em.plot();
-
-        %% Close EMode
-        em.close();
 
 Console output::
 

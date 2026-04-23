@@ -2,7 +2,7 @@
 EMode Guide
 ===========
 
-**User profile login**: run ``emode`` from the command line. Enter your EMode account credentials to save your profile.
+Run the :ref:`EMode Login <PythonEModeLogin>` GUI to locally save your EMode account credentials.
 
 .. grid:: 2
     :gutter: 4
@@ -22,13 +22,13 @@ EMode Guide
         :columns: 6
 
         * `EME <emodeguide/eme.html>`_
-        * `FEM <emodeguide/fem.html>`_
+        * `Multi-Physics <emodeguide/fem.html>`_
 
 .. toctree::
     :maxdepth: 0
     :caption: EMode2D Functions
     :hidden:
-    
+
     emodeguide/file-management
     emodeguide/setup
     emodeguide/solver-analysis
@@ -37,14 +37,15 @@ EMode Guide
     :maxdepth: 0
     :caption: EMode3D Functions
     :hidden:
-    
+
     emodeguide/eme
     emodeguide/fem
 
 .. toctree::
    :caption: Glossaries
    :maxdepth: 1
-   
+   :hidden:
+
    emodeguide/variables
    emodeguide/materials
 
@@ -52,7 +53,7 @@ EMode Guide
     :maxdepth: 0
     :caption: Installation
     :hidden:
-    
+
     installation/release-notes
     installation/troubleshooting
 

@@ -1,26 +1,335 @@
+.. _python-interface:
 
-Interface
-=========
+Python Interface
+================
 
-EMode requires either Python or MATLAB as an interface to run EMode with script-based commands.
+To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.9 through 3.13, including the Anaconda distribution, iPython terminals, and numerous IDEs.
 
-.. toctree::
-   :maxdepth: 0
-   :hidden:
-   
-   emodeconnection_python
-   emodeconnection_matlab
+The source code can be viewed here: `emodeconnection <https://github.com/emode-photonix/emodeconnection>`_
 
-.. card:: Python Interface
-   :link: emodeconnection_python
-   :link-alt: Python Interface
-   :link-type: doc
-   :width: 50%
-   :margin: 3
+For more information about Python, see these links:
 
-.. card:: MATLAB Interface
-   :link: emodeconnection_matlab
-   :link-alt: MATLAB Interface
-   :link-type: doc
-   :width: 50%
-   :margin: 3
+.. hlist::
+   :columns: 3
+
+   - `Download Python <https://www.python.org/downloads/>`_
+   - `Python Documentation <https://docs.python.org/3/tutorial/>`_
+   - `Python Tutorial <https://www.pythontutorial.net/>`_
+
+.. _SetupPython:
+
+Setup
+-----
+
+Install the ``emodeconnection`` Python package from the command line.
+
+.. code-block::
+
+   pip install emodeconnection
+
+Update to the latest version with:
+
+.. code-block::
+
+   pip install -U emodeconnection
+
+.. _emode-install:
+
+Install EMode
+-------------
+
+The ``emode-install`` command-line tool is included with the ``emodeconnection``
+Python package. It handles downloading, installing, and updating EMode.
+After installing ``emodeconnection`` via pip, you can run the installer.
+You will be prompted to accept the
+`EMode EULA <https://emodephotonix.com/legal/eula.pdf>`_ and log in
+with your EMode account credentials. For additional complete options,
+run ``emode-install --help``.
+
+.. code-block:: bash
+
+    emode-install
+
+Additional options:
+
+.. code-block:: bash
+
+    emode-install                            # Install latest version
+    emode-install --help                     # Show all options
+    emode-install --list-versions            # Show available versions
+    emode-install --update                   # Update to the latest version
+    emode-install --update --version 0.2.5   # Switch to a specific version
+    emode-install --version 0.2.5            # Install a specific version
+    emode-install --install-dir /opt/bin     # Custom install directory
+    emode-install --uninstall                # Remove EMode
+    emode-install --uninstall --install-dir /opt/bin  # Remove from custom location
+
+For automated or headless installs, set these environment variables
+to skip interactive prompts:
+
++-------------------------+-------------------------------------------------+
+| Variable                | Description                                     |
++=========================+=================================================+
+| `EMODE_EULA_ACCEPTED=1` | Accept the EULA non-interactively (CI/headless) |
++-------------------------+-------------------------------------------------+
+| `EMODE_EMAIL`           | Pre-fill login email                            |
++-------------------------+-------------------------------------------------+
+| `EMODE_PASSWORD`        | Pre-fill password (use with caution)            |
++-------------------------+-------------------------------------------------+
+| `EMODE_INTERACTIVE=1`   | Use interactive installer GUI                   |
++-------------------------+-------------------------------------------------+
+| `UNINSTALL_EMODE=y`     | Accept the uninstallation non-interactively     |
++-------------------------+-------------------------------------------------+
+
+.. _PythonEModeLogin:
+
+EMode Login
+-----------
+
+Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
+
+.. code-block::
+
+   import emodeconnection as emc
+   emc.EModeLogin()
+
+
+The EMode class
+---------------
+
+.. class:: EMode(simulation_name = 'emode', license_type = 'default', clear = 'none', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None)
+
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode`` from the the command line.
+
+    An existing file can be opened for further analysis by specifying the input argument ``open_existing = True``. This opened file can be copied to a new file name by specifying the input argument ``new_name = 'new_filename'``.
+
+    .. note::
+        All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using keyword arguments for each funtion input parameter.
+
+    :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
+    :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available. Default: 'default'.
+    :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all', 'latest', 'oldest', and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
+    :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
+    :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the `clear()` function to terminate ghost license check-outs. Default: False.
+    :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
+    :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
+    :type new_name: bool or str
+    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN'.
+    :param list[str] emode_cmd: Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location, or if multiple versions are installed in different locations.
+
+
+Functions
+---------
+
+The ``emodeconnection`` package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.
+
+.. function:: EModeLogin()
+
+    Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+
+.. function:: open_file(simulation_name = 'emode')
+
+    Opens an EMode simulation file with the extension '.eph' or '.mat' and returns a dictionary with the file contents.
+
+    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :return: Dictionary with all keys and data from the specified EMode simulation file.
+    :rtype: dict
+
+.. function:: get(variable, simulation_name = 'emode')
+
+    Returns the contents of a specified variable from an EMode simulation file with the extension '.eph' or '.mat'.
+
+    :param str variable: Name of the variable to return from EMode.
+    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :return: Requested item from EMode.
+    :rtype: int, float, str, or array-like
+
+.. function:: inspect(simulation_name = 'emode')
+
+    Get the names of all variables from EMode simulation file with the extension '.eph' or '.mat'.
+
+    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get()` function.
+    :rtype: list
+
+Constants
+---------
+
+The ``emodeconnection.constants`` module contains the following constants.
+
+.. py:attribute:: c
+
+   The speed of light in vacuum in m/s.
+
+.. py:attribute:: eps_0
+
+   The vacuum permittivity in F/m.
+
+.. py:attribute:: mu_0
+
+   The vacuum permeability in H/m.
+
+.. py:attribute:: eta
+
+   The impedance of free space in Ohms.
+
+.. py:attribute:: e
+
+   The elementary charge in C.
+
+Types
+-----
+
+Four types are available as classes of the emodeconnection package to specify material properties, field data, and grid data.
+
+.. py:class:: MaterialProperties
+
+   A container for linear and non-linear electromagnetic material parameters. At least one of `n` or `eps` **must** be supplied in any valid instance.
+
+   :param n: Scalar or tensor refractive index. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.
+   :type n: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param eps: Relative permittivity tensor εᵣ. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.
+   :type eps: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param mu: Relative permeability tensor μᵣ. Same shape conventions as `eps`. Default: *None* (μᵣ = 1).
+   :type mu: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param d: Second-order nonlinear susceptibility *d*. Expected shape is 3x6. Use *None* when the material is linear. Default: *None*.
+   :type d: ~typing.Optional[~DTensorType]
+
+----
+
+.. py:class:: MaterialSpec
+
+   A container that defines the adjustable properties of a material being used. All properties default to the materials
+   defaults (typically 0).
+
+   :param material: Either a *str* pointing to a material in the Material Database, or a MaterialProperties object. Required.
+   :type material: ~typing.Union[str, ~MaterialProperties]
+
+   :param theta: The angle of rotation around *y* for the material in radians.
+   :type theta: ~typing.Optional[float]
+
+   :param phi: The angle of rotation around *z* for the material in radians. This is applied *after* the theta rotation.
+   :type phi: ~typing.Optional[float]
+
+   :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.
+   :type x: ~typing.Optional[float]
+
+   :param loss: The absorption loss of the material in dB/m.
+   :type loss: ~typing.Optional[float]
+
+----
+
+.. py:class:: Field
+
+   A container for field data.
+
+   :param field: An array of all of the fields, including all modes with shape [N_fields, N_modes, Nx, Ny].
+   :type field: array-like
+
+   :param field_names: A list of the field names, corresponding to the fields in the ``field`` array.
+   :type field_names: list[str]
+
+   :param num_modes: The number of modes.
+   :type num_modes: int
+
+   :param grid: A grid object associated with the fields.
+   :type grid: Grid
+
+----
+
+.. py:class:: Grid
+
+   A container that defines the simulation grid.
+
+   :param x: Array of the x grid center points of the mesh.
+   :type x: array-like
+
+   :param y: Array of the y grid center points of the mesh.
+   :type y: array-like
+
+   :param is_pml: Whether the grid includes a PML region.
+   :type is_pml: bool
+
+   :param is_expanded: Whether the grid includes an expansion region.
+   :type is_expanded: bool
+
+   :param is_bc: True if the boundary condition is '00', False for other boundary conditions.
+   :type is_bc: bool
+
+Exceptions
+----------
+
+The ``emodeconnection.types`` module also contains the following exception classes. All errors in EMode are raised and passed back to the user as one of these errors.
+
+.. py:class:: EModeError(*args, **kwargs)
+
+   Base class for all EMode exceptions.
+
+----
+
+.. py:class:: ArgumentError(msg, function=None, argument=None)
+
+   Invalid value passed to *function*.
+
+   :param str msg: Human-readable explanation.
+   :param str function: Function name.
+   :param str argument: Name of the offending argument.
+
+----
+
+.. py:class:: EPHKeyError(msg, filename, key)
+
+   Missing dataset or attribute *key* in the given EPH file.
+
+   :param str msg: Details of the failure.
+   :param str filename: Path to the EPH file.
+   :param str key: Absent key.
+
+----
+
+.. py:class:: FileError(msg, filename)
+
+   Generic file-system or I/O problem.
+
+   :param str msg: Description of the error.
+   :param str filename: File path involved.
+
+----
+
+.. py:class:: LicenseError(msg, license_type)
+
+   Operation not permitted under *license_type*.
+
+   :param str msg: Explanation of the denial.
+   :param LicenseType license_type: Active or required licence class.
+
+----
+
+.. py:class:: ShapeError(msg, shape_name)
+
+   Unexpected tensor or geometry shape.
+
+   :param str msg: Explanation of the mismatch.
+   :param str shape_name: Symbolic name of the offending shape.
+
+----
+
+.. py:class:: NameError(msg, type, name)
+
+   Forbidden *name* within the given *type* category.
+
+   :param str msg: Reason for the failure.
+   :param str type: Category being searched (e.g. ``"section"`` or ``"label"``).
+   :param str name: Forbidden identifier.
+
+----
+
+.. py:class:: NotImplementedError(msg)
+
+   Feature is recognised but not yet implemented.
+
+   :param str msg: Description of the missing capability.

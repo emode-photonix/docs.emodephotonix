@@ -1,9 +1,9 @@
 
-FEM
----
+Multi-Physics
+-------------
 
 .. data:: heat
-    
+
     Run a steady-state thermal simulation of a waveguide cross-section.
 
     .. warning::
@@ -15,7 +15,7 @@ FEM
         Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
 
         Each material in the EMode material database now has ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), and ``dn_dT`` (1/K).
-    
+
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param float boundary_temperature: Fixed temperature boundary condition in 'K' set along each perimeter indicated by ``boundaries``. Default: 298.
     :param list[str] boundaries:  'top', 'bottom', 'left', or 'right'; Indicates which boundaries are set to the fixed temperature ``boundary_temperature``. Default: ['bottom'].
@@ -24,7 +24,7 @@ FEM
     :return: A dictionary/struct with the mesh points (``p``), mesh triangles (``t``), ``temperature``, ``thermal_conductivity``, and ``heat_generation`` arrays. It also includes the ``boundary_temperature`` and ``boundaries`` settings.
 
 .. data:: electrostatic
-    
+
     Run a steady-state electrostatic simulation of a waveguide cross-section.
 
     .. warning::
@@ -34,9 +34,9 @@ FEM
         Each ``shape()`` also now accepts an input parameter called ``voltage`` (default: 0), which is set to create electric field sources.
 
         Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
-        
+
         Each material in the EMode material database now has ``eps_r_dc`` (relative permittivity at ~1 kHz).
-    
+
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param bool verbose: Control the display of the progress bar. Default: True.
     :param str simulation_name: Simulation name. Default: 'emode'.

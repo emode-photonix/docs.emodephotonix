@@ -7,10 +7,10 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 
@@ -69,64 +69,6 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
         ## Close EMode
         em.close()
-
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 20; dy = 20; % [nm] resolution
-        h_core = 220; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-
-        window_width = 4000;
-        window_height = h_core + h_clad*2;
-
-        num_modes = 10; % [-] number of modes
-        BC = 'TE';
-
-        %% Connect and initialize EMode
-        em = emodeconnection(simulation_name = 'taper', verbose = true);
-
-        %% Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, boundary_condition = BC, ...
-            background_material = 'SiO2');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', ...
-            height = h_clad);
-        em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core);
-
-        %% Launch FDM solver and label profiles
-        em.shape(name = 'core', mask = 1000);
-        em.label_profile(name = 'a'); % skips solving the modes here
-
-        em.shape(name = 'core', mask = 2000);
-        em.label_profile(name = 'b'); % skips solving the modes here
-
-        %% Draw EME sections
-        em.section(profile = 'a', section_type = 'straight', ...
-            length = 2000);
-
-        em.section(name = 'taper', section_type = 'taper', ...
-            profile = 'a', profile_end = 'b', ...
-            length = 8000);
-
-        em.section(profile = 'b', section_type = 'straight', ...
-            length = 2000);
-
-        %% Run EME sweep
-        data = em.sweep(key = 'section, taper, length', ...
-            values = 0:250:8000, ...
-            result = {'S_matrix'});
-
-        %% Close EMode
-        em.close();
 
 
 Console output::
@@ -244,10 +186,10 @@ Console output::
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 

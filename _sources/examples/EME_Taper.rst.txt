@@ -7,10 +7,10 @@ The simplest EMode example of an EME simulation.
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
 
         ## Set simulation parameters
@@ -72,68 +72,6 @@ The simplest EMode example of an EME simulation.
 
         ## Close EMode
         em.close()
-
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 20; dy = 20; % [nm] resolution
-        h_core = 220; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-
-        window_width = 4000;
-        window_height = h_core + h_clad*2;
-
-        num_modes = 10; % [-] number of modes
-        BC = 'TE';
-
-        %% Connect and initialize EMode
-        em = emodeconnection(verbose = true);
-
-        %% Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, boundary_condition = BC, ...
-            background_material = 'SiO2');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', ...
-            height = h_clad);
-        em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core);
-
-        %% Launch FDM solver and label profiles
-        em.shape(name = 'core', mask = 1000);
-        em.FDM(profile = 'a');
-        em.report();
-        em.plot();
-
-        em.shape(name = 'core', mask = 2000);
-        em.FDM(profile = 'b');
-        em.report();
-        em.plot();
-
-        %% Draw EME sections
-        em.section(profile = 'a', section_type = 'straight', ...
-            length = 2000);
-
-        em.section(section_type = 'taper', ...
-            profile = 'a', profile_end = 'b', ...
-            length = 8000);
-
-        em.section(profile = 'b', section_type = 'straight', ...
-            length = 2000);
-
-        %% Run EME and plot results
-        em.EME();
-        em.plot();
-        em.plot_S_matrix();
-
-        %% Close EMode
-        em.close();
 
 
 Console output::

@@ -316,7 +316,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fem.html">FEM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem.html">Multi-Physics</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
 <ul class="nav bd-sidenav">
@@ -380,7 +380,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="open">
 <span class="sig-name descname"><span class="pre">open</span></span></dt>
-<dd><p>Open an existing simulation ‘.eph’ or ‘.mat’ file. This can be used to retrieve previous simulation data or to run a simulation based on a template.</p>
+<dd><p>Open an existing simulation ‘.eph’ file. This can be used to retrieve previous simulation data or to run a simulation based on a template.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -395,7 +395,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="get">
 <span class="sig-name descname"><span class="pre">get</span></span></dt>
-<dd><p>Extract data from an existing simulation to your Python or MATLAB environment.</p>
+<dd><p>Extract data from an existing simulation to your Python environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -410,7 +410,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="get_fields">
 <span class="sig-name descname"><span class="pre">get_fields</span></span></dt>
-<dd><p>Extract field data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Field object, and in MATLAB it returns a struct.</p>
+<dd><p>Extract field data from an existing simulation to your Python environment. This returns a Field object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -428,7 +428,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="get_grid">
 <span class="sig-name descname"><span class="pre">get_grid</span></span></dt>
-<dd><p>Extract grid data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Grid object, and in MATLAB it returns a struct.</p>
+<dd><p>Extract grid data from an existing simulation to your Python environment. This returns a Grid object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -456,12 +456,11 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="save">
 <span class="sig-name descname"><span class="pre">save</span></span></dt>
-<dd><p>Saves a simulation file and keeps the simulation file in the ‘open’ state. The file can be saved as an EMode Photonix file (‘eph’) or as a MATLAB-style file (‘.mat’).</p>
+<dd><p>Saves a simulation file and keeps the simulation file in the ‘open’ state. The file is saved as an EMode Photonix file (‘eph’).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether all field data should be saved (so the <code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, and <code class="docutils literal notranslate"><span class="pre">S</span></code> fields can be accessed without an EMode license) or just the raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>), default: False</p></li>
-<li><p><strong>file_type</strong> (<em>str</em>) – file type to save simulation file (‘eph’ or ‘mat’), default: ‘eph’</p></li>
 <li><p><strong>new_save_path</strong> (<em>str</em>) – if set, saves the simulation file in this new path, default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
@@ -472,13 +471,12 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="close">
 <span class="sig-name descname"><span class="pre">close</span></span></dt>
-<dd><p>Saves or deletes a simulation file. The file can be saved as an EMode Photonix file (‘eph’) or as a MATLAB-style file (‘.mat’). This function is called through the “close” method of emodeconnection, and these optional parameters can be passed directly to the “close” method.</p>
+<dd><p>Saves or deletes a simulation file. The file is saved as an EMode Photonix file (‘eph’). This function is called through the “close” method of emodeconnection, and these optional parameters can be passed directly to the “close” method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save</strong> (<em>bool</em>) – saves simulation file if True and deletes the simulation file if False, default: True</p></li>
 <li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether all field data should be saved (so the <code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, and <code class="docutils literal notranslate"><span class="pre">S</span></code> fields can be accessed without an EMode license) or just the raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>), default: False</p></li>
-<li><p><strong>file_type</strong> (<em>str</em>) – file type to save simulation file (‘eph’ or ‘mat’), default: ‘eph’ for Python connections and ‘mat’ for MATLAB connections</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -546,7 +544,7 @@
 
   <p class="copyright">
     
-      © Copyright EMode Photonix LLC. All rights reserved.
+      © Copyright EMode, Inc. All rights reserved.
       <br/>
     
   </p>

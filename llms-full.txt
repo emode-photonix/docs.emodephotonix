@@ -3,9 +3,9 @@
    :glob:
    :maxdepth: 0
    :hidden:
-   
+
    installation
-   interface
+   Interface <interface>
    emodeguide
    examples
 
@@ -13,61 +13,61 @@
 EMode Documentation
 *******************
 
-.. **Version**: 0.1.2
-
 EMode is a software product by EMode Photonix, offering a solution for photonics simulation and device design.
 
-.. card:: Installation
+.. card:: **Installation**
    :link: installation
    :link-alt: Installation
    :link-type: doc
    :width: 75%
    :margin: 3
-   
+
    Step-by-step instructions for installing and configuring EMode.
 
-.. card:: Interface
+.. card:: **Interface**
    :link: interface
    :link-alt: Interface
    :link-type: doc
    :width: 75%
    :margin: 3
 
-   Learn how to setup either Python or MATLAB to interact with EMode.
+   Learn how to setup Python to interact with EMode.
 
-.. card:: EMode Guide
+.. card:: **EMode Guide**
    :link: emodeguide
    :link-alt: EMode Guide
    :link-type: doc
    :width: 75%
    :margin: 3
 
-   Detailed reference documentation for all EMode functions, including background information and explanations.
+   Detailed documentation for all EMode functions.
 
-.. card:: Examples
+.. card:: **Examples**
    :link: examples
    :link-alt: Examples
    :link-type: doc
    :width: 75%
    :margin: 3
 
-   A collection of practical examples and common simulation setups.
-
+   A collection of examples and common simulation setups.
 
 
 Installation
 ============
 
-Use this page to set up EMode and run a simple example.
-
 1. Get an EMode License
 -----------------------
 
-- First, `create an EMode account <https://emodephotonix.com/register/>`_.
-- Verify your account via the confirmation email.
-- Then, purchase a software license online through the `EMode store <https://emodephotonix.com/get-emode/>`_. This is required, even for a free EMode\ :sup:`2D`\  license.
+- `Create an EMode account <https://emodephotonix.com/register/>`_, and verify your account via the confirmation email.
+- Purchase a subscription license through the `EMode store <https://emodephotonix.com/get-emode/>`_. This is required, even for a free EMode\ :sup:`2D`\  license.
 
-2. Download and Install EMode
+2. Setup the Python Interface
+------------------------------
+
+- See the :ref:`Python Interface <python-interface>` page for instructions to install Python.
+- Follow the :ref:`Setup <SetupPython>` instructions to install the ``emodeconnection`` package.
+
+3. Download and Install EMode
 -----------------------------
 
 **System requirements**: 840 MB free disk space
@@ -76,28 +76,59 @@ Use this page to set up EMode and run a simple example.
     :columns: 3
 
     * **Windows** 10 or higher
-    * **Linux**, Ubuntu 22.04 or higher, x86-64 **(Beta)**
-    * **macOS** 13 Ventura or higher **(Beta)**
+    * **Linux**, Ubuntu 22.04 or higher, x86-64
+    * **macOS** 13 Ventura or higher
 
-To install EMode, follow these steps:
+There are two installation methods:
 
-#.  Login to your `EMode account <https://emodephotonix.com/my-account/>`_.
-#.  On your account page, select an operating system (Windows, Linux, or macOS) from the dropdown menu.
-#.  Click the ``Download EMode`` button to download the appropriate file for your selected operating system (an installer for Windows, an executable for Linux & macOS).
+.. tab-set::
 
-    * **For Windows Users**: Unzip and run the downloaded installer and follow the prompts to complete the installation.
-    * **For Linux and macOS Users**: The downloaded file is an executable, not an installer. You will need to unzip it and move it to a directory included in your system's `PATH`. Here is an example command to run from a terminal window.
+    .. tab-item:: emode-install
 
-      .. code-block:: bash
+        The ``emode-install`` command-line tool is included with the ``emodeconnection``
+        Python package. It handles downloading, installing, and updating EMode.
+        After installing ``emodeconnection`` via pip, you can run the installer.
+        You will be prompted to accept the
+        `EMode EULA <https://emodephotonix.com/legal/eula.pdf>`_ and log in
+        with your EMode account credentials. For additional options, see the
+        :ref:`EMode Install <emode-install>` instructions or run ``emode-install --help``.
 
-        unzip emode.zip
-        sudo mv ~/Downloads/emode /usr/local/bin/
+        .. code-block:: bash
 
-      .. warning::
-        The Linux and macOS versions of EMode are currently in beta. Please `report <https://emodephotonix.com/contact/>`_ any problems you find.
+            emode-install
 
-      .. tip::
-        On macOS with an ARM processor (Apple Silicon), the first time you run EMode, you may see a prompt asking you to install **Rosetta 2**. Please proceed with this installation.
+    .. tab-item:: Manual install
+
+        #. Login to your `EMode account <https://emodephotonix.com/my-account/>`_.
+        #. Select your operating system and version from the dropdown menus.
+        #. Accept the EMode End User License Agreement.
+        #. Click ``Download EMode`` to download the file for your platform.
+
+        **Windows**
+
+        Unzip the downloaded ``.zip`` file and double-click the installer
+        (``.exe``). Follow the on-screen prompts to complete installation.
+        EMode will be added to your PATH automatically.
+
+        **macOS**
+
+        Double-click the downloaded ``.pkg`` file and follow the installer
+        prompts. Administrator access may be required. EMode will be installed
+        to ``/usr/local/bin/emode``.
+
+        **Linux**
+
+        Unzip the downloaded ``.zip`` file and run the ``install.sh`` script:
+
+        .. code-block:: bash
+
+            unzip EMode-VERSION-Linux.zip
+            sh install.sh
+
+.. tip::
+
+    On macOS with Apple silicon, EMode runs via Rosetta 2,
+    which you may be prompted to install on the first run.
 
 .. hlist::
    :columns: 2
@@ -105,53 +136,13 @@ To install EMode, follow these steps:
    * `Release notes <installation/release-notes.html>`_
    * `Troubleshooting <installation/troubleshooting.html>`_
 
-3. Setup a Scripting Interface
-------------------------------
-
-.. grid:: 2
-    :gutter: 4
-    :padding: 0
-    :margin: auto
-
-    .. grid-item-card:: :ref:`Python setup <SetupPython>`
-
-    .. grid-item-card:: :ref:`MATLAB setup <SetupMATLAB>`
-
 4. Run an EMode Example Script
 ------------------------------
 
 - Copy and run the `Basic: SOI <examples/SOI.html>`_ example in your scripting environment.
-- An account login window will open when EMode is first initialized. To subsequently access this window, run ``EMode`` from the command line.
+- A login window will open when EMode is first initialized. To subsequently access this window, see :ref:`EMode Login <PythonEModeLogin>`.
 
 If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.
-
-
-
-Interface
-=========
-
-EMode requires either Python or MATLAB as an interface to run EMode with script-based commands.
-
-.. toctree::
-   :maxdepth: 0
-   :hidden:
-   
-   emodeconnection_python
-   emodeconnection_matlab
-
-.. card:: Python Interface
-   :link: emodeconnection_python
-   :link-alt: Python Interface
-   :link-type: doc
-   :width: 50%
-   :margin: 3
-
-.. card:: MATLAB Interface
-   :link: emodeconnection_matlab
-   :link-alt: MATLAB Interface
-   :link-type: doc
-   :width: 50%
-   :margin: 3
 
 
 .. _python-interface:
@@ -166,11 +157,10 @@ The source code can be viewed here: `emodeconnection <https://github.com/emode-p
 For more information about Python, see these links:
 
 .. hlist::
-   :columns: 2
+   :columns: 3
 
-   - `Python documentation <https://docs.python.org/3/tutorial/>`_
    - `Download Python <https://www.python.org/downloads/>`_
-   - `Real Python <https://realpython.com/>`_
+   - `Python Documentation <https://docs.python.org/3/tutorial/>`_
    - `Python Tutorial <https://www.pythontutorial.net/>`_
 
 .. _SetupPython:
@@ -184,12 +174,66 @@ Install the ``emodeconnection`` Python package from the command line.
 
    pip install emodeconnection
 
+Update to the latest version with:
+
+.. code-block::
+
+   pip install -U emodeconnection
+
+.. _emode-install:
+
+Install EMode
+-------------
+
+The ``emode-install`` command-line tool is included with the ``emodeconnection``
+Python package. It handles downloading, installing, and updating EMode.
+After installing ``emodeconnection`` via pip, you can run the installer.
+You will be prompted to accept the
+`EMode EULA <https://emodephotonix.com/legal/eula.pdf>`_ and log in
+with your EMode account credentials. For additional complete options,
+run ``emode-install --help``.
+
+.. code-block:: bash
+
+    emode-install
+
+Additional options:
+
+.. code-block:: bash
+
+    emode-install                            # Install latest version
+    emode-install --help                     # Show all options
+    emode-install --list-versions            # Show available versions
+    emode-install --update                   # Update to the latest version
+    emode-install --update --version 0.2.5   # Switch to a specific version
+    emode-install --version 0.2.5            # Install a specific version
+    emode-install --install-dir /opt/bin     # Custom install directory
+    emode-install --uninstall                # Remove EMode
+    emode-install --uninstall --install-dir /opt/bin  # Remove from custom location
+
+For automated or headless installs, set these environment variables
+to skip interactive prompts:
+
++-------------------------+-------------------------------------------------+
+| Variable                | Description                                     |
++=========================+=================================================+
+| `EMODE_EULA_ACCEPTED=1` | Accept the EULA non-interactively (CI/headless) |
++-------------------------+-------------------------------------------------+
+| `EMODE_EMAIL`           | Pre-fill login email                            |
++-------------------------+-------------------------------------------------+
+| `EMODE_PASSWORD`        | Pre-fill password (use with caution)            |
++-------------------------+-------------------------------------------------+
+| `EMODE_INTERACTIVE=1`   | Use interactive installer GUI                   |
++-------------------------+-------------------------------------------------+
+| `UNINSTALL_EMODE=y`     | Accept the uninstallation non-interactively     |
++-------------------------+-------------------------------------------------+
+
 .. _PythonEModeLogin:
 
 EMode Login
 -----------
 
-Open a Python session and run the following. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
+Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. code-block::
 
@@ -213,12 +257,12 @@ The EMode class
     :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all', 'latest', 'oldest', and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
     :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
     :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
-    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license. Default: False.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the `clear()` function to terminate ghost license check-outs. Default: False.
     :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
     :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
     :type new_name: bool or str
     :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN'.
-    :param list[str] emode_cmd: Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location.
+    :param list[str] emode_cmd: Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location, or if multiple versions are installed in different locations.
 
 Functions
 ---------
@@ -282,7 +326,7 @@ The ``emodeconnection.constants`` module contains the following constants.
 Types
 -----
 
-Two types that can be used for specifying material properties are available as classes of the emodeconnection package.
+Four types are available as classes of the emodeconnection package to specify material properties, field data, and grid data.
 
 .. py:class:: MaterialProperties
 
@@ -328,7 +372,7 @@ Two types that can be used for specifying material properties are available as c
 
    A container for field data.
 
-   :param field: An array of all of the fields, including all modes.
+   :param field: An array of all of the fields, including all modes with shape [N_fields, N_modes, Nx, Ny].
    :type field: array-like
 
    :param field_names: A list of the field names, corresponding to the fields in the ``field`` array.
@@ -358,7 +402,7 @@ Two types that can be used for specifying material properties are available as c
    :param is_expanded: Whether the grid includes an expansion region.
    :type is_expanded: bool
 
-   :param is_bc: Whether the grid represents a base-grid, which omits boundary condition modifications, PMLs, and expansions.
+   :param is_bc: True if the boundary condition is '00', False for other boundary conditions.
    :type is_bc: bool
 
 Exceptions
@@ -435,195 +479,12 @@ The ``emodeconnection.types`` module also contains the following exception class
 
    :param str msg: Description of the missing capability.
 
-Updating the Python Interface
------------------------------
-
-Update the ``emodeconnection`` Python package to the latest version with:
-
-.. code-block::
-
-   pip install -U emodeconnection
-
-
-
-MATLAB Interface
-================
-
-To control EMode directly from a MATLAB script (version R2021a or higher), we supply a class file called ``emodeconnection.m`` that is automatically installed alongside EMode.
-
-For more information about MATLAB, check out this link:
-
-.. hlist::
-   :columns: 1
-
-   - `Get Started with MATLAB <https://www.mathworks.com/help/matlab/getting-started-with-matlab.html/>`_
-
-.. _SetupMATLAB:
-
-Setup
------
-
-Windows
-^^^^^^^
-
-The standard installation for Windows automatically includes this step. This is only necessary for Windows users during a manual emodeconnection update or if MATLAB is installed after installing EMode.
-
-Run the following in your MATLAB command window.
-
-.. code-block::
-
-    addpath(fullfile('C:', 'Program Files', 'EMode Photonix', 'EMode')); savepath;
-
-MacOs and Linux
-^^^^^^^^^^^^^^^
-
-1. The setup for macOS and Linux platforms first requires downloading :ref:`emodeconnection.m<MATLAB Download>`. Save this content as ``emodeconnection.m`` in the Downloads directory.
-
-2. Run the following in the terminal window to move ``emodeconnection.m`` to a permanent location.
-
-.. code-block::
-
-    sudo mv ~/Downloads/emodeconnection.m /usr/local/bin/
-
-3. Run the follwing in the MATLAB terminal to add this location to the MATLAB path.
-
-.. code-block::
-
-    addpath('/usr/local/bin/'); savepath;
-
-4. Install .NET by following `these instructions <https://learn.microsoft.com/en-us/dotnet/core/install/>`_.
-
-.. _MATLABEModeLogin:
-
-EMode Login
------------
-
-Open MATLAB and run the following in the MATLAB command line. This will open the EMode Login GUI to login to your EMode Photonix account and view the active license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
-
-.. code-block::
-
-    emodeconnection.EModeLogin()
-
-The EMode class
----------------
-
-.. class:: emodeconnection(name, value)
-
-    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, initializing this class will prompt for the user credentials. To reset the user profile, see ``EMode Login``.
-
-    An existing file can be opened for further analysis by specifying the input name-value pair ``'open_existing', true`` or ``open_existing = true``. This opened file can be copied to a new file name by specifying the input name-value pair ``'new_name', 'new_filename'`` or ``new_name = 'new_filename'``.
-
-    By default, calling the `close()` method saves the simulation file as a MATLAB-style .mat file. Adding optional input parameters can override this behavior to either delete the simulation file or save it as a .eph file.
-
-    .. note::
-        All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using name-value pair input arguments for each funtion input parameter, in the format of ("name_1", value_1, "name_2", value_2, "name_3", value_3, ...) or (name_1 = value_1, name_2 = value_2, name_3 = value_3, ...).
-
-    :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
-    :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available. Default: 'default'.
-    :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
-    :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
-    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 30 minutes, allowing licenses to reset after 30 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 3 days to support long simulations without continuously re-checking the license. Default: False.
-    :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
-    :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
-    :type new_name: bool or str
-    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN'.
-
-Functions
----------
-
-The ``emodeconnection`` package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.
-
-    .. staticmethod:: EModeLogin()
-        :noindex:
-
-        Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
-
-    .. staticmethod:: open_file(simulation_name)
-        :noindex:
-
-        Returns an EMode simulation file name with the extension ".mat" to be passed to the MATLAB load() function.
-
-        :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name. Default: 'emode'.
-        :return: Name of the specified EMode simulation file if it is available.
-        :rtype: char array
-
-    .. staticmethod:: get_(variable, simulation_name)
-
-        Returns the contents of a specified variable from an EMode simulation file with the extension ".mat".
-
-        :param str variable: Name of the variable to return from EMode. Default: 'emode'.
-        :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name.
-        :return: Requested item from EMode.
-        :rtype: int, float, str, or array-like
-
-    .. staticmethod:: inspect_(simulation_name)
-
-        Get the names of all variables from EMode simulation file with the extension ".mat".
-
-        :param str simulation_name: Name of the simulation file. The ".mat" extension is optional to include with the name. Default: 'emode'.
-        :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get_()` function.
-        :rtype: list
-
-Types
------
-
-Two types that can be used for specifying material properties are available as struct attributes of the emodeconnection class.
-
-.. py:attribute:: MaterialProperties
-
-   A container for linear and non-linear electromagnetic material parameters. At least one of `n` or `eps` **must** be supplied in any valid instance.
-
-   :param n: Scalar or tensor refractive index. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.
-   :type n: ~typing.Optional[float | list[float] | list[list[float]]]
-
-   :param eps: Relative permittivity tensor εᵣ. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.
-   :type eps: ~typing.Optional[float | list[float] | list[list[float]]]
-
-   :param mu: Relative permeability tensor μᵣ. Same shape conventions as `eps`. Default: *None* (μᵣ = 1).
-   :type mu: ~typing.Optional[float | list[float] | list[list[float]]]
-
-   :param d: Second-order nonlinear susceptibility *d*. Expected shape is 3x6. Use *None* when the material is linear. Default: *None*.
-   :type d: ~typing.Optional[~DTensorType]
-
-----
-
-.. py:attribute:: MaterialSpec
-
-   A container that defines the adjustable properties of a material being used. All properties default to the materials
-   defaults (typically 0).
-
-   :param material: Either a *str* of a material in the Material Database, or a MaterialProperties struct. Required.
-   :type material: ~typing.Union[str, ~MaterialProperties]
-
-   :param theta: The angle of rotation around *y* for the material in radians.
-   :type theta: ~typing.Optional[float]
-
-   :param phi: The angle of rotation around *z* for the material in radians. This is applied *after* the theta rotation.
-   :type phi: ~typing.Optional[float]
-
-   :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored for materials without this parameter. Must be between 0 and 1. Default: 0.
-   :type x: ~typing.Optional[float]
-
-   :param loss: The absorption loss of the material in dB/m.
-   :type loss: ~typing.Optional[float]
-
-.. _MATLAB Download:
-
-Updating the MATLAB Interface
------------------------------
-
-The latest version of ``emodeconnection.m`` can also be downloaded at the following link, which must be added to the EMode executable directory (or another directory in the MATLAB path). This is not necessary to setup EMode with MATLAB, and it is only intended for updating this connection package without re-installing EMode.
-
-.. raw:: html
-
-   <a href="https://raw.githubusercontent.com/emode-photonix/emodeconnection/main/emodeconnection_matlab/emodeconnection.m" download="emodeconnection.m">emodeconnection.m</a>
-
 
 
 EMode Guide
 ===========
 
-**User profile login**: run ``emode`` from the command line. Enter your EMode account credentials to save your profile.
+Run the :ref:`EMode Login <PythonEModeLogin>` GUI to locally save your EMode account credentials.
 
 .. grid:: 2
     :gutter: 4
@@ -643,13 +504,13 @@ EMode Guide
         :columns: 6
 
         * `EME <emodeguide/eme.html>`_
-        * `FEM <emodeguide/fem.html>`_
+        * `Multi-Physics <emodeguide/fem.html>`_
 
 .. toctree::
     :maxdepth: 0
     :caption: EMode2D Functions
     :hidden:
-    
+
     emodeguide/file-management
     emodeguide/setup
     emodeguide/solver-analysis
@@ -658,14 +519,15 @@ EMode Guide
     :maxdepth: 0
     :caption: EMode3D Functions
     :hidden:
-    
+
     emodeguide/eme
     emodeguide/fem
 
 .. toctree::
    :caption: Glossaries
    :maxdepth: 1
-   
+   :hidden:
+
    emodeguide/variables
    emodeguide/materials
 
@@ -673,7 +535,7 @@ EMode Guide
     :maxdepth: 0
     :caption: Installation
     :hidden:
-    
+
     installation/release-notes
     installation/troubleshooting
 
@@ -734,32 +596,32 @@ File management
 Simulation data are stored in an EMode Photonix file with the extension '.eph'. This file is created when a simulation is initialized, and existing simulation files can be opened by EMode for further analysis.
 
 .. data:: init
-    
+
     Create a simulation instance with an associated '.eph' file to run the simulation and store data. This function is automatically called when the emodeconnection class is initialized.
-    
+
     :param str save_path: path to save the simulation file relative to the current working directory, default: '.'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: open
-    
-    Open an existing simulation '.eph' or '.mat' file. This can be used to retrieve previous simulation data or to run a simulation based on a template.
-    
+
+    Open an existing simulation '.eph' file. This can be used to retrieve previous simulation data or to run a simulation based on a template.
+
     :param str save_path: path to open the simulation file relative to the current working directory, default: '.'
     :param str simulation_name: simulation name, default: 'emode'
     :param str new_name: new simulation name so the old file is not over-written, default: ``simulation_name``
 
 .. data:: get
-    
-    Extract data from an existing simulation to your Python or MATLAB environment.
-    
+
+    Extract data from an existing simulation to your Python environment.
+
     :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables.
     :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_fields
-    
-    Extract field data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Field object, and in MATLAB it returns a struct.
-    
+
+    Extract field data from an existing simulation to your Python environment. This returns a Field object.
+
     :param str key: name of the field to extract a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``].
     :type key: str or list[str]
     :param bool include_expand: whether to include the expanded region, default: True
@@ -769,8 +631,8 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_grid
-    
-    Extract grid data from an existing simulation to your Python or MATLAB environment. In Python, this returns a Grid object, and in MATLAB it returns a struct.
+
+    Extract grid data from an existing simulation to your Python environment. This returns a Grid object.
 
     :param bool include_expand: whether to include the expanded region, default: True
     :param bool include_pml: whether to include the PML region, default: True
@@ -779,318 +641,26 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: clear_field_data
-    
+
     Deletes the following data to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
-    
+
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: save
-    
-    Saves a simulation file and keeps the simulation file in the 'open' state. The file can be saved as an EMode Photonix file ('eph') or as a MATLAB-style file ('.mat').
-    
+
+    Saves a simulation file and keeps the simulation file in the 'open' state. The file is saved as an EMode Photonix file ('eph').
+
     :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
-    :param str file_type: file type to save simulation file ('eph' or 'mat'), default: 'eph'
     :param str new_save_path: if set, saves the simulation file in this new path, default: None
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: close
-    
-    Saves or deletes a simulation file. The file can be saved as an EMode Photonix file ('eph') or as a MATLAB-style file ('.mat'). This function is called through the "close" method of emodeconnection, and these optional parameters can be passed directly to the "close" method.
-    
+
+    Saves or deletes a simulation file. The file is saved as an EMode Photonix file ('eph'). This function is called through the "close" method of emodeconnection, and these optional parameters can be passed directly to the "close" method.
+
     :param bool save: saves simulation file if True and deletes the simulation file if False, default: True
     :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
-    :param str file_type: file type to save simulation file ('eph' or 'mat'), default: 'eph' for Python connections and 'mat' for MATLAB connections
     :param str simulation_name: simulation name, default: 'emode'
-
-
-
-EMode 0.0.5-b3 Updates
-======================
-
-New function, input parameter, and variable names
--------------------------------------------------
-
-Each function, input parameter, and variable that has changed name starting with EMode version 0.0.5-b3 is listed below with the following nomenclature. Functions, input parameters, and variables that have not changed names are not listed. The alias in an optional name for the variable, to help with backwards compatability. However, when an alias is not specified, only the new name is supported.
-
-    Old name → New name [alias]
-
-Functions with input parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. data:: EM_init → init
-    :noindex:
-    
-    (new) → save_path
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_open → open
-    :noindex:
-    
-    (new) → save_path
-    
-    sim → simulation_name [sim]
-    
-    new_name → new_simulation_name
-
-.. data:: EM_clear_field_data → clear_field_data
-    :noindex:
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_save → save
-    :noindex:
-    
-    (new) → save_all_fields
-    
-    ftype → file_type
-    
-    (new) → new_save_path
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_close → close
-    :noindex:
-    
-    (new) → save_all_fields
-    
-    ftype → file_type
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_settings → settings
-    :noindex:
-    
-    wav → wavelength [wav]
-    
-    res → x_resolution, y_resolution [res]
-    
-    width → window_width 
-    
-    height → window_height
-    
-    x_offset → (remove completely)
-    
-    BC → boundary_condition [BC]
-    
-    N_modes → num_modes [N_modes]
-    
-    (new) → field_to_solve
-    
-    guess → max_effective_index [guess]
-    
-    tol → tolerance [tol]
-    
-    radius → bend_radius [radius]
-    
-    pml → pml_NSEW_bool [pml]
-    
-    N_pml → num_pml_layers [N_pml]
-    
-    remove_pml_modes → remove_pml_modes_bool
-    
-    bg_index → background_refractive_index [bg_index]
-    
-    expand_res → expansion_resolution [expand_res]
-    
-    expand_size → expansion_size [expand_size]
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_add_material → add_material
-    :noindex:
-    
-    equation → refractive_index_equation [eq]
-    
-    unit → wavelength_unit
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_shape → shape
-    :noindex:
-    
-    index → refractive_index [index]
-    
-    mu → permeability
-    
-    alpha → loss_dB_per_m [alpha]
-    
-    vs → vertices [vs]
-    
-    pos → position
-    
-    etch → etch_depth [etch]
-    
-    angle → sidewall_angle [angle]
-    
-    fill_index → fill_refractive_index [fill_index]
-    
-    fill_mu → fill_permeability
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_FDM → FDM
-    :noindex:
-    
-    field_calc → (removed)
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_confinement → confinement
-    :noindex:
-    
-    shapes → shape_list [shapes]
-    
-    modes → mode_list [modes]
-    
-    vs → vertices [vs]
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_effective_area → effective_area
-    :noindex:
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_group_index → group_index
-    :noindex:
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_report → report
-    :noindex:
-    
-    filename → file_name
-    
-    ftype → file_type
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_label → label
-    :noindex:
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_calc_overlap → overlap
-    :noindex:
-    
-    label0 → label_a
-    
-    m0 → mode_a
-    
-    sim0 → simulation_name_a
-    
-    label → label_b
-    
-    m → mode_b
-    
-    sim → simulation_name_b
-
-.. data:: EM_scattering → scattering
-    :noindex:
-    
-    mode → mode_list
-    
-    Lc_nm → correlation_length [Lc_nm]
-    
-    st_dev_nm → roughness_rms [st_dev_nm]
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_plot → plot
-    :noindex:
-    
-    plot_fn → plot_function
-    
-    aspect → aspect_ratio
-    
-    filename → file_name
-    
-    ftype → file_type
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_materials → material_explorer
-    :noindex:
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_index → refractive_index
-    :noindex:
-    
-    wav_nm → wavelength
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_mu → permeability
-    :noindex:
-    
-    wav_nm → wavelength
-    
-    sim → simulation_name [sim]
-
-.. data:: EM_mesh → mesh
-    :noindex:
-    
-    sim → simulation_name [sim]
-
-Variables in the simulation file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. hlist::
-    :columns: 2
-    
-    * wavelength_nm → wavelength
-    * res → x_resolution, y_resolution [res]
-    * width → window_width
-    * height → window_height
-    * BC → boundary_condition [BC]
-    * N_modes → num_modes
-    * field → field_to_solve
-    * guess → max_effective_index
-    * tol → tolerance
-    * radius → bend_radius [radius]
-    * pml → pml_NSEW_bool
-    * N_pml → num_pml_layers
-    * remove_pml_modes → remove_pml_modes_bool
-    * bg_index → background_refractive_index
-    * expand_res → expansion_resolution
-    * expand_size → expansion_size
-    * shape_*_index → shape_*_refractive_index
-    * shape_*_mu → shape_*_permeability
-    * shape_*_alpha → shape_*_loss_dB_per_m
-    * shape_*_vs → shape_*_vertices
-    * shape_*_pos → shape_*_position
-    * shape_*_etch → shape_*_etch_depth
-    * shape_*_angle → shape_*_sidewall_angle
-    * shape_*_fill_index → shape_*_fill_refractive_index
-    * shape_*_fill_mu → shape_*_fill_permeability
-    * shape_*_index_value → shape_*_refractive_index_value
-    * all_shapes → shape_list
-    * User_material_* → user_material_*
-    * x → x_edge
-    * y → y_edge
-    * xc → x
-    * yc → y
-    * mu → permeability 
-    * eps → permittivity
-    * mesh_up_to_date → mesh_complete_bool
-    * solve_pml → (removed)
-    * x_pml → (removed)
-    * y_pml → (removed)
-    * eps_pml → (removed)
-    * mu_pml → (removed)
-    * n_eff → effective_index [n_eff]
-    * alpha → loss_dB_per_m [alpha]
-    * TE_frac → TE_fraction
-    * ind_TE → TE_indices
-    * ind_TM → TM_indices
-    * modes_removed → pml_modes_removed
-    * n_g → group_index [n_g]
-    * shape_*_scattering_vertical → shape_*_scattering_vertical_edges
-    * shape_*_scattering_horizontal → shape_*_scattering_horizontal_edges
-    * shape_*_scattering_edges → shape_*_scattering_all_edges
-    * shape_*_scattering → shape_*_scattering_sum
 
 
 
@@ -1157,11 +727,11 @@ EME
 
 
 
-FEM
----
+Multi-Physics
+-------------
 
 .. data:: heat
-    
+
     Run a steady-state thermal simulation of a waveguide cross-section.
 
     .. warning::
@@ -1173,7 +743,7 @@ FEM
         Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
 
         Each material in the EMode material database now has ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), and ``dn_dT`` (1/K).
-    
+
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param float boundary_temperature: Fixed temperature boundary condition in 'K' set along each perimeter indicated by ``boundaries``. Default: 298.
     :param list[str] boundaries:  'top', 'bottom', 'left', or 'right'; Indicates which boundaries are set to the fixed temperature ``boundary_temperature``. Default: ['bottom'].
@@ -1182,7 +752,7 @@ FEM
     :return: A dictionary/struct with the mesh points (``p``), mesh triangles (``t``), ``temperature``, ``thermal_conductivity``, and ``heat_generation`` arrays. It also includes the ``boundary_temperature`` and ``boundaries`` settings.
 
 .. data:: electrostatic
-    
+
     Run a steady-state electrostatic simulation of a waveguide cross-section.
 
     .. warning::
@@ -1192,9 +762,9 @@ FEM
         Each ``shape()`` also now accepts an input parameter called ``voltage`` (default: 0), which is set to create electric field sources.
 
         Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
-        
+
         Each material in the EMode material database now has ``eps_r_dc`` (relative permittivity at ~1 kHz).
-    
+
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param bool verbose: Control the display of the progress bar. Default: True.
     :param str simulation_name: Simulation name. Default: 'emode'.
@@ -1628,7 +1198,7 @@ Solver and analysis
     Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
 
     .. math::
-        \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
+        \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
 
     It also calculates the TE fraction of each mode (``TE_fraction``) with the following equation, and it saves the indices of the TE and TM modes (``TE_indices`` and ``TM_indices``).
 
@@ -1705,12 +1275,12 @@ Solver and analysis
 
 .. data:: overlap
 
-    Calculate overlap integral between two modes. The result is saved as ``overlap``.
+    Calculate overlap integral between two modes. The result is saved in the profile metadata as ``overlap`` and is returned by this function.
 
         Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
 
     .. math::
-        \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
+        \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_1 \times \vec H_2 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \times \vec H_1 \right| \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \times \vec H_2 \right| \, \mathrm{d}x \, \mathrm{d}y}
 
     :param str label_a: label of first mode set, or a blank string for the current mode set, default: ''
     :param int mode_a: mode number from the first mode set, default: 0
@@ -1721,7 +1291,7 @@ Solver and analysis
 
 .. data:: scattering
 
-    Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE['scattering_sum']`` (total scattering loss), ``SHAPE['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.
+    Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE.metadata['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE.metadata['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE.metadata['scattering_sum']`` (total scattering loss), ``SHAPE.metadata['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE.metadata['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.
 
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
 
@@ -1762,7 +1332,7 @@ Solver and analysis
 
 .. data:: refractive_index
 
-    Returns the refractive index from a material name (retrieved from the internal reference list) or from a custom refractive index value. Optionally, the material's reference (or citation) may be returned.
+    Returns the refractive index from a material name (retrieved from the internal reference list), a MaterialSpec object, or from a custom refractive index value. Optionally, the material's reference (or citation) may be returned.
 
     :param material: material name; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: "AlGaAs, 0.2" for a Al_{0.2}Ga_{0.8}As.
     :type material: str
@@ -2196,45 +1766,30 @@ Examples
 To launch EMode, initialize a simulation, and check out an active license:
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         em = emc.EMode()
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        em = emodeconnection();
 
 Next, EMode functions are called with:
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         em.function_name(keyword_1 = value_1, keyword_2 = value_2, ... )
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        em.function_name(keyword_1 = value_1, keyword_2 = value_2, ... );
 
 Close EMode and check in the license with:
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         em.close()
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        em.close();
 
 Example  Scripts
 ^^^^^^^^^^^^^^^^
@@ -2248,26 +1803,32 @@ Example  Scripts
         :shadow: md
         :columns: 6
 
-        * :doc:`SOI <examples//SOI>`
-        * :doc:`SiN <examples//SiN>`
-        * :doc:`LNOI <examples//LNOI>`
-        * :doc:`Laser <examples//Laser>`
-        * :doc:`Open <examples//Open>`
-        * :doc:`Dispersion <examples//Dispersion>`
+        .. hlist::
+            :columns: 3
+
+            * :doc:`SOI <examples//SOI>`
+            * :doc:`SiN <examples//SiN>`
+            * :doc:`LNOI <examples//LNOI>`
+            * :doc:`Laser <examples//Laser>`
+            * :doc:`Open <examples//Open>`
+            * :doc:`Dispersion <examples//Dispersion>`
 
     .. grid-item-card:: EMode\ :sup:`3D`\  Scripts
         :shadow: md
         :columns: 6
 
-        * :doc:`EME: Taper <examples//EME_Taper>`
-        * :doc:`EME: Sweep <examples//EME_Sweep>`
-        * :doc:`EME: GDS <examples//EME_GDS>`
+        .. hlist::
+            :columns: 2
+
+            * :doc:`EME: Taper <examples//EME_Taper>`
+            * :doc:`EME: Sweep <examples//EME_Sweep>`
+            * :doc:`EME: GDS <examples//EME_GDS>`
 
 .. toctree::
    :maxdepth: 1
-   :caption: EMode2D Scripts  
+   :caption: EMode2D Scripts
    :hidden:
-   
+
    examples//SOI
    examples//SiN
    examples//LNOI
@@ -2279,7 +1840,7 @@ Example  Scripts
    :maxdepth: 1
    :caption: EMode3D Scripts
    :hidden:
-   
+
    examples//EME_Taper
    examples//EME_Sweep
    examples//EME_GDS
@@ -2294,10 +1855,10 @@ The simplest EMode simulation example.
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
 
         ## Set simulation parameters
@@ -2333,43 +1894,6 @@ The simplest EMode simulation example.
 
         ## Close EMode
         em.close()
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        % Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 10; dy = 10; % [nm] resolution
-        w_core = 600; % [nm] waveguide core width
-        w_trench = 800; % [nm] waveguide side trench width
-        h_core = 500; % [nm] waveguide core height
-        h_clad = 800; % [nm] waveguide top and bottom clad
-        num_modes = 2; % [-] number of modes
-
-        % Connect and initialize EMode
-        em = emodeconnection();
-
-        % Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = w_core + w_trench*2, window_height = h_core + h_clad*2, ...
-            num_modes = num_modes, background_material = 'Air');
-
-        % Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', height = h_clad);
-        em.shape(name = 'core', material = 'Si', width = w_core, height = h_core);
-
-        % Launch FDM solver
-        em.FDM();
-
-        % Display the effective indices, TE fractions, and core confinement
-        em.report();
-
-        % Plot the field and refractive index profiles
-        em.plot();
-
-        % Close EMode
-        em.close();
 
 Console output::
 
@@ -2413,10 +1937,10 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
 
         ## Set simulation parameters
@@ -2473,64 +1997,6 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         variables = em.inspect()
         em.close()
 
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        % Set simulation parameters
-        wavelength = 980; % [nm] wavelength
-        dx = 10; dy = 10; % [nm] resolution
-        w_core = 2000; % [nm] waveguide core width
-        w_trench = 2500; % [nm] waveguide side trench width
-        h_core = 200; % [nm] waveguide core height
-        h_clad = 2500; % [nm] waveguide top and bottom clad
-        window_width = w_core + w_trench*2; % [nm]
-        window_height = h_core + h_clad*2; % [nm]
-        num_modes = 1; % [-] number of modes
-        boundary = 'TE'; % boundary condition
-
-        bend_radius = 100e3; % [nm] bend radius
-        x_off = 500; % [nm] waveguide x-offset for applying the bend radius at the center of the waveguide core rather than the center of the window
-
-        % Connect and initialize EMode
-        em = emodeconnection();
-
-        % Add custom material
-        equation = '(1 + 0.6961663/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2) + 0.8974794/(1 - (9.896161/x)^2))^0.5';
-        em.add_material(name = 'custom_SiO2', ...
-            refractive_index_equation = equation, wavelength_unit = 'um');
-
-        % Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, background_material = 'custom_SiO2', ...
-            boundary_condition = boundary, bend_radius = bend_radius + x_off, ...
-            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 10, ...
-            max_effective_index = 1.7);
-
-        % Draw shapes
-        em.shape(name = 'core', material = 'SiN', width = w_core, ...
-                height = h_core, position = [-x_off, window_height/2]);
-
-        % Launch FDM solver
-        em.FDM();
-
-        % Display the effective indices, loss, and core confinement
-        em.confinement();
-        em.report();
-
-        % Plot the field and refractive index profiles
-        em.plot(component = 'Ex', file_name = 'field_plot', file_type = 'png');
-        em.plot(component = 'Index', file_name = 'index_plot', file_type = 'png');
-
-        % Plot the field and refractive index profiles
-        em.plot();
-
-        % Collect all variable names and close EMode
-        variables = em.inspect();
-        em.close();
-
 Console output::
 
     EMode3D 0.2.5 - email
@@ -2567,10 +2033,10 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 
@@ -2636,77 +2102,6 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         ## Close EMode
         em.close()
 
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        % Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 10; dy = 10; % [nm] resolution
-        w_core = 1000; % [nm] waveguide core width
-        w_trench = 1000; % [nm] waveguide side trench width
-        h_core = 500; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-        window_width = w_core + w_trench*2; % [nm]
-        window_height = h_core + h_clad*2; % [nm]
-        num_modes = 1; % [-] number of modes
-        boundary = '0S'; % boundary condition
-
-        % Connect and initialize EMode
-        em = emodeconnection();
-
-        % View material database
-        em.material_explorer();
-
-        % Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, background_material = 'Air', ...
-            boundary_condition = boundary, ...
-            expansion_resolution = 20, expansion_size = 1500);
-
-        % Draw shapes
-        em.MaterialSpec.material = 'LN_MgO';
-        em.MaterialSpec.theta = pi/2;
-
-        em.shape(name = 'BOX', material = 'SiO2', height = h_clad);
-        em.shape(name = 'core', material = em.MaterialSpec, height = h_core, ...
-            etch_depth = h_core*3/4, mask = w_core, sidewall_angle = 15);
-
-        % Solve the first mode
-        em.FDM();
-        em.confinement(shape_list = 'core');
-        em.report();
-        em.label_profile(name = '0'); % save the data from the first mode
-
-        % Solve the second mode
-        em.shape(name = 'core', mask = w_core + 100);
-        em.FDM();
-        em.confinement(shape_list = 'core');
-        em.report();
-
-        % Calculate the overlap integral
-        overlap = em.overlap(label_a = '0', mode_a = 0, mode_b = 0);
-        fprintf('Power overlap: %0.3f %%', (overlap*100));
-
-        % Plot the field and refractive index profiles
-        em.plot(window_display = true);
-
-        % Get the refractive index of the core
-        res = em.refractive_index(material = em.MaterialSpec, ...
-            wavelength = wavelength, reference = true);
-        n_LN = res{1};
-        ref = res{2};
-        fprintf('\nRefractive index of LN: [%0.6f, %0.6f, %0.6f]\n', n_LN);
-        if (find(ref=='%'))
-            ref = [ref(1:find(ref=='%')-1) '%' ref(find(ref=='%'):end)];
-        end
-        fprintf([ref '\n']);
-
-        % Close EMode
-        em.close();
-
 Console output::
 
     EMode3D 0.2.5 - email
@@ -2766,10 +2161,10 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
 
         ## Set simulation parameters
@@ -2839,84 +2234,6 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
         ## Close EMode
         em.close()
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        % Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 10; dy = 5; % [nm] resolution
-        w_core = 1000; % [nm] waveguide core width
-        w_trench = 3000; % [nm] waveguide side trench width
-        h_core = 500; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-        h_SL = 35; % [nm] superlattice height
-        h_n = 110; % [nm] n-contact height
-        h_SCH = 125; % [nm] SCH height
-        h_QW = 55; % [nm] quantum well height
-        h_uclad = 2000; % [nm] upper cladding height
-        window_width = w_core + w_trench*2; % [nm]
-        window_height = h_core + h_clad + h_SL + h_n + h_SCH*2 + h_QW + h_uclad; % [nm]
-        num_modes = 1; % [-] number of modes
-        boundary = '00'; % boundary condition
-
-        % Connect and initialize EMode
-        em = emodeconnection(simulation_name = 'laser'); % custom file name instead of the default 'emode.eph'
-
-        % Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, background_material = 'SiO2', ...
-            boundary_condition = boundary);
-
-        % Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', height = h_clad);
-        em.shape(name = 'core', material = 'Si', height = h_core, ...
-            mask = w_core, etch_depth = h_core*0.5, fill_material = 'Air', ...
-            roughness_rms = [5, 0.2], correlation_length = [100, 80]);
-        em.MaterialProperties.n = 3.20;
-        em.shape(name = 'SL', material = em.MaterialProperties, height = h_SL);
-        em.MaterialProperties.n = 3.17;
-        em.shape(name = 'n-contact', material = em.MaterialProperties, height = h_n);
-        em.MaterialProperties.n = 3.43;
-        em.shape(name = 'SCH1', material = em.MaterialProperties, height = h_SCH);
-        em.MaterialProperties.n = 3.41;
-        em.shape(name = 'QW', material = em.MaterialProperties, height = h_QW);
-        em.MaterialProperties.n = 3.43;
-        em.shape(name = 'SCH2', material = em.MaterialProperties, height = h_SCH);
-        em.MaterialProperties.n = 3.17;
-        em.shape(name = 'uclad', material = em.MaterialProperties, height = h_uclad);
-
-        % Launch FDM solver
-        em.FDM();
-
-        % Display the effective indices, TE fractions, core confinement, and scattering loss
-        em.confinement(shape_list = 'core');
-        em.scattering(shape = 'core');
-        em.report();
-
-        % Display scattering loss details from the core
-        shape_core = em.get('shape_core');
-        sv = shape_core.metadata.scattering_vertical_edges;
-        sh = shape_core.metadata.scattering_horizontal_edges;
-        sT = shape_core.metadata.scattering_sum;
-        fprintf('Scattering loss from all vertical edges: %0.1f dB/m\n', sv)
-        fprintf('Scattering loss from all horizontal edges: %0.1f dB/m\n', sh)
-        fprintf('Total scattering loss: %0.1f dB/m\n\n', sT)
-
-        edges = shape_core.metadata.edges;
-        sa = shape_core.metadata.scattering_all_edges;
-        for kk = 1:length(edges)
-            fprintf('From (%s) to (%s):', num2str(edges(kk,:,1)), num2str(edges(kk,:,2)))
-            fprintf('    scattering loss = %0.1f dB/m\n', sa(kk))
-        end
-
-        % Plot the field and refractive index profiles
-        em.plot();
-
-        % Close EMode
-        em.close();
 
 Console output::
 
@@ -2981,10 +2298,10 @@ How to open an existing EMode simulation.
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
 
         ## Run an initial session with a unique simulation name.
@@ -3063,86 +2380,6 @@ How to open an existing EMode simulation.
         em.plot(component = 'Ey', mode = TM_indices)
         em.close()
 
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Run an initial session with a unique simulation name.
-
-        % Set simulation parameters
-        wavelength = 1970; % [nm] wavelength
-        dx = 10; dy = 5; % [nm] resolution
-        trench = 1200; % [nm] waveguide side trench width
-        t_clad = 1200; % [nm] waveguide top/bot clad
-        b_clad = 1500; % [nm] waveguide top/bot clad
-        w_core = 1734; % [nm] waveguide core width
-        h_core = 150; % [nm] waveguide core height
-        h_slab = 20; % [nm] slab thickness in etched areas
-        angle = 17; % [degrees] waveguide sidewall angle
-
-        width = w_core + trench*2; % [nm] window width
-        height = h_core + b_clad + t_clad; % [nm] window height
-        num_modes = 1; % [nm] number of modes
-        boundary = 'TE';
-
-        % Connect and initialize EMode
-        em = emodeconnection(simulation_name = 'GaAs_SHG');
-
-        % Settings
-        em.settings( ...
-            wavelength = wavelength, ...
-            x_resolution = dx, y_resolution = dy, ...
-            window_width = width, window_height = height, ...
-            boundary_condition = boundary, num_modes = num_modes, ...
-            background_material = 'Air');
-
-        % Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', height = b_clad);
-        em.shape(name = 'core', material = 'GaAs', sidewall_angle = angle, ...
-            mask = w_core, height = h_core, etch_depth = h_core - h_slab);
-
-        % Launch FDM solver
-        em.FDM();
-        em.report();
-        em.close();
-
-        %% The previous simulated can be opened again, modified, and saved with a new name.
-
-        % Open existing simulation file
-        em = emodeconnection(simulation_name = 'GaAs_SHG', ...
-            open_existing = true, new_name = 'GaAs_SHG-TM');
-
-        % Get the previous wavelength setting and convert it to the second harmonic wavelength
-        wavelength = em.get('wavelength')/2;
-        n_eff = em.get('effective_index');
-
-        % Update the settings
-        em.settings(wavelength = wavelength, ...
-            boundary_condition = 'TM', num_modes = 4, ...
-            max_effective_index = n_eff(1));
-
-        % Launch FDM solver
-        em.FDM();
-        em.report();
-        em.close();
-
-        %% When opening an existing file to only retrieve and plot data, a new simulation name is not needed since the simulation data will not be modified.
-
-        % Plot from existing simulation file - pump mode
-        em = emodeconnection(simulation_name = 'GaAs_SHG', open_existing = true);
-
-        E_p = em.get_fields(key = {'Ex', 'Ey', 'Ez'});
-        em.plot();
-        em.close();
-
-        % Plot from existing simulation file - signal mode
-        em = emodeconnection(simulation_name = 'GaAs_SHG-TM', open_existing = true);
-
-        E_s = em.get_fields(key = {'Ex', 'Ey', 'Ez'});
-        TM_indices = em.get('TM_indices');
-        em.plot('component', 'Ey', 'mode', TM_indices(1));
-        em.close();
-
 Console output::
 
     EMode3D 0.2.5 - email
@@ -3197,10 +2434,10 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 
@@ -3238,44 +2475,6 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
         ## Close EMode
         em.close()
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        dx = 10; dy = 10; % [nm] resolution
-        h_core = 750; % [nm] waveguide core height
-        b_clad = 2500; % [nm] waveguide top and bottom clad
-        h_clad = 1500; % [nm] waveguide top and bottom clad
-        w_core = h_core*1.25; % [nm] waveguide core width
-        w_trench = 2500; % [nm] waveguide side trench width
-        num_modes = 1; % [-] number of modes
-        boundary = 'TE';
-
-        wav_nm_ = 1000:50:2000; % [nm]
-
-        %% Connect and initialize EMode
-        em = emodeconnection(simulation_name = 'dispersion');
-
-        %% Settings
-        em.settings( ...
-            x_resolution = dx, y_resolution = dy, ...
-            window_width = w_core + w_trench*2, ...
-            window_height = h_core + b_clad + h_clad, ...
-            num_modes = num_modes, boundary_condition = boundary, ...
-            background_material = 'Air');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', height = b_clad);
-        em.shape(name = 'core', material = 'Ta2O5', width = w_core, ...
-            height = h_core);
-
-        %% Run wavelength sweep
-        data = em.sweep(key = 'wavelength', values = wav_nm_, ...
-            result = {'effective_index'});
-
-        %% Close EMode
-        em.close();
 
 Console output::
 
@@ -3330,10 +2529,10 @@ Console output::
 A separate script can be used to plot the results.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         from emodeconnection import constants
         import numpy as np
@@ -3416,7 +2615,6 @@ Figures:
 
 
 
-
 EME: Taper
 ----------
 
@@ -3425,10 +2623,10 @@ The simplest EMode example of an EME simulation.
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
 
         ## Set simulation parameters
@@ -3490,68 +2688,6 @@ The simplest EMode example of an EME simulation.
 
         ## Close EMode
         em.close()
-
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 20; dy = 20; % [nm] resolution
-        h_core = 220; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-
-        window_width = 4000;
-        window_height = h_core + h_clad*2;
-
-        num_modes = 10; % [-] number of modes
-        BC = 'TE';
-
-        %% Connect and initialize EMode
-        em = emodeconnection(verbose = true);
-
-        %% Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, boundary_condition = BC, ...
-            background_material = 'SiO2');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', ...
-            height = h_clad);
-        em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core);
-
-        %% Launch FDM solver and label profiles
-        em.shape(name = 'core', mask = 1000);
-        em.FDM(profile = 'a');
-        em.report();
-        em.plot();
-
-        em.shape(name = 'core', mask = 2000);
-        em.FDM(profile = 'b');
-        em.report();
-        em.plot();
-
-        %% Draw EME sections
-        em.section(profile = 'a', section_type = 'straight', ...
-            length = 2000);
-
-        em.section(section_type = 'taper', ...
-            profile = 'a', profile_end = 'b', ...
-            length = 8000);
-
-        em.section(profile = 'b', section_type = 'straight', ...
-            length = 2000);
-
-        %% Run EME and plot results
-        em.EME();
-        em.plot();
-        em.plot_S_matrix();
-
-        %% Close EMode
-        em.close();
 
 Console output::
 
@@ -3636,10 +2772,10 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 
@@ -3698,64 +2834,6 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
         ## Close EMode
         em.close()
-
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 20; dy = 20; % [nm] resolution
-        h_core = 220; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-
-        window_width = 4000;
-        window_height = h_core + h_clad*2;
-
-        num_modes = 10; % [-] number of modes
-        BC = 'TE';
-
-        %% Connect and initialize EMode
-        em = emodeconnection(simulation_name = 'taper', verbose = true);
-
-        %% Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, boundary_condition = BC, ...
-            background_material = 'SiO2');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', ...
-            height = h_clad);
-        em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core);
-
-        %% Launch FDM solver and label profiles
-        em.shape(name = 'core', mask = 1000);
-        em.label_profile(name = 'a'); % skips solving the modes here
-
-        em.shape(name = 'core', mask = 2000);
-        em.label_profile(name = 'b'); % skips solving the modes here
-
-        %% Draw EME sections
-        em.section(profile = 'a', section_type = 'straight', ...
-            length = 2000);
-
-        em.section(name = 'taper', section_type = 'taper', ...
-            profile = 'a', profile_end = 'b', ...
-            length = 8000);
-
-        em.section(profile = 'b', section_type = 'straight', ...
-            length = 2000);
-
-        %% Run EME sweep
-        data = em.sweep(key = 'section, taper, length', ...
-            values = 0:250:8000, ...
-            result = {'S_matrix'});
-
-        %% Close EMode
-        em.close();
 
 Console output::
 
@@ -3871,10 +2949,10 @@ Console output::
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 
@@ -3949,10 +3027,10 @@ To simulate more complex structures, a GDS import function is used to support an
 First, the GDS is created.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         from phidl import CrossSection, Device
         import phidl.path as pp
         from phidl import quickplot as qp
@@ -4006,10 +3084,10 @@ First, the GDS is created.
 Next, the directional coupler device is created and simulated for a short coupler length. The sweep function is used to optimize  the coupler length for 100 % coupling, and the propagation is re-plotted.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         from matplotlib import pyplot as plt
         import numpy as np
@@ -4101,99 +3179,6 @@ Next, the directional coupler device is created and simulated for a short couple
 
         ## Close EMode
         em.close()
-
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        %% Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 20; dy = 20; % [nm] resolution
-        h_core = 220; % [nm] waveguide core height
-        h_clad = 1200; % [nm] waveguide top and bottom clad
-        width_wg = 600; % [nm]
-        gap = 300; % [nm]
-        input_gap = 2000; % [nm]
-
-        window_height = h_core + h_clad*2;
-
-        num_modes = 2; % [-] number of modes
-        BC = 'TE-v';
-
-        %% Connect and initialize EMode
-        em = emodeconnection();
-
-        %% Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_height = window_height, num_modes = num_modes, ...
-            boundary_condition = BC, background_material = 'SiO2');
-
-        %% Draw shapes
-        em.shape(name = 'BOX', material = 'SiO2', ...
-            height = h_clad);
-
-        em.shape(name = 'core', material = 'Si', ...
-            height = h_core, etch_depth = h_core);
-
-        %% Create profiles
-        em.settings(window_width = 6200);
-        em.label_profile(name = 'slab');
-
-        em.settings(window_width = 2600);
-        em.shape(name = 'core', mask = width_wg);
-        em.label_profile(name = 'io_waveguide');
-
-        em.settings(window_width = 2600);
-        em.shape(name = 'core', mask = [width_wg, width_wg], ...
-            mask_offset = [-gap/2-width_wg/2, gap/2+width_wg/2]);
-        em.label_profile(name = 'coupler');
-
-        %% Draw EME sections
-        em.section(name = 'input', section_type = 'straight', ...
-            profile = 'io_waveguide', length = 1000, ...
-            offset = input_gap/2 + width_wg/2);
-
-        em.section(name = 'sbend', section_type = 'gds', ...
-            gds = 'sbend.gds', profile = 'slab', ...
-            shape_to_mask = 'core', ...
-            length = 10e3); % modify length of gds
-
-        em.section(name = 'coupler', section_type = 'straight', ...
-            profile = 'coupler', length = 30e3);
-
-        em.section(section_type = 'copy', ...
-            section_name = 'sbend', mirror = true);
-
-        em.section(name = 'output', section_type = 'straight', ...
-            profile = 'io_waveguide', length = 1000, ...
-            offset = -input_gap/2 - width_wg/2);
-
-        %% Run EME and plot results
-        em.EME();
-        em.plot();
-
-        %% Sweep the coupler length and plot results
-        data = em.sweep(key = 'section, coupler, length', ...
-            values = 0:10000:200e3, ...
-            result = {'S_matrix'});
-
-        S = data.S_matrix;
-        figure;
-        plot(double(data.values)*1e-3, abs(squeeze(S(1,1,2,1,:))).^2*100);
-        hold on;
-        xlabel(append('Coupler length (', char(181), 'm)'));
-        ylabel('Transmission (%)');
-        xlim([min(data.values*1e-3) max(data.values*1e-3)]);
-        ylim([0 100]);
-
-        %% Plot final design for 100 % coupler
-        em.section(name = 'coupler', length = 180e3);
-        em.EME();
-        em.plot();
-
-        %% Close EMode
-        em.close();
 
 Console output::
 

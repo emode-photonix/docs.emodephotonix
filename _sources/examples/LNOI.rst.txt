@@ -7,10 +7,10 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
 .. tabs::
-    
+
     .. code-tab:: python
         :caption: Python
-        
+
         import emodeconnection as emc
         import numpy as np
 
@@ -76,76 +76,6 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         ## Close EMode
         em.close()
 
-    
-    .. code-tab:: matlab
-        :caption: MATLAB
-        
-        % Set simulation parameters
-        wavelength = 1550; % [nm] wavelength
-        dx = 10; dy = 10; % [nm] resolution
-        w_core = 1000; % [nm] waveguide core width
-        w_trench = 1000; % [nm] waveguide side trench width
-        h_core = 500; % [nm] waveguide core height
-        h_clad = 1000; % [nm] waveguide top and bottom clad
-        window_width = w_core + w_trench*2; % [nm]
-        window_height = h_core + h_clad*2; % [nm]
-        num_modes = 1; % [-] number of modes
-        boundary = '0S'; % boundary condition
-
-        % Connect and initialize EMode
-        em = emodeconnection();
-
-        % View material database
-        em.material_explorer();
-
-        % Settings
-        em.settings( ...
-            wavelength = wavelength, x_resolution = dx, y_resolution = dy, ...
-            window_width = window_width, window_height = window_height, ...
-            num_modes = num_modes, background_material = 'Air', ...
-            boundary_condition = boundary, ...
-            expansion_resolution = 20, expansion_size = 1500);
-
-        % Draw shapes
-        em.MaterialSpec.material = 'LN_MgO';
-        em.MaterialSpec.theta = pi/2;
-
-        em.shape(name = 'BOX', material = 'SiO2', height = h_clad);
-        em.shape(name = 'core', material = em.MaterialSpec, height = h_core, ...
-            etch_depth = h_core*3/4, mask = w_core, sidewall_angle = 15);
-
-        % Solve the first mode
-        em.FDM();
-        em.confinement(shape_list = 'core');
-        em.report();
-        em.label_profile(name = '0'); % save the data from the first mode
-
-        % Solve the second mode
-        em.shape(name = 'core', mask = w_core + 100);
-        em.FDM();
-        em.confinement(shape_list = 'core');
-        em.report();
-
-        % Calculate the overlap integral
-        overlap = em.overlap(label_a = '0', mode_a = 0, mode_b = 0);
-        fprintf('Power overlap: %0.3f %%', (overlap*100));
-
-        % Plot the field and refractive index profiles
-        em.plot(window_display = true);
-
-        % Get the refractive index of the core
-        res = em.refractive_index(material = em.MaterialSpec, ...
-            wavelength = wavelength, reference = true);
-        n_LN = res{1};
-        ref = res{2};
-        fprintf('\nRefractive index of LN: [%0.6f, %0.6f, %0.6f]\n', n_LN);
-        if (find(ref=='%'))
-            ref = [ref(1:find(ref=='%')-1) '%' ref(find(ref=='%'):end)];
-        end
-        fprintf([ref '\n']);
-
-        % Close EMode
-        em.close();
 
 Console output::
 
