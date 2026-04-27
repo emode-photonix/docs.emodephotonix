@@ -85,9 +85,9 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 0.2.5 - email
-    Meshing  completed in 3.1 sec
-    Solving modes... completed in 8.3 sec
+    EMode3D 0.2.6 - email
+    Meshing  completed in 3.4 sec
+    Solving modes... completed in 9.2 sec
 
     Wavelength: 1550.0 nm
  

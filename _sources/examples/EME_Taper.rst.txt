@@ -76,7 +76,7 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.2 sec
     Solving modes... completed in 0.6 sec
 
@@ -115,10 +115,10 @@ Console output::
  
     Solving S-matrices...
     Solving section: 0...Meshing  completed in 0.1 sec
-     completed in 0.8 sec
+     completed in 1.1 sec
 
     Solving section: 1...
-     completed in 23.0 sec
+     completed in 25.0 sec
 
     Solving section: 2...Meshing  completed in 0.2 sec
      completed in 0.5 sec

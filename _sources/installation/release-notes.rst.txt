@@ -2,6 +2,12 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**0.2.6: April 27, 2026**
+
+* Fixed ``sweep()`` function to deliver ``mode_order`` and ``scattering_loss`` in ``results``.
+* Added ``mode_order()`` as a user accesible function.
+* Updated ``FDM()``, ``orthogonality()``, and ``overlap()`` to use ``profile`` instead of ``label`` nomenclature.
+
 **0.2.5: March 25, 2026**
 
 * Updated license manager connection to use a standard REST API (https).

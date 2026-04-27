@@ -49,9 +49,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.7 sec
+    Solving modes... completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  

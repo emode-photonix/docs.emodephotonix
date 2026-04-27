@@ -1205,7 +1205,8 @@ Solver and analysis
     .. math::
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param str label: dataset label name to automatically create a dataset after running ``FDM()``, no dataset is created if blank, default: ''
+    :param profile: profile name to automatically create a profile after running ``FDM()``, no profile is created if blank, default: ''
+    :type profile: str or int
     :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
     :param bool force_isotropic: if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.
     :param str simulation_name: simulation name, default: 'emode'
@@ -1246,9 +1247,9 @@ Solver and analysis
 
 .. data:: orthogonality
 
-    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available either in the simulation data or in the labeled dataset if specified. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
+    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the labeled (or default) dataset, and the ``maximum_overlap`` is returned by this function. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
 
-    :param str label: dataset label, default: ''
+    :param str profile: profile label, default: ''
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: group_index
@@ -1282,12 +1283,20 @@ Solver and analysis
     .. math::
         \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_1 \times \vec H_2 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \times \vec H_1 \right| \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \times \vec H_2 \right| \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param str label_a: label of first mode set, or a blank string for the current mode set, default: ''
-    :param int mode_a: mode number from the first mode set, default: 0
+    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
+    :param int mode_a: mode number from the first profile, default: 0
     :param str simulation_name_a: simulation name for the first mode set, default: 'emode'
-    :param str label_b: label of second mode set, or a blank string for the current mode set, default: ''
-    :param int mode_b: mode number from the second mode set, default: 0
+    :param str label_b: label of second profile, or a blank string for the default profile, default: ''
+    :param int mode_b: mode number from the second profile, default: 0
     :param str simulation_name_b: simulation name for the second mode set, default: 'emode'
+
+.. data:: mode_order
+
+    Calculate mode ordering between two mode lists. The result is returned as a list.
+
+    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
+    :param str profile_b: label of second profile, or a blank string for the default profile, default: ''
+    :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: scattering
 
@@ -1585,6 +1594,12 @@ Descriptions of all variables available in the simulation file. Some variables h
 
 Release Notes
 ^^^^^^^^^^^^^
+
+**0.2.6: April 27, 2026**
+
+* Fixed ``sweep()`` function to deliver ``mode_order`` and ``scattering_loss`` in ``results``.
+* Added ``mode_order()`` as a user accesible function.
+* Updated ``FDM()``, ``orthogonality()``, and ``overlap()`` to use ``profile`` instead of ``label`` nomenclature.
 
 **0.2.5: March 25, 2026**
 
@@ -1897,9 +1912,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.7 sec
+    Solving modes... completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -1999,9 +2014,9 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.4 sec
-    Solving modes... completed in 20.5 sec
+    Solving modes... completed in 20.8 sec
 
     Wavelength: 980.0 nm
  
@@ -2086,7 +2101,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
         em.report()
 
         ## Calculate the overlap integral
-        overlap = em.overlap(label_a = '0', mode_a = 0, mode_b = 0)
+        overlap = em.overlap(profile_a = '0', mode_a = 0, mode_b = 0)
         print('Power overlap: %0.3f %%' % (overlap*100))
 
         ## Plot the field and refractive index profiles
@@ -2104,9 +2119,9 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.4 sec
-    Solving modes... completed in 1.5 sec
+    Solving modes... completed in 1.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -2115,7 +2130,7 @@ Console output::
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
     Meshing  completed in 0.3 sec
-    Solving modes... completed in 1.1 sec
+    Solving modes... completed in 1.2 sec
 
     Wavelength: 1550.0 nm
  
@@ -2237,9 +2252,9 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 0.2.5 - email
-    Meshing  completed in 3.1 sec
-    Solving modes... completed in 8.3 sec
+    EMode3D 0.2.6 - email
+    Meshing  completed in 3.4 sec
+    Solving modes... completed in 9.2 sec
 
     Wavelength: 1550.0 nm
  
@@ -2382,9 +2397,9 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode3D 0.2.5 - email
-    Meshing  completed in 0.5 sec
-    Solving modes... completed in 1.4 sec
+    EMode3D 0.2.6 - email
+    Meshing  completed in 0.6 sec
+    Solving modes... completed in 1.5 sec
 
     Wavelength: 1970.0 nm
  
@@ -2393,9 +2408,9 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.5 sec
-    Solving modes... completed in 1.6 sec
+    Solving modes... completed in 1.8 sec
 
     Wavelength: 985.0 nm
  
@@ -2407,9 +2422,9 @@ Console output::
         TM-3  2.067847   1.2 %          0.000
  
     Exited EMode
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Exited EMode
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Exited EMode
 
 Figures:
@@ -2478,52 +2493,52 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
 
     Sweeping setting parameter 'wavelength'...
     Solving FDM: wavelength = 1000...Meshing  completed in 0.6 sec
-     completed in 2.3 sec
-    Solving FDM: wavelength = 1050...Meshing  completed in 0.6 sec
-     completed in 1.8 sec
-    Solving FDM: wavelength = 1100...Meshing  completed in 0.5 sec
+     completed in 2.0 sec
+    Solving FDM: wavelength = 1050...Meshing  completed in 0.5 sec
      completed in 1.7 sec
-    Solving FDM: wavelength = 1150...Meshing  completed in 0.5 sec
+    Solving FDM: wavelength = 1100...Meshing  completed in 0.5 sec
      completed in 1.6 sec
+    Solving FDM: wavelength = 1150...Meshing  completed in 0.5 sec
+     completed in 1.5 sec
     Solving FDM: wavelength = 1200...Meshing  completed in 0.5 sec
      completed in 1.7 sec
     Solving FDM: wavelength = 1250...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1300...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
+    Solving FDM: wavelength = 1350...Meshing  completed in 0.5 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 1400...Meshing  completed in 0.5 sec
      completed in 1.5 sec
-    Solving FDM: wavelength = 1300...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1350...Meshing  completed in 0.6 sec
-     completed in 1.9 sec
-    Solving FDM: wavelength = 1400...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
     Solving FDM: wavelength = 1450...Meshing  completed in 0.5 sec
      completed in 1.6 sec
-    Solving FDM: wavelength = 1500...Meshing  completed in 0.6 sec
+    Solving FDM: wavelength = 1500...Meshing  completed in 0.5 sec
      completed in 1.7 sec
     Solving FDM: wavelength = 1550...Meshing  completed in 0.5 sec
-     completed in 1.9 sec
-    Solving FDM: wavelength = 1600...Meshing  completed in 0.7 sec
-     completed in 2.4 sec
-    Solving FDM: wavelength = 1650...Meshing  completed in 0.6 sec
      completed in 1.7 sec
-    Solving FDM: wavelength = 1700...Meshing  completed in 0.6 sec
-     completed in 1.8 sec
+    Solving FDM: wavelength = 1600...Meshing  completed in 0.5 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 1650...Meshing  completed in 0.5 sec
+     completed in 1.7 sec
+    Solving FDM: wavelength = 1700...Meshing  completed in 0.5 sec
+     completed in 1.6 sec
     Solving FDM: wavelength = 1750...Meshing  completed in 0.6 sec
-     completed in 2.1 sec
+     completed in 1.7 sec
     Solving FDM: wavelength = 1800...Meshing  completed in 0.6 sec
-     completed in 1.9 sec
+     completed in 1.7 sec
     Solving FDM: wavelength = 1850...Meshing  completed in 0.6 sec
      completed in 1.8 sec
     Solving FDM: wavelength = 1900...Meshing  completed in 0.6 sec
      completed in 1.6 sec
     Solving FDM: wavelength = 1950...Meshing  completed in 0.6 sec
-     completed in 1.9 sec
+     completed in 1.7 sec
     Solving FDM: wavelength = 2000...Meshing  completed in 0.6 sec
-     completed in 1.9 sec
-     completed in 38.4 sec
+     completed in 1.7 sec
+     completed in 35.3 sec
     Exited EMode
 
 A separate script can be used to plot the results.
@@ -2691,7 +2706,7 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.2 sec
     Solving modes... completed in 0.6 sec
 
@@ -2730,10 +2745,10 @@ Console output::
  
     Solving S-matrices...
     Solving section: 0...Meshing  completed in 0.1 sec
-     completed in 0.8 sec
+     completed in 1.1 sec
 
     Solving section: 1...
-     completed in 23.0 sec
+     completed in 25.0 sec
 
     Solving section: 2...Meshing  completed in 0.2 sec
      completed in 0.5 sec
@@ -2837,7 +2852,7 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
 
@@ -2846,7 +2861,7 @@ Console output::
 
     Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 29.6 sec
+     completed in 26.6 sec
     Solving EME: length = 7750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
      completed in 1.5 sec
@@ -2855,19 +2870,19 @@ Console output::
      completed in 1.5 sec
     Solving EME: length = 7250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 7000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 6750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 6500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 6250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 6000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
      completed in 1.5 sec
@@ -2885,65 +2900,65 @@ Console output::
      completed in 1.5 sec
     Solving EME: length = 4750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 4500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 4250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.8 sec
     Solving EME: length = 4000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 3750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 3500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 3250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 3000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.9 sec
     Solving EME: length = 2750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 2500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 2250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 2000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
+    Solving EME: length = 2000...Meshing  completed in 0.3 sec
+    Meshing  completed in 0.3 sec
+     completed in 2.0 sec
     Solving EME: length = 1750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 2.3 sec
     Solving EME: length = 1500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 1250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 1000...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 750...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.7 sec
     Solving EME: length = 500...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 250...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
+     completed in 1.6 sec
     Solving EME: length = 0...Meshing  completed in 0.2 sec
     Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-     completed in 1 min 17.3 sec
+     completed in 1.6 sec
+     completed in 1 min 19.9 sec
     Exited EMode
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -3182,7 +3197,7 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 0.2.5 - email
+    EMode3D 0.2.6 - email
     Meshing  completed in 0.3 sec
     Meshing  completed in 0.1 sec
     Meshing  completed in 0.1 sec
@@ -3192,46 +3207,46 @@ Console output::
 
     Solving section: sbend...
     Meshing  completed in 0.1 sec
-     completed in 30.1 sec
+     completed in 31.1 sec
 
     Solving section: coupler... completed in 0.2 sec
 
     Solving section: 3...
-     completed in 3.9 sec
+     completed in 4.0 sec
 
     Solving section: output... completed in 0.1 sec
      completed in 0.1 sec
-    Meshing  completed in 0.1 sec
+    Meshing  completed in 0.2 sec
 
     Sweeping section parameter 'length'...
     Solving EME: length = 200000.0... completed in 1.1 sec
     Solving EME: length = 190000.0... completed in 1.1 sec
-    Solving EME: length = 180000.0... completed in 1.1 sec
-    Solving EME: length = 170000.0... completed in 1.1 sec
-    Solving EME: length = 160000.0... completed in 1.1 sec
-    Solving EME: length = 150000.0... completed in 1.1 sec
-    Solving EME: length = 140000.0... completed in 1.1 sec
-    Solving EME: length = 130000.0... completed in 1.1 sec
-    Solving EME: length = 120000.0... completed in 1.1 sec
-    Solving EME: length = 110000.0... completed in 1.1 sec
-    Solving EME: length = 100000.0... completed in 1.1 sec
-    Solving EME: length = 90000.0... completed in 1.1 sec
-    Solving EME: length = 80000.0... completed in 1.1 sec
-    Solving EME: length = 70000.0... completed in 1.2 sec
-    Solving EME: length = 60000.0... completed in 1.1 sec
-    Solving EME: length = 50000.0... completed in 1.1 sec
-    Solving EME: length = 40000.0... completed in 1.2 sec
-    Solving EME: length = 30000.0... completed in 1.1 sec
-    Solving EME: length = 20000.0... completed in 1.2 sec
-    Solving EME: length = 10000.0... completed in 1.1 sec
-    Solving EME: length = 0.0... completed in 1.1 sec
-     completed in 23.7 sec
+    Solving EME: length = 180000.0... completed in 1.2 sec
+    Solving EME: length = 170000.0... completed in 1.2 sec
+    Solving EME: length = 160000.0... completed in 1.2 sec
+    Solving EME: length = 150000.0... completed in 1.2 sec
+    Solving EME: length = 140000.0... completed in 1.5 sec
+    Solving EME: length = 130000.0... completed in 1.5 sec
+    Solving EME: length = 120000.0... completed in 1.6 sec
+    Solving EME: length = 110000.0... completed in 1.4 sec
+    Solving EME: length = 100000.0... completed in 1.6 sec
+    Solving EME: length = 90000.0... completed in 1.3 sec
+    Solving EME: length = 80000.0... completed in 1.3 sec
+    Solving EME: length = 70000.0... completed in 1.3 sec
+    Solving EME: length = 60000.0... completed in 1.4 sec
+    Solving EME: length = 50000.0... completed in 1.3 sec
+    Solving EME: length = 40000.0... completed in 1.5 sec
+    Solving EME: length = 30000.0... completed in 1.6 sec
+    Solving EME: length = 20000.0... completed in 1.5 sec
+    Solving EME: length = 10000.0... completed in 1.5 sec
+    Solving EME: length = 0.0... completed in 1.8 sec
+     completed in 29.0 sec
     Solving S-matrices...
-    Solving section: input... completed in 0.2 sec
+    Solving section: input... completed in 0.4 sec
 
-    Solving section: sbend... completed in 0.2 sec
+    Solving section: sbend... completed in 0.4 sec
 
-    Solving section: coupler... completed in 0.2 sec
+    Solving section: coupler... completed in 0.4 sec
 
     Solving section: 3... completed in 0.3 sec
 

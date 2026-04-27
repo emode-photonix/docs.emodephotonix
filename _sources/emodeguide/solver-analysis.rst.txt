@@ -14,7 +14,8 @@ Solver and analysis
     .. math::
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param str label: dataset label name to automatically create a dataset after running ``FDM()``, no dataset is created if blank, default: ''
+    :param profile: profile name to automatically create a profile after running ``FDM()``, no profile is created if blank, default: ''
+    :type profile: str or int
     :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
     :param bool force_isotropic: if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.
     :param str simulation_name: simulation name, default: 'emode'
@@ -55,9 +56,9 @@ Solver and analysis
 
 .. data:: orthogonality
 
-    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available either in the simulation data or in the labeled dataset if specified. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
+    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the labeled (or default) dataset, and the ``maximum_overlap`` is returned by this function. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
 
-    :param str label: dataset label, default: ''
+    :param str profile: profile label, default: ''
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: group_index
@@ -91,12 +92,20 @@ Solver and analysis
     .. math::
         \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_1 \times \vec H_2 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \times \vec H_1 \right| \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \times \vec H_2 \right| \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param str label_a: label of first mode set, or a blank string for the current mode set, default: ''
-    :param int mode_a: mode number from the first mode set, default: 0
+    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
+    :param int mode_a: mode number from the first profile, default: 0
     :param str simulation_name_a: simulation name for the first mode set, default: 'emode'
-    :param str label_b: label of second mode set, or a blank string for the current mode set, default: ''
-    :param int mode_b: mode number from the second mode set, default: 0
+    :param str label_b: label of second profile, or a blank string for the default profile, default: ''
+    :param int mode_b: mode number from the second profile, default: 0
     :param str simulation_name_b: simulation name for the second mode set, default: 'emode'
+
+.. data:: mode_order
+
+    Calculate mode ordering between two mode lists. The result is returned as a list.
+
+    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
+    :param str profile_b: label of second profile, or a blank string for the default profile, default: ''
+    :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: scattering
 
