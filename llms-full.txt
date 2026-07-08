@@ -61,23 +61,15 @@ Installation
 - `Create an EMode account <https://emodephotonix.com/register/>`_, and verify your account via the confirmation email.
 - Purchase a subscription license through the `EMode store <https://emodephotonix.com/get-emode/>`_. This is required, even for a free EMode\ :sup:`2D`\  license.
 
-2. Setup the Python Interface
+2. Set Up the Python Interface
 ------------------------------
 
-- See the :ref:`Python Interface <python-interface>` page for instructions to install Python.
-- Follow the :ref:`Setup <SetupPython>` instructions to install the ``emodeconnection`` package.
+Follow the :ref:`Python Interface <python-interface>` instructions to install Python and the ``emodeconnection`` package.
 
 3. Download and Install EMode
 -----------------------------
 
-**System requirements**: 840 MB free disk space
-
-.. hlist::
-    :columns: 3
-
-    * **Windows** 10 or higher
-    * **Linux**, Ubuntu 22.04 or higher, x86-64
-    * **macOS** 13 Ventura or higher
+**System requirements:** **Windows** 10+, **Linux** Ubuntu 22.04+ (x86-64), **macOS** 13 Ventura+
 
 There are two installation methods:
 
@@ -99,7 +91,7 @@ There are two installation methods:
 
     .. tab-item:: Manual install
 
-        #. Login to your `EMode account <https://emodephotonix.com/my-account/>`_.
+        #. Log in to your `EMode account <https://emodephotonix.com/my-account/>`_.
         #. Select your operating system and version from the dropdown menus.
         #. Accept the EMode End User License Agreement.
         #. Click ``Download EMode`` to download the file for your platform.
@@ -125,10 +117,15 @@ There are two installation methods:
             unzip EMode-VERSION-Linux.zip
             sh install.sh
 
-.. tip::
+**macOS Apple silicon:** EMode runs via Rosetta 2 and you may be prompted to install it on the first run.
 
-    On macOS with Apple silicon, EMode runs via Rosetta 2,
-    which you may be prompted to install on the first run.
+4. Run an EMode Example Script
+------------------------------
+
+- Run the `Basic: SOI <examples/SOI.html>`_ example in Python to verify your installation.
+- A login window will open when EMode is first initialized. To subsequently access this window, see :ref:`EMode Login <PythonEModeLogin>`.
+
+If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.
 
 .. hlist::
    :columns: 2
@@ -136,21 +133,13 @@ There are two installation methods:
    * `Release notes <installation/release-notes.html>`_
    * `Troubleshooting <installation/troubleshooting.html>`_
 
-4. Run an EMode Example Script
-------------------------------
-
-- Copy and run the `Basic: SOI <examples/SOI.html>`_ example in your scripting environment.
-- A login window will open when EMode is first initialized. To subsequently access this window, see :ref:`EMode Login <PythonEModeLogin>`.
-
-If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.
-
 
 .. _python-interface:
 
 Python Interface
 ================
 
-To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python versions 3.9 through 3.13, including the Anaconda distribution, iPython terminals, and numerous IDEs.
+To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python 3.10 or higher, including the Anaconda distribution, iPython terminals, and numerous IDEs.
 
 The source code can be viewed here: `emodeconnection <https://github.com/emode-photonix/emodeconnection>`_
 
@@ -179,6 +168,8 @@ Update to the latest version with:
 .. code-block::
 
    pip install -U emodeconnection
+
+Alternatively, the ``uv`` package manager may be used in place of ``pip``.
 
 .. _emode-install:
 
@@ -243,26 +234,29 @@ Open the EMode Login GUI from a Python session to login to your EMode Photonix a
 The EMode class
 ---------------
 
-.. class:: EMode(simulation_name = 'emode', license_type = 'default', clear = 'none', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None)
+.. class:: EMode(simulation_name = 'emode', license_type = 'default', clear = 'none', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None, force_open = False, save = True)
 
     Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode`` from the the command line.
 
     An existing file can be opened for further analysis by specifying the input argument ``open_existing = True``. This opened file can be copied to a new file name by specifying the input argument ``new_name = 'new_filename'``.
 
     .. note::
-        All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using keyword arguments for each funtion input parameter.
+        All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using keyword arguments for each function input parameter.
 
     :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
-    :param str license_type: The requested license type, either '2D', '3D', or 'default'. When running with 'default' license type, a '3D' license will be initialized if it is available, otherwise a '2D' license will be initialized if it is available. The '2D' or '3D' options will only request that specific license type if it is available. Default: 'default'.
+    :param str license_type: The requested license type, either '2d', '3d', or 'default'. When running with 'default' license type, a '3d' license will be initialized if it is available, otherwise a '2d' license will be initialized if it is available. The '2d' or '3d' options will only request that specific license type if it is available. Default: 'default'.
     :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all', 'latest', 'oldest', and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
-    :param str save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
+    :param save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
+    :type save_path: str or ~pathlib.Path
     :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
     :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the `clear()` function to terminate ghost license check-outs. Default: False.
     :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
     :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
     :type new_name: bool or str
-    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN'.
+    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN' (Normal).
     :param list[str] emode_cmd: Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location, or if multiple versions are installed in different locations.
+    :param bool force_open: If a simulation file with this name is already open elsewhere, open it anyway instead of auto-renaming. Default: False.
+    :param bool save: Whether to save the simulation file when the session ends. Set to False to run without writing to disk. Default: True.
 
 Functions
 ---------
@@ -273,28 +267,31 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
 
     Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
 
-.. function:: open_file(simulation_name = 'emode')
+.. function:: open_file(sim = 'emode', simulation_name = None)
 
     Opens an EMode simulation file with the extension '.eph' or '.mat' and returns a dictionary with the file contents.
 
-    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
+    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
     :return: Dictionary with all keys and data from the specified EMode simulation file.
     :rtype: dict
 
-.. function:: get(variable, simulation_name = 'emode')
+.. function:: get(variable, sim = 'emode', simulation_name = None)
 
     Returns the contents of a specified variable from an EMode simulation file with the extension '.eph' or '.mat'.
 
     :param str variable: Name of the variable to return from EMode.
-    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
+    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
     :return: Requested item from EMode.
     :rtype: int, float, str, or array-like
 
-.. function:: inspect(simulation_name = 'emode')
+.. function:: inspect(sim = 'emode', simulation_name = None)
 
     Get the names of all variables from EMode simulation file with the extension '.eph' or '.mat'.
 
-    :param str simulation_name: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name.
+    :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
+    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
     :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get()` function.
     :rtype: list
 
@@ -322,6 +319,10 @@ The ``emodeconnection.constants`` module contains the following constants.
 .. py:attribute:: e
 
    The elementary charge in C.
+
+.. py:attribute:: hbar
+
+   The reduced Planck constant in J·s.
 
 Types
 -----
@@ -405,24 +406,104 @@ Four types are available as classes of the emodeconnection package to specify ma
    :param is_bc: True if the boundary condition is '00', False for other boundary conditions.
    :type is_bc: bool
 
+----
+
+.. py:class:: SMatrix
+
+   A dense, port-structured scattering matrix returned by EME results (e.g. from ``EME()`` or ``get(key='S_matrix')``). Ports are indexed 0 to ``num_ports - 1``; port *i* spans a contiguous range of modes whose count is ``port_sizes[i]``. When ``port_names``/``wavelengths`` are available, ports can also be addressed by name instead of by index.
+
+   :param port_sizes: number of modes in each port.
+   :type port_sizes: tuple[int, ...]
+
+   :param data: the complex scattering matrix, with shape ``(total_modes, total_modes)``.
+   :type data: ~numpy.ndarray
+
+   :param port_names: name of each port, parallel to ``port_sizes``. Default: None.
+   :type port_names: tuple[str, ...] or None
+
+   :param wavelengths: wavelength of each port, parallel to ``port_sizes``. Default: None.
+   :type wavelengths: tuple[float, ...] or None
+
+   ``SMatrix`` also provides convenience methods: ``transmission(from_port, to_port)``, ``reflection(port)``, ``insertion_loss_dB(from_port, to_port, mode)``, ``unitarity_error()``, and ``plot(kind)``.
+
+Geometry
+--------
+
+The ``emodeconnection.geometry`` module provides classes for defining waveguide centerline paths, used primarily for EME GDS sections.
+
+.. py:class:: Pose(w=0, z=0, x=0, y=0, azimuth=0)
+
+   Position and orientation of a curve's local frame within the section frame.
+
+   :param float w: Lateral offset.
+   :param float z: Axial position.
+   :param float x: x position.
+   :param float y: y position.
+   :param float azimuth: Orientation angle in radians.
+
+----
+
+.. py:class:: Line(length)
+
+   Straight segment along the local +z axis.
+
+   :param float length: Length of the segment (must be positive).
+
+----
+
+.. py:class:: Arc(radius, sweep_angle)
+
+   Circular arc segment.
+
+   :param float radius: Bend radius (signed; sign determines bend direction).
+   :param float sweep_angle: Subtended angle in radians (signed).
+
+----
+
+.. py:class:: BSpline(knots, coefficients, degree=3)
+
+   B-spline curve segment.
+
+   :param list knots: Knot vector. Must satisfy ``len(knots) == len(coefficients) + degree + 1``.
+   :param list coefficients: Control points as a list of ``[x, z]`` pairs.
+   :param int degree: Spline degree. Default: 3.
+
+----
+
+.. py:class:: Path(segments)
+
+   A composed waveguide centerline built from one or more curve segments.
+
+   :param tuple segments: Tuple of :py:class:`Line`, :py:class:`Arc`, or :py:class:`BSpline` objects. The total path length is the sum of all segment lengths.
+
+----
+
+.. py:data:: Curve
+
+   Type alias for ``Union[Line, Arc, BSpline]``.
+
 Exceptions
 ----------
 
 The ``emodeconnection.types`` module also contains the following exception classes. All errors in EMode are raised and passed back to the user as one of these errors.
 
-.. py:class:: EModeError(*args, **kwargs)
+.. py:class:: EModeError(msg='', *args, **kwargs)
 
    Base class for all EMode exceptions.
 
+   :param str msg: Human-readable explanation. Default: ''.
+
 ----
 
-.. py:class:: ArgumentError(msg, function=None, argument=None)
+.. py:class:: ArgumentError(msg, function, argument)
 
    Invalid value passed to *function*.
 
    :param str msg: Human-readable explanation.
-   :param str function: Function name.
-   :param str argument: Name of the offending argument.
+   :param function: Function name, or None.
+   :type function: str or None
+   :param argument: Name of the offending argument, or None.
+   :type argument: str or None
 
 ----
 
@@ -550,12 +631,15 @@ Features
    * Finite difference method
    * Scattering loss
    * Bend modes
-   * (A)symmetries
+   * Symmetries
    * Perfectly matched layers
    * Sub-pixel averaging
-   * Anisotropic materials
+   * General anisotropy
    * Magnetic materials
    * Non-uniform meshing
+   * Eigenmode expansion (EME)
+   * Multi-physics (thermal, electrostatic)
+   * Second-order nonlinear optics
 
 Finite difference method
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -567,7 +651,7 @@ The finite difference method (FDM) is used to solve the waveguide eigenmodes. Th
 Boundary conditions
 ^^^^^^^^^^^^^^^^^^^
 
-Symmetric or asymmetric boundary conditions can be applied to the south and west sides of the simulation window. By explicitly setting the (a)symmetry with an 'S' or 'A', the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to 'TE' or 'TM' and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate 'S' or 'A' boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.
+Symmetric or anti-symmetric boundary conditions can be applied to the south and west sides of the simulation window with the setting parameter ``boundary_condition``. By explicitly setting the symmetry with an 'S' (symmetric) or 'A' (anti-symmetric), the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to 'TE' or 'TM' and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate 'S' or 'A' boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.
 
 Meshing
 ^^^^^^^
@@ -608,58 +692,100 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
     :param str save_path: path to open the simulation file relative to the current working directory, default: '.'
     :param str simulation_name: simulation name, default: 'emode'
-    :param str new_name: new simulation name so the old file is not over-written, default: ``simulation_name``
+    :param new_simulation_name: new simulation name so the old file is not over-written, default: False (the original ``simulation_name`` is reused)
+    :type new_simulation_name: bool or str
+    :param bool force: if a file with the target name is already open elsewhere, open it anyway instead of auto-renaming to an available filename, default: False
 
 .. data:: get
+    :no-index:
 
     Extract data from an existing simulation to your Python environment.
 
-    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables.
-    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables. Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`~emodeconnection.smatrix.SMatrix` object.
+    :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_fields
 
-    Extract field data from an existing simulation to your Python environment. This returns a Field object.
+    Extract field data from an existing simulation to your Python environment.
 
     :param str key: name of the field to extract a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``].
     :type key: str or list[str]
     :param bool include_expand: whether to include the expanded region, default: True
     :param bool include_pml: whether to include the PML region, default: True
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
-    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
+    :return: a Field object for each wavelength of the named profile.
+    :rtype: dict[float, Field]
 
 .. data:: get_grid
 
-    Extract grid data from an existing simulation to your Python environment. This returns a Grid object.
+    Extract grid data from an existing simulation to your Python environment.
 
     :param bool include_expand: whether to include the expanded region, default: True
     :param bool include_pml: whether to include the PML region, default: True
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
-    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str profile: label of the profile to extract the grid from, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+    :return: a Grid object for each wavelength of the named profile.
+    :rtype: dict[float, Grid]
+
+.. data:: get_shape
+
+    Extract shape data from an existing simulation. Returns the shape object with a ``metadata`` dictionary attached (scattering and confinement results for that shape).
+
+    :param str key: name of the shape to extract
+    :param str profile: label of the profile to extract the shape from, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: get_profile
+
+    Extract a full profile object from an existing simulation. Returns a Profile object containing the settings, shapes, grid, and field data associated with the named profile.
+
+    :param str profile: label of the profile to extract, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: create_profile_set
+
+    Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped.
+
+    :param profiles: names of the profiles to group
+    :type profiles: str or list[str]
+    :param str profile_set_name: name of the resulting profile set, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: delete_profile
+
+    Delete a named profile (or reset the ``_default`` profile's settings) from the simulation file.
+
+    :param str profile: name of the profile to delete
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: clear_field_data
 
-    Deletes the following data to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
+    Deletes the following data from every profile to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
 
+    :param str profile: currently ignored; field data is cleared from all profiles regardless of this argument, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: save
 
-    Saves a simulation file and keeps the simulation file in the 'open' state. The file is saved as an EMode Photonix file ('eph').
+    Saves a simulation file and keeps the simulation file in the 'open' state.
 
     :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
+    :param str file_type: file type to save the simulation file as, either 'eph' or 'mat', default: 'eph'
+    :param bool close: whether to close the simulation file after saving, default: False
     :param str new_save_path: if set, saves the simulation file in this new path, default: None
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: close
 
-    Saves or deletes a simulation file. The file is saved as an EMode Photonix file ('eph'). This function is called through the "close" method of emodeconnection, and these optional parameters can be passed directly to the "close" method.
+    Saves or deletes a simulation file. This function is called through the "close" method of emodeconnection, and these optional parameters can be passed directly to the "close" method.
 
     :param bool save: saves simulation file if True and deletes the simulation file if False, default: True
     :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
+    :param str file_type: file type to save the simulation file as, either 'eph' or 'mat', default: 'eph'
     :param str simulation_name: simulation name, default: 'emode'
 
 
@@ -667,48 +793,115 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 EME
 ---
 
-.. data:: section
+.. data:: EME_settings
 
-    Define a waveguide section used in the EME solver. This function is analagous to the ``shape`` function for 2D simulations, but instead sequentially defines the sections of an EME simulation.
+    Declare global EME defaults that are inherited by sections created afterward. Each parameter left unspecified leaves the corresponding stored default unchanged. A section's own ``settings`` argument at creation still overrides these globals. Sections created before this call are not affected.
+
+    :param apply_scattering: whether interfacial scattering loss is automatically applied to the S-matrix, either for every wavelength (True), no wavelengths (False), or only the listed wavelengths, default: False
+    :type apply_scattering: bool or list[float]
+    :param str beta_interpolation: either 'uniform' or 'linear' to specify how the propagation constant is interpolated between z-slices of a taper/gds section, default: 'uniform'
+    :param junction_normalization: controls how junction S-matrices are power-normalized; either a single bool/'gain' value applied to both junction kinds, or a dict with 'inter_section' and 'intra_section' keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: 'gain' for inter-section junctions and True for intra-section junctions
+    :type junction_normalization: bool or str or dict
+    :param float overlap_variation: threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01
+    :param float minimum_z_step: [um] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: straight_section
+
+    Define a uniform-cross-section waveguide section for the EME solver. Sections are placed sequentially in the z-direction in the order they are declared (or updated, if ``name`` already exists).
 
     :param str name: section name, default: an auto-generated number
-    :param str section_type: either 'straight', 'taper', 'gds', or 'copy', and each section type corresponds with only a subset of other input parameters:
+    :param str profile: label of the profile that defines the section's cross-section
+    :param float length: [nm] the length of the section
+    :param offset: the x- and y-offset of the section's port window, if only a single value is given it is assumed to be the x-offset, default: (0, 0)
+    :type offset: float or tuple[float, float]
+    :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
 
-        * **'straight'**: ``name``, ``profile``, ``order``, ``num_modes``, ``length``, ``offset``, ``simulation_name``
-        * **'taper'**: ``name``, ``profile``, ``profile_end``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``
-        ``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
-        * **'gds'**: ``name``, ``gds``, ``cell_index``, ``unit``, ``profile``, ``shape_to_mask``, ``etch_depth``, ``sidewall_angle``, ``tone``, ``window_width``, ``window_height``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
-        * **'copy'**: ``name``, ``section_name``, ``mirror``, ``order``, ``simulation_name``
+.. data:: taper_section
 
-    :param str profile: label of the profile to define the entire section (**'straight'** and **'gds'**) or section beginning (**'taper'**)
-    :param str profile_end: label of the profile to define the section ending (**'taper'**)
-    :param float order: a number that signifies the order in which section will be placed in the z-direction, default: auto-generated integer based on the order each section is called
-    :param str num_modes: how many modes to solve in the section (**'straight'**, **'taper'**, and **'gds'**), default: inherited from the profile definition
-    :param float length: the length of the section (in nanometers) (**'straight'**, **'taper'**, and **'gds'**)
-    :param offset: the x- and y-offset of the section (**'straight'**, **'taper'**, and **'gds'**), if only a single value is specified then it is assumed to be the x-offset: (``offset``, 0), default: (0,0)
-    :type offset: float or list
-    :param z_slices: manually specify the ``z_slices`` that will be solved in sections with variations in the z-direction (**'taper'** and **'gds'**), by specifying this parameter the ``z_option`` is forced to be 'custom', default: None
-    :type z_slices: list or array
-    :param float overlap_variation: threshold of mode list overlap between ``z_slices`` when solving with ``z_option`` of 'auto', this will use a bisection optimization limited by this ``overlap_variation`` parameter and ``minimum_z_step`` to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 0.02
-    :param float minimum_z_step: the minimum allowed step size in the z-direction for the ``z_slices`` determined by the bisection optimization for the ``z_option`` of 'auto' (**'taper'** and **'gds'**), 'auto' reverts to 1/8th of the wavelength, default: 'auto'
-    :param str z_option: either 'custom' or 'auto' to manually specify the ``z_slices`` or use the automatic bisection optimization algorithm to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 'auto'
-    :param str gds: name of the gds file used to mask a shape in the designated profile, this options allows for more complex section geometries using third party layout tools to define the mask (**'gds'**)
-    :param int cell_index: the cell index in the specified gds file (**'gds'**), default: 0
-    :param str unit: either 'um' or 'nm' to specify the units used in the gds file (**'gds'**), default: 'um'
-    :param str shape_to_mask: name of the shape that will be masked from the specified profile with the gds pattern (**'gds'**)
-    :param float etch_depth: the etch depth for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
-    :param float sidewall_angle: the sidewall angle of the etch for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
-    :param str tone: either 'p' or 'n' to specify the etch mask tone for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
-    :param float window_width: the simulation window width (**'gds'**), default: inherited from the original profile definition
-    :param float window_height: the simulation window height (**'gds'**), default: inherited from the original profile definition
-    :param str section_name: name of the section to copy (**'copy'**)
-    :param bool mirror: whether or not to mirror the copied shape (**'copy'**), default: False
+    Define a section that linearly interpolates its cross-section between two profiles for the EME solver, automatically slicing the z-direction to track the mode evolution.
+
+    :param str name: section name, default: an auto-generated number
+    :param str profile: label of the profile that defines the section beginning
+    :param str profile_end: label of the profile that defines the section ending
+    :param float length: [nm] the length of the section
+    :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: gds_section
+
+    Define a section whose cross-section varies along z according to a mask imported from a GDS file, for more complex geometries defined with third-party layout tools.
+
+    :param str name: section name, default: an auto-generated number
+    :param str profile: label of the profile that defines the section's cross-section outside of the GDS mask
+    :param str gds_path: path to the GDS file used to mask the section
+    :param layer_map: mapping of profile shape names to GDS layer numbers, used to determine which shapes in ``profile`` are masked by which GDS layer
+    :type layer_map: dict[str, int]
+    :param float length: [nm] the length of the section, default: derived from the GDS bounding box
+    :param cell_index: the cell index (or name) in the specified GDS file, default: 0
+    :type cell_index: int or str
+    :param float scale: unit scale factor applied to the GDS coordinates (e.g. use 1000 if the GDS file is drawn in microns but the simulation is in nanometers), default: 1
+    :param port_poses: explicit port positions/orientations at the section boundaries, default: derived from the GDS bounding box (left port at w=0, right port at w=length)
+    :type port_poses: dict
+    :param bool heal: whether to heal small gaps/self-intersections in the imported GDS polygons before meshing, default: True
+    :param float grow: amount to grow imported GDS polygons by, to close small gaps, default: 1e-3
+    :param settings: per-section overrides of the :data:`EME_settings`, default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+..
+    .. data:: TO_section
+
+        Define a section whose geometry is generated analytically via a transformation-optics (TO) coordinate transform, rather than from a fixed cross-section or an imported GDS mask. This is a beta feature.
+
+        :param str name: section name
+        :param str transform: either 'coupler' (a two-waveguide directional coupler) or 'parameterized_curve' (a single waveguide with arbitrary bending)
+        :param str profile: label of the profile that defines the waveguide cross-section
+        :param waveguides: the :class:`~emodeconnection.geometry.Path` centerline(s) of the waveguide(s); 'coupler' requires exactly 2, 'parameterized_curve' requires exactly 1
+        :type waveguides: list
+        :param float length: [nm] the length of the section
+        :param poses: the :class:`~emodeconnection.geometry.Pose` of each waveguide's local frame within the section frame; required (length 2) for 'coupler', ignored for 'parameterized_curve'
+        :type poses: list
+        :param float width: the lateral extent of the transform region; required for 'coupler', ignored for 'parameterized_curve'
+        :param float virtual_gap: extra lateral padding used internally by the coupler transform to avoid a coordinate singularity; required for 'coupler', ignored for 'parameterized_curve'
+        :param center_path: an optional additional :class:`~emodeconnection.geometry.Path` defining the coupler's central symmetry curve; only used for 'coupler', default: None
+        :param int theta_grid_points: number of grid points used to sample the transform's angular coordinate; only used for 'parameterized_curve', default: 2001
+        :param settings: per-section overrides of the :data:`EME_settings`, default: None
+        :type settings: dict or None
+        :param str simulation_name: simulation name, default: 'emode'
+
+        .. note::
+            Once created, a ``TO_section`` can only be updated through ``TO_section`` itself — its geometry cannot be reshaped through :data:`straight_section`/:data:`taper_section`/:data:`gds_section`.
+
+    .. data:: to_gds
+
+        Export a previously declared 'coupler' :data:`TO_section` to a GDS file, for fabrication preview and to inspect the geometry that the EME solver will build.
+
+        :param str name: name of the ``TO_section`` (transform 'coupler') to export
+        :param str path: file path to write the GDS library to
+        :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: copy_section
+
+    Place a second instance of an already-declared section in the chain, reusing its already-computed S-matrix instead of re-solving it.
+
+    :param str name: section name, default: an auto-generated number
+    :param str section_name: name of the existing section to copy
+    :param bool mirror: whether to reverse the placement along the propagation direction (swapping the left/right ports), default: False
+    :param port_swap: explicit port-name mapping to use instead of the automatically computed left/right swap when ``mirror`` is True, default: None
+    :type port_swap: dict
+    :param settings: per-section overrides of the :data:`EME_settings`, default: None
+    :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: EME
 
     Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME).
 
+    :param bool warm_start: whether to seed each taper/gds section's automatic z-slice refinement from the previously solved chain (when available), instead of re-refining from scratch, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: plot_S_matrix
@@ -722,7 +915,7 @@ EME
     :param plot_function: specify the function to apply to the plot data ('abs^2', 'angle', 'real', 'imag'), default: 'abs^2'
     :type plot_function: str or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
-    :param str file_type: file type for saving a plot, ‘pdf’ or ‘png’, default: ‘pdf’
+    :param str file_type: file type for saving a plot, ‘pdf’ or ‘png’, default: '' (no extension is added to ``file_name`` unless a file type is given)
     :param str simulation_name: simulation name, default: 'emode'
 
 
@@ -732,7 +925,7 @@ Multi-Physics
 
 .. data:: heat
 
-    Run a steady-state thermal simulation of a waveguide cross-section.
+    Run a steady-state thermal simulation of a waveguide cross-section. Requires a '3D' license.
 
     .. warning::
         This function is only available under beta release. Please report any issues or bugs.
@@ -740,7 +933,7 @@ Multi-Physics
     .. note::
         Each ``shape()`` now accepts an input parameter called ``heat_only`` (default: False), which can be used to set additional shapes on top or bottom of the photonic layer stack. For example, common ``heat_only`` shapes are the substrate and metal heater layers.
 
-        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
+        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 500), which is used to refine the triangular mesh within certain shapes.
 
         Each material in the EMode material database now has ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), and ``dn_dT`` (1/K).
 
@@ -753,15 +946,15 @@ Multi-Physics
 
 .. data:: electrostatic
 
-    Run a steady-state electrostatic simulation of a waveguide cross-section.
+    Run a steady-state electrostatic simulation of a waveguide cross-section. Requires a '3D' license.
 
     .. warning::
         This function is only available under beta release. Please report any issues or bugs.
 
     .. note::
-        Each ``shape()`` also now accepts an input parameter called ``voltage`` (default: 0), which is set to create electric field sources.
+        Each ``shape()`` also now accepts an input parameter called ``voltage`` (default: None), which is set to create electric field sources. Shapes with ``voltage`` left as None do not get a voltage boundary condition applied.
 
-        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
+        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 500), which is used to refine the triangular mesh within certain shapes.
 
         Each material in the EMode material database now has ``eps_r_dc`` (relative permittivity at ~1 kHz).
 
@@ -806,7 +999,7 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 689 nm to 1033 nm
     
         | M. A. Afromowitz, "Refractive index of Ga_{1-x}Al_{x}As," Solid State Commun. 15, 59 (1974).
-        | Notes: requires Al fraction input (x between 0 and 1), which defaults to x=0: "AlGaAs, x".
+        | Notes: requires Al fraction input (x between 0 and 1), which defaults to x=1: "AlGaAs, x".
 
 .. data:: AlN
     
@@ -931,8 +1124,8 @@ Descriptions of all materials available in built-in material database. This info
 .. data:: InP
     
     .. math:: n = \left(1 + 6.255 + \frac{2.316}{{1 - \left(0.6263/\lambda\right)^2}} + \frac{2.765}{{1 - \left(32.935/\lambda\right)^2}}\right)^{0.5}
-    
-    Wavelength range: 950 nm to 10000 nm
+
+    Wavelength range: 680 nm to 4449 nm
     
         | G. D. Pettit and W. J. Turner, "Refractive Index of InP," J. Appl. Phys. 36, 2081 (1965).
 
@@ -954,7 +1147,7 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 500 nm to 4000 nm
     
         | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
-        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
+        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction. A second dispersion model is available via a ``reference`` keyword, either 'Gayer 2008' (default, shown above) or 'Zelmon 1997', which uses different Sellmeier coefficients, a 400 nm to 5000 nm wavelength range, and a different axis convention.
 
 .. data:: LN
     
@@ -983,6 +1176,14 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 200 nm to 1100 nm
     
         | `Microchem PMMA Data Sheet, (2019). <https://kayakuam.com/wp-content/uploads/2019/09/PMMA_Data_Sheet.pdf>`_
+
+.. data:: Pt
+
+    .. math:: n = 4.0
+
+    Wavelength range: 0.0001 nm to 100000 nm
+
+        | Notes: no published refractive index reference; treated as a constant. Included primarily for its ``thermal_conductivity`` and ``resistivity`` values for FEM heat/electrostatic simulations of metal electrodes.
 
 .. data:: Si
     
@@ -1050,8 +1251,8 @@ Descriptions of all materials available in built-in material database. This info
         n_\mathrm{o} &= \left(3.2089 + \frac{3.4000 \times 10^{-5}}{1.2270 \times 10^{-5} - \lambda^{-2}} - 3.2545\times 10^{-8}\lambda^2 \right)^{0.5} \\
         n_\mathrm{e} &= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10^{-5} - \lambda^{-2}} - 4.2950 \times 10^{-8}\lambda^2 \right)^{0.5}
     
-    Wavelength range: 612 nm to 4449 nm
-    
+    Wavelength range: 500 nm to 4449 nm
+
         | A. Borne, P. Segonds, B. Boulanger, C. Félix, and J. Debray, "Refractive indices, phase-matching directions and third order nonlinear coefficients of rutile TiO2 from third harmonic generation," Opt. Mater. Express 2, 1797 (2012).
         | Notes: The n_e is the z-direction and n_o is the x- and y-direction. Equation takes wavelength in nanometers.
 
@@ -1072,13 +1273,14 @@ Simulation setup
 
     Specify the simulation settings.
 
+    :param str profile: label of the profile these settings apply to, default: '_default'
     :param float wavelength: [nm] simulation wavelength, default: 1550
     :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
     :param float x_resolution: [nm] resolution in the x-direction, default: 10
     :param float y_resolution: [nm] resolution in the y-direction, default: 10
     :param float window_width: [nm] simulation window width
     :param float window_height: [nm] simulation window height
-    :param boundary_condition: boundary condition set as a string with two characters 'XX'; the first character is the south boundary condition, the second character is the west boundary condition; '0': no symmetry (metal boundary), 'S': symmetric Ex, 'A': asymmetric Ex; alternatively, 'TE' and 'TM' can be specified to use the any symmetry available to find the fundamental TE and TM modes; use 'TE-h', 'TE-v', 'TM-h', and 'TM-v' to specify only horizontal or vertical symmetry for TE or TM modes; when using an (a)symmetric boundary, the ``pml_NSEW_bool`` setting is copied from the north/east perimeter to the south/west perimeter; default: '00'
+    :param boundary_condition: boundary condition set as a string with two characters 'XX'; the first character is the south boundary condition, the second character is the west boundary condition; '0': no symmetry (metal boundary), 'S': symmetric Ex, 'A': anti-symmetric Ex; alternatively, 'TE' and 'TM' can be specified to use the any symmetry available to find the fundamental TE and TM modes; use 'TE-h', 'TE-v', 'TM-h', and 'TM-v' to specify only horizontal or vertical symmetry for TE or TM modes; when using an (anti-)symmetric boundary, the ``pml_NSEW_bool`` setting is copied from the north/east perimeter to the south/west perimeter; default: '00'
     :type boundary_condition: str, length = 2
     :param int num_modes: number of modes to solve for, default: 1
     :param str field_to_solve: either 'Et' or 'Ht' to specify whether the transverse electric field or magnetic field is solved, default: 'Et'
@@ -1089,13 +1291,16 @@ Simulation setup
     :type pml_NSEW_bool: list, length = 4
     :param num_pml_layers: number of pml layers to use, either a single value that is applied to all boundaries or a list of 4 values, default: 10
     :type num_pml_layers: int or list with length = 4
-    :param bool remove_pml_modes_bool: automatically remove pml modes, default: True
+    :param bool remove_pml_modes_bool: automatically remove pml modes, default: False
     :param background_material: background material, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object, default: "Vacuum"
     :type background_material: str or ~MaterialProperties or ~MaterialSpec
     :param expansion_resolution: [nm] single value or list of 4 values for the stretched grid resolution; [north, south, east, west], the grid is gradually transitioned from res to ``expansion_resolution``, default: 20
     :type expansion_resolution: float or list
     :param expansion_size: [nm] single value or list of 4 values for the approximate stretched distance; [north, south, east, west], default: 0
     :type expansion_size: float or list
+    :param bool subpixel_avg: whether to use sub-pixel averaging of the permittivity/permeability at shape boundaries for improved accuracy, default: True
+    :param bool generate_chi2: whether to generate the second-order nonlinear susceptibility (chi2) tensor for the simulation window, default: False
+    :param bool include_heat: whether to include heat-related material properties when meshing for FEM heat calculations, default: True
     :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/10
     :param bool eme_scattering: whether or not to automatically calculate scattering for all possible shapes within EME calculations, default: False
     :param str simulation_name: simulation name, default: 'emode'
@@ -1114,6 +1319,8 @@ Simulation setup
     :param float resistivity: [Ohm-nm] resistivity of the material, default: infinity
     :param float dn_dT: [K^-1] change in refractive index per change in temperature, relative to 298 K, default: 0
     :param float eps_r_dc: [-] relative permittivity at ~1 kHz, default: 1.0
+    :param d: second-order nonlinear susceptibility d-matrix with shape (3, 6); use None for linear materials, default: None
+    :type d: list (3x6) or None
     :param float phi: phi angle of the crystal orientation in cylidrical coordinates, default: 0
     :param float theta: theta angle of the crystal orientation in cylidrical coordinates, default: 0
     :param str simulation_name: simulation name, default: 'emode'
@@ -1153,20 +1360,20 @@ Simulation setup
     :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
     :type material: ~MaterialSpec, ~MaterialProperties, or str
     :param float loss_dB_per_m: [dB/m] material propagation loss, if not set by the ``material`` parameter, default: 0
-    :param vertices: list of N vertices that define a closed polygon, if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
-    :type vertices: list (N,2) or int
+    :param vertices: list of N vertices that define a closed polygon, or a list of such vertex lists to define multiple disjoint polygons in one shape; if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
+    :type vertices: list (N,2), list of list (N,2), or int
     :param float width: shape width, gets set to the ``window_width`` if not specified, default: None
     :param float height: shape height, default: 0
-    :param position: centered x and y positions relative to the shape width and height, if y position is negative then it is treated like a layer stacked on top of the previous layer, if only a single value is provided it is assumed to be the x position and the y position is set to -1, default: [0,-1]
+    :param position: centered x and y positions relative to the shape width and height, if the y position is left unspecified then it is treated like a layer stacked on top of the previous layer, if only a single value is provided it is assumed to be the x position and the y position is left unspecified, default: (0, 'auto')
     :type position: list, length = 2
     :param mask: mask width for etching, centered on x-position set by ``position`` and ``mask_offset``, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask_offset`` values, default: ``width``
     :type mask: float or list
     :param mask_offset: the x-position offset for the ``mask`` parameter, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask`` values, default: ``0``
     :type mask_offset: float or list
-    :param tone: 'n' or 'p' to define the pattern tone as negative or positive for the ``mask`` parameter, default: ``n``
+    :param tone: 'n'/'N' or 'p'/'P' to define the pattern tone as negative or positive for the ``mask`` parameter, default: ``n``
     :type tone: str
     :param float etch_depth: etch depth for a layer outside the mask region, thickness = ``height`` - ``etch_depth``, default: 0
-    :param float sidewall_angle: etched sidewall angle in degrees, 0 is perfectly vertical, 90 is the maximum, this decreases the width at the top of the shape to create the angle, default: 0
+    :param float sidewall_angle: etched sidewall angle in degrees, 0 is perfectly vertical, 90 is the maximum; only applied to etched features (``height``, ``mask``, and a nonzero ``etch_depth`` must all be specified for this parameter to have any effect), default: 0
     :param fill_material: the material for the fill for this shape.  Takes the same values as material, as well as "transparent_fill" (the default). "transparent_fill" results in the fill being the background.
     :type fill_material: ~MaterialSpec, ~MaterialProperties, or str
     :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
@@ -1198,18 +1405,26 @@ Solver and analysis
     Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
 
     .. math::
-        \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
+        \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
 
     It also calculates the TE fraction of each mode (``TE_fraction``) with the following equation, and it saves the indices of the TE and TM modes (``TE_indices`` and ``TM_indices``).
 
     .. math::
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param profile: profile name to automatically create a profile after running ``FDM()``, no profile is created if blank, default: ''
+    :param profile: profile name to automatically create a profile after running ``FDM()``, default: '_default'
     :type profile: str or int
+    :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
+    :param float propagation_distance: [nm] optional propagation distance used to compute an additional propagation phase/loss, default: None
     :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
-    :param bool force_isotropic: if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.
+    :param int fLanczos: number of Lanczos vectors used by the eigensolver, default: 5
+    :param str solve_type: either 'isotropic', 'anisotropic', or 'auto' to control whether anisotropic materials are solved with the full tensor or reduced to their isotropic diagonal, default: 'auto'
+    :param bool include_heat: whether to include heat-related material properties when meshing, default: True
+    :param bool scattering: whether to automatically calculate interfacial scattering loss for all shapes after solving, default: False
     :param str simulation_name: simulation name, default: 'emode'
+
+    .. note::
+        The direct return value of this function (as called through ``emodeconnection``) is a dict with keys ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, and ``TM_indices``. The individual field components and derived quantities described above (``effective_index``, ``loss_dB_per_m``, ``Ex``/``Ey``/etc.) become available afterward from the saved profile via ``get()``/``get_fields()``, not as top-level keys of this return value.
 
 .. data:: sweep
 
@@ -1218,15 +1433,17 @@ Solver and analysis
     :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
-    :param str solve_type: either 'Mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
+    :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
     :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
     :type result: str or list
+    :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: confinement
 
     Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included.
 
+    :param str profile: profile label, default: '_default'
     :param shape_list: name (from ``shape``) or list of names of shapes to include in confinement or 'all' for all shapes, default: 'all'
     :type shapes: str or list
     :param mode_list: desired modes to calculate confinement, 'all', 'TE', 'TM', or a list of the desired mode indices, default: 'all'
@@ -1243,25 +1460,29 @@ Solver and analysis
     .. math::
         A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2
 
+    :param str profile: profile label, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: orthogonality
 
     Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the labeled (or default) dataset, and the ``maximum_overlap`` is returned by this function. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
 
-    :param str profile: profile label, default: ''
+    :param profile: profile label, default: '_default'
+    :type profile: str or int
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: group_index
 
     Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index.
 
+    :param str profile: profile label, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: report
 
     Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); confinement factors (if calculated); effective areas (if calculated).
 
+    :param str profile: profile label, default: '_default'
     :param bool save: whether to save the table to a file or not, default: False
     :param str file_name: name of the file to save, default: 'mode_report'
     :param str file_type: file type to save, 'txt', 'latex', or 'csv', default: 'txt'
@@ -1283,10 +1504,12 @@ Solver and analysis
     .. math::
         \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_1 \times \vec H_2 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \times \vec H_1 \right| \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \times \vec H_2 \right| \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
+    :param profile_a: label of first profile, default: '_default'
+    :type profile_a: str or int
     :param int mode_a: mode number from the first profile, default: 0
     :param str simulation_name_a: simulation name for the first mode set, default: 'emode'
-    :param str label_b: label of second profile, or a blank string for the default profile, default: ''
+    :param profile_b: label of second profile, default: '_default'
+    :type profile_b: str or int
     :param int mode_b: mode number from the second profile, default: 0
     :param str simulation_name_b: simulation name for the second mode set, default: 'emode'
 
@@ -1294,8 +1517,11 @@ Solver and analysis
 
     Calculate mode ordering between two mode lists. The result is returned as a list.
 
-    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
-    :param str profile_b: label of second profile, or a blank string for the default profile, default: ''
+    :param profile_a: label of first profile, default: ''
+    :type profile_a: str or int
+    :param profile_b: label of second profile, default: ''
+    :type profile_b: str or int
+    :param bool raw_fields: use the raw (un-normalized) field data for the ordering comparison instead of the interpolated fields, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: scattering
@@ -1304,6 +1530,7 @@ Solver and analysis
 
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
 
+    :param str profile: profile label, default: '_default'
     :param str shape: name of the shape for calculating the interfacial scattering, can also be a list of shapes or None (which calculates scattering for all shapes), default: None
     :param str shapes: alias for shape
     :param mode_list: mode number, list of mode numbers, or 'all', default: 'all'
@@ -1329,8 +1556,11 @@ Solver and analysis
     :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
     :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it calculates an average of the third dimension, default: None
     :type slice_position: float or None
+    :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward) field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False
+    :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, smaller is finer; 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
+    :type resolution: float or str
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
-    :param str file_type: file type for saving a plot, 'pdf' or 'png', default: 'pdf'
+    :param str file_type: file type for saving a plot, 'pdf' or 'png', default: '' (no extension is added to ``file_name`` unless a file type is given)
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: material_explorer
@@ -1359,10 +1589,32 @@ Solver and analysis
     :param bool reference: additionally return the citation for the material, default: False
     :return: [permeability_x, permeability_y, permeability_z] or ([permeability_x, permeability_y, permeability_z], reference)
 
+.. data:: permittivity
+
+    Returns the relative permittivity from a material name (retrieved from the internal reference list) or from a custom value. For isotropic materials this is a 3-element array; for fully anisotropic materials it is a 3×3 tensor. Optionally, the material's reference (or citation) may be returned.
+
+    :param material: material name, or a float/list for a custom value
+    :type material: str, float, or list
+    :param float wavelength: [nm] wavelength, default: 1550
+    :param bool reference: additionally return the citation for the material, default: False
+    :return: [eps_x, eps_y, eps_z], a 3×3 array, or the corresponding tuple with reference
+
+.. data:: d_matrix
+
+    Returns the second-order nonlinear d-matrix of a material. Optionally, the material's reference (or citation) may be returned.
+
+    :param str material: material name
+    :param float wavelength: [nm] wavelength, default: 1550
+    :param bool reference: additionally return the citation for the material, default: False
+    :return: d-matrix with shape (3, 6), or (d-matrix, reference)
+
 .. data:: mesh
 
     Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
 
+    :param str profile: profile label, default: '_default'
+    :param bool run_mesh: whether to actually run the meshing step now, or just mark the profile as prepared for meshing without running it, default: True
+    :param bool verbose: control the display of the progress bar, default: True
     :param str simulation_name: simulation name, default: 'emode'
 
 
@@ -1379,32 +1631,32 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     bend_radius
         (*float*) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.
-        
+
         Alias: ``radius``
 
     boundary_condition
-        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate asymmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition.
-    
+        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via ``get()``/``inspect()`` — use ``BC`` below to read back the resolved boundary condition.
+
     BC
         (*str*) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of '0', 'A', or 'S'. For example, setting the boundary_condition to 'TE' and running FDM() will result in BC changing to either 'SS', '0S', 'S0', or '00', depending on the index profile cross-section symmetry.
-    
+
     confinement_window
         (*list*) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.
-    
+
     effective_area
         (*list*) The effective area of each waveguide mode in units of square microns (:math:`\mu \mathrm{m}^2`), calculated by the following equation.
-        
+
         .. math::
             A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y}
 
     effective_index
         (*list*) The real part of the effective index for each mode.
-        
+
         Alias: ``n_eff``
 
     Ex, Ey, Ez, Hx, Hy, Hz
         (*complex arrays*) The electric (E [V/nm]) and magnetic (H [A/nm]) fields in the x-, y-, and z-directions. These calculated fields are interpolated to the center point of each mesh grid (defined by ``x`` and ``y``). The fields are normalized to the equation below.
-        
+
         .. math::
             \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
 
@@ -1422,20 +1674,20 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     group_index
         (*list*) The group refractive index calculated for each mode.
-        
+
         Alias: ``n_g``
 
     loss_dB_per_m
         (*float*) [dB/m] The power loss coefficient (:math:`\alpha`), which relates to the imaginary part of the effective index (:math:`\kappa`) by the following equation with the wavelength (:math:`\lambda`).
-        
+
         Alias: ``alpha``
-        
+
         .. math::
             \kappa = \frac{\alpha \lambda}{(4 \pi) 10 \, \mathrm{log}_{10}(e)} \approx \frac{\alpha \lambda}{54.575}
-    
+
     maximum_overlap
         (*float*) Largest overlap in the mode list, calculated from the ``orthogonality()`` function.
-    
+
     mesh_complete_bool
         (*boolean*) Indicates if the mesh grid has been calculated for the current definition of shapes and settings.
 
@@ -1450,9 +1702,9 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     overlap
         (*list*) The overlap integral in ``overlap`` uses the following formula to calculate the modal excitation of :math:`\vec E_2` by :math:`\vec E_1`.
-        
+
             Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
-        
+
         .. math::
             \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
@@ -1464,43 +1716,42 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     pml_NSEW_bool
         (*list*) List of booleans indicating if a perfectly matched layer (pml) boundary condition is applied to each boundary: [North, South, East, West].
-    
+
     priority_indices
         (*list*) A list of indices corresponding to the priorities of the shapes in the list ``shape_materials``.
-    
+
     remove_pml_modes_bool
         (*bool*) Indicates whether or not to automatically remove artificial modes found in the pml layers.
 
     shape_list
         (*list*) Complete list of defined shapes.
-    
+
     shape_materials
         (*list*) A list of materials corresponding to the defined shapes.
 
-    
     SHAPE['correlation_length']
         (*list*) A list of two values describing the correlation length of the roughness on the vertical and horizontal edges of the shape.
-        
+
         Alias: ``Lc_nm``
 
     SHAPE['fill_material']
         (*float* or *str*) Either a value or a material name to define the refractive index in the etched region of a 'planar' shape.
-    
+
     SHAPE['geometry']
         (*dict*) A dictionary of the parameters of the shapes geometry
-    
+
     SHAPE['geometry']['etch_depth']
         (*float*) The etch depth associated with a 'planar' shape that also has a defined ``SHAPE['geometry']['mask']``. The shape will have a thickness outside the mask definition equal to the difference between the ``SHAPE['geometry']['height']`` and ``SHAPE['geometry']['etch_depth']`` (or zero if this is negative).
 
     SHAPE['geometry']['height']
         (*float*) Maximum size of the shape in the y-direction.
 
-    SHAPE['geometry']['masks']
+    SHAPE['geometry']['mask']
         (*list*) The masks for this shape
-    
-    SHAPE['geometry']['mask_offsets']
+
+    SHAPE['geometry']['mask_offset']
         (*list*) The mask offsets for this shape
-    
+
     SHAPE['geometry']['position']
         (*list*) The x- and y-positions of the center point of the shape, constrained by the ``SHAPE['geometry']['width']`` and ``SHAPE['geometry']['height']``.
 
@@ -1533,7 +1784,7 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     SHAPE['roughness_rms']
         (*list*) A list of two values describing the rms roughness on the vertical and horizontal edges of the shape.
-        
+
         Alias: ``st_dev_nm``
 
     SHAPE['metadata']
@@ -1541,19 +1792,19 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     SHAPE['metadata']['confinement']
         (*list*) Confinement factor for each mode in the corresponding shape.
-    
+
     SHAPE['metadata']['edges']
-        (*list*) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from ``SHAPE['scattering_all_edges']``.
-    
+        (*list*) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlated to the loss values from ``SHAPE['metadata']['scattering_all_edges']``.
+
     SHAPE['metadata']['scattering_all_edges']
-        (*list*) Calculated scattering loss for each edge of the shape, defined by ``SHAPE['edges']``.
+        (*list*) Calculated scattering loss for each edge of the shape, defined by ``SHAPE['metadata']['edges']``.
 
     SHAPE['metadata']['scattering_horizontal_edges']
         (*list*) Calculated scattering loss for each horizontal edge of the shape.
 
     SHAPE['metadata']['scattering_sum']
         (*list*) Total calculated scattering loss for all edges of the shape.
-    
+
     SHAPE['metadata']['scattering_vertical_edges']
         (*list*) Calculated scattering loss for each vertical edge of the shape.
 
@@ -1562,7 +1813,7 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     TE_fraction
         (*list*) Fractions representing how much the mode is like a TE mode, calculated with the following equation.
-        
+
         .. math::
             \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
@@ -1595,6 +1846,15 @@ Descriptions of all variables available in the simulation file. Some variables h
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.0: July 8, 2026**
+
+* Major internal architectural changes to enable the pending release of nonlinear EME functions and complex circuit solutions.
+* EME API changed such that each section type is defined with a unique function.
+* Improved PMLs for stability, especially with radiation modes.
+* Fixed a bug with the command line installer for Windows. Now ``emode`` is added to path automatically.
+* Plot now shows bidirectional field data by default, controlled by the setting "Forward only".
+* Plot now blends fields with interpolation by default, controlled by the setting "Blend slices".
+
 **0.2.6: April 27, 2026**
 
 * Fixed ``sweep()`` function to deliver ``mode_order`` and ``scattering_loss`` in ``results``.
@@ -1608,7 +1868,7 @@ Release Notes
 
 **0.2.4: February 10, 2026**
 
-* Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.
+* Boundary condition implementations have been updated. This may impact (anti-)symmetric boundary mode lists.
 * Improved EME junction algorithm for robustness.
 * Implemented speed improvements, leading to a 60% speedup in our taper example.
 * Added an input to the ``settings()`` function called ``frequency`` as an alternative way to set the simulation wavelength. Internally, the ``wavelength`` is calculated from the ``frequency`` parameter as ``wavelength`` = c/``frequency``.
@@ -1765,48 +2025,86 @@ Release Notes
 Troubleshooting
 ^^^^^^^^^^^^^^^
 
-.. glossary::
-    
-    *EMode and EModeLogin open, but they have an issue connecting to the license server.*
-        First, double-check your internet connection. Next, try restarting your computer to make sure the new firewall settings are implemented.
-    
-    *EMode was installed and functioning properly, but now there are issues launching EMode or logging into the license server.*
-        Check that you have the latest version of EMode installed by navigating the installation page. Also, check that your connection module is up to date.
-    
+.. dropdown:: EMode and EModeLogin open, but they have an issue connecting to the license server.
+
+    First, double-check your internet connection. Next, try restarting your computer to make sure the new firewall settings are implemented.
+
+.. dropdown:: EMode was installed and functioning properly, but now there are issues launching EMode or logging into the license server.
+
+    Check that you have the latest version of EMode installed by navigating the installation page. Also, check that your connection module is up to date.
+
+.. dropdown:: A simulation crash left a license checked out and EMode now reports no available seats.
+
+    A crashed session keeps a license checked out until it times out (9 minutes by default, or 24 hours under roaming mode). Clear the stale session at startup with ``EMode(clear='all')``. To clear only one seat instead of all, use ``clear='oldest'`` or ``clear='latest'``. If the session was started with ``roaming=True``, the lock persists for 24 hours unless explicitly cleared.
+
+.. dropdown:: Calling section(), EME(), or plot_S_matrix() raises a LicenseError saying the function is only available with EMode3D.
+
+    These functions require an EMode\ :sup:`3D`\  license. When ``EMode()`` is initialized with ``license_type='default'``, a 2D license is checked out if no 3D license is available. Force a 3D checkout with ``EMode(license_type='3d')``. If your subscription only includes EMode\ :sup:`2D`\ , these functions are not accessible.
+
+.. dropdown:: After installing EMode on Windows, running emode from the command line produces "command not found" or is not recognized.
+
+    Update to v1.0.0 or later, or manually add the EMode install directory to your PATH. The install location is shown at the end of the installer output. You can also launch the login GUI directly from Python with ``emc.EModeLogin()``.
+
+.. dropdown:: FDM() returns fewer modes than num_modes, or returns zero modes.
+
+    The solver only finds modes with an effective index between the cladding index and ``max_effective_index``. If ``max_effective_index`` is set too low, guided modes are excluded. When set to 0 (default), it uses the maximum refractive index in the window—if a high-index material is present outside the core this cap may be too generous, causing spurious or missing results. Additionally, ``remove_pml_modes_bool`` (default ``False``) automatically removes modes identified as PML modes after solving when enabled, which can reduce the returned mode count. Also verify that ``window_width`` and ``window_height`` are large enough to contain the mode field: clipping the field tail will reduce the mode count. Confirm that ``num_modes`` is set in ``settings()`` before calling ``FDM()``.
+
+.. dropdown:: The mode list contains modes with very high loss or fields concentrated entirely in the PML regions.
+
+    These are PML-induced artificial modes. Set ``remove_pml_modes_bool=True`` in ``settings()`` (default ``False``) to automatically remove modes whose inner-window confinement falls below 75%. If PML modes still appear after enabling it, check that ``pml_NSEW_bool`` is set correctly and that ``expansion_size`` is nonzero on the relevant boundaries. Increasing ``num_pml_layers`` beyond the default of 10 improves PML absorption.
+
+.. dropdown:: The effective index changes significantly when I refine the resolution or increase the window size—results are not converging.
+
+    A convergence study is required for any quantitative result. Systematically vary ``x_resolution`` and ``y_resolution`` (halving each time), then ``window_width`` and ``window_height`` (increase until ``n_eff`` changes by less than your target tolerance), and finally ``expansion_size`` on each boundary. The ``sweep()`` function automates this: e.g., ``sweep(key='x_resolution', values=[20, 10, 5], result='effective_index')``. A ``max_effective_index`` set too close to ``n_eff`` can also bias the eigenvalue search.
+
+.. dropdown:: Setting boundary_condition='TE' or 'TM' sometimes falls back to '00' and solves the full window.
+
+    The ``'TE'`` and ``'TM'`` shortcuts detect symmetry from the refractive index profile. If the geometry is not symmetric about the window center (e.g., a shape is off-center), no symmetry is found and EMode falls back to ``'00'``. Check the resolved boundary condition with ``em.get('BC')`` after ``FDM()``. Use explicit boundary conditions such as ``'SS'`` or ``'0S'`` if you know the geometry is symmetric. The south (y) boundary is the first character; the west (x) boundary is the second.
+
+.. dropdown:: A shape is not visible in plot(component='Shapes'), or the geometry looks wrong.
+
+    Shapes are drawn in order of ``priority``: higher values are drawn on top. By default, each successive ``shape()`` call receives an auto-incremented priority. If a wide substrate or cladding layer is defined after a core, it will cover the core. Fix this by setting ``priority`` explicitly—give the core a higher value than the surrounding cladding. Inspect priorities with ``em.get('priority_indices')`` and validate the meshed index with ``plot(component='Index')``.
+
+.. dropdown:: A material name passed to shape() or settings() raises an error or is not recognized.
+
+    Material names are case-sensitive and must exactly match the database. Use ``material_explorer()`` to browse all available names and their recommended wavelength ranges. For alloys like AlGaAs, the composition fraction must be included in the name string, e.g., ``"AlGaAs, 0.3"``. If the wavelength is outside a material's recommended range, the model extrapolates (shown as a dashed line in ``material_explorer()``), which may produce inaccurate results.
+
+.. dropdown:: Calling add_material() raises an ArgumentError about invalid characters in the equation.
+
+    The ``refractive_index_equation`` string is restricted to the characters ``0123456789 x j . + - ^ * / ( ) [ ]``. Function calls (``sqrt``, ``np.``, ``math.``), variable names, and comparison operators are not allowed. Use ``x`` for the wavelength variable (unit set by ``wavelength_unit``, default ``'um'``). Exponents use ``^``, not ``**``. Square roots are written as ``(expr)^0.5``. Imaginary index components use ``j`` directly: e.g., ``1.5 + j0.001``. The string must be fewer than 1000 characters.
+
+.. dropdown:: scattering() returns 0 for all modes even though roughness is defined on the shape.
+
+    Scattering loss requires both ``roughness_rms`` and ``correlation_length`` to be nonzero on the relevant shape. Setting only one is insufficient. Also confirm that the shape has exposed interfaces: if it is fully overlapped by a higher-priority shape it contributes no scattering. Inspect results in the shape's metadata with ``em.get('shape_SHAPENAME')['metadata']['scattering_sum']`` after calling ``scattering()``.
+
+.. dropdown:: The simulation is slow, or a parameter sweep takes a very long time.
+
+    Resolution is the dominant cost: halving ``x_resolution`` and ``y_resolution`` increases the matrix size by 4× and solve time by roughly 8–16×. Reduce the window to the minimum size that passes a convergence check. Use symmetric boundary conditions (``'TE'``, ``'TM'``, ``'SS'``, etc.) when the geometry permits—this reduces the solved domain by up to 4×. Set ``num_modes`` to only as many modes as needed. Process priority can be raised with ``EMode(priority='pH')``.
+
+.. dropdown:: The returned effective_index is complex, or loss_dB_per_m is unexpectedly nonzero for a nominally lossless design.
+
+    A nonzero imaginary effective index indicates optical loss from one or more sources: (1) a material with a nonzero imaginary refractive index or ``loss_dB_per_m``; (2) PML layers absorbing leaky field energy—increase ``window_width``, ``window_height``, or ``expansion_size``; (3) ``bend_radius`` is set, which introduces radiative bending loss. Check each source using ``em.get('loss_dB_per_m')`` and ``em.get('bend_radius')``.
+
+.. dropdown:: An issue is not covered here, or behavior seems incorrect.
+
+    EMode only supports the latest version. Many issues are resolved by upgrading. Visit the installation page to download the latest release and review the release notes for resolved bugs and API changes.
+
 
 
 Examples
 ========
 
-To launch EMode, initialize a simulation, and check out an active license:
+Quick reference for initializing, running, and closing an EMode session:
 
-.. tabs::
+.. code-block:: python
 
-    .. code-tab:: python
-        :caption: Python
+    import emodeconnection as emc
 
-        import emodeconnection as emc
-        em = emc.EMode()
+    em = emc.EMode()                   # Launch and check out license
+    em.function_name(keyword = value)  # Call EMode functions
+    em.close()                         # Close and check in license
 
-Next, EMode functions are called with:
-
-.. tabs::
-
-    .. code-tab:: python
-        :caption: Python
-
-        em.function_name(keyword_1 = value_1, keyword_2 = value_2, ... )
-
-Close EMode and check in the license with:
-
-.. tabs::
-
-    .. code-tab:: python
-        :caption: Python
-
-        em.close()
-
-Example  Scripts
+Example Scripts
 ^^^^^^^^^^^^^^^^
 
 .. grid:: 2
@@ -1818,26 +2116,30 @@ Example  Scripts
         :shadow: md
         :columns: 6
 
-        .. hlist::
-            :columns: 3
+        .. container:: icon-list
 
-            * :doc:`SOI <examples//SOI>`
-            * :doc:`SiN <examples//SiN>`
-            * :doc:`LNOI <examples//LNOI>`
-            * :doc:`Laser <examples//Laser>`
-            * :doc:`Open <examples//Open>`
-            * :doc:`Dispersion <examples//Dispersion>`
+            .. hlist::
+                :columns: 2
+
+                * :octicon:`container;1em` :doc:`SOI <examples//SOI>`
+                * :octicon:`iterations;1em` :doc:`SiN <examples//SiN>`
+                * :octicon:`zap;1em` :doc:`LNOI <examples//LNOI>`
+                * :octicon:`light-bulb;1em` :doc:`Laser <examples//Laser>`
+                * :octicon:`file;1em` :doc:`Open <examples//Open>`
+                * :octicon:`graph;1em` :doc:`Dispersion <examples//Dispersion>`
 
     .. grid-item-card:: EMode\ :sup:`3D`\  Scripts
         :shadow: md
         :columns: 6
 
-        .. hlist::
-            :columns: 2
+        .. container:: icon-list
 
-            * :doc:`EME: Taper <examples//EME_Taper>`
-            * :doc:`EME: Sweep <examples//EME_Sweep>`
-            * :doc:`EME: GDS <examples//EME_GDS>`
+            .. hlist::
+                :columns: 2
+
+                * :octicon:`paper-airplane;1em` :doc:`EME: Taper <examples//EME_Taper>`
+                * :octicon:`video;1em` :doc:`EME: Sweep <examples//EME_Sweep>`
+                * :octicon:`project-symlink;1em` :doc:`EME: GDS <examples//EME_GDS>`
 
 .. toctree::
    :maxdepth: 1
@@ -1912,9 +2214,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.6 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.3 sec
+    Solving modes completed in 0.7 sec
 
     Wavelength: 1550.0 nm
  
@@ -2014,15 +2316,15 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.4 sec
-    Solving modes... completed in 20.8 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.5 sec
+    Solving modes completed in 21.8 sec
 
     Wavelength: 980.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    background confinement    core confinement
     --------  --------  ------  -------------  ------------------------  ------------------
-        TE-0  1.665877  99.9 %          0.030                    39.3 %              60.7 %
+        TE-0  1.665877  99.9 %          0.017                    39.3 %              60.7 %
  
     Exited EMode
 
@@ -2119,9 +2421,9 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.4 sec
-    Solving modes... completed in 1.6 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.5 sec
+    Solving modes completed in 1.5 sec
 
     Wavelength: 1550.0 nm
  
@@ -2129,8 +2431,9 @@ Console output::
     --------  --------  ------  -------------  ------------------
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
-    Meshing  completed in 0.3 sec
-    Solving modes... completed in 1.2 sec
+    Saved profile: '0'
+    Meshing completed in 0.4 sec
+    Solving modes completed in 1.1 sec
 
     Wavelength: 1550.0 nm
  
@@ -2169,7 +2472,7 @@ Figures:
 Scattering loss: Laser
 ----------------------
 
-An example of a complex layer structure where scattering loss is calculated for the Si waveguide core. Note that a fill_index is specified for the waveguide core, which is useful for structures formed by bonding. Also, a custom file name for the simulation is specified ("laser.eph") instead of the default "emode.eph".
+An example of a complex layer structure where scattering loss is calculated for the Si waveguide core. Note that a fill_material is specified for the waveguide core, which is useful for structures formed by bonding. Also, a custom file name for the simulation is specified ("laser.eph") instead of the default "emode.eph".
 
 The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tutorial on narrow linewidth tunable semiconductor lasers using Si/III-V heterogeneous integration," APL Photonics 4, 111101 (2019).
 
@@ -2252,9 +2555,9 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 3.4 sec
-    Solving modes... completed in 9.2 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 4.0 sec
+    Solving modes completed in 8.2 sec
 
     Wavelength: 1550.0 nm
  
@@ -2370,7 +2673,7 @@ How to open an existing EMode simulation.
 
         # Update the settings
         em.settings(wavelength = wavelength,
-            boundary_condition = 'TM', num_modes = 4,
+            boundary_condition = 'TM', num_modes = 2,
             max_effective_index = n_eff[0])
 
         # Launch FDM solver
@@ -2392,14 +2695,14 @@ How to open an existing EMode simulation.
 
         E_s = em.get_fields(key = ['Ex', 'Ey', 'Ez'])
         TM_indices = em.get('TM_indices')
-        em.plot(component = 'Ey', mode = TM_indices)
+        em.plot(component = 'Ey', mode = TM_indices[0])
         em.close()
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.6 sec
-    Solving modes... completed in 1.5 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.5 sec
 
     Wavelength: 1970.0 nm
  
@@ -2408,23 +2711,21 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.5 sec
-    Solving modes... completed in 1.8 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.4 sec
 
     Wavelength: 985.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.863080  99.9 %          0.000
-        TE-1  2.684545  99.7 %          0.000
-        TE-2  2.362233  98.6 %          0.000
-        TM-3  2.067847   1.2 %          0.000
+        TM-0  2.067847   1.2 %          0.000
+        TM-1  1.929029  15.3 %          0.000
  
     Exited EMode
-    EMode3D 0.2.6 - email
+    EMode3D 1.0.0 - email
     Exited EMode
-    EMode3D 0.2.6 - email
+    EMode3D 1.0.0 - email
     Exited EMode
 
 Figures:
@@ -2493,52 +2794,31 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode3D 0.2.6 - email
+    EMode3D 1.0.0 - email
 
     Sweeping setting parameter 'wavelength'...
-    Solving FDM: wavelength = 1000...Meshing  completed in 0.6 sec
-     completed in 2.0 sec
-    Solving FDM: wavelength = 1050...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1100...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1150...Meshing  completed in 0.5 sec
-     completed in 1.5 sec
-    Solving FDM: wavelength = 1200...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1250...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1300...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1350...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1400...Meshing  completed in 0.5 sec
-     completed in 1.5 sec
-    Solving FDM: wavelength = 1450...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1500...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1550...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1600...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1650...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1700...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1750...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1800...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1850...Meshing  completed in 0.6 sec
-     completed in 1.8 sec
-    Solving FDM: wavelength = 1900...Meshing  completed in 0.6 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1950...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 2000...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-     completed in 35.3 sec
+    Solving FDM: wavelength = 1000... completed in 2.1 sec
+    Solving FDM: wavelength = 1050... completed in 1.8 sec
+    Solving FDM: wavelength = 1100... completed in 1.7 sec
+    Solving FDM: wavelength = 1150... completed in 1.6 sec
+    Solving FDM: wavelength = 1200... completed in 1.7 sec
+    Solving FDM: wavelength = 1250... completed in 1.6 sec
+    Solving FDM: wavelength = 1300... completed in 1.7 sec
+    Solving FDM: wavelength = 1350... completed in 1.8 sec
+    Solving FDM: wavelength = 1400... completed in 1.6 sec
+    Solving FDM: wavelength = 1450... completed in 1.7 sec
+    Solving FDM: wavelength = 1500... completed in 1.7 sec
+    Solving FDM: wavelength = 1550... completed in 1.7 sec
+    Solving FDM: wavelength = 1600... completed in 1.8 sec
+    Solving FDM: wavelength = 1650... completed in 1.8 sec
+    Solving FDM: wavelength = 1700... completed in 1.7 sec
+    Solving FDM: wavelength = 1750... completed in 1.7 sec
+    Solving FDM: wavelength = 1800... completed in 1.8 sec
+    Solving FDM: wavelength = 1850... completed in 1.9 sec
+    Solving FDM: wavelength = 1900... completed in 1.7 sec
+    Solving FDM: wavelength = 1950... completed in 1.8 sec
+    Solving FDM: wavelength = 2000... completed in 1.7 sec
+     completed in 36.6 sec
     Exited EMode
 
 A separate script can be used to plot the results.
@@ -2684,15 +2964,15 @@ The simplest EMode example of an EME simulation.
         em.plot()
 
         ## Draw EME sections
-        em.section(section_type = 'straight',
+        em.straight_section(
             profile = 'a',
             length = 2000)
 
-        em.section(section_type = 'taper',
+        em.taper_section(
             profile = 'a', profile_end = 'b',
             length = 8000)
 
-        em.section(section_type = 'straight',
+        em.straight_section(
             profile = 'b',
             length = 2000)
 
@@ -2706,9 +2986,9 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.6 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.2 sec
+    Solving modes completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -2725,8 +3005,8 @@ Console output::
         TE-8  1.250897  98.7 %          0.000
         TE-9  1.189492  95.8 %          0.000
  
-    Meshing  completed in 0.2 sec
-    Solving modes... completed in 0.4 sec
+    Meshing completed in 0.2 sec
+    Solving modes completed in 0.4 sec
 
     Wavelength: 1550.0 nm
  
@@ -2743,16 +3023,65 @@ Console output::
         TM-8  1.333348   48.1 %          0.000
         TE-9  1.285430   69.6 %          0.000
  
+
     Solving S-matrices...
-    Solving section: 0...Meshing  completed in 0.1 sec
-     completed in 1.1 sec
-
-    Solving section: 1...
-     completed in 25.0 sec
-
-    Solving section: 2...Meshing  completed in 0.2 sec
-     completed in 0.5 sec
-     completed in 0.5 sec
+    Solving section: 1... completed in 0.0 sec
+    Solving section: 2...
+    Solving slice at 4000.0 nm... completed in 0.6 sec
+    Solving slice at 6000.0 nm... completed in 0.7 sec
+    Solving slice at 2000.0 nm... completed in 0.7 sec
+    Solving slice at 7000.0 nm... completed in 0.5 sec
+    Solving slice at 5000.0 nm... completed in 0.7 sec
+    Solving slice at 3000.0 nm... completed in 0.6 sec
+    Solving slice at 1000.0 nm... completed in 0.6 sec
+    Solving slice at 7500.0 nm... completed in 0.5 sec
+    Solving slice at 6500.0 nm... completed in 0.5 sec
+    Solving slice at 5500.0 nm... completed in 0.6 sec
+    Solving slice at 4500.0 nm... completed in 0.5 sec
+    Solving slice at 3500.0 nm... completed in 0.5 sec
+    Solving slice at 2500.0 nm... completed in 0.5 sec
+    Solving slice at 1500.0 nm... completed in 0.6 sec
+    Solving slice at 500.0 nm... completed in 0.5 sec
+    Solving slice at 7750.0 nm... completed in 0.5 sec
+    Solving slice at 7250.0 nm... completed in 0.5 sec
+    Solving slice at 6750.0 nm... completed in 0.5 sec
+    Solving slice at 6250.0 nm... completed in 0.6 sec
+    Solving slice at 5750.0 nm... completed in 0.5 sec
+    Solving slice at 5250.0 nm... completed in 0.5 sec
+    Solving slice at 4750.0 nm... completed in 0.5 sec
+    Solving slice at 4250.0 nm... completed in 0.5 sec
+    Solving slice at 3750.0 nm... completed in 0.5 sec
+    Solving slice at 3250.0 nm... completed in 0.5 sec
+    Solving slice at 2750.0 nm... completed in 0.5 sec
+    Solving slice at 2250.0 nm... completed in 0.5 sec
+    Solving slice at 1750.0 nm... completed in 0.5 sec
+    Solving slice at 1250.0 nm... completed in 0.5 sec
+    Solving slice at 750.0 nm... completed in 0.5 sec
+    Solving slice at 250.0 nm... completed in 0.5 sec
+    Solving slice at 6125.0 nm... completed in 0.5 sec
+    Solving slice at 5875.0 nm... completed in 0.5 sec
+    Solving slice at 5375.0 nm... completed in 0.5 sec
+    Solving slice at 5125.0 nm... completed in 0.5 sec
+    Solving slice at 4375.0 nm... completed in 0.5 sec
+    Solving slice at 4125.0 nm... completed in 0.5 sec
+    Solving slice at 3875.0 nm... completed in 0.5 sec
+    Solving slice at 3625.0 nm... completed in 0.5 sec
+    Solving slice at 3375.0 nm... completed in 0.5 sec
+    Solving slice at 3125.0 nm... completed in 0.5 sec
+    Solving slice at 2875.0 nm... completed in 0.5 sec
+    Solving slice at 2625.0 nm... completed in 0.5 sec
+    Solving slice at 2375.0 nm... completed in 0.5 sec
+    Solving slice at 5437.5 nm... completed in 0.5 sec
+    Solving slice at 5312.5 nm... completed in 0.5 sec
+    Solving slice at 5187.5 nm... completed in 0.5 sec
+    Solving slice at 4312.5 nm... completed in 0.5 sec
+    Solving slice at 4187.5 nm... completed in 0.5 sec
+    Solving slice at 2562.5 nm... completed in 0.5 sec
+    Solving slice at 2312.5 nm... completed in 0.5 sec
+    Solving slice at 4218.8 nm... completed in 0.5 sec
+     completed in 35.2 sec
+    Solving section: 3... completed in 0.0 sec
+     completed in 35.2 sec
     Exited EMode
 
 Figures:
@@ -2830,15 +3159,15 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         em.label_profile(name = 'b') # skips solving the modes here
 
         ## Draw EME sections
-        em.section(section_type = 'straight',
+        em.straight_section(
             profile = 'a',
             length = 2000)
 
-        em.section(name = 'taper', section_type = 'taper',
+        em.taper_section(name = 'taper',
             profile = 'a', profile_end = 'b',
             length = 8000)
 
-        em.section(section_type = 'straight',
+        em.straight_section(
             profile = 'b',
             length = 2000)
 
@@ -2852,113 +3181,98 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
+    EMode3D 1.0.0 - email
+    Saved profile: 'a'
+    Saved profile: 'b'
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 8000...Meshing  completed in 0.1 sec
-
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 26.6 sec
-    Solving EME: length = 7750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 7500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 7250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 7000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 6750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 6500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 6250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 6000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 4750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 4500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 4250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.8 sec
-    Solving EME: length = 4000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 3750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 3500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 3250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 3000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Solving EME: length = 2750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 2500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 2250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 2000...Meshing  completed in 0.3 sec
-    Meshing  completed in 0.3 sec
-     completed in 2.0 sec
-    Solving EME: length = 1750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 2.3 sec
-    Solving EME: length = 1500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 1250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 1000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 0...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-     completed in 1 min 19.9 sec
+    Solving EME: length = 8000...
+    Solving slice at 4000.0 nm... completed in 0.6 sec
+    Solving slice at 6000.0 nm... completed in 0.5 sec
+    Solving slice at 2000.0 nm... completed in 0.6 sec
+    Solving slice at 7000.0 nm... completed in 0.6 sec
+    Solving slice at 5000.0 nm... completed in 0.5 sec
+    Solving slice at 3000.0 nm... completed in 0.6 sec
+    Solving slice at 1000.0 nm... completed in 0.6 sec
+    Solving slice at 7500.0 nm... completed in 0.5 sec
+    Solving slice at 6500.0 nm... completed in 0.6 sec
+    Solving slice at 5500.0 nm... completed in 0.6 sec
+    Solving slice at 4500.0 nm... completed in 0.5 sec
+    Solving slice at 3500.0 nm... completed in 0.6 sec
+    Solving slice at 2500.0 nm... completed in 0.5 sec
+    Solving slice at 1500.0 nm... completed in 0.5 sec
+    Solving slice at 500.0 nm... completed in 0.5 sec
+    Solving slice at 7750.0 nm... completed in 0.5 sec
+    Solving slice at 7250.0 nm... completed in 0.5 sec
+    Solving slice at 6750.0 nm... completed in 0.5 sec
+    Solving slice at 6250.0 nm... completed in 0.5 sec
+    Solving slice at 5750.0 nm... completed in 0.5 sec
+    Solving slice at 5250.0 nm... completed in 0.5 sec
+    Solving slice at 4750.0 nm... completed in 0.5 sec
+    Solving slice at 4250.0 nm... completed in 0.5 sec
+    Solving slice at 3750.0 nm... completed in 0.5 sec
+    Solving slice at 3250.0 nm... completed in 0.5 sec
+    Solving slice at 2750.0 nm... completed in 0.5 sec
+    Solving slice at 2250.0 nm... completed in 0.5 sec
+    Solving slice at 1750.0 nm... completed in 0.6 sec
+    Solving slice at 1250.0 nm... completed in 0.5 sec
+    Solving slice at 750.0 nm... completed in 0.5 sec
+    Solving slice at 250.0 nm... completed in 0.5 sec
+    Solving slice at 6125.0 nm... completed in 0.5 sec
+    Solving slice at 5875.0 nm... completed in 0.5 sec
+    Solving slice at 5375.0 nm... completed in 0.5 sec
+    Solving slice at 5125.0 nm... completed in 0.5 sec
+    Solving slice at 4375.0 nm... completed in 0.5 sec
+    Solving slice at 4125.0 nm... completed in 0.5 sec
+    Solving slice at 3875.0 nm... completed in 0.5 sec
+    Solving slice at 3625.0 nm... completed in 0.5 sec
+    Solving slice at 3375.0 nm... completed in 0.5 sec
+    Solving slice at 3125.0 nm... completed in 0.5 sec
+    Solving slice at 2875.0 nm... completed in 0.5 sec
+    Solving slice at 2625.0 nm... completed in 0.5 sec
+    Solving slice at 2375.0 nm... completed in 0.5 sec
+    Solving slice at 5437.5 nm... completed in 0.5 sec
+    Solving slice at 5312.5 nm... completed in 0.5 sec
+    Solving slice at 5187.5 nm... completed in 0.5 sec
+    Solving slice at 4312.5 nm... completed in 0.5 sec
+    Solving slice at 4187.5 nm... completed in 0.5 sec
+    Solving slice at 2562.5 nm... completed in 0.5 sec
+    Solving slice at 2312.5 nm... completed in 0.5 sec
+    Solving slice at 4218.8 nm... completed in 0.5 sec
+     completed in 36.4 sec
+    Solving EME: length = 7750... completed in 0.0 sec
+    Solving EME: length = 7500... completed in 0.0 sec
+    Solving EME: length = 7250... completed in 0.0 sec
+    Solving EME: length = 7000... completed in 0.0 sec
+    Solving EME: length = 6750... completed in 0.0 sec
+    Solving EME: length = 6500... completed in 0.0 sec
+    Solving EME: length = 6250... completed in 0.0 sec
+    Solving EME: length = 6000... completed in 0.0 sec
+    Solving EME: length = 5750... completed in 0.0 sec
+    Solving EME: length = 5500... completed in 0.0 sec
+    Solving EME: length = 5250... completed in 0.0 sec
+    Solving EME: length = 5000... completed in 0.0 sec
+    Solving EME: length = 4750... completed in 0.0 sec
+    Solving EME: length = 4500... completed in 0.0 sec
+    Solving EME: length = 4250... completed in 0.0 sec
+    Solving EME: length = 4000... completed in 0.0 sec
+    Solving EME: length = 3750... completed in 0.0 sec
+    Solving EME: length = 3500... completed in 0.0 sec
+    Solving EME: length = 3250... completed in 0.0 sec
+    Solving EME: length = 3000... completed in 0.0 sec
+    Solving EME: length = 2750... completed in 0.0 sec
+    Solving EME: length = 2500... completed in 0.0 sec
+    Solving EME: length = 2250... completed in 0.0 sec
+    Solving EME: length = 2000... completed in 0.0 sec
+    Solving EME: length = 1750... completed in 0.0 sec
+    Solving EME: length = 1500... completed in 0.0 sec
+    Solving EME: length = 1250... completed in 0.0 sec
+    Solving EME: length = 1000... completed in 0.0 sec
+    Solving EME: length = 750... completed in 0.0 sec
+    Solving EME: length = 500... completed in 0.0 sec
+    Solving EME: length = 250... completed in 0.0 sec
+    Solving EME: length = 0... completed in 0.0 sec
+     completed in 37.3 sec
     Exited EMode
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -2989,14 +3303,14 @@ While no figures are generated in the EMode script, a separate script can be use
 
         fig, ax = plt.subplots(1, 1)
         ax.set_xlabel('Taper length (nm)')
-        ax.set_ylabel('Tranmission (%)')
+        ax.set_ylabel('Transmission (%)')
         ax.grid(visible=True, which='major', axis='both', linewidth=LW/2, color='grey', alpha=0.25)
 
-        S = np.array(data['S_matrix'])
+        transmission = np.array([s.transmission() for s in data['S_matrix']])
         lines = []
-        for kk in range(S.shape[-1]):
+        for kk in range(transmission.shape[-1]):
             line, = ax.plot(data['values'],
-                100*np.abs(S[:,1,0,kk,0])**2,
+                100*np.abs(transmission[:,kk,0])**2,
                 marker = '', linestyle = '-', lw = LW*1.5,
                 label = r'Mode 0$\rightarrow$%d' % kk)
     
@@ -3151,22 +3465,21 @@ Next, the directional coupler device is created and simulated for a short couple
         em.label_profile(name = 'coupler')
 
         ## Draw EME sections
-        em.section(name = 'input', section_type = 'straight',
+        em.straight_section(name = 'input',
             profile = 'io_waveguide', length = 1000,
             offset = input_gap/2 + width_wg/2)
 
-        em.section(name = 'sbend', section_type = 'gds',
-            gds = 'sbend.gds', profile = 'slab',
-            shape_to_mask = 'core',
+        em.gds_section(name = 'sbend',
+            gds_path = 'sbend.gds', profile = 'slab',
+            layer_map = {'core': 1},
             length = 10e3) # modify length of gds
 
-        em.section(name = 'coupler', section_type = 'straight',
+        em.straight_section(name = 'coupler',
             profile = 'coupler', length = 30e3)
 
-        em.section(section_type = 'copy',
-            section_name = 'sbend', mirror = True)
+        em.copy_section(section_name = 'sbend', mirror = True)
 
-        em.section(name = 'output', section_type = 'straight',
+        em.straight_section(name = 'output',
             profile = 'io_waveguide', length = 1000,
             offset = -input_gap/2 - width_wg/2)
 
@@ -3179,8 +3492,8 @@ Next, the directional coupler device is created and simulated for a short couple
             values = np.arange(0, 200.1e3, 10000),
             result = ['S_matrix'])
 
-        S = data['S_matrix']
-        plt.plot(data['values']*1e-3, np.abs(S[:,1,0,0])**2*100)
+        transmission = np.array([s.transmission() for s in data['S_matrix']])
+        plt.plot(data['values']*1e-3, np.abs(transmission[:,0,0])**2*100)
         plt.xlabel("Coupler length (\u03BCm)")
         plt.ylabel("Transmission (%)")
         plt.autoscale(enable = True, axis = 'x', tight = True)
@@ -3188,7 +3501,7 @@ Next, the directional coupler device is created and simulated for a short couple
         plt.savefig('transmission_plot.png', dpi = 300, bbox_inches = 'tight')
 
         ## Plot final design for 100 % coupler
-        em.section(name = 'coupler', length = 180e3)
+        em.straight_section(name = 'coupler', length = 180e3)
         em.EME()
         em.plot()
 
@@ -3197,61 +3510,50 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.3 sec
-    Meshing  completed in 0.1 sec
-    Meshing  completed in 0.1 sec
+    EMode3D 1.0.0 - email
+    Saved profile: 'slab'
+    Saved profile: 'io_waveguide'
+    Saved profile: 'coupler'
+
     Solving S-matrices...
-    Solving section: input...Meshing  completed in 0.1 sec
-     completed in 1.5 sec
-
-    Solving section: sbend...
-    Meshing  completed in 0.1 sec
-     completed in 31.1 sec
-
-    Solving section: coupler... completed in 0.2 sec
-
-    Solving section: 3...
-     completed in 4.0 sec
-
-    Solving section: output... completed in 0.1 sec
-     completed in 0.1 sec
-    Meshing  completed in 0.2 sec
+    Solving section: input... completed in 0.0 sec
+    Solving section: sbend... completed in 38.8 sec
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: 4... completed in 0.0 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 38.8 sec
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 200000.0... completed in 1.1 sec
-    Solving EME: length = 190000.0... completed in 1.1 sec
-    Solving EME: length = 180000.0... completed in 1.2 sec
-    Solving EME: length = 170000.0... completed in 1.2 sec
-    Solving EME: length = 160000.0... completed in 1.2 sec
-    Solving EME: length = 150000.0... completed in 1.2 sec
-    Solving EME: length = 140000.0... completed in 1.5 sec
-    Solving EME: length = 130000.0... completed in 1.5 sec
-    Solving EME: length = 120000.0... completed in 1.6 sec
-    Solving EME: length = 110000.0... completed in 1.4 sec
-    Solving EME: length = 100000.0... completed in 1.6 sec
-    Solving EME: length = 90000.0... completed in 1.3 sec
-    Solving EME: length = 80000.0... completed in 1.3 sec
-    Solving EME: length = 70000.0... completed in 1.3 sec
-    Solving EME: length = 60000.0... completed in 1.4 sec
-    Solving EME: length = 50000.0... completed in 1.3 sec
-    Solving EME: length = 40000.0... completed in 1.5 sec
-    Solving EME: length = 30000.0... completed in 1.6 sec
-    Solving EME: length = 20000.0... completed in 1.5 sec
-    Solving EME: length = 10000.0... completed in 1.5 sec
-    Solving EME: length = 0.0... completed in 1.8 sec
-     completed in 29.0 sec
+    Solving EME: length = 200000.0... completed in 0.4 sec
+    Solving EME: length = 190000.0... completed in 0.5 sec
+    Solving EME: length = 180000.0... completed in 0.4 sec
+    Solving EME: length = 170000.0... completed in 0.4 sec
+    Solving EME: length = 160000.0... completed in 0.4 sec
+    Solving EME: length = 150000.0... completed in 0.4 sec
+    Solving EME: length = 140000.0... completed in 0.4 sec
+    Solving EME: length = 130000.0... completed in 0.4 sec
+    Solving EME: length = 120000.0... completed in 0.4 sec
+    Solving EME: length = 110000.0... completed in 0.4 sec
+    Solving EME: length = 100000.0... completed in 0.4 sec
+    Solving EME: length = 90000.0... completed in 0.4 sec
+    Solving EME: length = 80000.0... completed in 0.4 sec
+    Solving EME: length = 70000.0... completed in 0.4 sec
+    Solving EME: length = 60000.0... completed in 0.4 sec
+    Solving EME: length = 50000.0... completed in 0.4 sec
+    Solving EME: length = 40000.0... completed in 0.4 sec
+    Solving EME: length = 30000.0... completed in 0.4 sec
+    Solving EME: length = 20000.0... completed in 0.4 sec
+    Solving EME: length = 10000.0... completed in 0.4 sec
+    Solving EME: length = 0.0... completed in 0.4 sec
+     completed in 9.0 sec
+
     Solving S-matrices...
-    Solving section: input... completed in 0.4 sec
-
-    Solving section: sbend... completed in 0.4 sec
-
-    Solving section: coupler... completed in 0.4 sec
-
-    Solving section: 3... completed in 0.3 sec
-
-    Solving section: output... completed in 0.1 sec
-     completed in 0.1 sec
+    Solving section: input... completed in 0.0 sec
+    Solving section: sbend... completed in 1.7 sec
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: 4... completed in 0.0 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 1.7 sec
     Exited EMode
 
 Figures:

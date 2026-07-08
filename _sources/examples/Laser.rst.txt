@@ -2,7 +2,7 @@
 Scattering loss: Laser
 ----------------------
 
-An example of a complex layer structure where scattering loss is calculated for the Si waveguide core. Note that a fill_index is specified for the waveguide core, which is useful for structures formed by bonding. Also, a custom file name for the simulation is specified ("laser.eph") instead of the default "emode.eph".
+An example of a complex layer structure where scattering loss is calculated for the Si waveguide core. Note that a fill_material is specified for the waveguide core, which is useful for structures formed by bonding. Also, a custom file name for the simulation is specified ("laser.eph") instead of the default "emode.eph".
 
 The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tutorial on narrow linewidth tunable semiconductor lasers using Si/III-V heterogeneous integration," APL Photonics 4, 111101 (2019).
 
@@ -85,9 +85,9 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 3.4 sec
-    Solving modes... completed in 9.2 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 4.0 sec
+    Solving modes completed in 8.2 sec
 
     Wavelength: 1550.0 nm
  

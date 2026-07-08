@@ -2,6 +2,15 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.0: July 8, 2026**
+
+* Major internal architectural changes to enable the pending release of nonlinear EME functions and complex circuit solutions.
+* EME API changed such that each section type is defined with a unique function.
+* Improved PMLs for stability, especially with radiation modes.
+* Fixed a bug with the command line installer for Windows. Now ``emode`` is added to path automatically.
+* Plot now shows bidirectional field data by default, controlled by the setting "Forward only".
+* Plot now blends fields with interpolation by default, controlled by the setting "Blend slices".
+
 **0.2.6: April 27, 2026**
 
 * Fixed ``sweep()`` function to deliver ``mode_order`` and ``scattering_loss`` in ``results``.
@@ -15,7 +24,7 @@ Release Notes
 
 **0.2.4: February 10, 2026**
 
-* Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.
+* Boundary condition implementations have been updated. This may impact (anti-)symmetric boundary mode lists.
 * Improved EME junction algorithm for robustness.
 * Implemented speed improvements, leading to a 60% speedup in our taper example.
 * Added an input to the ``settings()`` function called ``frequency`` as an alternative way to set the simulation wavelength. Internally, the ``wavelength`` is calculated from the ``frequency`` parameter as ``wavelength`` = c/``frequency``.

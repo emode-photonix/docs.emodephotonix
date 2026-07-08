@@ -118,22 +118,21 @@ Next, the directional coupler device is created and simulated for a short couple
         em.label_profile(name = 'coupler')
 
         ## Draw EME sections
-        em.section(name = 'input', section_type = 'straight',
+        em.straight_section(name = 'input',
             profile = 'io_waveguide', length = 1000,
             offset = input_gap/2 + width_wg/2)
 
-        em.section(name = 'sbend', section_type = 'gds',
-            gds = 'sbend.gds', profile = 'slab',
-            shape_to_mask = 'core',
+        em.gds_section(name = 'sbend',
+            gds_path = 'sbend.gds', profile = 'slab',
+            layer_map = {'core': 1},
             length = 10e3) # modify length of gds
 
-        em.section(name = 'coupler', section_type = 'straight',
+        em.straight_section(name = 'coupler',
             profile = 'coupler', length = 30e3)
 
-        em.section(section_type = 'copy',
-            section_name = 'sbend', mirror = True)
+        em.copy_section(section_name = 'sbend', mirror = True)
 
-        em.section(name = 'output', section_type = 'straight',
+        em.straight_section(name = 'output',
             profile = 'io_waveguide', length = 1000,
             offset = -input_gap/2 - width_wg/2)
 
@@ -146,8 +145,8 @@ Next, the directional coupler device is created and simulated for a short couple
             values = np.arange(0, 200.1e3, 10000),
             result = ['S_matrix'])
 
-        S = data['S_matrix']
-        plt.plot(data['values']*1e-3, np.abs(S[:,1,0,0])**2*100)
+        transmission = np.array([s.transmission() for s in data['S_matrix']])
+        plt.plot(data['values']*1e-3, np.abs(transmission[:,0,0])**2*100)
         plt.xlabel("Coupler length (\u03BCm)")
         plt.ylabel("Transmission (%)")
         plt.autoscale(enable = True, axis = 'x', tight = True)
@@ -155,7 +154,7 @@ Next, the directional coupler device is created and simulated for a short couple
         plt.savefig('transmission_plot.png', dpi = 300, bbox_inches = 'tight')
 
         ## Plot final design for 100 % coupler
-        em.section(name = 'coupler', length = 180e3)
+        em.straight_section(name = 'coupler', length = 180e3)
         em.EME()
         em.plot()
 
@@ -165,61 +164,50 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.3 sec
-    Meshing  completed in 0.1 sec
-    Meshing  completed in 0.1 sec
+    EMode3D 1.0.0 - email
+    Saved profile: 'slab'
+    Saved profile: 'io_waveguide'
+    Saved profile: 'coupler'
+
     Solving S-matrices...
-    Solving section: input...Meshing  completed in 0.1 sec
-     completed in 1.5 sec
-
-    Solving section: sbend...
-    Meshing  completed in 0.1 sec
-     completed in 31.1 sec
-
-    Solving section: coupler... completed in 0.2 sec
-
-    Solving section: 3...
-     completed in 4.0 sec
-
-    Solving section: output... completed in 0.1 sec
-     completed in 0.1 sec
-    Meshing  completed in 0.2 sec
+    Solving section: input... completed in 0.0 sec
+    Solving section: sbend... completed in 38.8 sec
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: 4... completed in 0.0 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 38.8 sec
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 200000.0... completed in 1.1 sec
-    Solving EME: length = 190000.0... completed in 1.1 sec
-    Solving EME: length = 180000.0... completed in 1.2 sec
-    Solving EME: length = 170000.0... completed in 1.2 sec
-    Solving EME: length = 160000.0... completed in 1.2 sec
-    Solving EME: length = 150000.0... completed in 1.2 sec
-    Solving EME: length = 140000.0... completed in 1.5 sec
-    Solving EME: length = 130000.0... completed in 1.5 sec
-    Solving EME: length = 120000.0... completed in 1.6 sec
-    Solving EME: length = 110000.0... completed in 1.4 sec
-    Solving EME: length = 100000.0... completed in 1.6 sec
-    Solving EME: length = 90000.0... completed in 1.3 sec
-    Solving EME: length = 80000.0... completed in 1.3 sec
-    Solving EME: length = 70000.0... completed in 1.3 sec
-    Solving EME: length = 60000.0... completed in 1.4 sec
-    Solving EME: length = 50000.0... completed in 1.3 sec
-    Solving EME: length = 40000.0... completed in 1.5 sec
-    Solving EME: length = 30000.0... completed in 1.6 sec
-    Solving EME: length = 20000.0... completed in 1.5 sec
-    Solving EME: length = 10000.0... completed in 1.5 sec
-    Solving EME: length = 0.0... completed in 1.8 sec
-     completed in 29.0 sec
+    Solving EME: length = 200000.0... completed in 0.4 sec
+    Solving EME: length = 190000.0... completed in 0.5 sec
+    Solving EME: length = 180000.0... completed in 0.4 sec
+    Solving EME: length = 170000.0... completed in 0.4 sec
+    Solving EME: length = 160000.0... completed in 0.4 sec
+    Solving EME: length = 150000.0... completed in 0.4 sec
+    Solving EME: length = 140000.0... completed in 0.4 sec
+    Solving EME: length = 130000.0... completed in 0.4 sec
+    Solving EME: length = 120000.0... completed in 0.4 sec
+    Solving EME: length = 110000.0... completed in 0.4 sec
+    Solving EME: length = 100000.0... completed in 0.4 sec
+    Solving EME: length = 90000.0... completed in 0.4 sec
+    Solving EME: length = 80000.0... completed in 0.4 sec
+    Solving EME: length = 70000.0... completed in 0.4 sec
+    Solving EME: length = 60000.0... completed in 0.4 sec
+    Solving EME: length = 50000.0... completed in 0.4 sec
+    Solving EME: length = 40000.0... completed in 0.4 sec
+    Solving EME: length = 30000.0... completed in 0.4 sec
+    Solving EME: length = 20000.0... completed in 0.4 sec
+    Solving EME: length = 10000.0... completed in 0.4 sec
+    Solving EME: length = 0.0... completed in 0.4 sec
+     completed in 9.0 sec
+
     Solving S-matrices...
-    Solving section: input... completed in 0.4 sec
-
-    Solving section: sbend... completed in 0.4 sec
-
-    Solving section: coupler... completed in 0.4 sec
-
-    Solving section: 3... completed in 0.3 sec
-
-    Solving section: output... completed in 0.1 sec
-     completed in 0.1 sec
+    Solving section: input... completed in 0.0 sec
+    Solving section: sbend... completed in 1.7 sec
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: 4... completed in 0.0 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 1.7 sec
     Exited EMode
 
 

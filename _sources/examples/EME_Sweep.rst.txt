@@ -50,15 +50,15 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
         em.label_profile(name = 'b') # skips solving the modes here
 
         ## Draw EME sections
-        em.section(section_type = 'straight',
+        em.straight_section(
             profile = 'a',
             length = 2000)
 
-        em.section(name = 'taper', section_type = 'taper',
+        em.taper_section(name = 'taper',
             profile = 'a', profile_end = 'b',
             length = 8000)
 
-        em.section(section_type = 'straight',
+        em.straight_section(
             profile = 'b',
             length = 2000)
 
@@ -73,113 +73,98 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
+    EMode3D 1.0.0 - email
+    Saved profile: 'a'
+    Saved profile: 'b'
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 8000...Meshing  completed in 0.1 sec
-
-    Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 26.6 sec
-    Solving EME: length = 7750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 7500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 7250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 7000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 6750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 6500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 6250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 6000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 5000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.5 sec
-    Solving EME: length = 4750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 4500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 4250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.8 sec
-    Solving EME: length = 4000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 3750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 3500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 3250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 3000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.9 sec
-    Solving EME: length = 2750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 2500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 2250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 2000...Meshing  completed in 0.3 sec
-    Meshing  completed in 0.3 sec
-     completed in 2.0 sec
-    Solving EME: length = 1750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 2.3 sec
-    Solving EME: length = 1500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 1250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 1000...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 750...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.7 sec
-    Solving EME: length = 500...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 250...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-    Solving EME: length = 0...Meshing  completed in 0.2 sec
-    Meshing  completed in 0.2 sec
-     completed in 1.6 sec
-     completed in 1 min 19.9 sec
+    Solving EME: length = 8000...
+    Solving slice at 4000.0 nm... completed in 0.6 sec
+    Solving slice at 6000.0 nm... completed in 0.5 sec
+    Solving slice at 2000.0 nm... completed in 0.6 sec
+    Solving slice at 7000.0 nm... completed in 0.6 sec
+    Solving slice at 5000.0 nm... completed in 0.5 sec
+    Solving slice at 3000.0 nm... completed in 0.6 sec
+    Solving slice at 1000.0 nm... completed in 0.6 sec
+    Solving slice at 7500.0 nm... completed in 0.5 sec
+    Solving slice at 6500.0 nm... completed in 0.6 sec
+    Solving slice at 5500.0 nm... completed in 0.6 sec
+    Solving slice at 4500.0 nm... completed in 0.5 sec
+    Solving slice at 3500.0 nm... completed in 0.6 sec
+    Solving slice at 2500.0 nm... completed in 0.5 sec
+    Solving slice at 1500.0 nm... completed in 0.5 sec
+    Solving slice at 500.0 nm... completed in 0.5 sec
+    Solving slice at 7750.0 nm... completed in 0.5 sec
+    Solving slice at 7250.0 nm... completed in 0.5 sec
+    Solving slice at 6750.0 nm... completed in 0.5 sec
+    Solving slice at 6250.0 nm... completed in 0.5 sec
+    Solving slice at 5750.0 nm... completed in 0.5 sec
+    Solving slice at 5250.0 nm... completed in 0.5 sec
+    Solving slice at 4750.0 nm... completed in 0.5 sec
+    Solving slice at 4250.0 nm... completed in 0.5 sec
+    Solving slice at 3750.0 nm... completed in 0.5 sec
+    Solving slice at 3250.0 nm... completed in 0.5 sec
+    Solving slice at 2750.0 nm... completed in 0.5 sec
+    Solving slice at 2250.0 nm... completed in 0.5 sec
+    Solving slice at 1750.0 nm... completed in 0.6 sec
+    Solving slice at 1250.0 nm... completed in 0.5 sec
+    Solving slice at 750.0 nm... completed in 0.5 sec
+    Solving slice at 250.0 nm... completed in 0.5 sec
+    Solving slice at 6125.0 nm... completed in 0.5 sec
+    Solving slice at 5875.0 nm... completed in 0.5 sec
+    Solving slice at 5375.0 nm... completed in 0.5 sec
+    Solving slice at 5125.0 nm... completed in 0.5 sec
+    Solving slice at 4375.0 nm... completed in 0.5 sec
+    Solving slice at 4125.0 nm... completed in 0.5 sec
+    Solving slice at 3875.0 nm... completed in 0.5 sec
+    Solving slice at 3625.0 nm... completed in 0.5 sec
+    Solving slice at 3375.0 nm... completed in 0.5 sec
+    Solving slice at 3125.0 nm... completed in 0.5 sec
+    Solving slice at 2875.0 nm... completed in 0.5 sec
+    Solving slice at 2625.0 nm... completed in 0.5 sec
+    Solving slice at 2375.0 nm... completed in 0.5 sec
+    Solving slice at 5437.5 nm... completed in 0.5 sec
+    Solving slice at 5312.5 nm... completed in 0.5 sec
+    Solving slice at 5187.5 nm... completed in 0.5 sec
+    Solving slice at 4312.5 nm... completed in 0.5 sec
+    Solving slice at 4187.5 nm... completed in 0.5 sec
+    Solving slice at 2562.5 nm... completed in 0.5 sec
+    Solving slice at 2312.5 nm... completed in 0.5 sec
+    Solving slice at 4218.8 nm... completed in 0.5 sec
+     completed in 36.4 sec
+    Solving EME: length = 7750... completed in 0.0 sec
+    Solving EME: length = 7500... completed in 0.0 sec
+    Solving EME: length = 7250... completed in 0.0 sec
+    Solving EME: length = 7000... completed in 0.0 sec
+    Solving EME: length = 6750... completed in 0.0 sec
+    Solving EME: length = 6500... completed in 0.0 sec
+    Solving EME: length = 6250... completed in 0.0 sec
+    Solving EME: length = 6000... completed in 0.0 sec
+    Solving EME: length = 5750... completed in 0.0 sec
+    Solving EME: length = 5500... completed in 0.0 sec
+    Solving EME: length = 5250... completed in 0.0 sec
+    Solving EME: length = 5000... completed in 0.0 sec
+    Solving EME: length = 4750... completed in 0.0 sec
+    Solving EME: length = 4500... completed in 0.0 sec
+    Solving EME: length = 4250... completed in 0.0 sec
+    Solving EME: length = 4000... completed in 0.0 sec
+    Solving EME: length = 3750... completed in 0.0 sec
+    Solving EME: length = 3500... completed in 0.0 sec
+    Solving EME: length = 3250... completed in 0.0 sec
+    Solving EME: length = 3000... completed in 0.0 sec
+    Solving EME: length = 2750... completed in 0.0 sec
+    Solving EME: length = 2500... completed in 0.0 sec
+    Solving EME: length = 2250... completed in 0.0 sec
+    Solving EME: length = 2000... completed in 0.0 sec
+    Solving EME: length = 1750... completed in 0.0 sec
+    Solving EME: length = 1500... completed in 0.0 sec
+    Solving EME: length = 1250... completed in 0.0 sec
+    Solving EME: length = 1000... completed in 0.0 sec
+    Solving EME: length = 750... completed in 0.0 sec
+    Solving EME: length = 500... completed in 0.0 sec
+    Solving EME: length = 250... completed in 0.0 sec
+    Solving EME: length = 0... completed in 0.0 sec
+     completed in 37.3 sec
     Exited EMode
 
 
@@ -211,14 +196,14 @@ While no figures are generated in the EMode script, a separate script can be use
 
         fig, ax = plt.subplots(1, 1)
         ax.set_xlabel('Taper length (nm)')
-        ax.set_ylabel('Tranmission (%)')
+        ax.set_ylabel('Transmission (%)')
         ax.grid(visible=True, which='major', axis='both', linewidth=LW/2, color='grey', alpha=0.25)
 
-        S = np.array(data['S_matrix'])
+        transmission = np.array([s.transmission() for s in data['S_matrix']])
         lines = []
-        for kk in range(S.shape[-1]):
+        for kk in range(transmission.shape[-1]):
             line, = ax.plot(data['values'],
-                100*np.abs(S[:,1,0,kk,0])**2,
+                100*np.abs(transmission[:,kk,0])**2,
                 marker = '', linestyle = '-', lw = LW*1.5,
                 label = r'Mode 0$\rightarrow$%d' % kk)
     

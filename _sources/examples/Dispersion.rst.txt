@@ -51,52 +51,31 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode3D 0.2.6 - email
+    EMode3D 1.0.0 - email
 
     Sweeping setting parameter 'wavelength'...
-    Solving FDM: wavelength = 1000...Meshing  completed in 0.6 sec
-     completed in 2.0 sec
-    Solving FDM: wavelength = 1050...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1100...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1150...Meshing  completed in 0.5 sec
-     completed in 1.5 sec
-    Solving FDM: wavelength = 1200...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1250...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1300...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1350...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1400...Meshing  completed in 0.5 sec
-     completed in 1.5 sec
-    Solving FDM: wavelength = 1450...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1500...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1550...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1600...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1650...Meshing  completed in 0.5 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1700...Meshing  completed in 0.5 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1750...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1800...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 1850...Meshing  completed in 0.6 sec
-     completed in 1.8 sec
-    Solving FDM: wavelength = 1900...Meshing  completed in 0.6 sec
-     completed in 1.6 sec
-    Solving FDM: wavelength = 1950...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-    Solving FDM: wavelength = 2000...Meshing  completed in 0.6 sec
-     completed in 1.7 sec
-     completed in 35.3 sec
+    Solving FDM: wavelength = 1000... completed in 2.1 sec
+    Solving FDM: wavelength = 1050... completed in 1.8 sec
+    Solving FDM: wavelength = 1100... completed in 1.7 sec
+    Solving FDM: wavelength = 1150... completed in 1.6 sec
+    Solving FDM: wavelength = 1200... completed in 1.7 sec
+    Solving FDM: wavelength = 1250... completed in 1.6 sec
+    Solving FDM: wavelength = 1300... completed in 1.7 sec
+    Solving FDM: wavelength = 1350... completed in 1.8 sec
+    Solving FDM: wavelength = 1400... completed in 1.6 sec
+    Solving FDM: wavelength = 1450... completed in 1.7 sec
+    Solving FDM: wavelength = 1500... completed in 1.7 sec
+    Solving FDM: wavelength = 1550... completed in 1.7 sec
+    Solving FDM: wavelength = 1600... completed in 1.8 sec
+    Solving FDM: wavelength = 1650... completed in 1.8 sec
+    Solving FDM: wavelength = 1700... completed in 1.7 sec
+    Solving FDM: wavelength = 1750... completed in 1.7 sec
+    Solving FDM: wavelength = 1800... completed in 1.8 sec
+    Solving FDM: wavelength = 1850... completed in 1.9 sec
+    Solving FDM: wavelength = 1900... completed in 1.7 sec
+    Solving FDM: wavelength = 1950... completed in 1.8 sec
+    Solving FDM: wavelength = 2000... completed in 1.7 sec
+     completed in 36.6 sec
     Exited EMode
 
 

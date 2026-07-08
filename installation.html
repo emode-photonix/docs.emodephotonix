@@ -32,10 +32,10 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -340,26 +340,13 @@
 <li><p>Purchase a subscription license through the <a class="reference external" href="https://emodephotonix.com/get-emode/">EMode store</a>. This is required, even for a free EMode<sup>2D</sup> license.</p></li>
 </ul>
 </section>
-<section id="setup-the-python-interface">
-<h2>2. Setup the Python Interface</h2>
-<ul class="simple">
-<li><p>See the <a class="reference internal" href="interface.html#python-interface"><span class="std std-ref">Python Interface</span></a> page for instructions to install Python.</p></li>
-<li><p>Follow the <a class="reference internal" href="interface.html#setuppython"><span class="std std-ref">Setup</span></a> instructions to install the <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> package.</p></li>
-</ul>
+<section id="set-up-the-python-interface">
+<h2>2. Set Up the Python Interface</h2>
+<p>Follow the <a class="reference internal" href="interface.html#python-interface"><span class="std std-ref">Python Interface</span></a> instructions to install Python and the <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> package.</p>
 </section>
 <section id="download-and-install-emode">
 <h2>3. Download and Install EMode</h2>
-<p><strong>System requirements</strong>: 840 MB free disk space</p>
-<table class="hlist"><tr><td><ul class="simple">
-<li><p><strong>Windows</strong> 10 or higher</p></li>
-</ul>
-</td><td><ul class="simple">
-<li><p><strong>Linux</strong>, Ubuntu 22.04 or higher, x86-64</p></li>
-</ul>
-</td><td><ul class="simple">
-<li><p><strong>macOS</strong> 13 Ventura or higher</p></li>
-</ul>
-</td></tr></table>
+<p><strong>System requirements:</strong> <strong>Windows</strong> 10+, <strong>Linux</strong> Ubuntu 22.04+ (x86-64), <strong>macOS</strong> 13 Ventura+</p>
 <p>There are two installation methods:</p>
 <div class="sd-tab-set docutils">
 <input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
@@ -380,7 +367,7 @@ with your EMode account credentials. For additional options, see the
 <label class="sd-tab-label" for="sd-tab-item-1">
 Manual install</label><div class="sd-tab-content docutils">
 <ol class="arabic simple">
-<li><p>Login to your <a class="reference external" href="https://emodephotonix.com/my-account/">EMode account</a>.</p></li>
+<li><p>Log in to your <a class="reference external" href="https://emodephotonix.com/my-account/">EMode account</a>.</p></li>
 <li><p>Select your operating system and version from the dropdown menus.</p></li>
 <li><p>Accept the EMode End User License Agreement.</p></li>
 <li><p>Click <code class="docutils literal notranslate"><span class="pre">Download</span> <span class="pre">EMode</span></code> to download the file for your platform.</p></li>
@@ -401,11 +388,15 @@ sh<span class="w"> </span>install.sh
 </div>
 </div>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>On macOS with Apple silicon, EMode runs via Rosetta 2,
-which you may be prompted to install on the first run.</p>
-</div>
+<p><strong>macOS Apple silicon:</strong> EMode runs via Rosetta 2 and you may be prompted to install it on the first run.</p>
+</section>
+<section id="run-an-emode-example-script">
+<h2>4. Run an EMode Example Script</h2>
+<ul class="simple">
+<li><p>Run the <a class="reference external" href="examples/SOI.html">Basic: SOI</a> example in Python to verify your installation.</p></li>
+<li><p>A login window will open when EMode is first initialized. To subsequently access this window, see <a class="reference internal" href="interface.html#pythonemodelogin"><span class="std std-ref">EMode Login</span></a>.</p></li>
+</ul>
+<p>If you have any issues, please contact our <a class="reference external" href="https://emodephotonix.com/contact/">support team</a>.</p>
 <table class="hlist"><tr><td><ul class="simple">
 <li><p><a class="reference external" href="installation/release-notes.html">Release notes</a></p></li>
 </ul>
@@ -413,14 +404,6 @@ which you may be prompted to install on the first run.</p>
 <li><p><a class="reference external" href="installation/troubleshooting.html">Troubleshooting</a></p></li>
 </ul>
 </td></tr></table>
-</section>
-<section id="run-an-emode-example-script">
-<h2>4. Run an EMode Example Script</h2>
-<ul class="simple">
-<li><p>Copy and run the <a class="reference external" href="examples/SOI.html">Basic: SOI</a> example in your scripting environment.</p></li>
-<li><p>A login window will open when EMode is first initialized. To subsequently access this window, see <a class="reference internal" href="interface.html#pythonemodelogin"><span class="std std-ref">EMode Login</span></a>.</p></li>
-</ul>
-<p>If you have any issues, please contact our <a class="reference external" href="https://emodephotonix.com/contact/">support team</a>.</p>
 </section>
 </section>
 
@@ -448,7 +431,7 @@ which you may be prompted to install on the first run.</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-an-emode-license">1. Get an EMode License</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-the-python-interface">2. Setup the Python Interface</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-python-interface">2. Set Up the Python Interface</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#download-and-install-emode">3. Download and Install EMode</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-an-emode-example-script">4. Run an EMode Example Script</a></li>
 </ul>

@@ -33,7 +33,7 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 689 nm to 1033 nm
     
         | M. A. Afromowitz, "Refractive index of Ga_{1-x}Al_{x}As," Solid State Commun. 15, 59 (1974).
-        | Notes: requires Al fraction input (x between 0 and 1), which defaults to x=0: "AlGaAs, x".
+        | Notes: requires Al fraction input (x between 0 and 1), which defaults to x=1: "AlGaAs, x".
 
 .. data:: AlN
     
@@ -158,8 +158,8 @@ Descriptions of all materials available in built-in material database. This info
 .. data:: InP
     
     .. math:: n = \left(1 + 6.255 + \frac{2.316}{{1 - \left(0.6263/\lambda\right)^2}} + \frac{2.765}{{1 - \left(32.935/\lambda\right)^2}}\right)^{0.5}
-    
-    Wavelength range: 950 nm to 10000 nm
+
+    Wavelength range: 680 nm to 4449 nm
     
         | G. D. Pettit and W. J. Turner, "Refractive Index of InP," J. Appl. Phys. 36, 2081 (1965).
 
@@ -181,7 +181,7 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 500 nm to 4000 nm
     
         | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
-        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
+        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction. A second dispersion model is available via a ``reference`` keyword, either 'Gayer 2008' (default, shown above) or 'Zelmon 1997', which uses different Sellmeier coefficients, a 400 nm to 5000 nm wavelength range, and a different axis convention.
 
 .. data:: LN
     
@@ -210,6 +210,14 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 200 nm to 1100 nm
     
         | `Microchem PMMA Data Sheet, (2019). <https://kayakuam.com/wp-content/uploads/2019/09/PMMA_Data_Sheet.pdf>`_
+
+.. data:: Pt
+
+    .. math:: n = 4.0
+
+    Wavelength range: 0.0001 nm to 100000 nm
+
+        | Notes: no published refractive index reference; treated as a constant. Included primarily for its ``thermal_conductivity`` and ``resistivity`` values for FEM heat/electrostatic simulations of metal electrodes.
 
 .. data:: Si
     
@@ -277,8 +285,8 @@ Descriptions of all materials available in built-in material database. This info
         n_\mathrm{o} &= \left(3.2089 + \frac{3.4000 \times 10^{-5}}{1.2270 \times 10^{-5} - \lambda^{-2}} - 3.2545\times 10^{-8}\lambda^2 \right)^{0.5} \\
         n_\mathrm{e} &= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10^{-5} - \lambda^{-2}} - 4.2950 \times 10^{-8}\lambda^2 \right)^{0.5}
     
-    Wavelength range: 612 nm to 4449 nm
-    
+    Wavelength range: 500 nm to 4449 nm
+
         | A. Borne, P. Segonds, B. Boulanger, C. Félix, and J. Debray, "Refractive indices, phase-matching directions and third order nonlinear coefficients of rutile TiO2 from third harmonic generation," Opt. Mater. Express 2, 1797 (2012).
         | Notes: The n_e is the z-direction and n_o is the x- and y-direction. Equation takes wavelength in nanometers.
 

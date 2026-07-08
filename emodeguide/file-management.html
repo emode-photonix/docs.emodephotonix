@@ -32,10 +32,10 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -386,21 +386,22 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save_path</strong> (<em>str</em>) – path to open the simulation file relative to the current working directory, default: ‘.’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
-<li><p><strong>new_name</strong> (<em>str</em>) – new simulation name so the old file is not over-written, default: <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code></p></li>
+<li><p><strong>new_simulation_name</strong> (<em>bool</em><em> or </em><em>str</em>) – new simulation name so the old file is not over-written, default: False (the original <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code> is reused)</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – if a file with the target name is already open elsewhere, open it anyway instead of auto-renaming to an available filename, default: False</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="get">
+<dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get</span></span></dt>
 <dd><p>Extract data from an existing simulation to your Python environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>str</em>) – name of the variable or parameter to extract. This can also be a list of fields of any combination of [<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>]. See <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a> for a complete list and description of all available variables.</p></li>
-<li><p><strong>label</strong> (<em>str</em>) – name of labeled dataset to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code>, default: ‘’</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – name of the variable or parameter to extract. This can also be a list of fields of any combination of [<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>]. See <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a> for a complete list and description of all available variables. Use <code class="docutils literal notranslate"><span class="pre">'S_matrix'</span></code> (EMode<sup>3D</sup> only) to retrieve the scattering matrix from a solved EME chain as an <code class="xref py py-class docutils literal notranslate"><span class="pre">SMatrix</span></code> object.</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code> from, default: ‘_default’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -410,7 +411,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="get_fields">
 <span class="sig-name descname"><span class="pre">get_fields</span></span></dt>
-<dd><p>Extract field data from an existing simulation to your Python environment. This returns a Field object.</p>
+<dd><p>Extract field data from an existing simulation to your Python environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -418,9 +419,15 @@
 <li><p><strong>include_expand</strong> (<em>bool</em>) – whether to include the expanded region, default: True</p></li>
 <li><p><strong>include_pml</strong> (<em>bool</em>) – whether to include the PML region, default: True</p></li>
 <li><p><strong>unfold</strong> (<em>bool</em>) – whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True</p></li>
-<li><p><strong>label</strong> (<em>str</em>) – name of labeled dataset to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code>, default: ‘’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code> from, default: ‘_default’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a Field object for each wavelength of the named profile.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[float, <a class="reference internal" href="../interface.html#Field" title="Field">Field</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -428,14 +435,78 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="get_grid">
 <span class="sig-name descname"><span class="pre">get_grid</span></span></dt>
-<dd><p>Extract grid data from an existing simulation to your Python environment. This returns a Grid object.</p>
+<dd><p>Extract grid data from an existing simulation to your Python environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>include_expand</strong> (<em>bool</em>) – whether to include the expanded region, default: True</p></li>
 <li><p><strong>include_pml</strong> (<em>bool</em>) – whether to include the PML region, default: True</p></li>
 <li><p><strong>unfold</strong> (<em>bool</em>) – whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True</p></li>
-<li><p><strong>label</strong> (<em>str</em>) – name of labeled dataset to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code>, default: ‘’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the grid from, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a Grid object for each wavelength of the named profile.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[float, <a class="reference internal" href="../interface.html#Grid" title="Grid">Grid</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="get_shape">
+<span class="sig-name descname"><span class="pre">get_shape</span></span></dt>
+<dd><p>Extract shape data from an existing simulation. Returns the shape object with a <code class="docutils literal notranslate"><span class="pre">metadata</span></code> dictionary attached (scattering and confinement results for that shape).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – name of the shape to extract</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the shape from, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="get_profile">
+<span class="sig-name descname"><span class="pre">get_profile</span></span></dt>
+<dd><p>Extract a full profile object from an existing simulation. Returns a Profile object containing the settings, shapes, grid, and field data associated with the named profile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="create_profile_set">
+<span class="sig-name descname"><span class="pre">create_profile_set</span></span></dt>
+<dd><p>Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profiles</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>]</em>) – names of the profiles to group</p></li>
+<li><p><strong>profile_set_name</strong> (<em>str</em>) – name of the resulting profile set, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="delete_profile">
+<span class="sig-name descname"><span class="pre">delete_profile</span></span></dt>
+<dd><p>Delete a named profile (or reset the <code class="docutils literal notranslate"><span class="pre">_default</span></code> profile’s settings) from the simulation file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to delete</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -445,10 +516,13 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="clear_field_data">
 <span class="sig-name descname"><span class="pre">clear_field_data</span></span></dt>
-<dd><p>Deletes the following data to reduce the ‘.eph’ file size: <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, <code class="docutils literal notranslate"><span class="pre">permeability</span></code>.</p>
+<dd><p>Deletes the following data from every profile to reduce the ‘.eph’ file size: <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, <code class="docutils literal notranslate"><span class="pre">permeability</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – currently ignored; field data is cleared from all profiles regardless of this argument, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -456,11 +530,13 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="save">
 <span class="sig-name descname"><span class="pre">save</span></span></dt>
-<dd><p>Saves a simulation file and keeps the simulation file in the ‘open’ state. The file is saved as an EMode Photonix file (‘eph’).</p>
+<dd><p>Saves a simulation file and keeps the simulation file in the ‘open’ state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether all field data should be saved (so the <code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, and <code class="docutils literal notranslate"><span class="pre">S</span></code> fields can be accessed without an EMode license) or just the raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>), default: False</p></li>
+<li><p><strong>file_type</strong> (<em>str</em>) – file type to save the simulation file as, either ‘eph’ or ‘mat’, default: ‘eph’</p></li>
+<li><p><strong>close</strong> (<em>bool</em>) – whether to close the simulation file after saving, default: False</p></li>
 <li><p><strong>new_save_path</strong> (<em>str</em>) – if set, saves the simulation file in this new path, default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
@@ -471,12 +547,13 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="close">
 <span class="sig-name descname"><span class="pre">close</span></span></dt>
-<dd><p>Saves or deletes a simulation file. The file is saved as an EMode Photonix file (‘eph’). This function is called through the “close” method of emodeconnection, and these optional parameters can be passed directly to the “close” method.</p>
+<dd><p>Saves or deletes a simulation file. This function is called through the “close” method of emodeconnection, and these optional parameters can be passed directly to the “close” method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save</strong> (<em>bool</em>) – saves simulation file if True and deletes the simulation file if False, default: True</p></li>
 <li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether all field data should be saved (so the <code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, and <code class="docutils literal notranslate"><span class="pre">S</span></code> fields can be accessed without an EMode license) or just the raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>), default: False</p></li>
+<li><p><strong>file_type</strong> (<em>str</em>) – file type to save the simulation file as, either ‘eph’ or ‘mat’, default: ‘eph’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -510,9 +587,12 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#init"><code class="docutils literal notranslate"><span class="pre">init</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open"><code class="docutils literal notranslate"><span class="pre">open</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get"><code class="docutils literal notranslate"><span class="pre">get</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_fields"><code class="docutils literal notranslate"><span class="pre">get_fields</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_grid"><code class="docutils literal notranslate"><span class="pre">get_grid</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_shape"><code class="docutils literal notranslate"><span class="pre">get_shape</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_profile"><code class="docutils literal notranslate"><span class="pre">get_profile</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create_profile_set"><code class="docutils literal notranslate"><span class="pre">create_profile_set</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#delete_profile"><code class="docutils literal notranslate"><span class="pre">delete_profile</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clear_field_data"><code class="docutils literal notranslate"><span class="pre">clear_field_data</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save"><code class="docutils literal notranslate"><span class="pre">save</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#close"><code class="docutils literal notranslate"><span class="pre">close</span></code></a></li>

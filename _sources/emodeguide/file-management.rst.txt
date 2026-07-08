@@ -17,56 +17,98 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
     :param str save_path: path to open the simulation file relative to the current working directory, default: '.'
     :param str simulation_name: simulation name, default: 'emode'
-    :param str new_name: new simulation name so the old file is not over-written, default: ``simulation_name``
+    :param new_simulation_name: new simulation name so the old file is not over-written, default: False (the original ``simulation_name`` is reused)
+    :type new_simulation_name: bool or str
+    :param bool force: if a file with the target name is already open elsewhere, open it anyway instead of auto-renaming to an available filename, default: False
 
 .. data:: get
+    :no-index:
 
     Extract data from an existing simulation to your Python environment.
 
-    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables.
-    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables. Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`~emodeconnection.smatrix.SMatrix` object.
+    :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_fields
 
-    Extract field data from an existing simulation to your Python environment. This returns a Field object.
+    Extract field data from an existing simulation to your Python environment.
 
     :param str key: name of the field to extract a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``].
     :type key: str or list[str]
     :param bool include_expand: whether to include the expanded region, default: True
     :param bool include_pml: whether to include the PML region, default: True
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
-    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
+    :return: a Field object for each wavelength of the named profile.
+    :rtype: dict[float, Field]
 
 .. data:: get_grid
 
-    Extract grid data from an existing simulation to your Python environment. This returns a Grid object.
+    Extract grid data from an existing simulation to your Python environment.
 
     :param bool include_expand: whether to include the expanded region, default: True
     :param bool include_pml: whether to include the PML region, default: True
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
-    :param str label: name of labeled dataset to extract the data defined by ``key``, default: ''
+    :param str profile: label of the profile to extract the grid from, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+    :return: a Grid object for each wavelength of the named profile.
+    :rtype: dict[float, Grid]
+
+.. data:: get_shape
+
+    Extract shape data from an existing simulation. Returns the shape object with a ``metadata`` dictionary attached (scattering and confinement results for that shape).
+
+    :param str key: name of the shape to extract
+    :param str profile: label of the profile to extract the shape from, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: get_profile
+
+    Extract a full profile object from an existing simulation. Returns a Profile object containing the settings, shapes, grid, and field data associated with the named profile.
+
+    :param str profile: label of the profile to extract, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: create_profile_set
+
+    Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped.
+
+    :param profiles: names of the profiles to group
+    :type profiles: str or list[str]
+    :param str profile_set_name: name of the resulting profile set, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: delete_profile
+
+    Delete a named profile (or reset the ``_default`` profile's settings) from the simulation file.
+
+    :param str profile: name of the profile to delete
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: clear_field_data
 
-    Deletes the following data to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
+    Deletes the following data from every profile to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
 
+    :param str profile: currently ignored; field data is cleared from all profiles regardless of this argument, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: save
 
-    Saves a simulation file and keeps the simulation file in the 'open' state. The file is saved as an EMode Photonix file ('eph').
+    Saves a simulation file and keeps the simulation file in the 'open' state.
 
     :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
+    :param str file_type: file type to save the simulation file as, either 'eph' or 'mat', default: 'eph'
+    :param bool close: whether to close the simulation file after saving, default: False
     :param str new_save_path: if set, saves the simulation file in this new path, default: None
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: close
 
-    Saves or deletes a simulation file. The file is saved as an EMode Photonix file ('eph'). This function is called through the "close" method of emodeconnection, and these optional parameters can be passed directly to the "close" method.
+    Saves or deletes a simulation file. This function is called through the "close" method of emodeconnection, and these optional parameters can be passed directly to the "close" method.
 
     :param bool save: saves simulation file if True and deletes the simulation file if False, default: True
     :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
+    :param str file_type: file type to save the simulation file as, either 'eph' or 'mat', default: 'eph'
     :param str simulation_name: simulation name, default: 'emode'

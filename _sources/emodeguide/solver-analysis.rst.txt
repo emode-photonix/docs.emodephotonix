@@ -7,18 +7,26 @@ Solver and analysis
     Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
 
     .. math::
-        \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
+        \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
 
     It also calculates the TE fraction of each mode (``TE_fraction``) with the following equation, and it saves the indices of the TE and TM modes (``TE_indices`` and ``TM_indices``).
 
     .. math::
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param profile: profile name to automatically create a profile after running ``FDM()``, no profile is created if blank, default: ''
+    :param profile: profile name to automatically create a profile after running ``FDM()``, default: '_default'
     :type profile: str or int
+    :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
+    :param float propagation_distance: [nm] optional propagation distance used to compute an additional propagation phase/loss, default: None
     :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
-    :param bool force_isotropic: if an anisotropic material has been used, this will take the diagonal of the material tensor to make it isotropic.
+    :param int fLanczos: number of Lanczos vectors used by the eigensolver, default: 5
+    :param str solve_type: either 'isotropic', 'anisotropic', or 'auto' to control whether anisotropic materials are solved with the full tensor or reduced to their isotropic diagonal, default: 'auto'
+    :param bool include_heat: whether to include heat-related material properties when meshing, default: True
+    :param bool scattering: whether to automatically calculate interfacial scattering loss for all shapes after solving, default: False
     :param str simulation_name: simulation name, default: 'emode'
+
+    .. note::
+        The direct return value of this function (as called through ``emodeconnection``) is a dict with keys ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, and ``TM_indices``. The individual field components and derived quantities described above (``effective_index``, ``loss_dB_per_m``, ``Ex``/``Ey``/etc.) become available afterward from the saved profile via ``get()``/``get_fields()``, not as top-level keys of this return value.
 
 .. data:: sweep
 
@@ -27,15 +35,17 @@ Solver and analysis
     :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
-    :param str solve_type: either 'Mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
+    :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
     :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
     :type result: str or list
+    :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: confinement
 
     Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included.
 
+    :param str profile: profile label, default: '_default'
     :param shape_list: name (from ``shape``) or list of names of shapes to include in confinement or 'all' for all shapes, default: 'all'
     :type shapes: str or list
     :param mode_list: desired modes to calculate confinement, 'all', 'TE', 'TM', or a list of the desired mode indices, default: 'all'
@@ -52,25 +62,29 @@ Solver and analysis
     .. math::
         A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2
 
+    :param str profile: profile label, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: orthogonality
 
     Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the labeled (or default) dataset, and the ``maximum_overlap`` is returned by this function. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
 
-    :param str profile: profile label, default: ''
+    :param profile: profile label, default: '_default'
+    :type profile: str or int
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: group_index
 
     Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index.
 
+    :param str profile: profile label, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: report
 
     Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); confinement factors (if calculated); effective areas (if calculated).
 
+    :param str profile: profile label, default: '_default'
     :param bool save: whether to save the table to a file or not, default: False
     :param str file_name: name of the file to save, default: 'mode_report'
     :param str file_type: file type to save, 'txt', 'latex', or 'csv', default: 'txt'
@@ -92,10 +106,12 @@ Solver and analysis
     .. math::
         \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_1 \times \vec H_2 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \times \vec H_1 \right| \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \times \vec H_2 \right| \, \mathrm{d}x \, \mathrm{d}y}
 
-    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
+    :param profile_a: label of first profile, default: '_default'
+    :type profile_a: str or int
     :param int mode_a: mode number from the first profile, default: 0
     :param str simulation_name_a: simulation name for the first mode set, default: 'emode'
-    :param str label_b: label of second profile, or a blank string for the default profile, default: ''
+    :param profile_b: label of second profile, default: '_default'
+    :type profile_b: str or int
     :param int mode_b: mode number from the second profile, default: 0
     :param str simulation_name_b: simulation name for the second mode set, default: 'emode'
 
@@ -103,8 +119,11 @@ Solver and analysis
 
     Calculate mode ordering between two mode lists. The result is returned as a list.
 
-    :param str profile_a: label of first profile, or a blank string for the default profile, default: ''
-    :param str profile_b: label of second profile, or a blank string for the default profile, default: ''
+    :param profile_a: label of first profile, default: ''
+    :type profile_a: str or int
+    :param profile_b: label of second profile, default: ''
+    :type profile_b: str or int
+    :param bool raw_fields: use the raw (un-normalized) field data for the ordering comparison instead of the interpolated fields, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: scattering
@@ -113,6 +132,7 @@ Solver and analysis
 
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
 
+    :param str profile: profile label, default: '_default'
     :param str shape: name of the shape for calculating the interfacial scattering, can also be a list of shapes or None (which calculates scattering for all shapes), default: None
     :param str shapes: alias for shape
     :param mode_list: mode number, list of mode numbers, or 'all', default: 'all'
@@ -138,8 +158,11 @@ Solver and analysis
     :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
     :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it calculates an average of the third dimension, default: None
     :type slice_position: float or None
+    :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward) field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False
+    :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, smaller is finer; 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
+    :type resolution: float or str
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
-    :param str file_type: file type for saving a plot, 'pdf' or 'png', default: 'pdf'
+    :param str file_type: file type for saving a plot, 'pdf' or 'png', default: '' (no extension is added to ``file_name`` unless a file type is given)
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: material_explorer
@@ -169,8 +192,30 @@ Solver and analysis
     :param bool reference: additionally return the citation for the material, default: False
     :return: [permeability_x, permeability_y, permeability_z] or ([permeability_x, permeability_y, permeability_z], reference)
 
+.. data:: permittivity
+
+    Returns the relative permittivity from a material name (retrieved from the internal reference list) or from a custom value. For isotropic materials this is a 3-element array; for fully anisotropic materials it is a 3×3 tensor. Optionally, the material's reference (or citation) may be returned.
+
+    :param material: material name, or a float/list for a custom value
+    :type material: str, float, or list
+    :param float wavelength: [nm] wavelength, default: 1550
+    :param bool reference: additionally return the citation for the material, default: False
+    :return: [eps_x, eps_y, eps_z], a 3×3 array, or the corresponding tuple with reference
+
+.. data:: d_matrix
+
+    Returns the second-order nonlinear d-matrix of a material. Optionally, the material's reference (or citation) may be returned.
+
+    :param str material: material name
+    :param float wavelength: [nm] wavelength, default: 1550
+    :param bool reference: additionally return the citation for the material, default: False
+    :return: d-matrix with shape (3, 6), or (d-matrix, reference)
+
 .. data:: mesh
 
     Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
 
+    :param str profile: profile label, default: '_default'
+    :param bool run_mesh: whether to actually run the meshing step now, or just mark the profile as prepared for meshing without running it, default: True
+    :param bool verbose: control the display of the progress bar, default: True
     :param str simulation_name: simulation name, default: 'emode'

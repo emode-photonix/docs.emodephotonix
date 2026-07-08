@@ -32,10 +32,10 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -407,16 +407,19 @@ EMode<sup>3D</sup> Functions</div>
 <li><p>Finite difference method</p></li>
 <li><p>Scattering loss</p></li>
 <li><p>Bend modes</p></li>
+<li><p>Symmetries</p></li>
 </ul>
 </td><td><ul class="simple">
-<li><p>(A)symmetries</p></li>
 <li><p>Perfectly matched layers</p></li>
 <li><p>Sub-pixel averaging</p></li>
+<li><p>General anisotropy</p></li>
+<li><p>Magnetic materials</p></li>
 </ul>
 </td><td><ul class="simple">
-<li><p>Anisotropic materials</p></li>
-<li><p>Magnetic materials</p></li>
 <li><p>Non-uniform meshing</p></li>
+<li><p>Eigenmode expansion (EME)</p></li>
+<li><p>Multi-physics (thermal, electrostatic)</p></li>
+<li><p>Second-order nonlinear optics</p></li>
 </ul>
 </td></tr></table>
 <section id="finite-difference-method">
@@ -430,7 +433,7 @@ EMode<sup>3D</sup> Functions</div>
 </section>
 <section id="boundary-conditions">
 <h3>Boundary conditions</h3>
-<p>Symmetric or asymmetric boundary conditions can be applied to the south and west sides of the simulation window. By explicitly setting the (a)symmetry with an ‘S’ or ‘A’, the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to ‘TE’ or ‘TM’ and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate ‘S’ or ‘A’ boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.</p>
+<p>Symmetric or anti-symmetric boundary conditions can be applied to the south and west sides of the simulation window with the setting parameter <code class="docutils literal notranslate"><span class="pre">boundary_condition</span></code>. By explicitly setting the symmetry with an ‘S’ (symmetric) or ‘A’ (anti-symmetric), the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to ‘TE’ or ‘TM’ and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate ‘S’ or ‘A’ boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.</p>
 </section>
 <section id="meshing">
 <h3>Meshing</h3>

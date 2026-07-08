@@ -68,12 +68,15 @@ Features
    * Finite difference method
    * Scattering loss
    * Bend modes
-   * (A)symmetries
+   * Symmetries
    * Perfectly matched layers
    * Sub-pixel averaging
-   * Anisotropic materials
+   * General anisotropy
    * Magnetic materials
    * Non-uniform meshing
+   * Eigenmode expansion (EME)
+   * Multi-physics (thermal, electrostatic)
+   * Second-order nonlinear optics
 
 Finite difference method
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -85,7 +88,7 @@ The finite difference method (FDM) is used to solve the waveguide eigenmodes. Th
 Boundary conditions
 ^^^^^^^^^^^^^^^^^^^
 
-Symmetric or asymmetric boundary conditions can be applied to the south and west sides of the simulation window. By explicitly setting the (a)symmetry with an 'S' or 'A', the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to 'TE' or 'TM' and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate 'S' or 'A' boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.
+Symmetric or anti-symmetric boundary conditions can be applied to the south and west sides of the simulation window with the setting parameter ``boundary_condition``. By explicitly setting the symmetry with an 'S' (symmetric) or 'A' (anti-symmetric), the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to 'TE' or 'TM' and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate 'S' or 'A' boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.
 
 Meshing
 ^^^^^^^

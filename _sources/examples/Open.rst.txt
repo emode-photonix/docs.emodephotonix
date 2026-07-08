@@ -65,7 +65,7 @@ How to open an existing EMode simulation.
 
         # Update the settings
         em.settings(wavelength = wavelength,
-            boundary_condition = 'TM', num_modes = 4,
+            boundary_condition = 'TM', num_modes = 2,
             max_effective_index = n_eff[0])
 
         # Launch FDM solver
@@ -88,15 +88,15 @@ How to open an existing EMode simulation.
 
         E_s = em.get_fields(key = ['Ex', 'Ey', 'Ez'])
         TM_indices = em.get('TM_indices')
-        em.plot(component = 'Ey', mode = TM_indices)
+        em.plot(component = 'Ey', mode = TM_indices[0])
         em.close()
 
 
 Console output::
 
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.6 sec
-    Solving modes... completed in 1.5 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.5 sec
 
     Wavelength: 1970.0 nm
  
@@ -105,23 +105,21 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode3D 0.2.6 - email
-    Meshing  completed in 0.5 sec
-    Solving modes... completed in 1.8 sec
+    EMode3D 1.0.0 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.4 sec
 
     Wavelength: 985.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.863080  99.9 %          0.000
-        TE-1  2.684545  99.7 %          0.000
-        TE-2  2.362233  98.6 %          0.000
-        TM-3  2.067847   1.2 %          0.000
+        TM-0  2.067847   1.2 %          0.000
+        TM-1  1.929029  15.3 %          0.000
  
     Exited EMode
-    EMode3D 0.2.6 - email
+    EMode3D 1.0.0 - email
     Exited EMode
-    EMode3D 0.2.6 - email
+    EMode3D 1.0.0 - email
     Exited EMode
 
 

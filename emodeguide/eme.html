@@ -32,10 +32,10 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -363,43 +363,95 @@
   <section id="eme">
 <h1>EME</h1>
 <dl class="py data">
-<dt class="sig sig-object py" id="section">
-<span class="sig-name descname"><span class="pre">section</span></span></dt>
-<dd><p>Define a waveguide section used in the EME solver. This function is analagous to the <code class="docutils literal notranslate"><span class="pre">shape</span></code> function for 2D simulations, but instead sequentially defines the sections of an EME simulation.</p>
+<dt class="sig sig-object py" id="EME_settings">
+<span class="sig-name descname"><span class="pre">EME_settings</span></span></dt>
+<dd><p>Declare global EME defaults that are inherited by sections created afterward. Each parameter left unspecified leaves the corresponding stored default unchanged. A section’s own <code class="docutils literal notranslate"><span class="pre">settings</span></code> argument at creation still overrides these globals. Sections created before this call are not affected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>apply_scattering</strong> (<em>bool</em><em> or </em><em>list</em><em>[</em><em>float</em><em>]</em>) – whether interfacial scattering loss is automatically applied to the S-matrix, either for every wavelength (True), no wavelengths (False), or only the listed wavelengths, default: False</p></li>
+<li><p><strong>beta_interpolation</strong> (<em>str</em>) – either ‘uniform’ or ‘linear’ to specify how the propagation constant is interpolated between z-slices of a taper/gds section, default: ‘uniform’</p></li>
+<li><p><strong>junction_normalization</strong> (<em>bool</em><em> or </em><em>str</em><em> or </em><em>dict</em>) – controls how junction S-matrices are power-normalized; either a single bool/’gain’ value applied to both junction kinds, or a dict with ‘inter_section’ and ‘intra_section’ keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or ‘gain’ (clip singular values at 1 while keeping the raw lossy mode-matching), default: ‘gain’ for inter-section junctions and True for intra-section junctions</p></li>
+<li><p><strong>overlap_variation</strong> (<em>float</em>) – threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01</p></li>
+<li><p><strong>minimum_z_step</strong> (<em>float</em>) – [um] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="straight_section">
+<span class="sig-name descname"><span class="pre">straight_section</span></span></dt>
+<dd><p>Define a uniform-cross-section waveguide section for the EME solver. Sections are placed sequentially in the z-direction in the order they are declared (or updated, if <code class="docutils literal notranslate"><span class="pre">name</span></code> already exists).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
-<li><p><strong>section_type</strong> (<em>str</em>) – <p>either ‘straight’, ‘taper’, ‘gds’, or ‘copy’, and each section type corresponds with only a subset of other input parameters:</p>
-<ul>
-<li><p><strong>’straight’</strong>: <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">profile</span></code>, <code class="docutils literal notranslate"><span class="pre">order</span></code>, <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>, <code class="docutils literal notranslate"><span class="pre">length</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code>, <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code></p></li>
-<li><p><strong>’taper’</strong>: <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">profile</span></code>, <code class="docutils literal notranslate"><span class="pre">profile_end</span></code>, <code class="docutils literal notranslate"><span class="pre">order</span></code>, <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>, <code class="docutils literal notranslate"><span class="pre">length</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code>, <code class="docutils literal notranslate"><span class="pre">z_slices</span></code>, ``</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section’s cross-section</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
+<li><p><strong>offset</strong> (<em>float</em><em> or </em><em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – the x- and y-offset of the section’s port window, if only a single value is given it is assumed to be the x-offset, default: (0, 0)</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, merged onto the current global EME settings (or onto the section’s existing settings, when updating), default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">,</span> <span class="pre">``minimum_z_step</span></code>, <code class="docutils literal notranslate"><span class="pre">z_option</span></code>, <code class="docutils literal notranslate"><span class="pre">taper_algorithm</span></code>, <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code>
-* <strong>‘gds’</strong>: <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">gds</span></code>, <code class="docutils literal notranslate"><span class="pre">cell_index</span></code>, <code class="docutils literal notranslate"><span class="pre">unit</span></code>, <code class="docutils literal notranslate"><span class="pre">profile</span></code>, <code class="docutils literal notranslate"><span class="pre">shape_to_mask</span></code>, <code class="docutils literal notranslate"><span class="pre">etch_depth</span></code>, <code class="docutils literal notranslate"><span class="pre">sidewall_angle</span></code>, <code class="docutils literal notranslate"><span class="pre">tone</span></code>, <code class="docutils literal notranslate"><span class="pre">window_width</span></code>, <code class="docutils literal notranslate"><span class="pre">window_height</span></code>, <code class="docutils literal notranslate"><span class="pre">order</span></code>, <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>, <code class="docutils literal notranslate"><span class="pre">length</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code>, <code class="docutils literal notranslate"><span class="pre">z_slices</span></code>, <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code>, <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code>, <code class="docutils literal notranslate"><span class="pre">z_option</span></code>, <code class="docutils literal notranslate"><span class="pre">taper_algorithm</span></code>, <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code>
-* <strong>‘copy’</strong>: <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">section_name</span></code>, <code class="docutils literal notranslate"><span class="pre">mirror</span></code>, <code class="docutils literal notranslate"><span class="pre">order</span></code>, <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code></p>
-</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to define the entire section (<strong>‘straight’</strong> and <strong>‘gds’</strong>) or section beginning (<strong>‘taper’</strong>)</p></li>
-<li><p><strong>profile_end</strong> (<em>str</em>) – label of the profile to define the section ending (<strong>‘taper’</strong>)</p></li>
-<li><p><strong>order</strong> (<em>float</em>) – a number that signifies the order in which section will be placed in the z-direction, default: auto-generated integer based on the order each section is called</p></li>
-<li><p><strong>num_modes</strong> (<em>str</em>) – how many modes to solve in the section (<strong>‘straight’</strong>, <strong>‘taper’</strong>, and <strong>‘gds’</strong>), default: inherited from the profile definition</p></li>
-<li><p><strong>length</strong> (<em>float</em>) – the length of the section (in nanometers) (<strong>‘straight’</strong>, <strong>‘taper’</strong>, and <strong>‘gds’</strong>)</p></li>
-<li><p><strong>offset</strong> (<em>float</em><em> or </em><em>list</em>) – the x- and y-offset of the section (<strong>‘straight’</strong>, <strong>‘taper’</strong>, and <strong>‘gds’</strong>), if only a single value is specified then it is assumed to be the x-offset: (<code class="docutils literal notranslate"><span class="pre">offset</span></code>, 0), default: (0,0)</p></li>
-<li><p><strong>z_slices</strong> (<em>list</em><em> or </em><em>array</em>) – manually specify the <code class="docutils literal notranslate"><span class="pre">z_slices</span></code> that will be solved in sections with variations in the z-direction (<strong>‘taper’</strong> and <strong>‘gds’</strong>), by specifying this parameter the <code class="docutils literal notranslate"><span class="pre">z_option</span></code> is forced to be ‘custom’, default: None</p></li>
-<li><p><strong>overlap_variation</strong> (<em>float</em>) – threshold of mode list overlap between <code class="docutils literal notranslate"><span class="pre">z_slices</span></code> when solving with <code class="docutils literal notranslate"><span class="pre">z_option</span></code> of ‘auto’, this will use a bisection optimization limited by this <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> parameter and <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code> to determine the <code class="docutils literal notranslate"><span class="pre">z_slices</span></code> (<strong>‘taper’</strong> and <strong>‘gds’</strong>), default: 0.02</p></li>
-<li><p><strong>minimum_z_step</strong> (<em>float</em>) – the minimum allowed step size in the z-direction for the <code class="docutils literal notranslate"><span class="pre">z_slices</span></code> determined by the bisection optimization for the <code class="docutils literal notranslate"><span class="pre">z_option</span></code> of ‘auto’ (<strong>‘taper’</strong> and <strong>‘gds’</strong>), ‘auto’ reverts to 1/8th of the wavelength, default: ‘auto’</p></li>
-<li><p><strong>z_option</strong> (<em>str</em>) – either ‘custom’ or ‘auto’ to manually specify the <code class="docutils literal notranslate"><span class="pre">z_slices</span></code> or use the automatic bisection optimization algorithm to determine the <code class="docutils literal notranslate"><span class="pre">z_slices</span></code> (<strong>‘taper’</strong> and <strong>‘gds’</strong>), default: ‘auto’</p></li>
-<li><p><strong>gds</strong> (<em>str</em>) – name of the gds file used to mask a shape in the designated profile, this options allows for more complex section geometries using third party layout tools to define the mask (<strong>‘gds’</strong>)</p></li>
-<li><p><strong>cell_index</strong> (<em>int</em>) – the cell index in the specified gds file (<strong>‘gds’</strong>), default: 0</p></li>
-<li><p><strong>unit</strong> (<em>str</em>) – either ‘um’ or ‘nm’ to specify the units used in the gds file (<strong>‘gds’</strong>), default: ‘um’</p></li>
-<li><p><strong>shape_to_mask</strong> (<em>str</em>) – name of the shape that will be masked from the specified profile with the gds pattern (<strong>‘gds’</strong>)</p></li>
-<li><p><strong>etch_depth</strong> (<em>float</em>) – the etch depth for the <code class="docutils literal notranslate"><span class="pre">shape_to_mask</span></code> (<strong>‘gds’</strong>), default: inherited from the original shape definition</p></li>
-<li><p><strong>sidewall_angle</strong> (<em>float</em>) – the sidewall angle of the etch for the <code class="docutils literal notranslate"><span class="pre">shape_to_mask</span></code> (<strong>‘gds’</strong>), default: inherited from the original shape definition</p></li>
-<li><p><strong>tone</strong> (<em>str</em>) – either ‘p’ or ‘n’ to specify the etch mask tone for the <code class="docutils literal notranslate"><span class="pre">shape_to_mask</span></code> (<strong>‘gds’</strong>), default: inherited from the original shape definition</p></li>
-<li><p><strong>window_width</strong> (<em>float</em>) – the simulation window width (<strong>‘gds’</strong>), default: inherited from the original profile definition</p></li>
-<li><p><strong>window_height</strong> (<em>float</em>) – the simulation window height (<strong>‘gds’</strong>), default: inherited from the original profile definition</p></li>
-<li><p><strong>section_name</strong> (<em>str</em>) – name of the section to copy (<strong>‘copy’</strong>)</p></li>
-<li><p><strong>mirror</strong> (<em>bool</em>) – whether or not to mirror the copied shape (<strong>‘copy’</strong>), default: False</p></li>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="taper_section">
+<span class="sig-name descname"><span class="pre">taper_section</span></span></dt>
+<dd><p>Define a section that linearly interpolates its cross-section between two profiles for the EME solver, automatically slicing the z-direction to track the mode evolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section beginning</p></li>
+<li><p><strong>profile_end</strong> (<em>str</em>) – label of the profile that defines the section ending</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a> (notably <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> and <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code>, which control the automatic z-slicing), default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="gds_section">
+<span class="sig-name descname"><span class="pre">gds_section</span></span></dt>
+<dd><p>Define a section whose cross-section varies along z according to a mask imported from a GDS file, for more complex geometries defined with third-party layout tools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section’s cross-section outside of the GDS mask</p></li>
+<li><p><strong>gds_path</strong> (<em>str</em>) – path to the GDS file used to mask the section</p></li>
+<li><p><strong>layer_map</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – mapping of profile shape names to GDS layer numbers, used to determine which shapes in <code class="docutils literal notranslate"><span class="pre">profile</span></code> are masked by which GDS layer</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section, default: derived from the GDS bounding box</p></li>
+<li><p><strong>cell_index</strong> (<em>int</em><em> or </em><em>str</em>) – the cell index (or name) in the specified GDS file, default: 0</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – unit scale factor applied to the GDS coordinates (e.g. use 1000 if the GDS file is drawn in microns but the simulation is in nanometers), default: 1</p></li>
+<li><p><strong>port_poses</strong> (<em>dict</em>) – explicit port positions/orientations at the section boundaries, default: derived from the GDS bounding box (left port at w=0, right port at w=length)</p></li>
+<li><p><strong>heal</strong> (<em>bool</em>) – whether to heal small gaps/self-intersections in the imported GDS polygons before meshing, default: True</p></li>
+<li><p><strong>grow</strong> (<em>float</em>) – amount to grow imported GDS polygons by, to close small gaps, default: 1e-3</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="copy_section">
+<span class="sig-name descname"><span class="pre">copy_section</span></span></dt>
+<dd><p>Place a second instance of an already-declared section in the chain, reusing its already-computed S-matrix instead of re-solving it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>section_name</strong> (<em>str</em>) – name of the existing section to copy</p></li>
+<li><p><strong>mirror</strong> (<em>bool</em>) – whether to reverse the placement along the propagation direction (swapping the left/right ports), default: False</p></li>
+<li><p><strong>port_swap</strong> (<em>dict</em>) – explicit port-name mapping to use instead of the automatically computed left/right swap when <code class="docutils literal notranslate"><span class="pre">mirror</span></code> is True, default: None</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -412,7 +464,10 @@
 <dd><p>Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>warm_start</strong> (<em>bool</em>) – whether to seed each taper/gds section’s automatic z-slice refinement from the previously solved chain (when available), instead of re-refining from scratch, default: False</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -428,7 +483,7 @@
 <li><p><strong>output</strong> (<em>int</em><em> or </em><em>str</em>) – output field (second number of the scattering matrix identifier), default: 1</p></li>
 <li><p><strong>plot_function</strong> (<em>str</em><em> or </em><em>None</em>) – specify the function to apply to the plot data (‘abs^2’, ‘angle’, ‘real’, ‘imag’), default: ‘abs^2’</p></li>
 <li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None</p></li>
-<li><p><strong>file_type</strong> (<em>str</em>) – file type for saving a plot, ‘pdf’ or ‘png’, default: ‘pdf’</p></li>
+<li><p><strong>file_type</strong> (<em>str</em>) – file type for saving a plot, ‘pdf’ or ‘png’, default: ‘’ (no extension is added to <code class="docutils literal notranslate"><span class="pre">file_name</span></code> unless a file type is given)</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -460,7 +515,11 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section"><code class="docutils literal notranslate"><span class="pre">section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#EME_settings"><code class="docutils literal notranslate"><span class="pre">EME_settings</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#straight_section"><code class="docutils literal notranslate"><span class="pre">straight_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taper_section"><code class="docutils literal notranslate"><span class="pre">taper_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gds_section"><code class="docutils literal notranslate"><span class="pre">gds_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#copy_section"><code class="docutils literal notranslate"><span class="pre">copy_section</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#EME"><code class="docutils literal notranslate"><span class="pre">EME</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot_S_matrix"><code class="docutils literal notranslate"><span class="pre">plot_S_matrix</span></code></a></li>
 </ul>

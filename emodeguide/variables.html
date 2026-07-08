@@ -32,10 +32,10 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -366,7 +366,7 @@
 <dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
 </dd>
-<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate asymmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition.</p>
+<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via <code class="docutils literal notranslate"><span class="pre">get()</span></code>/<code class="docutils literal notranslate"><span class="pre">inspect()</span></code> — use <code class="docutils literal notranslate"><span class="pre">BC</span></code> below to read back the resolved boundary condition.</p>
 </dd>
 <dt id="term-BC">BC</dt><dd><p>(<em>str</em>) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of ‘0’, ‘A’, or ‘S’. For example, setting the boundary_condition to ‘TE’ and running FDM() will result in BC changing to either ‘SS’, ‘0S’, ‘S0’, or ‘00’, depending on the index profile cross-section symmetry.</p>
 </dd>
@@ -441,9 +441,9 @@
 </dd>
 <dt id="term-SHAPE-geometry-height">SHAPE[‘geometry’][‘height’]</dt><dd><p>(<em>float</em>) Maximum size of the shape in the y-direction.</p>
 </dd>
-<dt id="term-SHAPE-geometry-masks">SHAPE[‘geometry’][‘masks’]</dt><dd><p>(<em>list</em>) The masks for this shape</p>
+<dt id="term-SHAPE-geometry-mask">SHAPE[‘geometry’][‘mask’]</dt><dd><p>(<em>list</em>) The masks for this shape</p>
 </dd>
-<dt id="term-SHAPE-geometry-mask_offsets">SHAPE[‘geometry’][‘mask_offsets’]</dt><dd><p>(<em>list</em>) The mask offsets for this shape</p>
+<dt id="term-SHAPE-geometry-mask_offset">SHAPE[‘geometry’][‘mask_offset’]</dt><dd><p>(<em>list</em>) The mask offsets for this shape</p>
 </dd>
 <dt id="term-SHAPE-geometry-position">SHAPE[‘geometry’][‘position’]</dt><dd><p>(<em>list</em>) The x- and y-positions of the center point of the shape, constrained by the <code class="docutils literal notranslate"><span class="pre">SHAPE['geometry']['width']</span></code> and <code class="docutils literal notranslate"><span class="pre">SHAPE['geometry']['height']</span></code>.</p>
 </dd>
@@ -472,9 +472,9 @@
 </dd>
 <dt id="term-SHAPE-metadata-confinement">SHAPE[‘metadata’][‘confinement’]</dt><dd><p>(<em>list</em>) Confinement factor for each mode in the corresponding shape.</p>
 </dd>
-<dt id="term-SHAPE-metadata-edges">SHAPE[‘metadata’][‘edges’]</dt><dd><p>(<em>list</em>) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlate to the loss values from <code class="docutils literal notranslate"><span class="pre">SHAPE['scattering_all_edges']</span></code>.</p>
+<dt id="term-SHAPE-metadata-edges">SHAPE[‘metadata’][‘edges’]</dt><dd><p>(<em>list</em>) Definitions of edges for the corresponding shape where the scattering loss is calculated. These edges can be correlated to the loss values from <code class="docutils literal notranslate"><span class="pre">SHAPE['metadata']['scattering_all_edges']</span></code>.</p>
 </dd>
-<dt id="term-SHAPE-metadata-scattering_all_edges">SHAPE[‘metadata’][‘scattering_all_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each edge of the shape, defined by <code class="docutils literal notranslate"><span class="pre">SHAPE['edges']</span></code>.</p>
+<dt id="term-SHAPE-metadata-scattering_all_edges">SHAPE[‘metadata’][‘scattering_all_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each edge of the shape, defined by <code class="docutils literal notranslate"><span class="pre">SHAPE['metadata']['edges']</span></code>.</p>
 </dd>
 <dt id="term-SHAPE-metadata-scattering_horizontal_edges">SHAPE[‘metadata’][‘scattering_horizontal_edges’]</dt><dd><p>(<em>list</em>) Calculated scattering loss for each horizontal edge of the shape.</p>
 </dd>

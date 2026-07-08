@@ -32,10 +32,10 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -356,33 +356,16 @@
                   
   <section id="examples">
 <h1>Examples</h1>
-<p>To launch EMode, initialize a simulation, and check out an active license:</p>
-<div class="tabs docutils container" data-tabgroup="">
-<ul class="tabbar">
-<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
-Python</li></ul><div class="tab codetab selected" data-id="0">
+<p>Quick reference for initializing, running, and closing an EMode session:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
-<span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">()</span>
+
+<span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">()</span>                   <span class="c1"># Launch and check out license</span>
+<span class="n">em</span><span class="o">.</span><span class="n">function_name</span><span class="p">(</span><span class="n">keyword</span> <span class="o">=</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># Call EMode functions</span>
+<span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>                         <span class="c1"># Close and check in license</span>
 </pre></div>
 </div>
-</div></div><p>Next, EMode functions are called with:</p>
-<div class="tabs docutils container" data-tabgroup="">
-<ul class="tabbar">
-<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
-Python</li></ul><div class="tab codetab selected" data-id="0">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">em</span><span class="o">.</span><span class="n">function_name</span><span class="p">(</span><span class="n">keyword_1</span> <span class="o">=</span> <span class="n">value_1</span><span class="p">,</span> <span class="n">keyword_2</span> <span class="o">=</span> <span class="n">value_2</span><span class="p">,</span> <span class="o">...</span> <span class="p">)</span>
-</pre></div>
-</div>
-</div></div><p>Close EMode and check in the license with:</p>
-<div class="tabs docutils container" data-tabgroup="">
-<ul class="tabbar">
-<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
-Python</li></ul><div class="tab codetab selected" data-id="0">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-</div>
-</div></div><section id="example-scripts">
-<h2>Example  Scripts</h2>
+<section id="example-scripts">
+<h2>Example Scripts</h2>
 <div class="sd-container-fluid sd-sphinx-override sd-m-auto sd-p-2 docutils">
 <div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-4 sd-g-xs-4 sd-g-sm-4 sd-g-md-4 sd-g-lg-4 docutils">
 <div class="sd-col sd-d-flex-row sd-col-6 sd-col-xs-6 sd-col-sm-6 sd-col-md-6 sd-col-lg-6 docutils">
@@ -390,19 +373,19 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 <div class="sd-card-body docutils">
 <div class="sd-card-title sd-font-weight-bold docutils">
 EMode<sup>2D</sup> Scripts</div>
+<div class="icon-list docutils container">
 <table class="hlist"><tr><td><ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="examples/SOI.html"><span class="doc">SOI</span></a></p></li>
-<li><p class="sd-card-text"><a class="reference internal" href="examples/SiN.html"><span class="doc">SiN</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-container" viewBox="0 0 16 16" aria-hidden="true"><path d="m10.41.24 4.711 2.774c.544.316.878.897.879 1.526v5.01a1.77 1.77 0 0 1-.88 1.53l-7.753 4.521-.002.001a1.769 1.769 0 0 1-1.774 0H5.59L.873 12.85A1.761 1.761 0 0 1 0 11.327V6.292c0-.304.078-.598.22-.855l.004-.005.01-.019c.15-.262.369-.486.64-.643L8.641.239a1.752 1.752 0 0 1 1.765 0l.002.001ZM9.397 1.534l-7.17 4.182 4.116 2.388a.27.27 0 0 0 .269 0l7.152-4.148-4.115-2.422a.252.252 0 0 0-.252 0Zm-7.768 10.02 4.1 2.393V9.474a1.807 1.807 0 0 1-.138-.072L1.5 7.029v4.298c0 .095.05.181.129.227Zm8.6.642 1.521-.887v-4.45l-1.521.882ZM7.365 9.402h.001c-.044.026-.09.049-.136.071v4.472l1.5-.875V8.61Zm5.885 1.032 1.115-.65h.002a.267.267 0 0 0 .133-.232V5.264l-1.25.725Z"></path></svg> <a class="reference internal" href="examples/SOI.html"><span class="doc">SOI</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-iterations" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 7.25a4.75 4.75 0 0 1 9.5 0 .75.75 0 0 0 1.5 0 6.25 6.25 0 1 0-6.25 6.25H12v2.146c0 .223.27.335.427.177l2.896-2.896a.25.25 0 0 0 0-.354l-2.896-2.896a.25.25 0 0 0-.427.177V12H7.25A4.75 4.75 0 0 1 2.5 7.25Z"></path></svg> <a class="reference internal" href="examples/SiN.html"><span class="doc">SiN</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-zap" viewBox="0 0 16 16" aria-hidden="true"><path d="M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.249 1.249 0 0 1-.871.354h-.302a1.25 1.25 0 0 1-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004L9.503.429Zm1.047 1.074L3.286 8.571A.25.25 0 0 0 3.462 9H6.75a.75.75 0 0 1 .694 1.034l-1.713 4.188 6.982-6.793A.25.25 0 0 0 12.538 7H9.25a.75.75 0 0 1-.683-1.06l2.008-4.418.003-.006a.036.036 0 0 0-.004-.009l-.006-.006-.008-.001c-.003 0-.006.002-.009.004Z"></path></svg> <a class="reference internal" href="examples/LNOI.html"><span class="doc">LNOI</span></a></p></li>
 </ul>
 </td><td><ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="examples/LNOI.html"><span class="doc">LNOI</span></a></p></li>
-<li><p class="sd-card-text"><a class="reference internal" href="examples/Laser.html"><span class="doc">Laser</span></a></p></li>
-</ul>
-</td><td><ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="examples/Open.html"><span class="doc">Open</span></a></p></li>
-<li><p class="sd-card-text"><a class="reference internal" href="examples/Dispersion.html"><span class="doc">Dispersion</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-light-bulb" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg> <a class="reference internal" href="examples/Laser.html"><span class="doc">Laser</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-file" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg> <a class="reference internal" href="examples/Open.html"><span class="doc">Open</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-graph" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> <a class="reference internal" href="examples/Dispersion.html"><span class="doc">Dispersion</span></a></p></li>
 </ul>
 </td></tr></table>
+</div>
 </div>
 </div>
 </div>
@@ -411,14 +394,16 @@ EMode<sup>2D</sup> Scripts</div>
 <div class="sd-card-body docutils">
 <div class="sd-card-title sd-font-weight-bold docutils">
 EMode<sup>3D</sup> Scripts</div>
+<div class="icon-list docutils container">
 <table class="hlist"><tr><td><ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="examples/EME_Taper.html"><span class="doc">EME: Taper</span></a></p></li>
-<li><p class="sd-card-text"><a class="reference internal" href="examples/EME_Sweep.html"><span class="doc">EME: Sweep</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-paper-airplane" viewBox="0 0 16 16" aria-hidden="true"><path d="M.989 8 .064 2.68a1.342 1.342 0 0 1 1.85-1.462l13.402 5.744a1.13 1.13 0 0 1 0 2.076L1.913 14.782a1.343 1.343 0 0 1-1.85-1.463L.99 8Zm.603-5.288L2.38 7.25h4.87a.75.75 0 0 1 0 1.5H2.38l-.788 4.538L13.929 8Z"></path></svg> <a class="reference internal" href="examples/EME_Taper.html"><span class="doc">EME: Taper</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-video" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25Z"></path><path d="M6 10.559V5.442a.25.25 0 0 1 .379-.215l4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559Z"></path></svg> <a class="reference internal" href="examples/EME_Sweep.html"><span class="doc">EME: Sweep</span></a></p></li>
 </ul>
 </td><td><ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="examples/EME_GDS.html"><span class="doc">EME: GDS</span></a></p></li>
+<li><p class="sd-card-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-project-symlink" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16h-8.5a.75.75 0 0 1 0-1.5h8.5a.25.25 0 0 0 .25-.25V6.5h-13v1.75a.75.75 0 0 1-1.5 0ZM6.5 5h8V1.75a.25.25 0 0 0-.25-.25H6.5Zm-5 0H5V1.5H1.75a.25.25 0 0 0-.25.25Z"></path><path d="M1.5 13.737a2.25 2.25 0 0 1 2.262-2.25L4 11.49v1.938c0 .218.26.331.42.183l2.883-2.677a.25.25 0 0 0 0-.366L4.42 7.89a.25.25 0 0 0-.42.183V9.99l-.23-.001A3.75 3.75 0 0 0 0 13.738v1.012a.75.75 0 0 0 1.5 0v-1.013Z"></path></svg> <a class="reference internal" href="examples/EME_GDS.html"><span class="doc">EME: GDS</span></a></p></li>
 </ul>
 </td></tr></table>
+</div>
 </div>
 </div>
 </div>
@@ -454,7 +439,7 @@ EMode<sup>3D</sup> Scripts</div>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-scripts">Example  Scripts</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-scripts">Example Scripts</a><ul class="nav section-nav flex-column">
 </ul>
 </li>
 </ul>

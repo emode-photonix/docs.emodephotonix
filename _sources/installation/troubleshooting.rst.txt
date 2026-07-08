@@ -2,11 +2,66 @@
 Troubleshooting
 ^^^^^^^^^^^^^^^
 
-.. glossary::
-    
-    *EMode and EModeLogin open, but they have an issue connecting to the license server.*
-        First, double-check your internet connection. Next, try restarting your computer to make sure the new firewall settings are implemented.
-    
-    *EMode was installed and functioning properly, but now there are issues launching EMode or logging into the license server.*
-        Check that you have the latest version of EMode installed by navigating the installation page. Also, check that your connection module is up to date.
-    
+.. dropdown:: EMode and EModeLogin open, but they have an issue connecting to the license server.
+
+    First, double-check your internet connection. Next, try restarting your computer to make sure the new firewall settings are implemented.
+
+.. dropdown:: EMode was installed and functioning properly, but now there are issues launching EMode or logging into the license server.
+
+    Check that you have the latest version of EMode installed by navigating the installation page. Also, check that your connection module is up to date.
+
+.. dropdown:: A simulation crash left a license checked out and EMode now reports no available seats.
+
+    A crashed session keeps a license checked out until it times out (9 minutes by default, or 24 hours under roaming mode). Clear the stale session at startup with ``EMode(clear='all')``. To clear only one seat instead of all, use ``clear='oldest'`` or ``clear='latest'``. If the session was started with ``roaming=True``, the lock persists for 24 hours unless explicitly cleared.
+
+.. dropdown:: Calling section(), EME(), or plot_S_matrix() raises a LicenseError saying the function is only available with EMode3D.
+
+    These functions require an EMode\ :sup:`3D`\  license. When ``EMode()`` is initialized with ``license_type='default'``, a 2D license is checked out if no 3D license is available. Force a 3D checkout with ``EMode(license_type='3d')``. If your subscription only includes EMode\ :sup:`2D`\ , these functions are not accessible.
+
+.. dropdown:: After installing EMode on Windows, running emode from the command line produces "command not found" or is not recognized.
+
+    Update to v1.0.0 or later, or manually add the EMode install directory to your PATH. The install location is shown at the end of the installer output. You can also launch the login GUI directly from Python with ``emc.EModeLogin()``.
+
+.. dropdown:: FDM() returns fewer modes than num_modes, or returns zero modes.
+
+    The solver only finds modes with an effective index between the cladding index and ``max_effective_index``. If ``max_effective_index`` is set too low, guided modes are excluded. When set to 0 (default), it uses the maximum refractive index in the window—if a high-index material is present outside the core this cap may be too generous, causing spurious or missing results. Additionally, ``remove_pml_modes_bool`` (default ``False``) automatically removes modes identified as PML modes after solving when enabled, which can reduce the returned mode count. Also verify that ``window_width`` and ``window_height`` are large enough to contain the mode field: clipping the field tail will reduce the mode count. Confirm that ``num_modes`` is set in ``settings()`` before calling ``FDM()``.
+
+.. dropdown:: The mode list contains modes with very high loss or fields concentrated entirely in the PML regions.
+
+    These are PML-induced artificial modes. Set ``remove_pml_modes_bool=True`` in ``settings()`` (default ``False``) to automatically remove modes whose inner-window confinement falls below 75%. If PML modes still appear after enabling it, check that ``pml_NSEW_bool`` is set correctly and that ``expansion_size`` is nonzero on the relevant boundaries. Increasing ``num_pml_layers`` beyond the default of 10 improves PML absorption.
+
+.. dropdown:: The effective index changes significantly when I refine the resolution or increase the window size—results are not converging.
+
+    A convergence study is required for any quantitative result. Systematically vary ``x_resolution`` and ``y_resolution`` (halving each time), then ``window_width`` and ``window_height`` (increase until ``n_eff`` changes by less than your target tolerance), and finally ``expansion_size`` on each boundary. The ``sweep()`` function automates this: e.g., ``sweep(key='x_resolution', values=[20, 10, 5], result='effective_index')``. A ``max_effective_index`` set too close to ``n_eff`` can also bias the eigenvalue search.
+
+.. dropdown:: Setting boundary_condition='TE' or 'TM' sometimes falls back to '00' and solves the full window.
+
+    The ``'TE'`` and ``'TM'`` shortcuts detect symmetry from the refractive index profile. If the geometry is not symmetric about the window center (e.g., a shape is off-center), no symmetry is found and EMode falls back to ``'00'``. Check the resolved boundary condition with ``em.get('BC')`` after ``FDM()``. Use explicit boundary conditions such as ``'SS'`` or ``'0S'`` if you know the geometry is symmetric. The south (y) boundary is the first character; the west (x) boundary is the second.
+
+.. dropdown:: A shape is not visible in plot(component='Shapes'), or the geometry looks wrong.
+
+    Shapes are drawn in order of ``priority``: higher values are drawn on top. By default, each successive ``shape()`` call receives an auto-incremented priority. If a wide substrate or cladding layer is defined after a core, it will cover the core. Fix this by setting ``priority`` explicitly—give the core a higher value than the surrounding cladding. Inspect priorities with ``em.get('priority_indices')`` and validate the meshed index with ``plot(component='Index')``.
+
+.. dropdown:: A material name passed to shape() or settings() raises an error or is not recognized.
+
+    Material names are case-sensitive and must exactly match the database. Use ``material_explorer()`` to browse all available names and their recommended wavelength ranges. For alloys like AlGaAs, the composition fraction must be included in the name string, e.g., ``"AlGaAs, 0.3"``. If the wavelength is outside a material's recommended range, the model extrapolates (shown as a dashed line in ``material_explorer()``), which may produce inaccurate results.
+
+.. dropdown:: Calling add_material() raises an ArgumentError about invalid characters in the equation.
+
+    The ``refractive_index_equation`` string is restricted to the characters ``0123456789 x j . + - ^ * / ( ) [ ]``. Function calls (``sqrt``, ``np.``, ``math.``), variable names, and comparison operators are not allowed. Use ``x`` for the wavelength variable (unit set by ``wavelength_unit``, default ``'um'``). Exponents use ``^``, not ``**``. Square roots are written as ``(expr)^0.5``. Imaginary index components use ``j`` directly: e.g., ``1.5 + j0.001``. The string must be fewer than 1000 characters.
+
+.. dropdown:: scattering() returns 0 for all modes even though roughness is defined on the shape.
+
+    Scattering loss requires both ``roughness_rms`` and ``correlation_length`` to be nonzero on the relevant shape. Setting only one is insufficient. Also confirm that the shape has exposed interfaces: if it is fully overlapped by a higher-priority shape it contributes no scattering. Inspect results in the shape's metadata with ``em.get('shape_SHAPENAME')['metadata']['scattering_sum']`` after calling ``scattering()``.
+
+.. dropdown:: The simulation is slow, or a parameter sweep takes a very long time.
+
+    Resolution is the dominant cost: halving ``x_resolution`` and ``y_resolution`` increases the matrix size by 4× and solve time by roughly 8–16×. Reduce the window to the minimum size that passes a convergence check. Use symmetric boundary conditions (``'TE'``, ``'TM'``, ``'SS'``, etc.) when the geometry permits—this reduces the solved domain by up to 4×. Set ``num_modes`` to only as many modes as needed. Process priority can be raised with ``EMode(priority='pH')``.
+
+.. dropdown:: The returned effective_index is complex, or loss_dB_per_m is unexpectedly nonzero for a nominally lossless design.
+
+    A nonzero imaginary effective index indicates optical loss from one or more sources: (1) a material with a nonzero imaginary refractive index or ``loss_dB_per_m``; (2) PML layers absorbing leaky field energy—increase ``window_width``, ``window_height``, or ``expansion_size``; (3) ``bend_radius`` is set, which introduces radiative bending loss. Check each source using ``em.get('loss_dB_per_m')`` and ``em.get('bend_radius')``.
+
+.. dropdown:: An issue is not covered here, or behavior seems incorrect.
+
+    EMode only supports the latest version. Many issues are resolved by upgrading. Visit the installation page to download the latest release and review the release notes for resolved bugs and API changes.

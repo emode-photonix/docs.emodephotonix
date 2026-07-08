@@ -7,23 +7,15 @@ Installation
 - `Create an EMode account <https://emodephotonix.com/register/>`_, and verify your account via the confirmation email.
 - Purchase a subscription license through the `EMode store <https://emodephotonix.com/get-emode/>`_. This is required, even for a free EMode\ :sup:`2D`\  license.
 
-2. Setup the Python Interface
+2. Set Up the Python Interface
 ------------------------------
 
-- See the :ref:`Python Interface <python-interface>` page for instructions to install Python.
-- Follow the :ref:`Setup <SetupPython>` instructions to install the ``emodeconnection`` package.
+Follow the :ref:`Python Interface <python-interface>` instructions to install Python and the ``emodeconnection`` package.
 
 3. Download and Install EMode
 -----------------------------
 
-**System requirements**: 840 MB free disk space
-
-.. hlist::
-    :columns: 3
-
-    * **Windows** 10 or higher
-    * **Linux**, Ubuntu 22.04 or higher, x86-64
-    * **macOS** 13 Ventura or higher
+**System requirements:** **Windows** 10+, **Linux** Ubuntu 22.04+ (x86-64), **macOS** 13 Ventura+
 
 There are two installation methods:
 
@@ -45,7 +37,7 @@ There are two installation methods:
 
     .. tab-item:: Manual install
 
-        #. Login to your `EMode account <https://emodephotonix.com/my-account/>`_.
+        #. Log in to your `EMode account <https://emodephotonix.com/my-account/>`_.
         #. Select your operating system and version from the dropdown menus.
         #. Accept the EMode End User License Agreement.
         #. Click ``Download EMode`` to download the file for your platform.
@@ -71,21 +63,18 @@ There are two installation methods:
             unzip EMode-VERSION-Linux.zip
             sh install.sh
 
-.. tip::
+**macOS Apple silicon:** EMode runs via Rosetta 2 and you may be prompted to install it on the first run.
 
-    On macOS with Apple silicon, EMode runs via Rosetta 2,
-    which you may be prompted to install on the first run.
+4. Run an EMode Example Script
+------------------------------
+
+- Run the `Basic: SOI <examples/SOI.html>`_ example in Python to verify your installation.
+- A login window will open when EMode is first initialized. To subsequently access this window, see :ref:`EMode Login <PythonEModeLogin>`.
+
+If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.
 
 .. hlist::
    :columns: 2
 
    * `Release notes <installation/release-notes.html>`_
    * `Troubleshooting <installation/troubleshooting.html>`_
-
-4. Run an EMode Example Script
-------------------------------
-
-- Copy and run the `Basic: SOI <examples/SOI.html>`_ example in your scripting environment.
-- A login window will open when EMode is first initialized. To subsequently access this window, see :ref:`EMode Login <PythonEModeLogin>`.
-
-If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.

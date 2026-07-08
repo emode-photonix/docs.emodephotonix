@@ -2,48 +2,115 @@
 EME
 ---
 
-.. data:: section
+.. data:: EME_settings
 
-    Define a waveguide section used in the EME solver. This function is analagous to the ``shape`` function for 2D simulations, but instead sequentially defines the sections of an EME simulation.
+    Declare global EME defaults that are inherited by sections created afterward. Each parameter left unspecified leaves the corresponding stored default unchanged. A section's own ``settings`` argument at creation still overrides these globals. Sections created before this call are not affected.
+
+    :param apply_scattering: whether interfacial scattering loss is automatically applied to the S-matrix, either for every wavelength (True), no wavelengths (False), or only the listed wavelengths, default: False
+    :type apply_scattering: bool or list[float]
+    :param str beta_interpolation: either 'uniform' or 'linear' to specify how the propagation constant is interpolated between z-slices of a taper/gds section, default: 'uniform'
+    :param junction_normalization: controls how junction S-matrices are power-normalized; either a single bool/'gain' value applied to both junction kinds, or a dict with 'inter_section' and 'intra_section' keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: 'gain' for inter-section junctions and True for intra-section junctions
+    :type junction_normalization: bool or str or dict
+    :param float overlap_variation: threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01
+    :param float minimum_z_step: [um] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: straight_section
+
+    Define a uniform-cross-section waveguide section for the EME solver. Sections are placed sequentially in the z-direction in the order they are declared (or updated, if ``name`` already exists).
 
     :param str name: section name, default: an auto-generated number
-    :param str section_type: either 'straight', 'taper', 'gds', or 'copy', and each section type corresponds with only a subset of other input parameters:
+    :param str profile: label of the profile that defines the section's cross-section
+    :param float length: [nm] the length of the section
+    :param offset: the x- and y-offset of the section's port window, if only a single value is given it is assumed to be the x-offset, default: (0, 0)
+    :type offset: float or tuple[float, float]
+    :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
 
-        * **'straight'**: ``name``, ``profile``, ``order``, ``num_modes``, ``length``, ``offset``, ``simulation_name``
-        * **'taper'**: ``name``, ``profile``, ``profile_end``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``
-        ``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
-        * **'gds'**: ``name``, ``gds``, ``cell_index``, ``unit``, ``profile``, ``shape_to_mask``, ``etch_depth``, ``sidewall_angle``, ``tone``, ``window_width``, ``window_height``, ``order``, ``num_modes``, ``length``, ``offset``, ``z_slices``, ``overlap_variation``, ``minimum_z_step``, ``z_option``, ``taper_algorithm``, ``simulation_name``
-        * **'copy'**: ``name``, ``section_name``, ``mirror``, ``order``, ``simulation_name``
+.. data:: taper_section
 
-    :param str profile: label of the profile to define the entire section (**'straight'** and **'gds'**) or section beginning (**'taper'**)
-    :param str profile_end: label of the profile to define the section ending (**'taper'**)
-    :param float order: a number that signifies the order in which section will be placed in the z-direction, default: auto-generated integer based on the order each section is called
-    :param str num_modes: how many modes to solve in the section (**'straight'**, **'taper'**, and **'gds'**), default: inherited from the profile definition
-    :param float length: the length of the section (in nanometers) (**'straight'**, **'taper'**, and **'gds'**)
-    :param offset: the x- and y-offset of the section (**'straight'**, **'taper'**, and **'gds'**), if only a single value is specified then it is assumed to be the x-offset: (``offset``, 0), default: (0,0)
-    :type offset: float or list
-    :param z_slices: manually specify the ``z_slices`` that will be solved in sections with variations in the z-direction (**'taper'** and **'gds'**), by specifying this parameter the ``z_option`` is forced to be 'custom', default: None
-    :type z_slices: list or array
-    :param float overlap_variation: threshold of mode list overlap between ``z_slices`` when solving with ``z_option`` of 'auto', this will use a bisection optimization limited by this ``overlap_variation`` parameter and ``minimum_z_step`` to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 0.02
-    :param float minimum_z_step: the minimum allowed step size in the z-direction for the ``z_slices`` determined by the bisection optimization for the ``z_option`` of 'auto' (**'taper'** and **'gds'**), 'auto' reverts to 1/8th of the wavelength, default: 'auto'
-    :param str z_option: either 'custom' or 'auto' to manually specify the ``z_slices`` or use the automatic bisection optimization algorithm to determine the ``z_slices`` (**'taper'** and **'gds'**), default: 'auto'
-    :param str gds: name of the gds file used to mask a shape in the designated profile, this options allows for more complex section geometries using third party layout tools to define the mask (**'gds'**)
-    :param int cell_index: the cell index in the specified gds file (**'gds'**), default: 0
-    :param str unit: either 'um' or 'nm' to specify the units used in the gds file (**'gds'**), default: 'um'
-    :param str shape_to_mask: name of the shape that will be masked from the specified profile with the gds pattern (**'gds'**)
-    :param float etch_depth: the etch depth for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
-    :param float sidewall_angle: the sidewall angle of the etch for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
-    :param str tone: either 'p' or 'n' to specify the etch mask tone for the ``shape_to_mask`` (**'gds'**), default: inherited from the original shape definition
-    :param float window_width: the simulation window width (**'gds'**), default: inherited from the original profile definition
-    :param float window_height: the simulation window height (**'gds'**), default: inherited from the original profile definition
-    :param str section_name: name of the section to copy (**'copy'**)
-    :param bool mirror: whether or not to mirror the copied shape (**'copy'**), default: False
+    Define a section that linearly interpolates its cross-section between two profiles for the EME solver, automatically slicing the z-direction to track the mode evolution.
+
+    :param str name: section name, default: an auto-generated number
+    :param str profile: label of the profile that defines the section beginning
+    :param str profile_end: label of the profile that defines the section ending
+    :param float length: [nm] the length of the section
+    :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: gds_section
+
+    Define a section whose cross-section varies along z according to a mask imported from a GDS file, for more complex geometries defined with third-party layout tools.
+
+    :param str name: section name, default: an auto-generated number
+    :param str profile: label of the profile that defines the section's cross-section outside of the GDS mask
+    :param str gds_path: path to the GDS file used to mask the section
+    :param layer_map: mapping of profile shape names to GDS layer numbers, used to determine which shapes in ``profile`` are masked by which GDS layer
+    :type layer_map: dict[str, int]
+    :param float length: [nm] the length of the section, default: derived from the GDS bounding box
+    :param cell_index: the cell index (or name) in the specified GDS file, default: 0
+    :type cell_index: int or str
+    :param float scale: unit scale factor applied to the GDS coordinates (e.g. use 1000 if the GDS file is drawn in microns but the simulation is in nanometers), default: 1
+    :param port_poses: explicit port positions/orientations at the section boundaries, default: derived from the GDS bounding box (left port at w=0, right port at w=length)
+    :type port_poses: dict
+    :param bool heal: whether to heal small gaps/self-intersections in the imported GDS polygons before meshing, default: True
+    :param float grow: amount to grow imported GDS polygons by, to close small gaps, default: 1e-3
+    :param settings: per-section overrides of the :data:`EME_settings`, default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+..
+    .. data:: TO_section
+
+        Define a section whose geometry is generated analytically via a transformation-optics (TO) coordinate transform, rather than from a fixed cross-section or an imported GDS mask. This is a beta feature.
+
+        :param str name: section name
+        :param str transform: either 'coupler' (a two-waveguide directional coupler) or 'parameterized_curve' (a single waveguide with arbitrary bending)
+        :param str profile: label of the profile that defines the waveguide cross-section
+        :param waveguides: the :class:`~emodeconnection.geometry.Path` centerline(s) of the waveguide(s); 'coupler' requires exactly 2, 'parameterized_curve' requires exactly 1
+        :type waveguides: list
+        :param float length: [nm] the length of the section
+        :param poses: the :class:`~emodeconnection.geometry.Pose` of each waveguide's local frame within the section frame; required (length 2) for 'coupler', ignored for 'parameterized_curve'
+        :type poses: list
+        :param float width: the lateral extent of the transform region; required for 'coupler', ignored for 'parameterized_curve'
+        :param float virtual_gap: extra lateral padding used internally by the coupler transform to avoid a coordinate singularity; required for 'coupler', ignored for 'parameterized_curve'
+        :param center_path: an optional additional :class:`~emodeconnection.geometry.Path` defining the coupler's central symmetry curve; only used for 'coupler', default: None
+        :param int theta_grid_points: number of grid points used to sample the transform's angular coordinate; only used for 'parameterized_curve', default: 2001
+        :param settings: per-section overrides of the :data:`EME_settings`, default: None
+        :type settings: dict or None
+        :param str simulation_name: simulation name, default: 'emode'
+
+        .. note::
+            Once created, a ``TO_section`` can only be updated through ``TO_section`` itself — its geometry cannot be reshaped through :data:`straight_section`/:data:`taper_section`/:data:`gds_section`.
+
+    .. data:: to_gds
+
+        Export a previously declared 'coupler' :data:`TO_section` to a GDS file, for fabrication preview and to inspect the geometry that the EME solver will build.
+
+        :param str name: name of the ``TO_section`` (transform 'coupler') to export
+        :param str path: file path to write the GDS library to
+        :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: copy_section
+
+    Place a second instance of an already-declared section in the chain, reusing its already-computed S-matrix instead of re-solving it.
+
+    :param str name: section name, default: an auto-generated number
+    :param str section_name: name of the existing section to copy
+    :param bool mirror: whether to reverse the placement along the propagation direction (swapping the left/right ports), default: False
+    :param port_swap: explicit port-name mapping to use instead of the automatically computed left/right swap when ``mirror`` is True, default: None
+    :type port_swap: dict
+    :param settings: per-section overrides of the :data:`EME_settings`, default: None
+    :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: EME
 
     Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME).
 
+    :param bool warm_start: whether to seed each taper/gds section's automatic z-slice refinement from the previously solved chain (when available), instead of re-refining from scratch, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: plot_S_matrix
@@ -57,5 +124,5 @@ EME
     :param plot_function: specify the function to apply to the plot data ('abs^2', 'angle', 'real', 'imag'), default: 'abs^2'
     :type plot_function: str or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
-    :param str file_type: file type for saving a plot, ‘pdf’ or ‘png’, default: ‘pdf’
+    :param str file_type: file type for saving a plot, ‘pdf’ or ‘png’, default: '' (no extension is added to ``file_name`` unless a file type is given)
     :param str simulation_name: simulation name, default: 'emode'

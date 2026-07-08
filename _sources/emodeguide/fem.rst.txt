@@ -4,7 +4,7 @@ Multi-Physics
 
 .. data:: heat
 
-    Run a steady-state thermal simulation of a waveguide cross-section.
+    Run a steady-state thermal simulation of a waveguide cross-section. Requires a '3D' license.
 
     .. warning::
         This function is only available under beta release. Please report any issues or bugs.
@@ -12,7 +12,7 @@ Multi-Physics
     .. note::
         Each ``shape()`` now accepts an input parameter called ``heat_only`` (default: False), which can be used to set additional shapes on top or bottom of the photonic layer stack. For example, common ``heat_only`` shapes are the substrate and metal heater layers.
 
-        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
+        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 500), which is used to refine the triangular mesh within certain shapes.
 
         Each material in the EMode material database now has ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), and ``dn_dT`` (1/K).
 
@@ -25,15 +25,15 @@ Multi-Physics
 
 .. data:: electrostatic
 
-    Run a steady-state electrostatic simulation of a waveguide cross-section.
+    Run a steady-state electrostatic simulation of a waveguide cross-section. Requires a '3D' license.
 
     .. warning::
         This function is only available under beta release. Please report any issues or bugs.
 
     .. note::
-        Each ``shape()`` also now accepts an input parameter called ``voltage`` (default: 0), which is set to create electric field sources.
+        Each ``shape()`` also now accepts an input parameter called ``voltage`` (default: None), which is set to create electric field sources. Shapes with ``voltage`` left as None do not get a voltage boundary condition applied.
 
-        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 0), which is used to refine the triangular mesh within certain shapes.
+        Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 500), which is used to refine the triangular mesh within certain shapes.
 
         Each material in the EMode material database now has ``eps_r_dc`` (relative permittivity at ~1 kHz).
 

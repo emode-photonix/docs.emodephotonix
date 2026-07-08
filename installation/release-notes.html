@@ -32,10 +32,10 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1240b27d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -358,6 +358,15 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>1.0.0: July 8, 2026</strong></p>
+<ul class="simple">
+<li><p>Major internal architectural changes to enable the pending release of nonlinear EME functions and complex circuit solutions.</p></li>
+<li><p>EME API changed such that each section type is defined with a unique function.</p></li>
+<li><p>Improved PMLs for stability, especially with radiation modes.</p></li>
+<li><p>Fixed a bug with the command line installer for Windows. Now <code class="docutils literal notranslate"><span class="pre">emode</span></code> is added to path automatically.</p></li>
+<li><p>Plot now shows bidirectional field data by default, controlled by the setting “Forward only”.</p></li>
+<li><p>Plot now blends fields with interpolation by default, controlled by the setting “Blend slices”.</p></li>
+</ul>
 <p><strong>0.2.6: April 27, 2026</strong></p>
 <ul class="simple">
 <li><p>Fixed <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function to deliver <code class="docutils literal notranslate"><span class="pre">mode_order</span></code> and <code class="docutils literal notranslate"><span class="pre">scattering_loss</span></code> in <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p></li>
@@ -371,7 +380,7 @@
 </ul>
 <p><strong>0.2.4: February 10, 2026</strong></p>
 <ul class="simple">
-<li><p>Boundary condition implementations have been updated. This may impact (a)symmetric boundary mode lists.</p></li>
+<li><p>Boundary condition implementations have been updated. This may impact (anti-)symmetric boundary mode lists.</p></li>
 <li><p>Improved EME junction algorithm for robustness.</p></li>
 <li><p>Implemented speed improvements, leading to a 60% speedup in our taper example.</p></li>
 <li><p>Added an input to the <code class="docutils literal notranslate"><span class="pre">settings()</span></code> function called <code class="docutils literal notranslate"><span class="pre">frequency</span></code> as an alternative way to set the simulation wavelength. Internally, the <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> is calculated from the <code class="docutils literal notranslate"><span class="pre">frequency</span></code> parameter as <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> = c/<code class="docutils literal notranslate"><span class="pre">frequency</span></code>.</p></li>

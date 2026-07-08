@@ -2,35 +2,17 @@
 Examples
 ========
 
-To launch EMode, initialize a simulation, and check out an active license:
+Quick reference for initializing, running, and closing an EMode session:
 
-.. tabs::
+.. code-block:: python
 
-    .. code-tab:: python
-        :caption: Python
+    import emodeconnection as emc
 
-        import emodeconnection as emc
-        em = emc.EMode()
+    em = emc.EMode()                   # Launch and check out license
+    em.function_name(keyword = value)  # Call EMode functions
+    em.close()                         # Close and check in license
 
-Next, EMode functions are called with:
-
-.. tabs::
-
-    .. code-tab:: python
-        :caption: Python
-
-        em.function_name(keyword_1 = value_1, keyword_2 = value_2, ... )
-
-Close EMode and check in the license with:
-
-.. tabs::
-
-    .. code-tab:: python
-        :caption: Python
-
-        em.close()
-
-Example  Scripts
+Example Scripts
 ^^^^^^^^^^^^^^^^
 
 .. grid:: 2
@@ -42,26 +24,30 @@ Example  Scripts
         :shadow: md
         :columns: 6
 
-        .. hlist::
-            :columns: 3
+        .. container:: icon-list
 
-            * :doc:`SOI <examples//SOI>`
-            * :doc:`SiN <examples//SiN>`
-            * :doc:`LNOI <examples//LNOI>`
-            * :doc:`Laser <examples//Laser>`
-            * :doc:`Open <examples//Open>`
-            * :doc:`Dispersion <examples//Dispersion>`
+            .. hlist::
+                :columns: 2
+
+                * :octicon:`container;1em` :doc:`SOI <examples//SOI>`
+                * :octicon:`iterations;1em` :doc:`SiN <examples//SiN>`
+                * :octicon:`zap;1em` :doc:`LNOI <examples//LNOI>`
+                * :octicon:`light-bulb;1em` :doc:`Laser <examples//Laser>`
+                * :octicon:`file;1em` :doc:`Open <examples//Open>`
+                * :octicon:`graph;1em` :doc:`Dispersion <examples//Dispersion>`
 
     .. grid-item-card:: EMode\ :sup:`3D`\  Scripts
         :shadow: md
         :columns: 6
 
-        .. hlist::
-            :columns: 2
+        .. container:: icon-list
 
-            * :doc:`EME: Taper <examples//EME_Taper>`
-            * :doc:`EME: Sweep <examples//EME_Sweep>`
-            * :doc:`EME: GDS <examples//EME_GDS>`
+            .. hlist::
+                :columns: 2
+
+                * :octicon:`paper-airplane;1em` :doc:`EME: Taper <examples//EME_Taper>`
+                * :octicon:`video;1em` :doc:`EME: Sweep <examples//EME_Sweep>`
+                * :octicon:`project-symlink;1em` :doc:`EME: GDS <examples//EME_GDS>`
 
 .. toctree::
    :maxdepth: 1
