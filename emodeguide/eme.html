@@ -373,7 +373,7 @@
 <li><p><strong>beta_interpolation</strong> (<em>str</em>) – either ‘uniform’ or ‘linear’ to specify how the propagation constant is interpolated between z-slices of a taper/gds section, default: ‘uniform’</p></li>
 <li><p><strong>junction_normalization</strong> (<em>bool</em><em> or </em><em>str</em><em> or </em><em>dict</em>) – controls how junction S-matrices are power-normalized; either a single bool/’gain’ value applied to both junction kinds, or a dict with ‘inter_section’ and ‘intra_section’ keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or ‘gain’ (clip singular values at 1 while keeping the raw lossy mode-matching), default: ‘gain’ for inter-section junctions and True for intra-section junctions</p></li>
 <li><p><strong>overlap_variation</strong> (<em>float</em>) – threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01</p></li>
-<li><p><strong>minimum_z_step</strong> (<em>float</em>) – [um] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1</p></li>
+<li><p><strong>minimum_z_step</strong> (<em>float</em>) – [nm] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>

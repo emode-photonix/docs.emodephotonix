@@ -12,7 +12,7 @@ EME
     :param junction_normalization: controls how junction S-matrices are power-normalized; either a single bool/'gain' value applied to both junction kinds, or a dict with 'inter_section' and 'intra_section' keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: 'gain' for inter-section junctions and True for intra-section junctions
     :type junction_normalization: bool or str or dict
     :param float overlap_variation: threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01
-    :param float minimum_z_step: [um] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1
+    :param float minimum_z_step: [nm] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: straight_section
