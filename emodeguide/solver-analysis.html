@@ -414,7 +414,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="confinement">
 <span class="sig-name descname"><span class="pre">confinement</span></span></dt>
-<dd><p>Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included.</p>
+<dd><p>Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included. The confinement factors are also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -432,7 +432,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="effective_area">
 <span class="sig-name descname"><span class="pre">effective_area</span></span></dt>
-<dd><p>Calculate the effective areas for all modes. After running this function, an array called <code class="docutils literal notranslate"><span class="pre">effective_area</span></code> will become available and <code class="docutils literal notranslate"><span class="pre">report</span></code> will display the effective areas. The <code class="docutils literal notranslate"><span class="pre">effective_area</span></code> is also returned by this function and is in units of <span class="math notranslate nohighlight">\(\mu\text{m}^2\)</span>.</p>
+<dd><p>Calculate the effective areas for all modes. After running this function, an array called <code class="docutils literal notranslate"><span class="pre">effective_area</span></code> will become available and <code class="docutils literal notranslate"><span class="pre">report</span></code> will display the effective areas. The <code class="docutils literal notranslate"><span class="pre">effective_area</span></code> is also returned by this function and is in units of <span class="math notranslate nohighlight">\(\mu\text{m}^2\)</span>; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
 <div class="math notranslate nohighlight">
 \[A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2\]</div>
 <dl class="field-list simple">
@@ -448,7 +448,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="orthogonality">
 <span class="sig-name descname"><span class="pre">orthogonality</span></span></dt>
-<dd><p>Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called <code class="docutils literal notranslate"><span class="pre">maximum_overlap</span></code> will become available in metadata of the labeled (or default) dataset, and the <code class="docutils literal notranslate"><span class="pre">maximum_overlap</span></code> is returned by this function. Ideally, this value is less than <span class="math notranslate nohighlight">\(10^{-3}\)</span>, indicating an accurate mode list.</p>
+<dd><p>Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called <code class="docutils literal notranslate"><span class="pre">maximum_overlap</span></code> will become available in metadata of the labeled (or default) dataset, and the <code class="docutils literal notranslate"><span class="pre">maximum_overlap</span></code> is returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength. Ideally, this value is less than <span class="math notranslate nohighlight">\(10^{-3}\)</span>, indicating an accurate mode list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -462,7 +462,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="group_index">
 <span class="sig-name descname"><span class="pre">group_index</span></span></dt>
-<dd><p>Calculate the group index for all modes. First, <code class="docutils literal notranslate"><span class="pre">group_index</span></code> runs <code class="docutils literal notranslate"><span class="pre">FDM</span></code> (if not already run), then it runs <code class="docutils literal notranslate"><span class="pre">FDM</span></code> a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called <code class="docutils literal notranslate"><span class="pre">group_index</span></code> will become available and <code class="docutils literal notranslate"><span class="pre">report</span></code> will display the group index.</p>
+<dd><p>Calculate the group index for all modes. First, <code class="docutils literal notranslate"><span class="pre">group_index</span></code> runs <code class="docutils literal notranslate"><span class="pre">FDM</span></code> (if not already run), then it runs <code class="docutils literal notranslate"><span class="pre">FDM</span></code> a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called <code class="docutils literal notranslate"><span class="pre">group_index</span></code> will become available and <code class="docutils literal notranslate"><span class="pre">report</span></code> will display the group index. The <code class="docutils literal notranslate"><span class="pre">group_index</span></code> array is also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -546,7 +546,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="scattering">
 <span class="sig-name descname"><span class="pre">scattering</span></span></dt>
-<dd><p>Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_vertical_edges']</span></code> (total loss from all vertical interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_horizontal_edges']</span></code> (total loss from all horizontal interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_sum']</span></code> (total scattering loss), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['edges']</span></code> (list of edge points for calculating scattering loss), and <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_all_edges']</span></code> (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.</p>
+<dd><p>Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_vertical_edges']</span></code> (total loss from all vertical interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_horizontal_edges']</span></code> (total loss from all horizontal interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_sum']</span></code> (total scattering loss), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['edges']</span></code> (list of edge points for calculating scattering loss), and <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_all_edges']</span></code> (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface. The scattering results are also returned by this function as a dictionary keyed by shape name; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
 <p>[1] T. Barwicz and H. A. Haus, “Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides,” J. Lightwave Technol. 23, 2719 (2005).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -565,6 +565,7 @@
 <dt class="sig sig-object py" id="plot">
 <span class="sig-name descname"><span class="pre">plot</span></span></dt>
 <dd><p>Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.</p>
+<p>For EME plots in the ‘z-x’ or ‘z-y’ planes, the data dropdown also offers an ‘Outline’ view that displays a geometry-only outline of the declared sections. Once sections are declared with <code class="docutils literal notranslate"><span class="pre">straight_section()</span></code>, <code class="docutils literal notranslate"><span class="pre">taper_section()</span></code>, or <code class="docutils literal notranslate"><span class="pre">gds_section()</span></code>, calling <code class="docutils literal notranslate"><span class="pre">plot()</span></code> before running <code class="docutils literal notranslate"><span class="pre">EME()</span></code> shows only the ‘Outline’ view, which is useful to check the section layout before solving. After <code class="docutils literal notranslate"><span class="pre">EME()</span></code> has run, ‘Outline’ is available alongside the field components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -579,7 +580,7 @@
 <li><p><strong>legend</strong> (<em>bool</em>) – setting inclusion of a legend on the index and shape plots, default: True</p></li>
 <li><p><strong>port</strong> (<em>int</em><em> or </em><em>str</em>) – (EME) input port setting, default: 0</p></li>
 <li><p><strong>plane</strong> (<em>str</em>) – (EME) plot cross-section plane setting. For 2D simulations, this defaults to ‘x-y’. For 3D simulations, it accepts ‘x-y’, ‘z-x’, or ‘z-y’, default: ‘z-x’</p></li>
-<li><p><strong>slice_position</strong> (<em>float</em><em> or </em><em>None</em>) – (EME) location of the third dimension for a cross-section display. For example, if <cite>plane</cite> is ‘z-x’, then the <cite>slice_position</cite> refers to the y-position of the cross-section. If None, it calculates an average of the third dimension, default: None</p></li>
+<li><p><strong>slice_position</strong> (<em>float</em><em> or </em><em>None</em>) – (EME) location of the third dimension for a cross-section display. For example, if <cite>plane</cite> is ‘z-x’, then the <cite>slice_position</cite> refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: ‘sum’ (default), which totals the field across the fixed transverse axis, or ‘mean’, which averages it, default: None</p></li>
 <li><p><strong>forward_only</strong> (<em>bool</em>) – (EME) render only the forward-propagating component of the field instead of the total (forward + backward) field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False</p></li>
 <li><p><strong>resolution</strong> (<em>float</em><em> or </em><em>str</em>) – (EME) sample spacing in nm along the propagation axis for the ‘z-x’/’z-y’ longitudinal panels, smaller is finer; ‘auto’ picks a spacing of roughly one sample per horizontal display pixel, default: ‘auto’</p></li>
 <li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None</p></li>

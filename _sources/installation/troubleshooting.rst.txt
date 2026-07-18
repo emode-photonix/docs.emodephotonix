@@ -12,7 +12,7 @@ Troubleshooting
 
 .. dropdown:: A simulation crash left a license checked out and EMode now reports no available seats.
 
-    A crashed session keeps a license checked out until it times out (9 minutes by default, or 24 hours under roaming mode). Clear the stale session at startup with ``EMode(clear='all')``. To clear only one seat instead of all, use ``clear='oldest'`` or ``clear='latest'``. If the session was started with ``roaming=True``, the lock persists for 24 hours unless explicitly cleared.
+    A crashed session keeps a license checked out until it times out (9 minutes by default, or 24 hours under roaming mode). Clear the stale session at startup with ``EMode(clear='all')``, or from the :ref:`EMode Login <PythonEModeLogin>` GUI or ``emode login`` command by selecting a clearing option. To clear only one seat instead of all, use ``clear='oldest'``, ``clear='latest'``, or ``clear='mine'``. If the session was started with ``roaming=True``, the lock persists for 24 hours unless explicitly cleared.
 
 .. dropdown:: Calling section(), EME(), or plot_S_matrix() raises a LicenseError saying the function is only available with EMode3D.
 
@@ -20,7 +20,7 @@ Troubleshooting
 
 .. dropdown:: After installing EMode on Windows, running emode from the command line produces "command not found" or is not recognized.
 
-    Update to v1.0.0 or later, or manually add the EMode install directory to your PATH. The install location is shown at the end of the installer output. You can also launch the login GUI directly from Python with ``emc.EModeLogin()``.
+    Update to v1.0.0 or later, or manually add the EMode install directory to your PATH. The install location is shown at the end of the installer output. You can also launch the login GUI directly from Python with ``emc.EModeLogin()``. Once ``emode`` is on your PATH, ``emode login`` provides a text-based login for terminal-only environments.
 
 .. dropdown:: FDM() returns fewer modes than num_modes, or returns zero modes.
 

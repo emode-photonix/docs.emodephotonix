@@ -224,19 +224,32 @@ to skip interactive prompts:
 EMode Login
 -----------
 
-Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
+Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions and active sessions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. code-block::
 
    import emodeconnection as emc
    emc.EModeLogin()
 
+To clear active sessions, select an option from the dropdown in the *Active Sessions* header row and click *Clear*. This terminates the selected sessions without consuming a license seat and refreshes the session table. The options are 'none' (default), 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest' (the latest non-roaming session), and 'oldest' (the oldest non-roaming session).
+
+Command-line login
+^^^^^^^^^^^^^^^^^^
+
+Run ``emode login`` from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid; credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option (the same options as the GUI dropdown), and asks whether to log out on this computer.
+
+.. code-block:: bash
+
+   emode login
+
+To enter credentials without contacting the license server, run ``emode login --write``. This prompts for your email and password and writes them directly, without validation or session display. Use this as a basic fallback interface when the license server is unreachable.
+
 The EMode class
 ---------------
 
 .. class:: EMode(simulation_name = 'emode', license_type = 'default', clear = 'none', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None, force_open = False, save = True)
 
-    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode`` from the the command line.
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode login --write`` from the command line.
 
     An existing file can be opened for further analysis by specifying the input argument ``open_existing = True``. This opened file can be copied to a new file name by specifying the input argument ``new_name = 'new_filename'``.
 
@@ -245,11 +258,11 @@ The EMode class
 
     :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
     :param str license_type: The requested license type, either '2d', '3d', or 'default'. When running with 'default' license type, a '3d' license will be initialized if it is available, otherwise a '2d' license will be initialized if it is available. The '2d' or '3d' options will only request that specific license type if it is available. Default: 'default'.
-    :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all', 'latest', 'oldest', and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
+    :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest'/'oldest' (the latest/oldest non-roaming session), and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
     :param save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
     :type save_path: str or ~pathlib.Path
     :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
-    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the `clear()` function to terminate ghost license check-outs. Default: False.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the ``clear`` parameter or the :ref:`EMode Login <PythonEModeLogin>` session clearing to terminate ghost license check-outs. Default: False.
     :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
     :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
     :type new_name: bool or str
@@ -265,7 +278,7 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
 
 .. function:: EModeLogin()
 
-    Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+    Opens the EMode Login GUI to input your EMode Photonix account credentials, view active license subscriptions, and view or clear active sessions (see :ref:`EMode Login <PythonEModeLogin>`). Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. function:: open_file(sim = 'emode', simulation_name = None)
 
@@ -565,7 +578,7 @@ The ``emodeconnection.types`` module also contains the following exception class
 EMode Guide
 ===========
 
-Run the :ref:`EMode Login <PythonEModeLogin>` GUI to locally save your EMode account credentials.
+Run the :ref:`EMode Login <PythonEModeLogin>` GUI or the ``emode login`` command to locally save your EMode account credentials.
 
 .. grid:: 2
     :gutter: 4
@@ -716,8 +729,8 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
     :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
-    :return: a Field object for each wavelength of the named profile.
-    :rtype: dict[float, Field]
+    :return: a Field object for a single-wavelength profile, or a FieldSet (a Field for each wavelength, indexable/iterable like a dict[float, Field]) for a multi-wavelength profile.
+    :rtype: Field | FieldSet
 
 .. data:: get_grid
 
@@ -728,8 +741,8 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
     :param str profile: label of the profile to extract the grid from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
-    :return: a Grid object for each wavelength of the named profile.
-    :rtype: dict[float, Grid]
+    :return: a Grid object for a single-wavelength profile, or a GridSet (a Grid for each wavelength, indexable/iterable like a dict[float, Grid]) for a multi-wavelength profile.
+    :rtype: Grid | GridSet
 
 .. data:: get_shape
 
@@ -851,6 +864,9 @@ EME
     :param settings: per-section overrides of the :data:`EME_settings`, default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
+
+.. note::
+    Once sections are declared, call ``plot()`` with ``plane='z-x'`` or ``plane='z-y'`` to preview a geometry-only 'Outline' of the section layout before running :data:`EME`.
 
 ..
     .. data:: TO_section
@@ -1441,7 +1457,7 @@ Solver and analysis
 
 .. data:: confinement
 
-    Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included.
+    Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included. The confinement factors are also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     :param str profile: profile label, default: '_default'
     :param shape_list: name (from ``shape``) or list of names of shapes to include in confinement or 'all' for all shapes, default: 'all'
@@ -1455,7 +1471,7 @@ Solver and analysis
 
 .. data:: effective_area
 
-    Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas. The ``effective_area`` is also returned by this function and is in units of :math:`\mu\text{m}^2`.
+    Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas. The ``effective_area`` is also returned by this function and is in units of :math:`\mu\text{m}^2`; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     .. math::
         A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2
@@ -1465,7 +1481,7 @@ Solver and analysis
 
 .. data:: orthogonality
 
-    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the labeled (or default) dataset, and the ``maximum_overlap`` is returned by this function. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
+    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the labeled (or default) dataset, and the ``maximum_overlap`` is returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
 
     :param profile: profile label, default: '_default'
     :type profile: str or int
@@ -1473,7 +1489,7 @@ Solver and analysis
 
 .. data:: group_index
 
-    Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index.
+    Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index. The ``group_index`` array is also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     :param str profile: profile label, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
@@ -1526,7 +1542,7 @@ Solver and analysis
 
 .. data:: scattering
 
-    Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE.metadata['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE.metadata['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE.metadata['scattering_sum']`` (total scattering loss), ``SHAPE.metadata['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE.metadata['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface.
+    Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE.metadata['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE.metadata['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE.metadata['scattering_sum']`` (total scattering loss), ``SHAPE.metadata['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE.metadata['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface. The scattering results are also returned by this function as a dictionary keyed by shape name; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
 
@@ -1541,6 +1557,8 @@ Solver and analysis
 
     Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.
 
+    For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``taper_section()``, or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
+
     :param str component: field component or index, 'Ex/y/z'; 'Hx/y/z'; 'Sx/y/z'; 'Index'; 'Shapes', default: 'Ex'
     :param str plot_function: plotting function, 'real'; 'imag'; 'abs'; 'abs^2'; 'log', default: 'real'
     :param int mode: mode number, default: 0
@@ -1554,7 +1572,7 @@ Solver and analysis
     :param port: (EME) input port setting, default: 0
     :type port: int or str
     :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
-    :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it calculates an average of the third dimension, default: None
+    :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: 'sum' (default), which totals the field across the fixed transverse axis, or 'mean', which averages it, default: None
     :type slice_position: float or None
     :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward) field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False
     :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, smaller is finer; 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
@@ -1846,6 +1864,25 @@ Descriptions of all variables available in the simulation file. Some variables h
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.1: July 18, 2026**
+
+* New
+
+  * Added a section outline view in EME plots, available before running the EME solve.
+  * EME slice view uses 'sum' rather than 'mean' by default, and 'mean' is still an option.
+  * Added functionality to clear sessions from the EModeLogin GUI.
+  * Added a CLI replica of the EModeLogin GUI, accessed by running ``emode login`` from the command line.
+  * Added an alternative basic interface for entering credentials with ``emode login --write``.
+  * The ``clear`` parameter of ``EMode()`` accepts two new options: 'mine' and 'others', for clearing sessions by user.
+
+* Fixed
+
+  * Offset section display x-y view.
+  * Settings issues for plots, including window and mesh display for EME.
+  * In emodeconnection, the ``save`` parameter no longer shadows the ``save()`` function in EMode.
+  * ``effective_area()``, ``group_index()``, ``orthogonality()``, ``scattering()``, and ``confinement()`` now return the value directly for single-wavelength profiles; a dict keyed by wavelength is returned only for multi-wavelength profiles.
+  * ``get_fields()`` and ``get_grid()`` return ``FieldSet``/``GridSet`` objects for multi-wavelength profiles, preserving numeric wavelength keys.
+
 **1.0.0: July 8, 2026**
 
 * Major internal architectural changes to enable the pending release of nonlinear EME functions and complex circuit solutions.
@@ -2035,7 +2072,7 @@ Troubleshooting
 
 .. dropdown:: A simulation crash left a license checked out and EMode now reports no available seats.
 
-    A crashed session keeps a license checked out until it times out (9 minutes by default, or 24 hours under roaming mode). Clear the stale session at startup with ``EMode(clear='all')``. To clear only one seat instead of all, use ``clear='oldest'`` or ``clear='latest'``. If the session was started with ``roaming=True``, the lock persists for 24 hours unless explicitly cleared.
+    A crashed session keeps a license checked out until it times out (9 minutes by default, or 24 hours under roaming mode). Clear the stale session at startup with ``EMode(clear='all')``, or from the :ref:`EMode Login <PythonEModeLogin>` GUI or ``emode login`` command by selecting a clearing option. To clear only one seat instead of all, use ``clear='oldest'``, ``clear='latest'``, or ``clear='mine'``. If the session was started with ``roaming=True``, the lock persists for 24 hours unless explicitly cleared.
 
 .. dropdown:: Calling section(), EME(), or plot_S_matrix() raises a LicenseError saying the function is only available with EMode3D.
 
@@ -2043,7 +2080,7 @@ Troubleshooting
 
 .. dropdown:: After installing EMode on Windows, running emode from the command line produces "command not found" or is not recognized.
 
-    Update to v1.0.0 or later, or manually add the EMode install directory to your PATH. The install location is shown at the end of the installer output. You can also launch the login GUI directly from Python with ``emc.EModeLogin()``.
+    Update to v1.0.0 or later, or manually add the EMode install directory to your PATH. The install location is shown at the end of the installer output. You can also launch the login GUI directly from Python with ``emc.EModeLogin()``. Once ``emode`` is on your PATH, ``emode login`` provides a text-based login for terminal-only environments.
 
 .. dropdown:: FDM() returns fewer modes than num_modes, or returns zero modes.
 
@@ -2214,9 +2251,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Meshing completed in 0.3 sec
-    Solving modes completed in 0.7 sec
+    Solving modes completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -2316,9 +2353,9 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Meshing completed in 0.5 sec
-    Solving modes completed in 21.8 sec
+    Solving modes completed in 21.4 sec
 
     Wavelength: 980.0 nm
  
@@ -2421,7 +2458,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Meshing completed in 0.5 sec
     Solving modes completed in 1.5 sec
 
@@ -2555,9 +2592,9 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 1.0.0 - email
-    Meshing completed in 4.0 sec
-    Solving modes completed in 8.2 sec
+    EMode3D 1.0.1 - email
+    Meshing completed in 4.1 sec
+    Solving modes completed in 8.4 sec
 
     Wavelength: 1550.0 nm
  
@@ -2700,9 +2737,9 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode3D 1.0.0 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 1.5 sec
+    EMode3D 1.0.1 - email
+    Meshing completed in 0.7 sec
+    Solving modes completed in 1.4 sec
 
     Wavelength: 1970.0 nm
  
@@ -2711,9 +2748,9 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode3D 1.0.0 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 1.4 sec
+    EMode3D 1.0.1 - email
+    Meshing completed in 0.7 sec
+    Solving modes completed in 1.6 sec
 
     Wavelength: 985.0 nm
  
@@ -2723,9 +2760,9 @@ Console output::
         TM-1  1.929029  15.3 %          0.000
  
     Exited EMode
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Exited EMode
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Exited EMode
 
 Figures:
@@ -2794,31 +2831,31 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
 
     Sweeping setting parameter 'wavelength'...
-    Solving FDM: wavelength = 1000... completed in 2.1 sec
-    Solving FDM: wavelength = 1050... completed in 1.8 sec
-    Solving FDM: wavelength = 1100... completed in 1.7 sec
-    Solving FDM: wavelength = 1150... completed in 1.6 sec
-    Solving FDM: wavelength = 1200... completed in 1.7 sec
-    Solving FDM: wavelength = 1250... completed in 1.6 sec
-    Solving FDM: wavelength = 1300... completed in 1.7 sec
-    Solving FDM: wavelength = 1350... completed in 1.8 sec
-    Solving FDM: wavelength = 1400... completed in 1.6 sec
-    Solving FDM: wavelength = 1450... completed in 1.7 sec
-    Solving FDM: wavelength = 1500... completed in 1.7 sec
-    Solving FDM: wavelength = 1550... completed in 1.7 sec
-    Solving FDM: wavelength = 1600... completed in 1.8 sec
-    Solving FDM: wavelength = 1650... completed in 1.8 sec
-    Solving FDM: wavelength = 1700... completed in 1.7 sec
-    Solving FDM: wavelength = 1750... completed in 1.7 sec
-    Solving FDM: wavelength = 1800... completed in 1.8 sec
-    Solving FDM: wavelength = 1850... completed in 1.9 sec
-    Solving FDM: wavelength = 1900... completed in 1.7 sec
-    Solving FDM: wavelength = 1950... completed in 1.8 sec
-    Solving FDM: wavelength = 2000... completed in 1.7 sec
-     completed in 36.6 sec
+    Solving FDM: wavelength = 1000... completed in 2.2 sec
+    Solving FDM: wavelength = 1050... completed in 1.9 sec
+    Solving FDM: wavelength = 1100... completed in 1.9 sec
+    Solving FDM: wavelength = 1150... completed in 1.7 sec
+    Solving FDM: wavelength = 1200... completed in 1.9 sec
+    Solving FDM: wavelength = 1250... completed in 1.8 sec
+    Solving FDM: wavelength = 1300... completed in 1.8 sec
+    Solving FDM: wavelength = 1350... completed in 1.9 sec
+    Solving FDM: wavelength = 1400... completed in 1.7 sec
+    Solving FDM: wavelength = 1450... completed in 1.9 sec
+    Solving FDM: wavelength = 1500... completed in 1.9 sec
+    Solving FDM: wavelength = 1550... completed in 1.9 sec
+    Solving FDM: wavelength = 1600... completed in 1.9 sec
+    Solving FDM: wavelength = 1650... completed in 2.0 sec
+    Solving FDM: wavelength = 1700... completed in 2.0 sec
+    Solving FDM: wavelength = 1750... completed in 1.9 sec
+    Solving FDM: wavelength = 1800... completed in 2.0 sec
+    Solving FDM: wavelength = 1850... completed in 2.1 sec
+    Solving FDM: wavelength = 1900... completed in 1.8 sec
+    Solving FDM: wavelength = 1950... completed in 2.0 sec
+    Solving FDM: wavelength = 2000... completed in 1.9 sec
+     completed in 39.9 sec
     Exited EMode
 
 A separate script can be used to plot the results.
@@ -2986,7 +3023,7 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Meshing completed in 0.2 sec
     Solving modes completed in 0.6 sec
 
@@ -3028,24 +3065,24 @@ Console output::
     Solving section: 1... completed in 0.0 sec
     Solving section: 2...
     Solving slice at 4000.0 nm... completed in 0.6 sec
-    Solving slice at 6000.0 nm... completed in 0.7 sec
-    Solving slice at 2000.0 nm... completed in 0.7 sec
-    Solving slice at 7000.0 nm... completed in 0.5 sec
-    Solving slice at 5000.0 nm... completed in 0.7 sec
+    Solving slice at 6000.0 nm... completed in 0.5 sec
+    Solving slice at 2000.0 nm... completed in 0.6 sec
+    Solving slice at 7000.0 nm... completed in 0.6 sec
+    Solving slice at 5000.0 nm... completed in 0.5 sec
     Solving slice at 3000.0 nm... completed in 0.6 sec
     Solving slice at 1000.0 nm... completed in 0.6 sec
-    Solving slice at 7500.0 nm... completed in 0.5 sec
+    Solving slice at 7500.0 nm... completed in 0.6 sec
     Solving slice at 6500.0 nm... completed in 0.5 sec
-    Solving slice at 5500.0 nm... completed in 0.6 sec
+    Solving slice at 5500.0 nm... completed in 0.5 sec
     Solving slice at 4500.0 nm... completed in 0.5 sec
     Solving slice at 3500.0 nm... completed in 0.5 sec
     Solving slice at 2500.0 nm... completed in 0.5 sec
-    Solving slice at 1500.0 nm... completed in 0.6 sec
+    Solving slice at 1500.0 nm... completed in 0.5 sec
     Solving slice at 500.0 nm... completed in 0.5 sec
     Solving slice at 7750.0 nm... completed in 0.5 sec
     Solving slice at 7250.0 nm... completed in 0.5 sec
     Solving slice at 6750.0 nm... completed in 0.5 sec
-    Solving slice at 6250.0 nm... completed in 0.6 sec
+    Solving slice at 6250.0 nm... completed in 0.5 sec
     Solving slice at 5750.0 nm... completed in 0.5 sec
     Solving slice at 5250.0 nm... completed in 0.5 sec
     Solving slice at 4750.0 nm... completed in 0.5 sec
@@ -3061,27 +3098,27 @@ Console output::
     Solving slice at 6125.0 nm... completed in 0.5 sec
     Solving slice at 5875.0 nm... completed in 0.5 sec
     Solving slice at 5375.0 nm... completed in 0.5 sec
-    Solving slice at 5125.0 nm... completed in 0.5 sec
+    Solving slice at 5125.0 nm... completed in 0.6 sec
     Solving slice at 4375.0 nm... completed in 0.5 sec
     Solving slice at 4125.0 nm... completed in 0.5 sec
     Solving slice at 3875.0 nm... completed in 0.5 sec
     Solving slice at 3625.0 nm... completed in 0.5 sec
     Solving slice at 3375.0 nm... completed in 0.5 sec
-    Solving slice at 3125.0 nm... completed in 0.5 sec
-    Solving slice at 2875.0 nm... completed in 0.5 sec
+    Solving slice at 3125.0 nm... completed in 0.6 sec
+    Solving slice at 2875.0 nm... completed in 0.6 sec
     Solving slice at 2625.0 nm... completed in 0.5 sec
-    Solving slice at 2375.0 nm... completed in 0.5 sec
+    Solving slice at 2375.0 nm... completed in 0.6 sec
     Solving slice at 5437.5 nm... completed in 0.5 sec
     Solving slice at 5312.5 nm... completed in 0.5 sec
     Solving slice at 5187.5 nm... completed in 0.5 sec
     Solving slice at 4312.5 nm... completed in 0.5 sec
-    Solving slice at 4187.5 nm... completed in 0.5 sec
+    Solving slice at 4187.5 nm... completed in 0.6 sec
     Solving slice at 2562.5 nm... completed in 0.5 sec
     Solving slice at 2312.5 nm... completed in 0.5 sec
     Solving slice at 4218.8 nm... completed in 0.5 sec
-     completed in 35.2 sec
+     completed in 36.0 sec
     Solving section: 3... completed in 0.0 sec
-     completed in 35.2 sec
+     completed in 36.0 sec
     Exited EMode
 
 Figures:
@@ -3181,24 +3218,24 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Saved profile: 'a'
     Saved profile: 'b'
 
     Sweeping section parameter 'length'...
     Solving EME: length = 8000...
-    Solving slice at 4000.0 nm... completed in 0.6 sec
-    Solving slice at 6000.0 nm... completed in 0.5 sec
-    Solving slice at 2000.0 nm... completed in 0.6 sec
+    Solving slice at 4000.0 nm... completed in 0.5 sec
+    Solving slice at 6000.0 nm... completed in 0.6 sec
+    Solving slice at 2000.0 nm... completed in 0.5 sec
     Solving slice at 7000.0 nm... completed in 0.6 sec
-    Solving slice at 5000.0 nm... completed in 0.5 sec
+    Solving slice at 5000.0 nm... completed in 0.6 sec
     Solving slice at 3000.0 nm... completed in 0.6 sec
     Solving slice at 1000.0 nm... completed in 0.6 sec
-    Solving slice at 7500.0 nm... completed in 0.5 sec
-    Solving slice at 6500.0 nm... completed in 0.6 sec
-    Solving slice at 5500.0 nm... completed in 0.6 sec
+    Solving slice at 7500.0 nm... completed in 0.6 sec
+    Solving slice at 6500.0 nm... completed in 0.5 sec
+    Solving slice at 5500.0 nm... completed in 0.5 sec
     Solving slice at 4500.0 nm... completed in 0.5 sec
-    Solving slice at 3500.0 nm... completed in 0.6 sec
+    Solving slice at 3500.0 nm... completed in 0.5 sec
     Solving slice at 2500.0 nm... completed in 0.5 sec
     Solving slice at 1500.0 nm... completed in 0.5 sec
     Solving slice at 500.0 nm... completed in 0.5 sec
@@ -3213,8 +3250,8 @@ Console output::
     Solving slice at 3750.0 nm... completed in 0.5 sec
     Solving slice at 3250.0 nm... completed in 0.5 sec
     Solving slice at 2750.0 nm... completed in 0.5 sec
-    Solving slice at 2250.0 nm... completed in 0.5 sec
-    Solving slice at 1750.0 nm... completed in 0.6 sec
+    Solving slice at 2250.0 nm... completed in 0.6 sec
+    Solving slice at 1750.0 nm... completed in 0.5 sec
     Solving slice at 1250.0 nm... completed in 0.5 sec
     Solving slice at 750.0 nm... completed in 0.5 sec
     Solving slice at 250.0 nm... completed in 0.5 sec
@@ -3222,8 +3259,8 @@ Console output::
     Solving slice at 5875.0 nm... completed in 0.5 sec
     Solving slice at 5375.0 nm... completed in 0.5 sec
     Solving slice at 5125.0 nm... completed in 0.5 sec
-    Solving slice at 4375.0 nm... completed in 0.5 sec
-    Solving slice at 4125.0 nm... completed in 0.5 sec
+    Solving slice at 4375.0 nm... completed in 0.6 sec
+    Solving slice at 4125.0 nm... completed in 0.6 sec
     Solving slice at 3875.0 nm... completed in 0.5 sec
     Solving slice at 3625.0 nm... completed in 0.5 sec
     Solving slice at 3375.0 nm... completed in 0.5 sec
@@ -3239,7 +3276,7 @@ Console output::
     Solving slice at 2562.5 nm... completed in 0.5 sec
     Solving slice at 2312.5 nm... completed in 0.5 sec
     Solving slice at 4218.8 nm... completed in 0.5 sec
-     completed in 36.4 sec
+     completed in 37.6 sec
     Solving EME: length = 7750... completed in 0.0 sec
     Solving EME: length = 7500... completed in 0.0 sec
     Solving EME: length = 7250... completed in 0.0 sec
@@ -3272,7 +3309,7 @@ Console output::
     Solving EME: length = 500... completed in 0.0 sec
     Solving EME: length = 250... completed in 0.0 sec
     Solving EME: length = 0... completed in 0.0 sec
-     completed in 37.3 sec
+     completed in 38.6 sec
     Exited EMode
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -3510,22 +3547,22 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Saved profile: 'slab'
     Saved profile: 'io_waveguide'
     Saved profile: 'coupler'
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 38.8 sec
+    Solving section: sbend... completed in 40.2 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 38.8 sec
+     completed in 40.2 sec
 
     Sweeping section parameter 'length'...
     Solving EME: length = 200000.0... completed in 0.4 sec
-    Solving EME: length = 190000.0... completed in 0.5 sec
+    Solving EME: length = 190000.0... completed in 0.4 sec
     Solving EME: length = 180000.0... completed in 0.4 sec
     Solving EME: length = 170000.0... completed in 0.4 sec
     Solving EME: length = 160000.0... completed in 0.4 sec
@@ -3535,7 +3572,7 @@ Console output::
     Solving EME: length = 120000.0... completed in 0.4 sec
     Solving EME: length = 110000.0... completed in 0.4 sec
     Solving EME: length = 100000.0... completed in 0.4 sec
-    Solving EME: length = 90000.0... completed in 0.4 sec
+    Solving EME: length = 90000.0... completed in 0.5 sec
     Solving EME: length = 80000.0... completed in 0.4 sec
     Solving EME: length = 70000.0... completed in 0.4 sec
     Solving EME: length = 60000.0... completed in 0.4 sec
@@ -3549,11 +3586,11 @@ Console output::
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 1.7 sec
+    Solving section: sbend... completed in 1.8 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 1.7 sec
+     completed in 1.8 sec
     Exited EMode
 
 Figures:

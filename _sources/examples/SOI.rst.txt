@@ -47,11 +47,12 @@ The simplest EMode simulation example.
         ## Close EMode
         em.close()
 
+
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Meshing completed in 0.3 sec
-    Solving modes completed in 0.7 sec
+    Solving modes completed in 0.6 sec
 
     Wavelength: 1550.0 nm
  

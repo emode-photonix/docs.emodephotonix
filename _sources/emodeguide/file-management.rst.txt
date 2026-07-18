@@ -41,8 +41,8 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
     :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
-    :return: a Field object for each wavelength of the named profile.
-    :rtype: dict[float, Field]
+    :return: a Field object for a single-wavelength profile, or a FieldSet (a Field for each wavelength, indexable/iterable like a dict[float, Field]) for a multi-wavelength profile.
+    :rtype: Field | FieldSet
 
 .. data:: get_grid
 
@@ -53,8 +53,8 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
     :param str profile: label of the profile to extract the grid from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
-    :return: a Grid object for each wavelength of the named profile.
-    :rtype: dict[float, Grid]
+    :return: a Grid object for a single-wavelength profile, or a GridSet (a Grid for each wavelength, indexable/iterable like a dict[float, Grid]) for a multi-wavelength profile.
+    :rtype: Grid | GridSet
 
 .. data:: get_shape
 

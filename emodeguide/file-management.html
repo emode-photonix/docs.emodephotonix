@@ -424,10 +424,10 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a Field object for each wavelength of the named profile.</p>
+<dd class="field-even"><p>a Field object for a single-wavelength profile, or a FieldSet (a Field for each wavelength, indexable/iterable like a dict[float, Field]) for a multi-wavelength profile.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict[float, <a class="reference internal" href="../interface.html#Field" title="Field">Field</a>]</p>
+<dd class="field-odd"><p><a class="reference internal" href="../interface.html#Field" title="Field">Field</a> | FieldSet</p>
 </dd>
 </dl>
 </dd></dl>
@@ -447,10 +447,10 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a Grid object for each wavelength of the named profile.</p>
+<dd class="field-even"><p>a Grid object for a single-wavelength profile, or a GridSet (a Grid for each wavelength, indexable/iterable like a dict[float, Grid]) for a multi-wavelength profile.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict[float, <a class="reference internal" href="../interface.html#Grid" title="Grid">Grid</a>]</p>
+<dd class="field-odd"><p><a class="reference internal" href="../interface.html#Grid" title="Grid">Grid</a> | GridSet</p>
 </dd>
 </dl>
 </dd></dl>

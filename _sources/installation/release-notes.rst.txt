@@ -2,6 +2,25 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.1: July 18, 2026**
+
+* New
+
+  * Added a section outline view in EME plots, available before running the EME solve.
+  * EME slice view uses 'sum' rather than 'mean' by default, and 'mean' is still an option.
+  * Added functionality to clear sessions from the EModeLogin GUI.
+  * Added a CLI replica of the EModeLogin GUI, accessed by running ``emode login`` from the command line.
+  * Added an alternative basic interface for entering credentials with ``emode login --write``.
+  * The ``clear`` parameter of ``EMode()`` accepts two new options: 'mine' and 'others', for clearing sessions by user.
+
+* Fixed
+
+  * Offset section display x-y view.
+  * Settings issues for plots, including window and mesh display for EME.
+  * In emodeconnection, the ``save`` parameter no longer shadows the ``save()`` function in EMode.
+  * ``effective_area()``, ``group_index()``, ``orthogonality()``, ``scattering()``, and ``confinement()`` now return the value directly for single-wavelength profiles; a dict keyed by wavelength is returned only for multi-wavelength profiles.
+  * ``get_fields()`` and ``get_grid()`` return ``FieldSet``/``GridSet`` objects for multi-wavelength profiles, preserving numeric wavelength keys.
+
 **1.0.0: July 8, 2026**
 
 * Major internal architectural changes to enable the pending release of nonlinear EME functions and complex circuit solutions.

@@ -88,12 +88,25 @@ to skip interactive prompts:
 EMode Login
 -----------
 
-Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
+Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions and active sessions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. code-block::
 
    import emodeconnection as emc
    emc.EModeLogin()
+
+To clear active sessions, select an option from the dropdown in the *Active Sessions* header row and click *Clear*. This terminates the selected sessions without consuming a license seat and refreshes the session table. The options are 'none' (default), 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest' (the latest non-roaming session), and 'oldest' (the oldest non-roaming session).
+
+Command-line login
+^^^^^^^^^^^^^^^^^^
+
+Run ``emode login`` from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid; credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option (the same options as the GUI dropdown), and asks whether to log out on this computer.
+
+.. code-block:: bash
+
+   emode login
+
+To enter credentials without contacting the license server, run ``emode login --write``. This prompts for your email and password and writes them directly, without validation or session display. Use this as a basic fallback interface when the license server is unreachable.
 
 
 The EMode class
@@ -101,7 +114,7 @@ The EMode class
 
 .. class:: EMode(simulation_name = 'emode', license_type = 'default', clear = 'none', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None, force_open = False, save = True)
 
-    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode`` from the the command line.
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode login --write`` from the command line.
 
     An existing file can be opened for further analysis by specifying the input argument ``open_existing = True``. This opened file can be copied to a new file name by specifying the input argument ``new_name = 'new_filename'``.
 
@@ -110,11 +123,11 @@ The EMode class
 
     :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
     :param str license_type: The requested license type, either '2d', '3d', or 'default'. When running with 'default' license type, a '3d' license will be initialized if it is available, otherwise a '2d' license will be initialized if it is available. The '2d' or '3d' options will only request that specific license type if it is available. Default: 'default'.
-    :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all', 'latest', 'oldest', and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
+    :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest'/'oldest' (the latest/oldest non-roaming session), and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
     :param save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
     :type save_path: str or ~pathlib.Path
     :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
-    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the `clear()` function to terminate ghost license check-outs. Default: False.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the ``clear`` parameter or the :ref:`EMode Login <PythonEModeLogin>` session clearing to terminate ghost license check-outs. Default: False.
     :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
     :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
     :type new_name: bool or str
@@ -131,7 +144,7 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
 
 .. function:: EModeLogin()
 
-    Opens the EMode Login GUI to input your EMode Photonix account credentials and view active license subscriptions. Once logged in, click the exit button to close the GUI and save the login credentials.
+    Opens the EMode Login GUI to input your EMode Photonix account credentials, view active license subscriptions, and view or clear active sessions (see :ref:`EMode Login <PythonEModeLogin>`). Once logged in, click the exit button to close the GUI and save the login credentials.
 
 .. function:: open_file(sim = 'emode', simulation_name = None)
 

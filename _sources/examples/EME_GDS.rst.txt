@@ -164,22 +164,22 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Saved profile: 'slab'
     Saved profile: 'io_waveguide'
     Saved profile: 'coupler'
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 38.8 sec
+    Solving section: sbend... completed in 40.2 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 38.8 sec
+     completed in 40.2 sec
 
     Sweeping section parameter 'length'...
     Solving EME: length = 200000.0... completed in 0.4 sec
-    Solving EME: length = 190000.0... completed in 0.5 sec
+    Solving EME: length = 190000.0... completed in 0.4 sec
     Solving EME: length = 180000.0... completed in 0.4 sec
     Solving EME: length = 170000.0... completed in 0.4 sec
     Solving EME: length = 160000.0... completed in 0.4 sec
@@ -189,7 +189,7 @@ Console output::
     Solving EME: length = 120000.0... completed in 0.4 sec
     Solving EME: length = 110000.0... completed in 0.4 sec
     Solving EME: length = 100000.0... completed in 0.4 sec
-    Solving EME: length = 90000.0... completed in 0.4 sec
+    Solving EME: length = 90000.0... completed in 0.5 sec
     Solving EME: length = 80000.0... completed in 0.4 sec
     Solving EME: length = 70000.0... completed in 0.4 sec
     Solving EME: length = 60000.0... completed in 0.4 sec
@@ -203,11 +203,11 @@ Console output::
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 1.7 sec
+    Solving section: sbend... completed in 1.8 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 1.7 sec
+     completed in 1.8 sec
     Exited EMode
 
 

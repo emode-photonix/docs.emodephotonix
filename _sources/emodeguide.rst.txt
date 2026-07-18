@@ -2,7 +2,7 @@
 EMode Guide
 ===========
 
-Run the :ref:`EMode Login <PythonEModeLogin>` GUI to locally save your EMode account credentials.
+Run the :ref:`EMode Login <PythonEModeLogin>` GUI or the ``emode login`` command to locally save your EMode account credentials.
 
 .. grid:: 2
     :gutter: 4

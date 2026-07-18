@@ -61,6 +61,9 @@ EME
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
 
+.. note::
+    Once sections are declared, call ``plot()`` with ``plane='z-x'`` or ``plane='z-y'`` to preview a geometry-only 'Outline' of the section layout before running :data:`EME`.
+
 ..
     .. data:: TO_section
 

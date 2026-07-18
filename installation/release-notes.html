@@ -358,6 +358,28 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>1.0.1: July 18, 2026</strong></p>
+<ul class="simple">
+<li><p>New</p>
+<ul>
+<li><p>Added a section outline view in EME plots, available before running the EME solve.</p></li>
+<li><p>EME slice view uses ‘sum’ rather than ‘mean’ by default, and ‘mean’ is still an option.</p></li>
+<li><p>Added functionality to clear sessions from the EModeLogin GUI.</p></li>
+<li><p>Added a CLI replica of the EModeLogin GUI, accessed by running <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span></code> from the command line.</p></li>
+<li><p>Added an alternative basic interface for entering credentials with <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span> <span class="pre">--write</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">clear</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">EMode()</span></code> accepts two new options: ‘mine’ and ‘others’, for clearing sessions by user.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p>Offset section display x-y view.</p></li>
+<li><p>Settings issues for plots, including window and mesh display for EME.</p></li>
+<li><p>In emodeconnection, the <code class="docutils literal notranslate"><span class="pre">save</span></code> parameter no longer shadows the <code class="docutils literal notranslate"><span class="pre">save()</span></code> function in EMode.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">effective_area()</span></code>, <code class="docutils literal notranslate"><span class="pre">group_index()</span></code>, <code class="docutils literal notranslate"><span class="pre">orthogonality()</span></code>, <code class="docutils literal notranslate"><span class="pre">scattering()</span></code>, and <code class="docutils literal notranslate"><span class="pre">confinement()</span></code> now return the value directly for single-wavelength profiles; a dict keyed by wavelength is returned only for multi-wavelength profiles.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_fields()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_grid()</span></code> return <code class="docutils literal notranslate"><span class="pre">FieldSet</span></code>/<code class="docutils literal notranslate"><span class="pre">GridSet</span></code> objects for multi-wavelength profiles, preserving numeric wavelength keys.</p></li>
+</ul>
+</li>
+</ul>
 <p><strong>1.0.0: July 8, 2026</strong></p>
 <ul class="simple">
 <li><p>Major internal architectural changes to enable the pending release of nonlinear EME functions and complex circuit solutions.</p></li>

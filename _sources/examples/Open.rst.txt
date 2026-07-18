@@ -94,9 +94,9 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode3D 1.0.0 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 1.5 sec
+    EMode3D 1.0.1 - email
+    Meshing completed in 0.7 sec
+    Solving modes completed in 1.4 sec
 
     Wavelength: 1970.0 nm
  
@@ -105,9 +105,9 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode3D 1.0.0 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 1.4 sec
+    EMode3D 1.0.1 - email
+    Meshing completed in 0.7 sec
+    Solving modes completed in 1.6 sec
 
     Wavelength: 985.0 nm
  
@@ -117,9 +117,9 @@ Console output::
         TM-1  1.929029  15.3 %          0.000
  
     Exited EMode
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Exited EMode
-    EMode3D 1.0.0 - email
+    EMode3D 1.0.1 - email
     Exited EMode
 
 
