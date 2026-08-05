@@ -15,7 +15,7 @@ Descriptions of all variables available in the simulation file. Some variables h
         Alias: ``radius``
 
     boundary_condition
-        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via ``get()``/``inspect()`` — use ``BC`` below to read back the resolved boundary condition.
+        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via ``get()``/``inspect()``; use ``BC`` below to read back the resolved boundary condition.
 
     BC
         (*str*) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of '0', 'A', or 'S'. For example, setting the boundary_condition to 'TE' and running FDM() will result in BC changing to either 'SS', '0S', 'S0', or '00', depending on the index profile cross-section symmetry.
@@ -91,11 +91,20 @@ Descriptions of all variables available in the simulation file. Some variables h
     permittivity, permeability
         (*list*) The permittivity and permeability arrays are defined by ``mesh`` from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.
 
-    pml_modes_removed
-        (*list*) Mode indices that were removed during the automatic process to determine artificial modes introduced from the pml layers.
+    pml_alpha_max
+        (*float*) The complex-frequency-shifted (CFS) term of the pml profile, where 0 disables it.
+
+    pml_kappa_max
+        (*float*) The maximum real coordinate stretch of the pml profile, reached at the outer pml face.
 
     pml_NSEW_bool
         (*list*) List of booleans indicating if a perfectly matched layer (pml) boundary condition is applied to each boundary: [North, South, East, West].
+
+    pml_order
+        (*float*) The polynomial grading exponent of the pml stretch profile.
+
+    pml_reflection
+        (*float*) The target round-trip reflection that the pml is designed for, which sets the maximum pml conductivity.
 
     priority_indices
         (*list*) A list of indices corresponding to the priorities of the shapes in the list ``shape_materials``.

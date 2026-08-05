@@ -26,7 +26,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
     Extract data from an existing simulation to your Python environment.
 
-    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables. Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`~emodeconnection.smatrix.SMatrix` object.
+    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables. Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`SMatrix` object.
     :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 

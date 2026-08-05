@@ -85,20 +85,20 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 1.0.1 - email
-    Meshing completed in 4.1 sec
-    Solving modes completed in 8.4 sec
+    EMode3D 1.0.2 - email
+    Meshing completed in 4.4 sec
+    Solving modes completed in 9.4 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement    core scattering (dB/m)
     --------  --------  ------  -------------  ------------------  ------------------------
-        TE-0  3.290919  99.8 %          0.000              49.8 %                   218.753
+        TE-0  3.290919  99.8 %          0.000              49.8 %                   218.019
  
     Exited EMode
     Scattering loss from all vertical edges: 217.8 dB/m
-    Scattering loss from all horizontal edges: 1.0 dB/m
-    Total scattering loss: 218.8 dB/m
+    Scattering loss from all horizontal edges: 0.3 dB/m
+    Total scattering loss: 218.0 dB/m
 
     From [-500.0, 1250.0] to [-500.0, 1500.0]
         scattering loss = 108.9 dB/m
@@ -106,23 +106,14 @@ Console output::
     From [500.0, 1500.0] to [500.0, 1250.0]
         scattering loss = 108.9 dB/m
 
-    From [-3500.0, 1250.0] to [-500.0, 1250.0]
-        scattering loss = 0.1 dB/m
-
     From [-500.0, 1500.0] to [500.0, 1500.0]
         scattering loss = 0.3 dB/m
 
-    From [500.0, 1250.0] to [3500.0, 1250.0]
-        scattering loss = 0.1 dB/m
-
-    From [3500.0, 1250.0] to [4200.0, 1250.0]
+    From [500.0, 1250.0] to [500000000.0, 1250.0]
         scattering loss = 0.0 dB/m
 
-    From [4200.0, 1000.0] to [3500.0, 1000.0]
+    From [500000000.0, 1000.0] to [-500000000.0, 1000.0]
         scattering loss = 0.0 dB/m
-
-    From [3500.0, 1000.0] to [-3500.0, 1000.0]
-        scattering loss = 0.5 dB/m
 
 
 

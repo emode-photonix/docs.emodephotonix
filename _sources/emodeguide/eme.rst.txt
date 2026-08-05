@@ -2,6 +2,8 @@
 EME
 ---
 
+Every section function below accepts a ``ports`` argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use :data:`connect_ports` to wire named ports explicitly instead, including into branching topologies. See :ref:`ports` for the port model and the ``Port`` and ``Bounds`` classes.
+
 .. data:: EME_settings
 
     Declare global EME defaults that are inherited by sections created afterward. Each parameter left unspecified leaves the corresponding stored default unchanged. A section's own ``settings`` argument at creation still overrides these globals. Sections created before this call are not affected.
@@ -22,9 +24,36 @@ EME
     :param str name: section name, default: an auto-generated number
     :param str profile: label of the profile that defines the section's cross-section
     :param float length: [nm] the length of the section
-    :param offset: the x- and y-offset of the section's port window, if only a single value is given it is assumed to be the x-offset, default: (0, 0)
+    :param offset: [nm] transverse displacement of this section relative to whatever its ports connect to; if only a single value is given it is assumed to be the x-offset, default: (0, 0). **Legacy**: this is the same displacement as :class:`Port`'s own ``offset`` applied to every port of the section at once, and setting both on one section raises an error. Prefer declaring ``offset`` on the specific port that sits off-axis.
     :type offset: float or tuple[float, float]
+    :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
+    :type ports: list[Port] or None
     :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: pwd_section
+
+    Define a free space section, in which the field is expanded in plane waves (a plane-wave decomposition, PWD) over a uniform material, rather than in the guided modes of a cross-section. This is intended for gaps, facets, and free space propagation between waveguide sections; the junctions between a free space section and its neighbors are computed analytically instead of from a mode solve.
+
+    The basis is the set of plane-wave harmonics of the section window, with transverse wavevectors ``kx = 2*pi*m/window_width`` and ``ky = 2*pi*n/window_height``, each harmonic carrying both a TE and a TM polarization. At least one of ``max_order``, ``max_kt``, or ``num_modes`` is required to truncate the basis; when more than one is given, they are applied in the order ``max_order``, ``max_kt``, ``num_modes``.
+
+    :param str name: section name, default: an auto-generated number
+    :param float length: [nm] the length of the section
+    :param material: the material filling the section, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object; must be isotropic, default: "Vacuum"
+    :type material: str or ~MaterialProperties or ~MaterialSpec
+    :param str profile: label of the profile that supplies the default window and the wavelength(s) of the section, default: '_default'
+    :param window: [nm] the (width, height) of the plane-wave window, which overrides the window of ``profile``, default: None (use the ``window_width`` and ``window_height`` of ``profile``)
+    :type window: tuple[float, float] or None
+    :param offset: [nm] transverse displacement of the window's origin, which is its horizontal center and bottom edge, default: (0, 0)
+    :type offset: tuple[float, float]
+    :param max_order: the largest harmonic order to keep in the x- and y-directions, so that ``|m| <= max_order[0]`` and ``|n| <= max_order[1]``, default: None
+    :type max_order: tuple[int, int] or None
+    :param float max_kt: [1/nm] the largest transverse wavevector magnitude to keep, default: None
+    :param int num_modes: the largest number of modes to keep, counting both polarizations of each harmonic, and applied after ``max_order`` and ``max_kt``; the basis always keeps a harmonic together with its opposite-direction pair, so the resulting count can land slightly below the requested value, default: None
+    :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
+    :type ports: list[Port] or None
+    :param settings: per-section overrides of the :data:`EME_settings`, default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -36,6 +65,8 @@ EME
     :param str profile: label of the profile that defines the section beginning
     :param str profile_end: label of the profile that defines the section ending
     :param float length: [nm] the length of the section
+    :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
+    :type ports: list[Port] or None
     :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
@@ -57,6 +88,8 @@ EME
     :type port_poses: dict
     :param bool heal: whether to heal small gaps/self-intersections in the imported GDS polygons before meshing, default: True
     :param float grow: amount to grow imported GDS polygons by, to close small gaps, default: 1e-3
+    :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
+    :type ports: list[Port] or None
     :param settings: per-section overrides of the :data:`EME_settings`, default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
@@ -86,7 +119,7 @@ EME
         :param str simulation_name: simulation name, default: 'emode'
 
         .. note::
-            Once created, a ``TO_section`` can only be updated through ``TO_section`` itself — its geometry cannot be reshaped through :data:`straight_section`/:data:`taper_section`/:data:`gds_section`.
+            Once created, a ``TO_section`` can only be updated through ``TO_section`` itself; its geometry cannot be reshaped through :data:`straight_section`/:data:`taper_section`/:data:`gds_section`.
 
     .. data:: to_gds
 
@@ -105,8 +138,20 @@ EME
     :param bool mirror: whether to reverse the placement along the propagation direction (swapping the left/right ports), default: False
     :param port_swap: explicit port-name mapping to use instead of the automatically computed left/right swap when ``mirror`` is True, default: None
     :type port_swap: dict
+    :param ports: relabel/window this copy's own left/right boundary, with the same semantics as any other section's ``ports``, independent of ``port_swap`` and of the source section's own ports. See :class:`Port`, default: None (keep existing/default ports)
+    :type ports: list[Port] or None
     :param settings: per-section overrides of the :data:`EME_settings`, default: None
     :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: connect_ports
+
+    Override the default left/right adjacency wiring between named ports declared with the ``ports`` argument of any section function.
+
+    Connecting two ports also **pins their coordinate systems together**: the two ports' origins (the horizontal centre and bottom edge of each cross-section) are made to coincide, so the connection is what positions one section relative to the other. Use :class:`Port`'s ``offset`` to displace a section off that shared origin, and its ``window`` to choose which part of a wider cross-section the port exposes. The first section you declare defines the global frame that plots are drawn in.
+
+    :param pairs: a list of ``('<section_name>.<port_name>', '<section_name>.<port_name>')`` pairs to connect, e.g. ``[('a.right', 'b.left'), ('c.right', 'd.left')]``. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at :data:`EME` build time.
+    :type pairs: list[tuple[str, str]]
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: EME

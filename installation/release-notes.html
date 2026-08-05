@@ -358,6 +358,30 @@
                   
   <section id="release-notes">
 <h1>Release Notes</h1>
+<p><strong>1.0.2: August 5, 2026</strong></p>
+<ul class="simple">
+<li><p>New</p>
+<ul>
+<li><p>Free space sections using plane-wave decomposition, declared with <a class="reference internal" href="../emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>. Junctions with neighboring waveguide sections are computed analytically instead of by a mode solve.</p></li>
+<li><p>Generalized port definitions and connections, including branching: a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument on every section function, <a class="reference internal" href="../emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> for wiring named ports explicitly, and the <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> and <a class="reference internal" href="../interface.html#Bounds" title="Bounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bounds</span></code></a> classes in emodeconnection (see <a class="reference internal" href="../interface.html#ports"><span class="std std-ref">Ports</span></a>). A connection also positions its two sections relative to each other, replacing the now legacy per-section <code class="docutils literal notranslate"><span class="pre">offset</span></code>.</p></li>
+<li><p>A port can expose a sub-window of a wider cross-section, and when it is not connected to anything its mode is solved on that window alone, isolating a single waveguide of a multi-waveguide cross-section instead of the coupled supermode.</p></li>
+<li><p>The PML profile parameters are now user-tunable in <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>: <code class="docutils literal notranslate"><span class="pre">pml_order</span></code>, <code class="docutils literal notranslate"><span class="pre">pml_reflection</span></code>, <code class="docutils literal notranslate"><span class="pre">pml_kappa_max</span></code>, and <code class="docutils literal notranslate"><span class="pre">pml_alpha_max</span></code>, with defaults unchanged.</p></li>
+<li><p>The port selector in the field plot lists the simulation’s port names.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code> had no effect at all; it now removes the artificial modes of the PML regions from the mode list.</p></li>
+<li><p>The innermost PML layer was transparent, so a PML of N layers had only N-1 absorbing layers, and the PML parameters were missing from the cached-solution key, so two profiles differing only in their PML could share a solution.</p></li>
+<li><p>Shape geometry is now resolved in absolute coordinates, independent of the simulation window.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scattering()</span></code> raised an error when <code class="docutils literal notranslate"><span class="pre">shapes</span></code> or <code class="docutils literal notranslate"><span class="pre">mode_list</span></code> was given as a list.</p></li>
+<li><p>In emodeconnection, a single-element list argument was collapsed to the bare element before being sent to EMode, affecting every list-valued argument.</p></li>
+<li><p>In EME plots, section outlines disagreed with the field for every section after the first in a chain with transverse offsets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code> crashed when previewing a profile or taper section after <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, when given a <code class="docutils literal notranslate"><span class="pre">slice_position</span></code>, and for a slice containing only background material.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">emode</span></code> command line no longer requires Tk/Tcl for <code class="docutils literal notranslate"><span class="pre">--help</span></code>, <code class="docutils literal notranslate"><span class="pre">--version</span></code>, and <code class="docutils literal notranslate"><span class="pre">login</span></code>.</p></li>
+</ul>
+</li>
+</ul>
 <p><strong>1.0.1: July 18, 2026</strong></p>
 <ul class="simple">
 <li><p>New</p>

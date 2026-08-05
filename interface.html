@@ -753,6 +753,44 @@ defaults (typically 0).</p>
 </dd></dl>
 
 </section>
+<section id="ports">
+<span id="id2"></span><h2>Ports</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection.port</span></code> module provides classes for defining named ports on EME sections. Every EME section function accepts a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument (see <a class="reference internal" href="emodeguide/eme.html"><span class="doc">EME</span></a>) that replaces the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-<code class="docutils literal notranslate"><span class="pre">side</span></code> basis: a supplied port replaces every existing port on that side, and multiple ports may share a side. Ports are addressed globally as <code class="docutils literal notranslate"><span class="pre">&quot;&lt;section_name&gt;.&lt;port_name&gt;&quot;</span></code> for explicit wiring with <a class="reference internal" href="emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a>.</p>
+<p><strong>Connecting two ports pins their coordinate systems together.</strong> The two ports’ origins, which are the horizontal center and bottom edge of each port’s cross-section, are made to coincide, so a section is positioned by the connection rather than by absolute coordinates. Because the origin is the <em>bottom</em> edge in y, two profiles of different heights stay aligned at their substrate rather than at their vertical centers. Use <code class="docutils literal notranslate"><span class="pre">offset</span></code> below to displace a section off that shared origin.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Port">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset=(0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.0)</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A named port on a section.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Port</span></code> carries two offsets that mean different things: <code class="docutils literal notranslate"><span class="pre">window.offset</span></code> says <em>which part of this section’s cross-section the port exposes</em>, while <code class="docutils literal notranslate"><span class="pre">offset</span></code> says <em>where this section sits</em> relative to what the port connects to. In short, <code class="docutils literal notranslate"><span class="pre">window</span></code> answers “which part of me?” and <code class="docutils literal notranslate"><span class="pre">offset</span></code> answers “where am I?”. A window never moves a section, and an offset never crops one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Port name, unique within its section.</p></li>
+<li><p><strong>window</strong> (<a class="reference internal" href="#Bounds" title="Bounds"><em>Bounds</em></a><em> or </em><em>None</em>) – A rectangular sub-region of the port’s full cross-section to isolate, positioned within <em>this section’s own</em> cross-section. Must overlap the section’s profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), the port’s mode is solved independently on just this window instead of the section’s full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section’s entire cross-section).</p></li>
+<li><p><strong>side</strong> (<em>str</em>) – Which end of the section this port is declared on, either ‘left’ or ‘right’.</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section’s cross-section relative to the port it connects to: <code class="docutils literal notranslate"><span class="pre">offset=(1300,</span> <span class="pre">0)</span></code> places this section’s content 1300 nm in +x from the connection’s shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler’s input port <code class="docutils literal notranslate"><span class="pre">offset</span></code> so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section <code class="docutils literal notranslate"><span class="pre">offset=</span></code> argument (see <a class="reference internal" href="emodeguide/eme.html"><span class="doc">EME</span></a>) is this same displacement applied to every port at once; setting both on one section raises an <a class="reference internal" href="#ArgumentError" title="ArgumentError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgumentError</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Bounds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A rectangular sub-window of a port’s full cross-section, used as <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">window</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window_width</strong> (<em>float</em>) – Width of the window, in the cross-section’s x-direction.</p></li>
+<li><p><strong>window_height</strong> (<em>float</em>) – Height of the window, in the cross-section’s y-direction.</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Position of the window within the port’s full cross-section: the x-coordinate of the window’s horizontal center, and the y-coordinate of the window’s bottom edge. Note the asymmetry: the second entry is the window’s <strong>bottom</strong>, not its center, matching the cross-section’s own y-axis which starts at 0 at the bottom of the profile. A full-height window therefore wants <code class="docutils literal notranslate"><span class="pre">y=0</span></code>, not <code class="docutils literal notranslate"><span class="pre">-window_height/2</span></code>. The window must overlap the section’s profile.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="exceptions">
 <h2>Exceptions</h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection.types</span></code> module also contains the following exception classes. All errors in EMode are raised and passed back to the user as one of these errors.</p>
@@ -939,6 +977,11 @@ defaults (typically 0).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#BSpline"><code class="docutils literal notranslate"><span class="pre">BSpline</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Curve"><code class="docutils literal notranslate"><span class="pre">Curve</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ports">Ports</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Port"><code class="docutils literal notranslate"><span class="pre">Port</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Bounds"><code class="docutils literal notranslate"><span class="pre">Bounds</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a><ul class="nav section-nav flex-column">

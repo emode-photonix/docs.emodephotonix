@@ -24,13 +24,13 @@ Troubleshooting
 
 .. dropdown:: FDM() returns fewer modes than num_modes, or returns zero modes.
 
-    The solver only finds modes with an effective index between the cladding index and ``max_effective_index``. If ``max_effective_index`` is set too low, guided modes are excluded. When set to 0 (default), it uses the maximum refractive index in the window—if a high-index material is present outside the core this cap may be too generous, causing spurious or missing results. Additionally, ``remove_pml_modes_bool`` (default ``False``) automatically removes modes identified as PML modes after solving when enabled, which can reduce the returned mode count. Also verify that ``window_width`` and ``window_height`` are large enough to contain the mode field: clipping the field tail will reduce the mode count. Confirm that ``num_modes`` is set in ``settings()`` before calling ``FDM()``.
+    The solver only finds modes with an effective index between the cladding index and ``max_effective_index``. If ``max_effective_index`` is set too low, guided modes are excluded. When set to 0 (default), it uses the maximum refractive index in the window, so if a high-index material is present outside the core this cap may be too generous, causing spurious or missing results. Additionally, ``remove_pml_modes_bool`` (default ``False``) automatically removes modes identified as PML modes after solving when enabled, which can reduce the returned mode count. Also verify that ``window_width`` and ``window_height`` are large enough to contain the mode field: clipping the field tail will reduce the mode count. Confirm that ``num_modes`` is set in ``settings()`` before calling ``FDM()``.
 
 .. dropdown:: The mode list contains modes with very high loss or fields concentrated entirely in the PML regions.
 
     These are PML-induced artificial modes. Set ``remove_pml_modes_bool=True`` in ``settings()`` (default ``False``) to automatically remove modes whose inner-window confinement falls below 75%. If PML modes still appear after enabling it, check that ``pml_NSEW_bool`` is set correctly and that ``expansion_size`` is nonzero on the relevant boundaries. Increasing ``num_pml_layers`` beyond the default of 10 improves PML absorption.
 
-.. dropdown:: The effective index changes significantly when I refine the resolution or increase the window size—results are not converging.
+.. dropdown:: The effective index changes significantly when I refine the resolution or increase the window size, and results are not converging.
 
     A convergence study is required for any quantitative result. Systematically vary ``x_resolution`` and ``y_resolution`` (halving each time), then ``window_width`` and ``window_height`` (increase until ``n_eff`` changes by less than your target tolerance), and finally ``expansion_size`` on each boundary. The ``sweep()`` function automates this: e.g., ``sweep(key='x_resolution', values=[20, 10, 5], result='effective_index')``. A ``max_effective_index`` set too close to ``n_eff`` can also bias the eigenvalue search.
 
@@ -40,7 +40,7 @@ Troubleshooting
 
 .. dropdown:: A shape is not visible in plot(component='Shapes'), or the geometry looks wrong.
 
-    Shapes are drawn in order of ``priority``: higher values are drawn on top. By default, each successive ``shape()`` call receives an auto-incremented priority. If a wide substrate or cladding layer is defined after a core, it will cover the core. Fix this by setting ``priority`` explicitly—give the core a higher value than the surrounding cladding. Inspect priorities with ``em.get('priority_indices')`` and validate the meshed index with ``plot(component='Index')``.
+    Shapes are drawn in order of ``priority``: higher values are drawn on top. By default, each successive ``shape()`` call receives an auto-incremented priority. If a wide substrate or cladding layer is defined after a core, it will cover the core. Fix this by setting ``priority`` explicitly, giving the core a higher value than the surrounding cladding. Inspect priorities with ``em.get('priority_indices')`` and validate the meshed index with ``plot(component='Index')``.
 
 .. dropdown:: A material name passed to shape() or settings() raises an error or is not recognized.
 
@@ -56,11 +56,11 @@ Troubleshooting
 
 .. dropdown:: The simulation is slow, or a parameter sweep takes a very long time.
 
-    Resolution is the dominant cost: halving ``x_resolution`` and ``y_resolution`` increases the matrix size by 4× and solve time by roughly 8–16×. Reduce the window to the minimum size that passes a convergence check. Use symmetric boundary conditions (``'TE'``, ``'TM'``, ``'SS'``, etc.) when the geometry permits—this reduces the solved domain by up to 4×. Set ``num_modes`` to only as many modes as needed. Process priority can be raised with ``EMode(priority='pH')``.
+    Resolution is the dominant cost: halving ``x_resolution`` and ``y_resolution`` increases the matrix size by 4× and solve time by roughly 8–16×. Reduce the window to the minimum size that passes a convergence check. Use symmetric boundary conditions (``'TE'``, ``'TM'``, ``'SS'``, etc.) when the geometry permits, which reduces the solved domain by up to 4×. Set ``num_modes`` to only as many modes as needed. Process priority can be raised with ``EMode(priority='pH')``.
 
 .. dropdown:: The returned effective_index is complex, or loss_dB_per_m is unexpectedly nonzero for a nominally lossless design.
 
-    A nonzero imaginary effective index indicates optical loss from one or more sources: (1) a material with a nonzero imaginary refractive index or ``loss_dB_per_m``; (2) PML layers absorbing leaky field energy—increase ``window_width``, ``window_height``, or ``expansion_size``; (3) ``bend_radius`` is set, which introduces radiative bending loss. Check each source using ``em.get('loss_dB_per_m')`` and ``em.get('bend_radius')``.
+    A nonzero imaginary effective index indicates optical loss from one or more sources: (1) a material with a nonzero imaginary refractive index or ``loss_dB_per_m``; (2) PML layers absorbing leaky field energy, which can be reduced by increasing ``window_width``, ``window_height``, or ``expansion_size``; (3) ``bend_radius`` is set, which introduces radiative bending loss. Check each source using ``em.get('loss_dB_per_m')`` and ``em.get('bend_radius')``.
 
 .. dropdown:: An issue is not covered here, or behavior seems incorrect.
 

@@ -79,9 +79,9 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 1.0.1 - email
+    EMode3D 1.0.2 - email
     Meshing completed in 0.5 sec
-    Solving modes completed in 1.5 sec
+    Solving modes completed in 1.6 sec
 
     Wavelength: 1550.0 nm
  
@@ -90,8 +90,8 @@ Console output::
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
     Saved profile: '0'
-    Meshing completed in 0.4 sec
-    Solving modes completed in 1.1 sec
+    Meshing completed in 0.5 sec
+    Solving modes completed in 1.2 sec
 
     Wavelength: 1550.0 nm
  

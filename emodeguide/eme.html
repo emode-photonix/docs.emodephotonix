@@ -362,6 +362,7 @@
                   
   <section id="eme">
 <h1>EME</h1>
+<p>Every section function below accepts a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> to wire named ports explicitly instead, including into branching topologies. See <a class="reference internal" href="../interface.html#ports"><span class="std std-ref">Ports</span></a> for the port model and the <code class="docutils literal notranslate"><span class="pre">Port</span></code> and <code class="docutils literal notranslate"><span class="pre">Bounds</span></code> classes.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="EME_settings">
 <span class="sig-name descname"><span class="pre">EME_settings</span></span></dt>
@@ -390,8 +391,34 @@
 <li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
 <li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section’s cross-section</p></li>
 <li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
-<li><p><strong>offset</strong> (<em>float</em><em> or </em><em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – the x- and y-offset of the section’s port window, if only a single value is given it is assumed to be the x-offset, default: (0, 0)</p></li>
+<li><p><strong>offset</strong> (<em>float</em><em> or </em><em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section relative to whatever its ports connect to; if only a single value is given it is assumed to be the x-offset, default: (0, 0). <strong>Legacy</strong>: this is the same displacement as <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s own <code class="docutils literal notranslate"><span class="pre">offset</span></code> applied to every port of the section at once, and setting both on one section raises an error. Prefer declaring <code class="docutils literal notranslate"><span class="pre">offset</span></code> on the specific port that sits off-axis.</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
 <li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, merged onto the current global EME settings (or onto the section’s existing settings, when updating), default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pwd_section">
+<span class="sig-name descname"><span class="pre">pwd_section</span></span></dt>
+<dd><p>Define a free space section, in which the field is expanded in plane waves (a plane-wave decomposition, PWD) over a uniform material, rather than in the guided modes of a cross-section. This is intended for gaps, facets, and free space propagation between waveguide sections; the junctions between a free space section and its neighbors are computed analytically instead of from a mode solve.</p>
+<p>The basis is the set of plane-wave harmonics of the section window, with transverse wavevectors <code class="docutils literal notranslate"><span class="pre">kx</span> <span class="pre">=</span> <span class="pre">2*pi*m/window_width</span></code> and <code class="docutils literal notranslate"><span class="pre">ky</span> <span class="pre">=</span> <span class="pre">2*pi*n/window_height</span></code>, each harmonic carrying both a TE and a TM polarization. At least one of <code class="docutils literal notranslate"><span class="pre">max_order</span></code>, <code class="docutils literal notranslate"><span class="pre">max_kt</span></code>, or <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> is required to truncate the basis; when more than one is given, they are applied in the order <code class="docutils literal notranslate"><span class="pre">max_order</span></code>, <code class="docutils literal notranslate"><span class="pre">max_kt</span></code>, <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
+<li><p><strong>material</strong> (<em>str</em><em> or </em><em>~MaterialProperties</em><em> or </em><em>~MaterialSpec</em>) – the material filling the section, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object; must be isotropic, default: “Vacuum”</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that supplies the default window and the wavelength(s) of the section, default: ‘_default’</p></li>
+<li><p><strong>window</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – [nm] the (width, height) of the plane-wave window, which overrides the window of <code class="docutils literal notranslate"><span class="pre">profile</span></code>, default: None (use the <code class="docutils literal notranslate"><span class="pre">window_width</span></code> and <code class="docutils literal notranslate"><span class="pre">window_height</span></code> of <code class="docutils literal notranslate"><span class="pre">profile</span></code>)</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of the window’s origin, which is its horizontal center and bottom edge, default: (0, 0)</p></li>
+<li><p><strong>max_order</strong> (<em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>] or </em><em>None</em>) – the largest harmonic order to keep in the x- and y-directions, so that <code class="docutils literal notranslate"><span class="pre">|m|</span> <span class="pre">&lt;=</span> <span class="pre">max_order[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">|n|</span> <span class="pre">&lt;=</span> <span class="pre">max_order[1]</span></code>, default: None</p></li>
+<li><p><strong>max_kt</strong> (<em>float</em>) – [1/nm] the largest transverse wavevector magnitude to keep, default: None</p></li>
+<li><p><strong>num_modes</strong> (<em>int</em>) – the largest number of modes to keep, counting both polarizations of each harmonic, and applied after <code class="docutils literal notranslate"><span class="pre">max_order</span></code> and <code class="docutils literal notranslate"><span class="pre">max_kt</span></code>; the basis always keeps a harmonic together with its opposite-direction pair, so the resulting count can land slightly below the requested value, default: None</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -409,6 +436,7 @@
 <li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section beginning</p></li>
 <li><p><strong>profile_end</strong> (<em>str</em>) – label of the profile that defines the section ending</p></li>
 <li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
 <li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a> (notably <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> and <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code>, which control the automatic z-slicing), default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
@@ -433,6 +461,7 @@
 <li><p><strong>port_poses</strong> (<em>dict</em>) – explicit port positions/orientations at the section boundaries, default: derived from the GDS bounding box (left port at w=0, right port at w=length)</p></li>
 <li><p><strong>heal</strong> (<em>bool</em>) – whether to heal small gaps/self-intersections in the imported GDS polygons before meshing, default: True</p></li>
 <li><p><strong>grow</strong> (<em>float</em>) – amount to grow imported GDS polygons by, to close small gaps, default: 1e-3</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
 <li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
@@ -455,7 +484,23 @@
 <li><p><strong>section_name</strong> (<em>str</em>) – name of the existing section to copy</p></li>
 <li><p><strong>mirror</strong> (<em>bool</em>) – whether to reverse the placement along the propagation direction (swapping the left/right ports), default: False</p></li>
 <li><p><strong>port_swap</strong> (<em>dict</em>) – explicit port-name mapping to use instead of the automatically computed left/right swap when <code class="docutils literal notranslate"><span class="pre">mirror</span></code> is True, default: None</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – relabel/window this copy’s own left/right boundary, with the same semantics as any other section’s <code class="docutils literal notranslate"><span class="pre">ports</span></code>, independent of <code class="docutils literal notranslate"><span class="pre">port_swap</span></code> and of the source section’s own ports. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
 <li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="connect_ports">
+<span class="sig-name descname"><span class="pre">connect_ports</span></span></dt>
+<dd><p>Override the default left/right adjacency wiring between named ports declared with the <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument of any section function.</p>
+<p>Connecting two ports also <strong>pins their coordinate systems together</strong>: the two ports’ origins (the horizontal centre and bottom edge of each cross-section) are made to coincide, so the connection is what positions one section relative to the other. Use <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">offset</span></code> to displace a section off that shared origin, and its <code class="docutils literal notranslate"><span class="pre">window</span></code> to choose which part of a wider cross-section the port exposes. The first section you declare defines the global frame that plots are drawn in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pairs</strong> (<em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – a list of <code class="docutils literal notranslate"><span class="pre">('&lt;section_name&gt;.&lt;port_name&gt;',</span> <span class="pre">'&lt;section_name&gt;.&lt;port_name&gt;')</span></code> pairs to connect, e.g. <code class="docutils literal notranslate"><span class="pre">[('a.right',</span> <span class="pre">'b.left'),</span> <span class="pre">('c.right',</span> <span class="pre">'d.left')]</span></code>. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> build time.</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -521,9 +566,11 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#EME_settings"><code class="docutils literal notranslate"><span class="pre">EME_settings</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#straight_section"><code class="docutils literal notranslate"><span class="pre">straight_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pwd_section"><code class="docutils literal notranslate"><span class="pre">pwd_section</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taper_section"><code class="docutils literal notranslate"><span class="pre">taper_section</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gds_section"><code class="docutils literal notranslate"><span class="pre">gds_section</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#copy_section"><code class="docutils literal notranslate"><span class="pre">copy_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connect_ports"><code class="docutils literal notranslate"><span class="pre">connect_ports</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#EME"><code class="docutils literal notranslate"><span class="pre">EME</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot_S_matrix"><code class="docutils literal notranslate"><span class="pre">plot_S_matrix</span></code></a></li>
 </ul>

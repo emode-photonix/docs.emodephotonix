@@ -2,6 +2,27 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.2: August 5, 2026**
+
+* New
+
+  * Free space sections using plane-wave decomposition, declared with :data:`pwd_section`. Junctions with neighboring waveguide sections are computed analytically instead of by a mode solve.
+  * Generalized port definitions and connections, including branching: a ``ports`` argument on every section function, :data:`connect_ports` for wiring named ports explicitly, and the :class:`Port` and :class:`Bounds` classes in emodeconnection (see :ref:`ports`). A connection also positions its two sections relative to each other, replacing the now legacy per-section ``offset``.
+  * A port can expose a sub-window of a wider cross-section, and when it is not connected to anything its mode is solved on that window alone, isolating a single waveguide of a multi-waveguide cross-section instead of the coupled supermode.
+  * The PML profile parameters are now user-tunable in :data:`settings`: ``pml_order``, ``pml_reflection``, ``pml_kappa_max``, and ``pml_alpha_max``, with defaults unchanged.
+  * The port selector in the field plot lists the simulation's port names.
+
+* Fixed
+
+  * ``remove_pml_modes_bool`` had no effect at all; it now removes the artificial modes of the PML regions from the mode list.
+  * The innermost PML layer was transparent, so a PML of N layers had only N-1 absorbing layers, and the PML parameters were missing from the cached-solution key, so two profiles differing only in their PML could share a solution.
+  * Shape geometry is now resolved in absolute coordinates, independent of the simulation window.
+  * ``scattering()`` raised an error when ``shapes`` or ``mode_list`` was given as a list.
+  * In emodeconnection, a single-element list argument was collapsed to the bare element before being sent to EMode, affecting every list-valued argument.
+  * In EME plots, section outlines disagreed with the field for every section after the first in a chain with transverse offsets.
+  * ``plot()`` crashed when previewing a profile or taper section after ``FDM()``, when given a ``slice_position``, and for a slice containing only background material.
+  * The ``emode`` command line no longer requires Tk/Tcl for ``--help``, ``--version``, and ``login``.
+
 **1.0.1: July 18, 2026**
 
 * New

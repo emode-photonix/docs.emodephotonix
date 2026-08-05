@@ -366,7 +366,7 @@
 <dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
 </dd>
-<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via <code class="docutils literal notranslate"><span class="pre">get()</span></code>/<code class="docutils literal notranslate"><span class="pre">inspect()</span></code> — use <code class="docutils literal notranslate"><span class="pre">BC</span></code> below to read back the resolved boundary condition.</p>
+<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via <code class="docutils literal notranslate"><span class="pre">get()</span></code>/<code class="docutils literal notranslate"><span class="pre">inspect()</span></code>; use <code class="docutils literal notranslate"><span class="pre">BC</span></code> below to read back the resolved boundary condition.</p>
 </dd>
 <dt id="term-BC">BC</dt><dd><p>(<em>str</em>) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of ‘0’, ‘A’, or ‘S’. For example, setting the boundary_condition to ‘TE’ and running FDM() will result in BC changing to either ‘SS’, ‘0S’, ‘S0’, or ‘00’, depending on the index profile cross-section symmetry.</p>
 </dd>
@@ -418,9 +418,15 @@
 </dd>
 <dt id="term-permittivity-permeability">permittivity, permeability</dt><dd><p>(<em>list</em>) The permittivity and permeability arrays are defined by <code class="docutils literal notranslate"><span class="pre">mesh</span></code> from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.</p>
 </dd>
-<dt id="term-pml_modes_removed">pml_modes_removed</dt><dd><p>(<em>list</em>) Mode indices that were removed during the automatic process to determine artificial modes introduced from the pml layers.</p>
+<dt id="term-pml_alpha_max">pml_alpha_max</dt><dd><p>(<em>float</em>) The complex-frequency-shifted (CFS) term of the pml profile, where 0 disables it.</p>
+</dd>
+<dt id="term-pml_kappa_max">pml_kappa_max</dt><dd><p>(<em>float</em>) The maximum real coordinate stretch of the pml profile, reached at the outer pml face.</p>
 </dd>
 <dt id="term-pml_NSEW_bool">pml_NSEW_bool</dt><dd><p>(<em>list</em>) List of booleans indicating if a perfectly matched layer (pml) boundary condition is applied to each boundary: [North, South, East, West].</p>
+</dd>
+<dt id="term-pml_order">pml_order</dt><dd><p>(<em>float</em>) The polynomial grading exponent of the pml stretch profile.</p>
+</dd>
+<dt id="term-pml_reflection">pml_reflection</dt><dd><p>(<em>float</em>) The target round-trip reflection that the pml is designed for, which sets the maximum pml conductivity.</p>
 </dd>
 <dt id="term-priority_indices">priority_indices</dt><dd><p>(<em>list</em>) A list of indices corresponding to the priorities of the shapes in the list <code class="docutils literal notranslate"><span class="pre">shape_materials</span></code>.</p>
 </dd>

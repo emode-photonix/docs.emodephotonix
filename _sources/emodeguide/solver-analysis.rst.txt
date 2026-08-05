@@ -143,7 +143,7 @@ Solver and analysis
 
     Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.
 
-    For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``taper_section()``, or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
+    For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``pwd_section()``, ``taper_section()``, or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
 
     :param str component: field component or index, 'Ex/y/z'; 'Hx/y/z'; 'Sx/y/z'; 'Index'; 'Shapes', default: 'Ex'
     :param str plot_function: plotting function, 'real'; 'imag'; 'abs'; 'abs^2'; 'log', default: 'real'
@@ -155,7 +155,7 @@ Solver and analysis
     :param bool mesh_display: setting mesh display, default: False
     :param bool window_display: setting window display, default: False
     :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
-    :param port: (EME) input port setting, default: 0
+    :param port: (EME) the input port that the field is excited from, either a port index or a port name (see :class:`Port`), default: 0
     :type port: int or str
     :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
     :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: 'sum' (default), which totals the field across the fixed transverse axis, or 'mean', which averages it, default: None

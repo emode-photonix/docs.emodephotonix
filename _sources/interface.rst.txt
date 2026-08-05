@@ -361,6 +361,39 @@ The ``emodeconnection.geometry`` module provides classes for defining waveguide 
 
    Type alias for ``Union[Line, Arc, BSpline]``.
 
+.. _ports:
+
+Ports
+-----
+
+The ``emodeconnection.port`` module provides classes for defining named ports on EME sections. Every EME section function accepts a ``ports`` argument (see :doc:`EME </emodeguide/eme>`) that replaces the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-``side`` basis: a supplied port replaces every existing port on that side, and multiple ports may share a side. Ports are addressed globally as ``"<section_name>.<port_name>"`` for explicit wiring with :data:`connect_ports`.
+
+**Connecting two ports pins their coordinate systems together.** The two ports' origins, which are the horizontal center and bottom edge of each port's cross-section, are made to coincide, so a section is positioned by the connection rather than by absolute coordinates. Because the origin is the *bottom* edge in y, two profiles of different heights stay aligned at their substrate rather than at their vertical centers. Use ``offset`` below to displace a section off that shared origin.
+
+.. py:class:: Port(name, window=None, side, offset=(0.0, 0.0))
+
+   A named port on a section.
+
+   A ``Port`` carries two offsets that mean different things: ``window.offset`` says *which part of this section's cross-section the port exposes*, while ``offset`` says *where this section sits* relative to what the port connects to. In short, ``window`` answers "which part of me?" and ``offset`` answers "where am I?". A window never moves a section, and an offset never crops one.
+
+   :param str name: Port name, unique within its section.
+   :param window: A rectangular sub-region of the port's full cross-section to isolate, positioned within *this section's own* cross-section. Must overlap the section's profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), the port's mode is solved independently on just this window instead of the section's full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section's entire cross-section).
+   :type window: Bounds or None
+   :param str side: Which end of the section this port is declared on, either 'left' or 'right'.
+   :param offset: [nm] transverse displacement of this section's cross-section relative to the port it connects to: ``offset=(1300, 0)`` places this section's content 1300 nm in +x from the connection's shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler's input port ``offset`` so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section ``offset=`` argument (see :doc:`EME </emodeguide/eme>`) is this same displacement applied to every port at once; setting both on one section raises an :class:`ArgumentError`.
+   :type offset: tuple[float, float]
+
+----
+
+.. py:class:: Bounds(window_width, window_height, offset=(0.0, 0.0))
+
+   A rectangular sub-window of a port's full cross-section, used as :class:`Port`'s ``window``.
+
+   :param float window_width: Width of the window, in the cross-section's x-direction.
+   :param float window_height: Height of the window, in the cross-section's y-direction.
+   :param offset: Position of the window within the port's full cross-section: the x-coordinate of the window's horizontal center, and the y-coordinate of the window's bottom edge. Note the asymmetry: the second entry is the window's **bottom**, not its center, matching the cross-section's own y-axis which starts at 0 at the bottom of the profile. A full-height window therefore wants ``y=0``, not ``-window_height/2``. The window must overlap the section's profile.
+   :type offset: tuple[float, float]
+
 Exceptions
 ----------
 
