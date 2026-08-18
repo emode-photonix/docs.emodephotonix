@@ -28,11 +28,13 @@ Troubleshooting
 
 .. dropdown:: The mode list contains modes with very high loss or fields concentrated entirely in the PML regions.
 
-    These are PML-induced artificial modes. Set ``remove_pml_modes_bool=True`` in ``settings()`` (default ``False``) to automatically remove modes whose inner-window confinement falls below 75%. If PML modes still appear after enabling it, check that ``pml_NSEW_bool`` is set correctly and that ``expansion_size`` is nonzero on the relevant boundaries. Increasing ``num_pml_layers`` beyond the default of 10 improves PML absorption.
+    These are PML-induced artificial modes. Set ``remove_pml_modes_bool=True`` in ``settings()`` (default ``False``) to automatically remove modes whose inner-window confinement falls below 75%. If PML modes still appear after enabling it, check that ``pml_NSEW_bool`` is set correctly and that ``expansion_size`` is nonzero on the relevant boundaries. Increasing ``num_pml_layers`` beyond the default of 10, or setting ``pml_thickness`` directly, improves PML absorption. Raising ``pml_alpha_max`` to roughly ``0.1*omega*eps_0`` also pushes the artificial (Bérenger) modes away from the physical ones.
 
 .. dropdown:: The effective index changes significantly when I refine the resolution or increase the window size, and results are not converging.
 
     A convergence study is required for any quantitative result. Systematically vary ``x_resolution`` and ``y_resolution`` (halving each time), then ``window_width`` and ``window_height`` (increase until ``n_eff`` changes by less than your target tolerance), and finally ``expansion_size`` on each boundary. The ``sweep()`` function automates this: e.g., ``sweep(key='x_resolution', values=[20, 10, 5], result='effective_index')``. A ``max_effective_index`` set too close to ``n_eff`` can also bias the eigenvalue search.
+
+    If the simulation has a PML, specify it with ``pml_thickness`` rather than ``num_pml_layers`` for the resolution part of the sweep. ``num_pml_layers`` counts grid cells, so the absorber shrinks every time the mesh is refined and the boundary moves along with the discretization -- the sweep then measures the two effects together and will not converge cleanly. ``pml_thickness`` holds the absorber's physical size fixed and adjusts the layer count for you.
 
 .. dropdown:: Setting boundary_condition='TE' or 'TM' sometimes falls back to '00' and solves the full window.
 

@@ -22,8 +22,10 @@ Simulation setup
     :param float bend_radius: [nm] waveguide bend radius relative to the center of the window, must be positive and larger than window_width/2, if ``bend_radius`` = 0 no bending is used in the calculation, default: 0
     :param pml_NSEW_bool: indicates whether to use a pml on each of the 4 boundaries, [north, south, east, west], 0: no pml, 1: use pml, default: [0,0,0,0]
     :type pml_NSEW_bool: list, length = 4
-    :param num_pml_layers: number of pml layers to use, either a single value that is applied to all boundaries or a list of 4 values, default: 10
+    :param num_pml_layers: number of pml layers to use, either a single value that is applied to all boundaries or a list of 4 values; [north, south, east, west], default: 10
     :type num_pml_layers: int or list with length = 4
+    :param pml_thickness: [nm] pml thickness, either a single value that is applied to all boundaries or a list of 4 values; [north, south, east, west]; a value of 0 on a boundary falls back to ``num_pml_layers`` there, so the two settings can be mixed per boundary. This is the delivered thickness, measured from the simulation window edge out to the outer pml wall, so it stays fixed when the resolution changes -- which is what a grid convergence sweep needs, since ``num_pml_layers`` counts cells and so shrinks the absorber as the mesh is refined. Because the delivered thickness is the integral of the ``pml_kappa_max``/``pml_order`` grading over the layer stack, the number of layers this resolves to depends on those two settings; it is also quantized to a whole number of layers, and a request that does not land on one is rounded with a warning stating what was delivered. If both ``pml_thickness`` and ``num_pml_layers`` are given in the same ``settings()`` call, ``pml_thickness`` takes precedence; otherwise whichever of the two was set most recently applies, default: 0
+    :type pml_thickness: float or list with length = 4
     :param float pml_order: polynomial grading exponent of the pml stretch profile, default: 3
     :param float pml_reflection: the target round-trip reflection that the pml is designed for, which sets the maximum pml conductivity; must be greater than 0 and less than 1, default: 1e-8
     :param float pml_kappa_max: the maximum real coordinate stretch, reached at the outer pml face; must be at least 1, default: 7

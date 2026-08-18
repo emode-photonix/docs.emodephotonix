@@ -73,48 +73,48 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode3D 1.0.2 - email
+    EMode3D 1.0.3 - email
     Saved profile: 'a'
     Saved profile: 'b'
 
     Sweeping section parameter 'length'...
     Solving EME: length = 8000...
-    Solving slice at 4000.0 nm... completed in 0.7 sec
-    Solving slice at 6000.0 nm... completed in 0.7 sec
-    Solving slice at 2000.0 nm... completed in 0.7 sec
-    Solving slice at 7000.0 nm... completed in 0.5 sec
-    Solving slice at 5000.0 nm... completed in 0.6 sec
-    Solving slice at 3000.0 nm... completed in 0.6 sec
-    Solving slice at 1000.0 nm... completed in 0.6 sec
+    Solving slice at 4000.0 nm... completed in 0.5 sec
+    Solving slice at 6000.0 nm... completed in 0.5 sec
+    Solving slice at 2000.0 nm... completed in 0.5 sec
+    Solving slice at 7000.0 nm... completed in 0.6 sec
+    Solving slice at 5000.0 nm... completed in 0.5 sec
+    Solving slice at 3000.0 nm... completed in 0.5 sec
+    Solving slice at 1000.0 nm... completed in 0.5 sec
     Solving slice at 7500.0 nm... completed in 0.5 sec
     Solving slice at 6500.0 nm... completed in 0.5 sec
-    Solving slice at 5500.0 nm... completed in 0.6 sec
-    Solving slice at 4500.0 nm... completed in 0.6 sec
-    Solving slice at 3500.0 nm... completed in 0.6 sec
+    Solving slice at 5500.0 nm... completed in 0.5 sec
+    Solving slice at 4500.0 nm... completed in 0.5 sec
+    Solving slice at 3500.0 nm... completed in 0.5 sec
     Solving slice at 2500.0 nm... completed in 0.5 sec
     Solving slice at 1500.0 nm... completed in 0.5 sec
     Solving slice at 500.0 nm... completed in 0.5 sec
     Solving slice at 7750.0 nm... completed in 0.5 sec
-    Solving slice at 7250.0 nm... completed in 0.6 sec
-    Solving slice at 6750.0 nm... completed in 0.6 sec
-    Solving slice at 6250.0 nm... completed in 0.6 sec
-    Solving slice at 5750.0 nm... completed in 0.6 sec
-    Solving slice at 5250.0 nm... completed in 0.6 sec
+    Solving slice at 7250.0 nm... completed in 0.5 sec
+    Solving slice at 6750.0 nm... completed in 0.5 sec
+    Solving slice at 6250.0 nm... completed in 0.5 sec
+    Solving slice at 5750.0 nm... completed in 0.5 sec
+    Solving slice at 5250.0 nm... completed in 0.5 sec
     Solving slice at 4750.0 nm... completed in 0.6 sec
-    Solving slice at 4250.0 nm... completed in 0.6 sec
+    Solving slice at 4250.0 nm... completed in 0.5 sec
     Solving slice at 3750.0 nm... completed in 0.6 sec
-    Solving slice at 3250.0 nm... completed in 0.6 sec
-    Solving slice at 2750.0 nm... completed in 0.6 sec
+    Solving slice at 3250.0 nm... completed in 0.5 sec
+    Solving slice at 2750.0 nm... completed in 0.5 sec
     Solving slice at 2250.0 nm... completed in 0.5 sec
     Solving slice at 1750.0 nm... completed in 0.5 sec
-    Solving slice at 1250.0 nm... completed in 0.6 sec
-    Solving slice at 750.0 nm... completed in 0.6 sec
-    Solving slice at 250.0 nm... completed in 0.6 sec
+    Solving slice at 1250.0 nm... completed in 0.5 sec
+    Solving slice at 750.0 nm... completed in 0.5 sec
+    Solving slice at 250.0 nm... completed in 0.5 sec
     Solving slice at 6125.0 nm... completed in 0.5 sec
-    Solving slice at 5875.0 nm... completed in 0.5 sec
-    Solving slice at 5375.0 nm... completed in 0.6 sec
-    Solving slice at 5125.0 nm... completed in 0.6 sec
-    Solving slice at 4375.0 nm... completed in 0.6 sec
+    Solving slice at 5875.0 nm... completed in 0.6 sec
+    Solving slice at 5375.0 nm... completed in 0.5 sec
+    Solving slice at 5125.0 nm... completed in 0.5 sec
+    Solving slice at 4375.0 nm... completed in 0.5 sec
     Solving slice at 4125.0 nm... completed in 0.5 sec
     Solving slice at 3875.0 nm... completed in 0.6 sec
     Solving slice at 3625.0 nm... completed in 0.5 sec
@@ -122,16 +122,16 @@ Console output::
     Solving slice at 3125.0 nm... completed in 0.5 sec
     Solving slice at 2875.0 nm... completed in 0.5 sec
     Solving slice at 2625.0 nm... completed in 0.5 sec
-    Solving slice at 2375.0 nm... completed in 0.6 sec
+    Solving slice at 2375.0 nm... completed in 0.5 sec
     Solving slice at 5437.5 nm... completed in 0.5 sec
     Solving slice at 5312.5 nm... completed in 0.5 sec
-    Solving slice at 5187.5 nm... completed in 0.6 sec
+    Solving slice at 5187.5 nm... completed in 0.5 sec
     Solving slice at 4312.5 nm... completed in 0.5 sec
-    Solving slice at 4187.5 nm... completed in 0.6 sec
-    Solving slice at 2562.5 nm... completed in 0.6 sec
-    Solving slice at 2312.5 nm... completed in 0.6 sec
+    Solving slice at 4187.5 nm... completed in 0.5 sec
+    Solving slice at 2562.5 nm... completed in 0.5 sec
+    Solving slice at 2312.5 nm... completed in 0.5 sec
     Solving slice at 4218.8 nm... completed in 0.5 sec
-     completed in 39.5 sec
+     completed in 37.4 sec
     Solving EME: length = 7750... completed in 0.1 sec
     Solving EME: length = 7500... completed in 0.1 sec
     Solving EME: length = 7250... completed in 0.1 sec
@@ -164,7 +164,7 @@ Console output::
     Solving EME: length = 500... completed in 0.1 sec
     Solving EME: length = 250... completed in 0.1 sec
     Solving EME: length = 0... completed in 0.1 sec
-     completed in 41.7 sec
+     completed in 39.5 sec
     Exited EMode
 
 

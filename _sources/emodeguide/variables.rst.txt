@@ -77,6 +77,9 @@ Descriptions of all variables available in the simulation file. Some variables h
     num_pml_layers
         (*int* or *list*) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West].
 
+    pml_thickness
+        (*float* or *list*) Either a float or a list of floats indicating the perfectly matched layer thickness in nm for all or each boundary: [North, South, East, West]. 0 means the boundary uses ``num_pml_layers`` instead. Unlike a layer count, this holds the absorber's physical size fixed as the resolution changes.
+
     max_effective_index
         (*float*) Upper limit for the effective index.
 

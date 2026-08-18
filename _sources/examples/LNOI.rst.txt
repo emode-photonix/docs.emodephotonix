@@ -79,7 +79,7 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 1.0.2 - email
+    EMode3D 1.0.3 - email
     Meshing completed in 0.5 sec
     Solving modes completed in 1.6 sec
 
@@ -91,13 +91,13 @@ Console output::
  
     Saved profile: '0'
     Meshing completed in 0.5 sec
-    Solving modes completed in 1.2 sec
+    Solving modes completed in 1.3 sec
 
     Wavelength: 1550.0 nm
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
-        TE-0  1.789641  99.1 %          0.000              83.4 %
+        TE-0  1.789642  99.1 %          0.000              83.4 %
  
     Exited EMode
     Power overlap: 99.836 %

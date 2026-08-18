@@ -407,6 +407,8 @@
 </dd>
 <dt id="term-num_pml_layers">num_pml_layers</dt><dd><p>(<em>int</em> or <em>list</em>) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West].</p>
 </dd>
+<dt id="term-pml_thickness">pml_thickness</dt><dd><p>(<em>float</em> or <em>list</em>) Either a float or a list of floats indicating the perfectly matched layer thickness in nm for all or each boundary: [North, South, East, West]. 0 means the boundary uses <code class="docutils literal notranslate"><span class="pre">num_pml_layers</span></code> instead. Unlike a layer count, this holds the absorber’s physical size fixed as the resolution changes.</p>
+</dd>
 <dt id="term-max_effective_index">max_effective_index</dt><dd><p>(<em>float</em>) Upper limit for the effective index.</p>
 </dd>
 <dt id="term-overlap">overlap</dt><dd><p>(<em>list</em>) The overlap integral in <code class="docutils literal notranslate"><span class="pre">overlap</span></code> uses the following formula to calculate the modal excitation of <span class="math notranslate nohighlight">\(\vec E_2\)</span> by <span class="math notranslate nohighlight">\(\vec E_1\)</span>.</p>

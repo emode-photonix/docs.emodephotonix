@@ -2,6 +2,26 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.3: August 18, 2026**
+
+* New
+
+  * Added the setting ``pml_thickness``, which specifies the PML by physical thickness in nm instead of by a layer count. It is [north, south, east, west] like every other four-sided setting, and 0 on a side falls back to ``num_pml_layers`` there, so the two can be mixed per side. A layer count measures grid cells, so the absorber shrinks as the mesh is refined; ``pml_thickness`` holds it fixed, which is what a resolution convergence sweep needs. See :data:`settings`.
+
+* Fixed
+
+  * A simulation with a PML could not be reopened: :data:`open` failed before any plot or solve ran, and the ``.eph`` file was already wrong when it was written.
+  * A boundary condition that pins the field at the wall left phantom modes in the mode list: one grid column wide, with exactly zero loss, sorted in among the physical modes. They are removed from the eigenvalue problem now, and genuine modes appear in the slots they were occupying.
+  * The PML now delivers the thickness its profile specifies. The grid gave the absorber smoothed cell widths, so a default 10-layer PML measured 492.8 nm against a design value of 500.0 nm, and the outermost -- most absorbing -- layer absorbed 14% less than intended. Reported radiation loss shifts by a few percent in simulations with a PML.
+  * The cached-solution key discarded the PML coordinate stretch, so two profiles differing only in their PML could share a junction S-matrix.
+  * Lowering ``num_modes`` with :data:`settings` after a solve produced a mode list that EME could not assemble.
+  * ``expansion_size`` validation checked every direction against the north expansion instead of its own, so a valid single-direction expansion could be rejected and a bad resolution could escape the check.
+  * :data:`FDM` called without a ``profile`` argument no longer also writes a junk profile named 'None' alongside the default one.
+  * A junction between a section with a symmetric or antisymmetric boundary condition and either a :data:`pwd_section` or a differently reduced neighbor now integrates every overlap over the same domain.
+  * A windowed port lost its normalization when its basis passed through a transform, giving a 13% error in the self-overlap on a symmetry-folded port.
+  * A port with a composed ``basis_map`` raised an error instead of producing a cache key.
+  * Overlap products are recomputed after the field data changes instead of being served from a stale cache.
+
 **1.0.2: August 5, 2026**
 
 * New
