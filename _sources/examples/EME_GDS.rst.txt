@@ -16,6 +16,8 @@ First, the GDS is created.
         from phidl import CrossSection, Device
         import phidl.path as pp
         from phidl import quickplot as qp
+        from phidl import set_quickplot_options
+        from matplotlib import pyplot as plt
 
         ## Parameters
         width_wg = 0.6 # [um]
@@ -52,8 +54,21 @@ First, the GDS is created.
         D = Device()
         wgt = D << WG_trans
 
-        ## Quickplot to view
+        ## Quickplot to view and save the layout
+        set_quickplot_options(show_ports = False, show_subports = False)
         qp(D)
+
+        ax = plt.gca()
+        ax.set_xlabel('x (\u03BCm)')
+        ax.set_ylabel('y (\u03BCm)')
+        # quickplot pads the view by 10 % of the bounding box; clip back to the
+        # geometry. 'box' rather than the default 'datalim' so equal aspect is kept by
+        # resizing the axes instead of re-widening the limits we just set.
+        ax.set_aspect('equal', adjustable = 'box')
+        ax.set_xlim(D.bbox[0][0], D.bbox[1][0])
+        ax.set_ylim(D.bbox[0][1], D.bbox[1][1])
+
+        plt.savefig('sbend.png', dpi = 300, bbox_inches = 'tight')
 
         ## Save gds file
         D.write_gds('sbend.gds')
@@ -164,18 +179,15 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 1.0.3 - email
-    Saved profile: 'slab'
-    Saved profile: 'io_waveguide'
-    Saved profile: 'coupler'
+    EMode3D 1.0.4 - email
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 41.7 sec
+    Solving section: sbend... completed in 2 min 42.7 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 41.7 sec
+     completed in 2 min 42.7 sec
 
     Sweeping section parameter 'length'...
     Solving EME: length = 200000.0... completed in 0.6 sec
@@ -185,7 +197,7 @@ Console output::
     Solving EME: length = 160000.0... completed in 0.6 sec
     Solving EME: length = 150000.0... completed in 0.6 sec
     Solving EME: length = 140000.0... completed in 0.6 sec
-    Solving EME: length = 130000.0... completed in 0.5 sec
+    Solving EME: length = 130000.0... completed in 0.6 sec
     Solving EME: length = 120000.0... completed in 0.6 sec
     Solving EME: length = 110000.0... completed in 0.6 sec
     Solving EME: length = 100000.0... completed in 0.6 sec
@@ -199,15 +211,15 @@ Console output::
     Solving EME: length = 20000.0... completed in 0.6 sec
     Solving EME: length = 10000.0... completed in 0.6 sec
     Solving EME: length = 0.0... completed in 0.6 sec
-     completed in 12.1 sec
+     completed in 12.7 sec
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 1.9 sec
+    Solving section: sbend... completed in 2.7 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 1.9 sec
+     completed in 2.7 sec
     Exited EMode
 
 

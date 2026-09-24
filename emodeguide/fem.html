@@ -50,6 +50,7 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/code-tabs.js?v=c983d12e"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/fem';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -322,6 +323,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
@@ -374,7 +376,7 @@
 <p class="admonition-title">Note</p>
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">heat_only</span></code> (default: False), which can be used to set additional shapes on top or bottom of the photonic layer stack. For example, common <code class="docutils literal notranslate"><span class="pre">heat_only</span></code> shapes are the substrate and metal heater layers.</p>
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> also now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">fem_resolution</span></code> (default: 500), which is used to refine the triangular mesh within certain shapes.</p>
-<p>Each material in the EMode material database now has <code class="docutils literal notranslate"><span class="pre">thermal_conductivity</span></code> (W/m·K), <code class="docutils literal notranslate"><span class="pre">resistivity</span></code> (Ohm·nm), and <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> (1/K).</p>
+<p>Every material carries <code class="docutils literal notranslate"><span class="pre">thermal_conductivity</span></code> (W/m·K), <code class="docutils literal notranslate"><span class="pre">resistivity</span></code> (Ohm·nm), <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> (1/K), and <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code>; the defaults are <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>, infinity, <code class="docutils literal notranslate"><span class="pre">0</span></code>, and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> where no reliable published value has been entered. See the <a class="reference internal" href="materials.html"><span class="doc">Material Database</span></a> page for values and sources.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -405,6 +407,7 @@
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> also now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">voltage</span></code> (default: None), which is set to create electric field sources. Shapes with <code class="docutils literal notranslate"><span class="pre">voltage</span></code> left as None do not get a voltage boundary condition applied.</p>
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> also now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">fem_resolution</span></code> (default: 500), which is used to refine the triangular mesh within certain shapes.</p>
 <p>Each material in the EMode material database now has <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code> (relative permittivity at ~1 kHz).</p>
+<p>The DC field derived here perturbs the permittivity through each material’s linear electro-optic (Pockels) tensor <code class="docutils literal notranslate"><span class="pre">r</span></code> (<code class="docutils literal notranslate"><span class="pre">get('&lt;material&gt;')['r']</span></code>, m/V): <span class="math notranslate nohighlight">\(\Delta(1/n^2)_{ij} = \sum_k r_{ijk} E_k\)</span>, then <span class="math notranslate nohighlight">\(\Delta\varepsilon = -\varepsilon \cdot \Delta(1/n^2) \cdot \varepsilon\)</span>. <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> applies this automatically on the next solve (<code class="docutils literal notranslate"><span class="pre">include_static=False</span></code> to skip it), the same way <code class="docutils literal notranslate"><span class="pre">heat()</span></code>’s temperature field perturbs the permittivity through <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code>.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -415,7 +418,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary/struct with the mesh points (<code class="docutils literal notranslate"><span class="pre">p</span></code>), mesh triangles (<code class="docutils literal notranslate"><span class="pre">t</span></code>), <code class="docutils literal notranslate"><span class="pre">voltage</span></code>, and <code class="docutils literal notranslate"><span class="pre">eps_dc_grid</span></code>.</p>
+<dd class="field-even"><p>A dictionary/struct with the mesh points (<code class="docutils literal notranslate"><span class="pre">p</span></code>), mesh triangles (<code class="docutils literal notranslate"><span class="pre">t</span></code>), <code class="docutils literal notranslate"><span class="pre">voltage</span></code>, <code class="docutils literal notranslate"><span class="pre">eps_dc_grid</span></code>, the per-element electric field (<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, in V/nm), and <code class="docutils literal notranslate"><span class="pre">centroids</span></code> (element centers, in the optical window’s frame).</p>
 </dd>
 </dl>
 </dd></dl>

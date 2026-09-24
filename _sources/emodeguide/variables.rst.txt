@@ -2,23 +2,68 @@
 Variable Descriptions
 ---------------------
 
-Descriptions of all variables available in the simulation file. Some variables have an alias, which is a copy of the data from the primary variable name for enhanced compatability with previous versions of EMode. For shapes, SHAPE indicates the name defined by the user.
+Descriptions of the variables stored in a simulation file. Variables are read back with
+:data:`get`, or -- for grids, fields, shapes and whole profiles -- with the typed accessors
+:data:`get_grid`, :data:`get_fields`, :data:`get_shape` and :data:`get_profile`. Some
+variables have an alias, a copy under an older name kept for compatibility. SHAPE stands
+for a shape name and NAME for a profile name.
+
+How the simulation file is organized
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A simulation file has two levels.
+
+**Top-level variables** describe the file and the EME circuit: ``EMode_simulation_file``,
+``file_type``, ``emode_version``, ``materials``, ``profiles``, ``eme_scattering``,
+``propagation_resolution``, and -- once the corresponding functions have run --
+``sweep_data``, ``S_matrix`` (through ``get('S_matrix')``), ``response`` and ``sources``.
+:data:`inspect` returns their names. Names beginning with an underscore are internal and
+may change between versions.
+
+**Profiles** live under the top-level ``profiles`` dictionary, one entry per cross-section.
+``'_default'`` is the working profile that :data:`settings`, :data:`shape`, :data:`mesh` and
+:data:`FDM` act on unless ``profile=`` is given. :data:`label_profile` saves a copy of it
+under a name; :data:`FDM` with ``profile=`` saves its result under a name; and
+:data:`create_profile_set` groups profiles solved at different wavelengths into one
+multi-wavelength profile, in which case per-profile results come back as a dictionary keyed
+by wavelength. Every function that reads a profile takes ``profile=NAME``: :data:`get`,
+:data:`get_fields`, :data:`get_grid`, :data:`get_shape`, :data:`get_profile`,
+:data:`confinement`, :data:`effective_area`, :data:`group_index`, :data:`orthogonality`,
+:data:`report`, :data:`scattering`, :data:`mesh`, :data:`FDM`, :data:`delete_profile`.
+:data:`reset` acts on ``'_default'`` only and leaves named profiles alone.
+
+**Settings** (window, resolution, boundary condition, PML, ...) are part of the profile
+but are not returned by ``get()``; read them from ``get_profile(NAME).settings``.
+
+Per-profile variables
+^^^^^^^^^^^^^^^^^^^^^^
+
+Read with ``get(key, profile=NAME)`` (default ``NAME='_default'``); a multi-wavelength
+profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wavelength.
 
 .. glossary::
 
     background_material
-        (*float*) material in the background of simulation window, setting the default material where no shapes are defined.
+        (*float* or *str*) The background material of the profile's simulation window, setting the default material where no shapes are defined.
 
-    bend_radius
-        (*float*) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.
+    effective_index
+        (*list*) The real part of the effective index for each mode.
 
-        Alias: ``radius``
+        Alias: ``n_eff``
 
-    boundary_condition
-        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via ``get()``/``inspect()``; use ``BC`` below to read back the resolved boundary condition.
+    Ex, Ey, Ez, Hx, Hy, Hz
+        (*complex arrays*) The electric (E [V/nm]) and magnetic (H [A/nm]) fields in the x-, y-, and z-directions. These calculated fields are interpolated to the center point of each mesh grid (defined by ``xc`` and ``yc``). The fields are normalized to the equation below.
 
-    BC
-        (*str*) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of '0', 'A', or 'S'. For example, setting the boundary_condition to 'TE' and running FDM() will result in BC changing to either 'SS', '0S', 'S0', or '00', depending on the index profile cross-section symmetry.
+        .. math::
+            \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
+
+        Deprecated: fetching these through ``get()`` (rather than :data:`get_fields`) prints a deprecation warning.
+
+    Fx, Fy
+        (*complex arrays*) Raw fields that are solved. They either correspond to the electric or magnetic fields depending on ``field_to_solve``. However, these raw fields are defined on the Yee mesh grid, not the center points of the mesh grid. An internal function extracts all other field components from ``Fx``, ``Fy``, ``permittivity``, and ``permeability``.
+
+    Gx, Gy
+        (*complex arrays*) The auxiliary longitudinal raw field components present for a bend or an anisotropic solve. Present only when the corresponding basis actually carries them.
 
     confinement_window
         (*list*) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.
@@ -29,28 +74,8 @@ Descriptions of all variables available in the simulation file. Some variables h
         .. math::
             A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y}
 
-    effective_index
-        (*list*) The real part of the effective index for each mode.
-
-        Alias: ``n_eff``
-
-    Ex, Ey, Ez, Hx, Hy, Hz
-        (*complex arrays*) The electric (E [V/nm]) and magnetic (H [A/nm]) fields in the x-, y-, and z-directions. These calculated fields are interpolated to the center point of each mesh grid (defined by ``x`` and ``y``). The fields are normalized to the equation below.
-
-        .. math::
-            \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
-
-    expansion_resolution
-        (*list*) List of the desired mesh step size in the x- and y-directions in the expanded regions around the perimeter of the simulation window.
-
-    expansion_size
-        (*list*) List of the size of the expanded regions in the x- and y-directions.
-
-    field_to_solve
-        (*str*) Desired transverse field component to solve; either 'Et' or 'Ht'.
-
-    Fx, Fy
-        (*complex arrays*) Raw fields that are solved. They either correspond to the electric or magnetic fields depending on ``field_to_solve``. However, these raw fields are defined on the Yee mesh grid, not the center points of the mesh grid. An internal function extracts all other field components from ``Fx``, ``Fy``, ``permittivity``, and ``permeability``.
+    extent, pml_extent
+        (*list*) ``[xmin, xmax, ymin, ymax]`` of the full simulation window, and of the window with the pml region excluded.
 
     group_index
         (*list*) The group refractive index calculated for each mode.
@@ -68,8 +93,132 @@ Descriptions of all variables available in the simulation file. Some variables h
     maximum_overlap
         (*float*) Largest overlap in the mode list, calculated from the ``orthogonality()`` function.
 
+    overlap
+        (*list*) The overlap integral in ``overlap`` uses the following formula to calculate the modal excitation of :math:`\vec E_2` by :math:`\vec E_1`.
+
+            Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
+
+        .. math::
+            \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
+
+        Note: :data:`overlap` currently stores this result on the ``'_default'`` profile regardless of ``profile_b``. The value returned directly by the function call is correct.
+
+    permittivity, permeability
+        (*list*) The permittivity and permeability arrays are defined by ``mesh`` from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.
+
+    PML_indices
+        (*list*) Indices of modes that carry less than 75% of their power inside the simulation window -- modes of the pml (absorbing) region rather than of the device. Present only when the profile was solved with a pml. See ``window_confinement``, and ``remove_pml_modes_bool``/``pml_seed_bool`` under Settings.
+
+    scattering_sum, scattering_loss
+        (*list*) Total per-mode scattering loss [dB/m] summed over shape edges: ``scattering_sum`` is a list of per-shape contributions, ``scattering_loss`` their sum. Populated after ``scattering()`` runs.
+
+    shapes
+        (*list*) The list of :data:`Shape` objects making up the profile, background included; prefer :data:`get_shape` to read a single shape's attributes and metadata.
+
+    Sx, Sy, Sz
+        (*arrays*) [W/nm] The Poynting vector in the x-, y-, and z-directions.
+
+    TE_fraction
+        (*list*) Fractions representing how much the mode is like a TE mode, calculated with the following equation.
+
+        .. math::
+            \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
+
+    TE_indices, TM_indices
+        (*list*) Indices for the corresponding TE or TM modes in the modes list.
+
+    wavelength
+        (*float*) [nm] Free-space wavelength.
+
+    window_confinement
+        (*list*) Fraction of each mode's power inside the simulation window (inset by one grid cell on every side), only present when the profile has a pml. A mode below 75% is a mode of the absorbing region rather than of the device -- what ``remove_pml_modes_bool`` discards and ``PML_indices`` designates.
+
+    xc, yc
+        (*complex arrays*) Cell-center coordinates of the mesh grid, in the x- and y-directions. These can be complex when pml layers are introduced.
+
+        Deprecated: ``x``, ``y`` -- read through :data:`get_grid` instead.
+
+Simulation-level variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
+
+.. glossary::
+
+    emode_version
+        (*str*) The version of EMode that wrote the simulation file.
+
+    EMode_simulation_file
+        (*str*) The file name the simulation was created with; also serves as a marker that this is a valid EMode simulation file.
+
+    file_type
+        (*str*) The simulation file's extension, ``'.eph'``.
+
+    serialized
+        (*bool*) Internal bookkeeping for the file's on-disk (de)serialization state.
+
+    eme_scattering
+        (*bool*) Legacy key, retained so old simulation files still load. It has no effect: EME scattering is controlled by ``EME_settings(apply_scattering=...)``.
+
+    materials
+        (*list*) Names of every material in the database, built-in and user-added. A user-added material's own properties are returned by ``get(NAME)``; see ``user_material_NAME`` below.
+
+    priority_indices
+        (*list*) A list of indices corresponding to the priorities of the shapes in the current profile.
+
+    profiles
+        (*dict*) The named profiles saved in this file (see "How the simulation file is organized" above); does not include ``'_default'``.
+
+    propagation_resolution
+        (*float*) [nm] Sampling resolution used along the propagation direction for EME field reconstruction.
+
+    response
+        (*CircuitResponse*) The power-dependent nonlinear response from the most recent EME solve with a declared excitation; returned by ``get('response')``. It also carries ``trajectories``, the forward amplitudes recorded along each :math:`\chi^{(2)}` slice, read with ``power_vs_z(wavelength)`` or ``amplitude_vs_z(wavelength)``.
+
+    S_matrix
+        (*SMatrix*) The scattering matrix from a solved EME chain; returned by ``get('S_matrix')`` (EMode\ :sup:`3D`\  only).
+
+    sources
+        (*list*) The declared excitation sources for the EME chain; returned by ``get('sources')``.
+
+    sweep_data
+        (*dict*) Results from the most recent ``sweep()`` call.
+
+    user_material_NAME
+        (*str*) The name of a user defined material.
+
+Settings
+^^^^^^^^
+
+Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).settings``.
+
+.. glossary::
+
+    bend_radius
+        (*float*) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.
+
+        Alias: ``radius``
+
+    boundary_condition
+        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via ``get()``/``inspect()``; use ``BC`` below to read back the resolved boundary condition.
+
+    BC
+        (*str*) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of '0', 'A', or 'S'. For example, setting the boundary_condition to 'TE' and running FDM() will result in BC changing to either 'SS', '0S', 'S0', or '00', depending on the index profile cross-section symmetry.
+
+    expansion_resolution
+        (*list*) List of the desired mesh step size in the x- and y-directions in the expanded regions around the perimeter of the simulation window.
+
+    expansion_size
+        (*list*) List of the size of the expanded regions in the x- and y-directions.
+
+    field_to_solve
+        (*str*) Desired transverse field component to solve; either 'Et' or 'Ht'.
+
+    max_effective_index
+        (*float*) Upper limit for the effective index; the eigensolver's shift, unless ``pml_seed_bool`` derives one automatically.
+
     mesh_complete_bool
-        (*boolean*) Indicates if the mesh grid has been calculated for the current definition of shapes and settings.
+        Removed; use ``get_profile(NAME).status.meshed``.
 
     num_modes
         (*int*) Total number of modes to solve.
@@ -79,20 +228,6 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     pml_thickness
         (*float* or *list*) Either a float or a list of floats indicating the perfectly matched layer thickness in nm for all or each boundary: [North, South, East, West]. 0 means the boundary uses ``num_pml_layers`` instead. Unlike a layer count, this holds the absorber's physical size fixed as the resolution changes.
-
-    max_effective_index
-        (*float*) Upper limit for the effective index.
-
-    overlap
-        (*list*) The overlap integral in ``overlap`` uses the following formula to calculate the modal excitation of :math:`\vec E_2` by :math:`\vec E_1`.
-
-            Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
-
-        .. math::
-            \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
-
-    permittivity, permeability
-        (*list*) The permittivity and permeability arrays are defined by ``mesh`` from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.
 
     pml_alpha_max
         (*float*) The complex-frequency-shifted (CFS) term of the pml profile, where 0 disables it.
@@ -109,18 +244,35 @@ Descriptions of all variables available in the simulation file. Some variables h
     pml_reflection
         (*float*) The target round-trip reflection that the pml is designed for, which sets the maximum pml conductivity.
 
-    priority_indices
-        (*list*) A list of indices corresponding to the priorities of the shapes in the list ``shape_materials``.
+    pml_seed_bool
+        (*bool*) Seed the pml eigensolve with the fundamental mode of the same structure solved without a pml, so the guided fundamental lands at mode 0 without a hand-tuned ``max_effective_index``.
 
     remove_pml_modes_bool
         (*bool*) Indicates whether or not to automatically remove artificial modes found in the pml layers.
 
-    shape_list
-        (*list*) Complete list of defined shapes.
+    shape_list, shape_materials
+        Removed; use ``get_profile(NAME).shapes`` (or the per-profile ``shapes`` variable above).
 
-    shape_materials
-        (*list*) A list of materials corresponding to the defined shapes.
+    tolerance
+        (*float*) Numerical tolerance for convergence of the effective indices.
 
+    window_height
+        (float) [nm] Total height (y-direction) of the simulation window.
+
+    window_width
+        (float) [nm] Total width (x-direction) of the simulation window.
+
+    x_resolution, y_resolution
+        (*float*) [nm] Mesh grid step in the x- and y-directions.
+
+Shape attributes
+^^^^^^^^^^^^^^^^^
+
+Read with :data:`get_shape` (or ``get('shape_SHAPE')``), which returns a Shape object with
+these attributes, plus a ``metadata`` dict populated once ``scattering()``/``confinement()``
+have run for that shape.
+
+.. glossary::
 
     SHAPE['correlation_length']
         (*list*) A list of two values describing the correlation length of the roughness on the vertical and horizontal edges of the shape.
@@ -200,36 +352,3 @@ Descriptions of all variables available in the simulation file. Some variables h
 
     SHAPE['metadata']['scattering_vertical_edges']
         (*list*) Calculated scattering loss for each vertical edge of the shape.
-
-    Sx, Sy, Sz
-        (*arrays*) [W/nm] The Poynting vector in the x-, y-, and z-directions.
-
-    TE_fraction
-        (*list*) Fractions representing how much the mode is like a TE mode, calculated with the following equation.
-
-        .. math::
-            \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
-
-    TE_indices, TM_indices
-        (*list*) Indices for the corresponding TE or TM modes in the modes list.
-
-    tolerance
-        (*float*) Numerical tolerance for convergence of the effective indices.
-
-    user_material_NAME
-        (*str*) The name of a user defined material.
-
-    wavelength
-        (*float*) [nm] Free-space wavelength.
-
-    window_height
-        (float) [nm] Total height (y-direction) of the simulation window.
-
-    window_width
-        (float) [nm] Total width (x-direction) of the simulation window.
-
-    x, y
-        (*complex arrays*) Arrays that define the x and y grid **center** points of the mesh. These can be complex when pml layers are introduced.
-
-    x_resolution, y_resolution
-        (*float*) [nm] Mesh grid step in the x- and y-directions.

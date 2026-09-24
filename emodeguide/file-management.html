@@ -322,6 +322,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
@@ -401,9 +402,20 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> (<em>str</em>) – name of the variable or parameter to extract. This can also be a list of fields of any combination of [<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>]. See <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a> for a complete list and description of all available variables. Use <code class="docutils literal notranslate"><span class="pre">'S_matrix'</span></code> (EMode<sup>3D</sup> only) to retrieve the scattering matrix from a solved EME chain as an <a class="reference internal" href="../interface.html#SMatrix" title="SMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMatrix</span></code></a> object.</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code> from, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code> from, default: ‘_default’. A multi-wavelength profile returns a dict keyed by wavelength.</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="inspect">
+<span class="sig-name descname"><span class="pre">inspect</span></span></dt>
+<dd><p>Return the names of the top-level variables in the simulation file (see <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a>). Per-profile results live inside <code class="docutils literal notranslate"><span class="pre">profiles</span></code> and are read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=...)</span></code> or the typed accessors; names beginning with an underscore are internal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p>
 </dd>
 </dl>
 </dd></dl>
@@ -419,7 +431,7 @@
 <li><p><strong>include_expand</strong> (<em>bool</em>) – whether to include the expanded region, default: True</p></li>
 <li><p><strong>include_pml</strong> (<em>bool</em>) – whether to include the PML region, default: True</p></li>
 <li><p><strong>unfold</strong> (<em>bool</em>) – whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code> from, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code> from, default: ‘_default’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -442,7 +454,7 @@
 <li><p><strong>include_expand</strong> (<em>bool</em>) – whether to include the expanded region, default: True</p></li>
 <li><p><strong>include_pml</strong> (<em>bool</em>) – whether to include the PML region, default: True</p></li>
 <li><p><strong>unfold</strong> (<em>bool</em>) – whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the grid from, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to extract the grid from, default: ‘_default’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -463,7 +475,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> (<em>str</em>) – name of the shape to extract</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract the shape from, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to extract the shape from, default: ‘_default’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -477,7 +489,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile to extract, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to extract, default: ‘_default’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -487,7 +499,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="create_profile_set">
 <span class="sig-name descname"><span class="pre">create_profile_set</span></span></dt>
-<dd><p>Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped.</p>
+<dd><p>Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped. The default <code class="docutils literal notranslate"><span class="pre">profile_set_name</span></code> replaces the <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> profile.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -516,7 +528,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="clear_field_data">
 <span class="sig-name descname"><span class="pre">clear_field_data</span></span></dt>
-<dd><p>Deletes the following data from every profile to reduce the ‘.eph’ file size: <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, <code class="docutils literal notranslate"><span class="pre">permeability</span></code>.</p>
+<dd><p>Deletes the following data from every profile, including the default profile, to reduce the ‘.eph’ file size: <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, <code class="docutils literal notranslate"><span class="pre">permeability</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -587,6 +599,7 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#init"><code class="docutils literal notranslate"><span class="pre">init</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open"><code class="docutils literal notranslate"><span class="pre">open</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect"><code class="docutils literal notranslate"><span class="pre">inspect</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_fields"><code class="docutils literal notranslate"><span class="pre">get_fields</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_grid"><code class="docutils literal notranslate"><span class="pre">get_grid</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get_shape"><code class="docutils literal notranslate"><span class="pre">get_shape</span></code></a></li>

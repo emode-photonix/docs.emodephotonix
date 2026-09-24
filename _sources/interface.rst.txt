@@ -166,12 +166,13 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
     :rtype: int, float, str, or array-like
 
 .. function:: inspect(sim = 'emode', simulation_name = None)
+    :no-index:
 
-    Get the names of all variables from EMode simulation file with the extension '.eph' or '.mat'.
+    Get the names of all top-level variables from EMode simulation file with the extension '.eph' or '.mat'.
 
     :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
     :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
-    :return: List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the `get()` function.
+    :return: List of the top-level variable names in the file. Per-profile results are nested under ``profiles`` and are read with ``get(key, profile=...)`` or the typed accessors; see :doc:`Variable Descriptions <emodeguide/variables>`.
     :rtype: list
 
 Constants
@@ -370,7 +371,7 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
 
 **Connecting two ports pins their coordinate systems together.** The two ports' origins, which are the horizontal center and bottom edge of each port's cross-section, are made to coincide, so a section is positioned by the connection rather than by absolute coordinates. Because the origin is the *bottom* edge in y, two profiles of different heights stay aligned at their substrate rather than at their vertical centers. Use ``offset`` below to displace a section off that shared origin.
 
-.. py:class:: Port(name, window=None, side, offset=(0.0, 0.0))
+.. py:class:: Port(name, side, window=None, offset=(0.0, 0.0), basis_transform=None)
 
    A named port on a section.
 
@@ -382,6 +383,8 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
    :param str side: Which end of the section this port is declared on, either 'left' or 'right'.
    :param offset: [nm] transverse displacement of this section's cross-section relative to the port it connects to: ``offset=(1300, 0)`` places this section's content 1300 nm in +x from the connection's shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler's input port ``offset`` so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section ``offset=`` argument (see :doc:`EME </emodeguide/eme>`) is this same displacement applied to every port at once; setting both on one section raises an :class:`ArgumentError`.
    :type offset: tuple[float, float]
+   :param basis_transform: Declares an angled facet on this port. Build it with :func:`make_angled_facet_port` rather than constructing one directly. Default: None (the port's cross-section is normal to the propagation axis).
+   :type basis_transform: AngledFacetMap or None
 
 ----
 
@@ -393,6 +396,29 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
    :param float window_height: Height of the window, in the cross-section's y-direction.
    :param offset: Position of the window within the port's full cross-section: the x-coordinate of the window's horizontal center, and the y-coordinate of the window's bottom edge. Note the asymmetry: the second entry is the window's **bottom**, not its center, matching the cross-section's own y-axis which starts at 0 at the bottom of the profile. A full-height window therefore wants ``y=0``, not ``-window_height/2``. The window must overlap the section's profile.
    :type offset: tuple[float, float]
+
+----
+
+.. py:function:: make_angled_facet_port(name, side, pivot_angle, polar_angle=0.0, pivot_point=None, degrees=True, window=None)
+
+   Build a :class:`Port` whose cross-section is tilted about a hinge line, modelling an angled facet: the plane where this section meets its neighbour is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode's acceptance cone; for a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the ``ports`` argument of the waveguide section that ends at the facet, and wire it with :data:`connect_ports` if it is not the section's default left/right adjacency.
+
+   :param str name: Port name, unique within its section.
+   :param str side: Which end of the section the facet is on, either 'left' or 'right'.
+   :param float pivot_angle: Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless ``degrees`` is False. 0 is an untilted facet. The sign sets which way the transmitted beam deflects.
+   :param float polar_angle: Orientation of the hinge line in the transverse plane: 0 for a vertical hinge (the facet is tilted in the x–z plane), ±90 for a horizontal one. Only these axis-aligned values are accepted. Default: 0.
+   :param pivot_point: [nm] a point ``(x, y)`` the hinge line passes through, in the section's own cross-section coordinates. Default: None (the horizontal centre of the cross-section, at its vertical middle).
+   :type pivot_point: tuple[float, float] or None
+   :param bool degrees: Whether the angles are in degrees (True) or radians (False). Default: True.
+   :param window: As :class:`Port`'s ``window``. Default: None.
+   :type window: Bounds or None
+
+   .. note::
+      Three things to know before using one.
+
+      * A facet is taken by the junction kernel directly. The junction is solved with the facet's forward and backward traces kept explicit; a facet at zero tilt gives the same answer as no facet.
+      * The facet belongs on the waveguide side of the junction. It cannot sit on a :data:`pwd_section`, whose basis is analytic, or on a profile that uses a PML; both are rejected when the EME chain is built.
+      * Size ``num_modes`` on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental's reflected plus transmitted power under-runs and the solver warns; ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.
 
 Exceptions
 ----------

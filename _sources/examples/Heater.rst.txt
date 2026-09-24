@@ -1,0 +1,160 @@
+
+Multi-physics: Heater
+---------------------
+
+Highlighted features: ``heat_only`` shapes, ``fem_resolution``, ``current``, ``heat``, the thermo-optic shift of a mode, and the heater power for a :math:`\pi` phase shift.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import emodeconnection as emc
+        import matplotlib.pyplot as plt
+        from scipy.interpolate import LinearNDInterpolator
+
+        ## Simulation parameters
+        wavelength = 1550  # [nm]
+        dx, dy = 10, 10  # [nm] optical resolution
+        w_core, h_core = 500, 220  # [nm] Si core
+        w_trench = 800  # [nm] cladding on each side of the core in the optical window
+        h_bclad, h_tclad = 2000, 1200  # [nm] SiO2 below and above the core
+        w_pt, h_pt = 1000, 140  # [nm] Pt heater
+        current = 10e-3  # [A] heater current
+        h_air = 500  # [nm] air above the heater in the thermal domain
+        h_substrate, w_substrate = 10e3, 10e3  # [nm] Si substrate (thermal domain only)
+
+        opt_width, opt_height = w_core + 2 * w_trench, h_bclad + h_core + h_tclad
+        heat_width, heat_height = w_substrate, h_substrate + opt_height + h_air
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        em.settings(
+            wavelength=wavelength,
+            x_resolution=dx,
+            y_resolution=dy,
+            num_modes=1,
+            background_material='Air',
+            window_width=opt_width,
+            window_height=opt_height,
+        )
+
+        ## Layer stack: heat_only shapes are excluded from the optical mesh. The
+        ## thermal domain is the union of every shape; every exposed surface is
+        ## insulating and the bottom of the substrate is held at 298 K.
+        em.shape(name='substrate', material='Si', height=h_substrate, fem_resolution=200, heat_only=True)
+        em.shape(name='BOX', material='SiO2', height=h_bclad, fem_resolution=200)
+        em.shape(
+            name='core',
+            material='Si',
+            fill_material='SiO2',
+            mask=w_core,
+            height=h_core,
+            etch_depth=h_core,
+            fem_resolution=50,
+        )
+        em.shape(name='tclad', material='SiO2', height=h_tclad, fem_resolution=200)
+        em.shape(
+            name='heater',
+            material='Pt',
+            width=w_pt,
+            height=h_pt,
+            fem_resolution=50,
+            current=current,
+            heat_only=True,
+        )
+
+        ## Cold mode
+        em.FDM()
+        em.report()
+        n_cold = em.get('effective_index')[0]
+
+        ## Thermal solve: a wider window so the substrate spans the full thermal domain
+        em.settings(window_width=heat_width, window_height=heat_height)
+        heat_data = em.heat(boundary_temperature=298, boundaries=['bottom'])
+
+        T = heat_data['temperature']
+        # heat() returns its mesh in the optical window's frame, so the core sits at the
+        # same y here as it does in the layer stack.
+        core_point = LinearNDInterpolator(heat_data['p'].T, T)((0.0, h_bclad + h_core / 2))
+        print(f'Maximum temperature: {T.max():.1f} K')
+        print(f'Core temperature rise: {core_point - 298:.1f} K')
+
+        ## Heated mode: FDM folds the temperature field into the permittivity through dn_dT
+        em.settings(window_width=opt_width, window_height=opt_height)
+        em.FDM()
+        em.report()
+        n_hot = em.get('effective_index')[0]
+        dn = n_hot - n_cold
+
+        ## Heater power per length and the power for a pi phase shift (independent of length)
+        Pt = em.get('Pt')
+        rho = Pt['resistivity'] * 1e-9  # [Ohm*nm] -> [Ohm*m]
+        area = w_pt * h_pt * 1e-18  # [m^2]
+        power_per_length = current**2 * rho / area  # [W/m]
+        P_pi = power_per_length * wavelength * 1e-9 / (2 * abs(dn))  # [W]
+        print(f'Heater power: {power_per_length:.1f} mW/mm')  # 1 W/m is 1 mW/mm
+        print(f'Effective index shift: {dn:.2e}')
+        print(f'Power for a pi phase shift: {P_pi * 1e3:.1f} mW')
+
+        ## Temperature map, with the FEM mesh drawn over it
+        fig, ax = plt.subplots()
+        im = ax.tripcolor(
+            heat_data['p'][0], heat_data['p'][1], heat_data['t'].T, T, cmap='plasma', shading='gouraud'
+        )
+        ax.triplot(heat_data['p'][0], heat_data['p'][1], heat_data['t'].T, color='w', lw=0.15, alpha=0.4)
+        ax.set_aspect('equal')
+        ax.set_xlabel('x [nm]')
+        ax.set_ylabel('y [nm]')
+        fig.colorbar(im, ax=ax, label='Temperature [K]')
+        fig.savefig('heater_temperature.png', dpi=150, bbox_inches='tight')
+
+        em.plot()
+
+        em.close()
+
+
+Console output::
+
+    EMode3D 1.0.4 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 4.2 sec
+
+    Wavelength: 1550.0 nm
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)
+    --------  --------  ------  -------------
+        TE-0  2.446865  98.3 %          0.000
+ 
+    Solving heat completed in 0.2 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 4.4 sec
+
+    Wavelength: 1550.0 nm
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)
+    --------  --------  ------  -------------
+        TE-0  2.451263  98.4 %          0.000
+ 
+    Exited EMode
+    Maximum temperature: 347.9 K
+    Core temperature rise: 20.5 K
+    Heater power: 75.0 mW/mm
+    Effective index shift: 4.40e-03
+    Power for a pi phase shift: 13.2 mW
+
+
+Figures:
+
+.. figure:: Figures/Heater/heater_temperature.png
+    :width: 400
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/Heater/heater_Ex.png
+    :width: 400
+    :align: center
+    :figwidth: 500

@@ -12,6 +12,15 @@ Quick reference for initializing, running, and closing an EMode session:
     em.function_name(keyword = value)  # Call EMode functions
     em.close()                         # Close and check in license
 
+.. hardware-note-start
+
+.. note::
+
+   The console output on the example pages below, including all timings,
+   was produced on: AMD EPYC 7763 64-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
+
+.. hardware-note-end
+
 Example Scripts
 ^^^^^^^^^^^^^^^^
 
@@ -20,7 +29,7 @@ Example Scripts
     :padding: 2
     :margin: auto
 
-    .. grid-item-card:: EMode\ :sup:`2D`\  Scripts
+    .. grid-item-card:: EMode\ :sup:`2D`
         :shadow: md
         :columns: 6
 
@@ -35,8 +44,9 @@ Example Scripts
                 * :octicon:`light-bulb;1em` :doc:`Laser <examples//Laser>`
                 * :octicon:`file;1em` :doc:`Open <examples//Open>`
                 * :octicon:`graph;1em` :doc:`Dispersion <examples//Dispersion>`
+                * :octicon:`sliders;1em` :doc:`Adaptive Scan <examples//Adaptive_Scan>`
 
-    .. grid-item-card:: EMode\ :sup:`3D`\  Scripts
+    .. grid-item-card:: EMode\ :sup:`3D`
         :shadow: md
         :columns: 6
 
@@ -48,10 +58,16 @@ Example Scripts
                 * :octicon:`paper-airplane;1em` :doc:`EME: Taper <examples//EME_Taper>`
                 * :octicon:`video;1em` :doc:`EME: Sweep <examples//EME_Sweep>`
                 * :octicon:`project-symlink;1em` :doc:`EME: GDS <examples//EME_GDS>`
+                * :octicon:`broadcast;1em` :doc:`EME: Angled Facet <examples//EME_Angled_Facet>`
+                * :octicon:`pulse;1em` :doc:`Nonlinear-EME: SHG <examples//EME_SHG>`
+                * :octicon:`zap;1em` :doc:`Nonlinear-EME: PPLN <examples//EME_PPLN>`
+                * :octicon:`arrow-switch;1em` :doc:`Nonlinear-EME: DFG <examples//EME_DFG>`
+                * :octicon:`flame;1em` :doc:`Heater <examples//Heater>`
+                * :octicon:`plug;1em` :doc:`Phase Shifter <examples//Phase_Shifter>`
 
 .. toctree::
    :maxdepth: 1
-   :caption: EMode2D Scripts
+   :caption: EMode2D
    :hidden:
 
    examples//SOI
@@ -60,12 +76,19 @@ Example Scripts
    examples//Laser
    examples//Open
    examples//Dispersion
+   examples//Adaptive_Scan
 
 .. toctree::
    :maxdepth: 1
-   :caption: EMode3D Scripts
+   :caption: EMode3D
    :hidden:
 
    examples//EME_Taper
    examples//EME_Sweep
    examples//EME_GDS
+   examples//EME_Angled_Facet
+   examples//EME_SHG
+   examples//EME_PPLN
+   examples//EME_DFG
+   examples//Heater
+   examples//Phase_Shifter

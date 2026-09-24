@@ -518,9 +518,9 @@ to skip interactive prompts:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="inspect">
+<dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">inspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emode'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Get the names of all variables from EMode simulation file with the extension ‘.eph’ or ‘.mat’.</p>
+<dd><p>Get the names of all top-level variables from EMode simulation file with the extension ‘.eph’ or ‘.mat’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -529,7 +529,7 @@ to skip interactive prompts:</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of names of all variables available in the EMode simulation file. Any of these variables can be extracted to the user with the <cite>get()</cite> function.</p>
+<dd class="field-even"><p>List of the top-level variable names in the file. Per-profile results are nested under <code class="docutils literal notranslate"><span class="pre">profiles</span></code> and are read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=...)</span></code> or the typed accessors; see <a class="reference internal" href="emodeguide/variables.html"><span class="doc">Variable Descriptions</span></a>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -759,7 +759,7 @@ defaults (typically 0).</p>
 <p><strong>Connecting two ports pins their coordinate systems together.</strong> The two ports’ origins, which are the horizontal center and bottom edge of each port’s cross-section, are made to coincide, so a section is positioned by the connection rather than by absolute coordinates. Because the origin is the <em>bottom</em> edge in y, two profiles of different heights stay aligned at their substrate rather than at their vertical centers. Use <code class="docutils literal notranslate"><span class="pre">offset</span></code> below to displace a section off that shared origin.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="Port">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset=(0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.0)</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>A named port on a section.</p>
 <p>A <code class="docutils literal notranslate"><span class="pre">Port</span></code> carries two offsets that mean different things: <code class="docutils literal notranslate"><span class="pre">window.offset</span></code> says <em>which part of this section’s cross-section the port exposes</em>, while <code class="docutils literal notranslate"><span class="pre">offset</span></code> says <em>where this section sits</em> relative to what the port connects to. In short, <code class="docutils literal notranslate"><span class="pre">window</span></code> answers “which part of me?” and <code class="docutils literal notranslate"><span class="pre">offset</span></code> answers “where am I?”. A window never moves a section, and an offset never crops one.</p>
 <dl class="field-list simple">
@@ -769,6 +769,7 @@ defaults (typically 0).</p>
 <li><p><strong>window</strong> (<a class="reference internal" href="#Bounds" title="Bounds"><em>Bounds</em></a><em> or </em><em>None</em>) – A rectangular sub-region of the port’s full cross-section to isolate, positioned within <em>this section’s own</em> cross-section. Must overlap the section’s profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), the port’s mode is solved independently on just this window instead of the section’s full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section’s entire cross-section).</p></li>
 <li><p><strong>side</strong> (<em>str</em>) – Which end of the section this port is declared on, either ‘left’ or ‘right’.</p></li>
 <li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section’s cross-section relative to the port it connects to: <code class="docutils literal notranslate"><span class="pre">offset=(1300,</span> <span class="pre">0)</span></code> places this section’s content 1300 nm in +x from the connection’s shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler’s input port <code class="docutils literal notranslate"><span class="pre">offset</span></code> so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section <code class="docutils literal notranslate"><span class="pre">offset=</span></code> argument (see <a class="reference internal" href="emodeguide/eme.html"><span class="doc">EME</span></a>) is this same displacement applied to every port at once; setting both on one section raises an <a class="reference internal" href="#ArgumentError" title="ArgumentError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgumentError</span></code></a>.</p></li>
+<li><p><strong>basis_transform</strong> (<em>AngledFacetMap</em><em> or </em><em>None</em>) – Declares an angled facet on this port. Build it with <a class="reference internal" href="#make_angled_facet_port" title="make_angled_facet_port"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a> rather than constructing one directly. Default: None (the port’s cross-section is normal to the propagation axis).</p></li>
 </ul>
 </dd>
 </dl>
@@ -788,6 +789,35 @@ defaults (typically 0).</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="make_angled_facet_port">
+<span class="sig-name descname"><span class="pre">make_angled_facet_port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polar_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degrees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Build a <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> whose cross-section is tilted about a hinge line, modelling an angled facet: the plane where this section meets its neighbour is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode’s acceptance cone; for a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument of the waveguide section that ends at the facet, and wire it with <a class="reference internal" href="emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> if it is not the section’s default left/right adjacency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Port name, unique within its section.</p></li>
+<li><p><strong>side</strong> (<em>str</em>) – Which end of the section the facet is on, either ‘left’ or ‘right’.</p></li>
+<li><p><strong>pivot_angle</strong> (<em>float</em>) – Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless <code class="docutils literal notranslate"><span class="pre">degrees</span></code> is False. 0 is an untilted facet. The sign sets which way the transmitted beam deflects.</p></li>
+<li><p><strong>polar_angle</strong> (<em>float</em>) – Orientation of the hinge line in the transverse plane: 0 for a vertical hinge (the facet is tilted in the x–z plane), ±90 for a horizontal one. Only these axis-aligned values are accepted. Default: 0.</p></li>
+<li><p><strong>pivot_point</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – [nm] a point <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> the hinge line passes through, in the section’s own cross-section coordinates. Default: None (the horizontal centre of the cross-section, at its vertical middle).</p></li>
+<li><p><strong>degrees</strong> (<em>bool</em>) – Whether the angles are in degrees (True) or radians (False). Default: True.</p></li>
+<li><p><strong>window</strong> (<a class="reference internal" href="#Bounds" title="Bounds"><em>Bounds</em></a><em> or </em><em>None</em>) – As <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">window</span></code>. Default: None.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Three things to know before using one.</p>
+<ul class="simple">
+<li><p>A facet is taken by the junction kernel directly. The junction is solved with the facet’s forward and backward traces kept explicit; a facet at zero tilt gives the same answer as no facet.</p></li>
+<li><p>The facet belongs on the waveguide side of the junction. It cannot sit on a <a class="reference internal" href="emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>, whose basis is analytic, or on a profile that uses a PML; both are rejected when the EME chain is built.</p></li>
+<li><p>Size <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental’s reflected plus transmitted power under-runs and the solver warns; ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.</p></li>
+</ul>
+</div>
 </dd></dl>
 
 </section>
@@ -950,7 +980,6 @@ defaults (typically 0).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#EModeLogin"><code class="docutils literal notranslate"><span class="pre">EModeLogin()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#open_file"><code class="docutils literal notranslate"><span class="pre">open_file()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect"><code class="docutils literal notranslate"><span class="pre">inspect()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a><ul class="nav section-nav flex-column">
@@ -982,6 +1011,7 @@ defaults (typically 0).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ports">Ports</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Port"><code class="docutils literal notranslate"><span class="pre">Port</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Bounds"><code class="docutils literal notranslate"><span class="pre">Bounds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make_angled_facet_port"><code class="docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a><ul class="nav section-nav flex-column">

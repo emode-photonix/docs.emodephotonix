@@ -22,6 +22,7 @@ Solver and analysis
     :param int fLanczos: number of Lanczos vectors used by the eigensolver, default: 5
     :param str solve_type: either 'isotropic', 'anisotropic', or 'auto' to control whether anisotropic materials are solved with the full tensor or reduced to their isotropic diagonal, default: 'auto'
     :param bool include_heat: whether to include heat-related material properties when meshing, default: True
+    :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
     :param bool scattering: whether to automatically calculate interfacial scattering loss for all shapes after solving, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -32,20 +33,23 @@ Solver and analysis
 
     This function sweeps a calculation as a function of any available setting, shape parameter, or section parameter (EMode\ :sup:`3D`\  only). Run a parameter sweep of ``key`` over defined ``values`` by solving ``solve_type`` for each value and saving a list of parameters defined by 'result' that correspond to the ``values``. After running a sweep, the data will be available from a parameter called ``sweep_data``, which includes all of the specified parameters of this funcion and the data specified by the ``result`` parameter. The ``result`` parameter can include any parameter that is listed in the ``inspect()`` output (after running the desired simulation). Additionally, the ``result`` parameter can include 'scattering_loss' (a sum of all scattering losses for each mode) or 'mode_order' (a list of mode indices used for tracking the order of the modes).
 
-    :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME
+    :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME. The accepted section keys are 'length', 'num_modes', 'minimum_z_step', 'overlap_variation', 'z_slices', 'offset', 'etch_depth', 'sidewall_angle', 'window_width', 'window_height', and 'facet_angle' (the tilt [degrees] of an angled facet on that section, see :func:`make_angled_facet_port`); any other section key raises an error naming it.
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
     :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
     :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
     :type result: str or list
     :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
+    :param bool adaptive: only for a wavelength sweep. ``values`` keeps its meaning -- the wavelengths you want results at -- and ``adaptive`` changes only *where the solver runs*: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength places further solves until the mode list stops moving by more than ``tolerance``, or the gap reaches ``minimum_step``. The requested wavelengths are then filled in by interpolating the solved mode lists, which is much cheaper than solving every point when the modes vary smoothly. ``sweep_data`` additionally carries ``solved_wavelengths`` (where the solver actually ran) and ``unconverged`` (any stretch the sampler gave up on, reported rather than raised). Default: False
+    :param float tolerance: with ``adaptive``, the largest mode-list change tolerated between adjacent solves, default: 1e-3
+    :param float minimum_step: [nm] with ``adaptive``, the smallest wavelength gap the sampler will bisect into, default: the spacing of ``values``
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: confinement
 
     Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included. The confinement factors are also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
-    :param str profile: profile label, default: '_default'
+    :param str profile: profile name, default: '_default'
     :param shape_list: name (from ``shape``) or list of names of shapes to include in confinement or 'all' for all shapes, default: 'all'
     :type shapes: str or list
     :param mode_list: desired modes to calculate confinement, 'all', 'TE', 'TM', or a list of the desired mode indices, default: 'all'
@@ -62,14 +66,14 @@ Solver and analysis
     .. math::
         A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2
 
-    :param str profile: profile label, default: '_default'
+    :param str profile: profile name, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: orthogonality
 
-    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the labeled (or default) dataset, and the ``maximum_overlap`` is returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
+    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the named (or default) profile, and the ``maximum_overlap`` is returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
 
-    :param profile: profile label, default: '_default'
+    :param profile: profile name, default: '_default'
     :type profile: str or int
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -77,14 +81,16 @@ Solver and analysis
 
     Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index. The ``group_index`` array is also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
-    :param str profile: profile label, default: '_default'
+    :param str profile: profile name, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: report
 
-    Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); confinement factors (if calculated); effective areas (if calculated).
+    Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); a ``PML`` column when the profile was solved with a pml, marking the modes that carry less than 75% of their power inside the window (see ``PML_indices`` and ``window_confinement`` in :doc:`Variable Descriptions </emodeguide/variables>`); per-shape confinement factors and scattering loss (if calculated); effective areas (if calculated).
 
-    :param str profile: profile label, default: '_default'
+    Returns the table as a dictionary keyed by profile name, each table holding one list per column. A multi-wavelength profile returns one table per wavelength, keyed by wavelength; an unsolved profile returns an empty table.
+
+    :param str profile: profile name, default: '_default'
     :param bool save: whether to save the table to a file or not, default: False
     :param str file_name: name of the file to save, default: 'mode_report'
     :param str file_type: file type to save, 'txt', 'latex', or 'csv', default: 'txt'
@@ -92,7 +98,7 @@ Solver and analysis
 
 .. data:: label_profile
 
-    Creates a labeled dataset from the current settings and field data, saved as a Python dictionary or a MATLAB structure array called ``dataset_NAME``. It can be used to run different simulations and compare the outputs. Also, it is used in conjunction with certain functions like ``overlap`` and ``orthogonality``.
+    Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under ``name`` in the ``profiles`` dictionary of the simulation file, meshing it first if needed. Named profiles are read with ``profile=NAME`` in :data:`get`, :data:`get_fields`, :data:`get_grid`, :data:`get_shape` and :data:`get_profile`, are the inputs to ``overlap``, ``mode_order`` and the EME section functions, and are not affected by :data:`reset`.
 
     :param str name: save the current simulation state to this name, default: '0'
     :param str simulation_name: simulation name, default: 'emode'
@@ -132,7 +138,7 @@ Solver and analysis
 
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
 
-    :param str profile: profile label, default: '_default'
+    :param str profile: profile name, default: '_default'
     :param str shape: name of the shape for calculating the interfacial scattering, can also be a list of shapes or None (which calculates scattering for all shapes), default: None
     :param str shapes: alias for shape
     :param mode_list: mode number, list of mode numbers, or 'all', default: 'all'
@@ -160,9 +166,15 @@ Solver and analysis
     :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
     :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: 'sum' (default), which totals the field across the fixed transverse axis, or 'mean', which averages it, default: None
     :type slice_position: float or None
-    :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward) field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False
+    :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward)
+    :param float wavelength: (EME) which wavelength's field to render on a multi-wavelength circuit, such as the pump or the second harmonic of a :math:`\chi^{(2)}` section. Default: None, the circuit's first wavelength
+    :param bool driven: a plot of a :math:`\chi^{(2)}` section uses the declared ``excitation`` rather than a unit mode, because conversion depends on power. Each slice is drawn from the forward amplitudes recorded along it, so the generated wavelength builds along the guide instead of stepping at slice boundaries. Without a declared excitation the field shown is the small-signal response and the solver says so field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False
     :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, smaller is finer; 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
     :type resolution: float or str
+    :param str excitation: (EME) render the field launched by a free-space field declared with :data:`free_space_field`, instead of unit amplitude in ``mode`` at ``port``. It also selects which port the field is viewed at. This is the only API surface for viewing one; in the plot window the same choice appears in the Mode menu as ``'<name> (free space)'``. Default: None
+    :param str normalization: the field family the colour scale is normalized to, either 'vector' (the full transverse vector at the excitation plane) or 'component' (the plotted component alone), default: 'vector'
+    :param profile: render a stored profile by name instead of the EME section. Once a simulation has declared sections, the plot always follows the section, so this is the only way to view a profile saved by an earlier ``FDM(profile=...)`` call. An unknown name raises an error listing the available profiles, default: None
+    :type profile: str or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
     :param str file_type: file type for saving a plot, 'pdf' or 'png', default: '' (no extension is added to ``file_name`` unless a file type is given)
     :param str simulation_name: simulation name, default: 'emode'
@@ -171,6 +183,8 @@ Solver and analysis
 
     Interactive material explorer to plot the refractive indices of all available materials. The default wavelength range in the plot corresponds to the recommended range from the material reference listed below the plot. If wavelengths are specified outside this range, the model will be plotted with a dashed line instead of a solid line. User defined materials are also available.
 
+    :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
+    :param str file_type: file type for saving a plot, 'pdf' or 'png', default: '' (no extension is added to ``file_name`` unless a file type is given)
     :param str simulation_name: simulation name, default: 'emode'
 
 
@@ -217,7 +231,7 @@ Solver and analysis
 
     Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by ``FDM`` if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (``x``, ``y``) of the mesh grid, and the relative permittivity and permeability matrices (``permittivity`` and ``permeability``).
 
-    :param str profile: profile label, default: '_default'
+    :param str profile: profile name, default: '_default'
     :param bool run_mesh: whether to actually run the meshing step now, or just mark the profile as prepared for meshing without running it, default: True
     :param bool verbose: control the display of the progress bar, default: True
     :param str simulation_name: simulation name, default: 'emode'

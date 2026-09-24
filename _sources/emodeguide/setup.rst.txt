@@ -6,9 +6,11 @@ Simulation setup
 
     Specify the simulation settings.
 
-    :param str profile: label of the profile these settings apply to, default: '_default'
+    :param str profile: name of the profile these settings apply to, default: '_default'
     :param float wavelength: [nm] simulation wavelength, default: 1550
     :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
+    :param excitation: declare a CW pump driving the circuit (EMode\ :sup:`3D`\  only), as ``Source(port=..., wavelength=..., mode=0, power=1.0, phase=0.0)`` from ``emodeconnection``, where ``power`` is in W and ``phase`` in radians. ``port`` is a bare side ('left'/'right') or a qualified '<section>.<port>' name, resolved when the circuit is built, and ``wavelength`` [nm] is matched against the circuit's own wavelengths. This is what makes :data:`EME` solve the power-dependent response of a :math:`\chi^{(2)}` section in addition to the small-signal scattering matrix; the result is read back with ``get('response')``, and the declared source with ``get('sources')``. Default: None
+    :type excitation: Source or None
     :param float x_resolution: [nm] resolution in the x-direction, default: 10
     :param float y_resolution: [nm] resolution in the y-direction, default: 10
     :param float window_width: [nm] simulation window width
@@ -31,6 +33,7 @@ Simulation setup
     :param float pml_kappa_max: the maximum real coordinate stretch, reached at the outer pml face; must be at least 1, default: 7
     :param float pml_alpha_max: the complex-frequency-shifted (CFS) pml term, where 0 disables it; raise it if the solve returns too many artificial pml modes, where ``0.1*omega*eps_0`` is a reasonable starting point that is small enough to barely move the physical modes, default: 0
     :param bool remove_pml_modes_bool: automatically remove the artificial modes of the pml regions from the mode list, identified as modes carrying less than 75% of their power inside the simulation window, default: False
+    :param bool pml_seed_bool: seed the pml eigensolve with the fundamental mode of the same structure solved without a pml, so the guided fundamental lands at mode 0 without a hand-tuned ``max_effective_index``; costs one extra single-mode solve, default: False
     :param background_material: background material, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object, default: "Vacuum"
     :type background_material: str or ~MaterialProperties or ~MaterialSpec
     :param expansion_resolution: [nm] single value or list of 4 values for the stretched grid resolution; [north, south, east, west], the grid is gradually transitioned from res to ``expansion_resolution``, default: 20
@@ -41,7 +44,6 @@ Simulation setup
     :param bool generate_chi2: whether to generate the second-order nonlinear susceptibility (chi2) tensor for the simulation window, default: False
     :param bool include_heat: whether to include heat-related material properties when meshing for FEM heat calculations, default: True
     :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/10
-    :param bool eme_scattering: whether or not to automatically calculate scattering for all possible shapes within EME calculations, default: False
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: add_material
@@ -62,6 +64,7 @@ Simulation setup
     :type d: list (3x6) or None
     :param float phi: phi angle of the crystal orientation in cylidrical coordinates, default: 0
     :param float theta: theta angle of the crystal orientation in cylidrical coordinates, default: 0
+    :param dict property_refs: citation string per property name (``'d'``, ``'r'``, ``'thermal_conductivity'``, ``'dn_dT'``, ``'eps_r_dc'``, ``'resistivity'``), default: {}
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: import_database
@@ -71,7 +74,7 @@ Simulation setup
     :param str filename: name of text file to be imported
     :param str simulation_name: simulation name, default: 'emode'
 
-    Here is an example of several custom materials in the database text file to be imported. See the ``add_material`` function for parameter details. Each custom material must contain the ``name`` and ``refractive_index_equation``, separated by a new line. Comments can be added with '#' or '%'.
+    Here is an example of several custom materials in the database text file to be imported. See the ``add_material`` function for parameter details. Each custom material must contain the ``name`` and ``refractive_index_equation``, separated by a new line. Comments can be added with '#' or '%'. A ``name = ...`` line starts a new record (the spaces around ``=`` are optional); a record with no ``refractive_index_equation`` raises an error and nothing in the file is imported. ``wavelength_range`` is always in um regardless of ``wavelength_unit``, and defaults to ``[0.2, 2.0]`` when omitted. ``citation`` may contain an ``=`` sign.
 
         | name = custom_name_1
         | refractive_index_equation = equation_1
@@ -95,6 +98,7 @@ Simulation setup
 
     Create or update a shape with attributes. These parameters are saved with 'shape\_'+name+'/' preceding the attribute name. If a name is not given, a number will be allocated as the shape name.
 
+    :param str profile: name of the profile to add the shape to, default: '_default'
     :param str name: shape name, default: an auto-generated number
     :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
     :type material: ~MaterialSpec, ~MaterialProperties, or str
@@ -133,7 +137,9 @@ Simulation setup
 
 .. data:: reset
 
-    Clear simulation settings, shape definitions, or both.
+    Clear simulation settings, shape definitions, or both, on the default profile.
+
+    ``'shapes'`` removes every user-defined shape from the default profile (the background remains) and discards its mesh, mode list, and analysis results; ``'settings'`` replaces the default profile with a new one at the default settings, which also removes its shapes, and resets ``eme_scattering`` and ``propagation_resolution``; ``'all'`` does both. Named profiles created by :data:`label_profile` are not affected. Any other ``kind`` raises an error.
 
     :param str kind: either 'shapes', 'settings', or 'all' to specify what data is cleared, default: 'shapes'
     :param str simulation_name: simulation name, default: 'emode'

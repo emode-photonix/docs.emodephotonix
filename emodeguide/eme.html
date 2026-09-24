@@ -50,6 +50,7 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/code-tabs.js?v=c983d12e"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/eme';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -322,6 +323,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
@@ -362,7 +364,7 @@
                   
   <section id="eme">
 <h1>EME</h1>
-<p>Every section function below accepts a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> to wire named ports explicitly instead, including into branching topologies. See <a class="reference internal" href="../interface.html#ports"><span class="std std-ref">Ports</span></a> for the port model and the <code class="docutils literal notranslate"><span class="pre">Port</span></code> and <code class="docutils literal notranslate"><span class="pre">Bounds</span></code> classes.</p>
+<p>Every section function below accepts a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> to wire named ports explicitly instead, including into branching topologies. See <a class="reference internal" href="../interface.html#ports"><span class="std std-ref">Ports</span></a> for the port model, the <code class="docutils literal notranslate"><span class="pre">Port</span></code> and <code class="docutils literal notranslate"><span class="pre">Bounds</span></code> classes, and <a class="reference internal" href="../interface.html#make_angled_facet_port" title="make_angled_facet_port"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a> for declaring an angled facet on a port.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="EME_settings">
 <span class="sig-name descname"><span class="pre">EME_settings</span></span></dt>
@@ -389,11 +391,12 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section’s cross-section</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that defines the section’s cross-section</p></li>
 <li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
 <li><p><strong>offset</strong> (<em>float</em><em> or </em><em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section relative to whatever its ports connect to; if only a single value is given it is assumed to be the x-offset, default: (0, 0). <strong>Legacy</strong>: this is the same displacement as <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s own <code class="docutils literal notranslate"><span class="pre">offset</span></code> applied to every port of the section at once, and setting both on one section raises an error. Prefer declaring <code class="docutils literal notranslate"><span class="pre">offset</span></code> on the specific port that sits off-axis.</p></li>
 <li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
-<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, merged onto the current global EME settings (or onto the section’s existing settings, when updating), default: None</p></li>
+<li><p><strong>nonlinear</strong> (<em>SHGProcess</em><em> or </em><em>SFGProcess</em><em> or </em><em>DFGProcess</em><em> or </em><em>None</em>) – declare a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> process on this section (EMode<sup>3D</sup> only), one of <code class="docutils literal notranslate"><span class="pre">SHGProcess(pump_wavelength=...)</span></code>, <code class="docutils literal notranslate"><span class="pre">SFGProcess(pump_wavelength_1=...,</span> <span class="pre">pump_wavelength_2=...)</span></code> or <code class="docutils literal notranslate"><span class="pre">DFGProcess(pump_wavelength=...,</span> <span class="pre">signal_wavelength=...)</span></code> from <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>. You name the process’s <em>input</em> wavelength(s); the remaining one follows from energy conservation and is matched against the section’s own profile wavelengths. Quasi-phase matching is declared on the process with <code class="docutils literal notranslate"><span class="pre">poling_period</span></code> [nm], plus <code class="docutils literal notranslate"><span class="pre">duty_cycle</span></code> (default: 0.5) and <code class="docutils literal notranslate"><span class="pre">qpm_order</span></code> (default: 1); <code class="docutils literal notranslate"><span class="pre">inverted=True</span></code> instead flips the local <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting <code class="docutils literal notranslate"><span class="pre">nonlinear</span></code> when updating an existing section leaves the declared process in place, and passing a new one replaces it. A declared process cannot currently be removed – <code class="docutils literal notranslate"><span class="pre">nonlinear=None</span></code> is indistinguishable from omitting the argument – so redeclare the section under a new name instead. A pump must also be declared, see <code class="docutils literal notranslate"><span class="pre">excitation</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>, and the power-dependent result is read back with <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>. The process also carries <code class="docutils literal notranslate"><span class="pre">z_samples</span></code> (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as <code class="docutils literal notranslate"><span class="pre">get('response').power_vs_z(wavelength)</span></code>, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, merged onto the current global EME settings (or onto the section’s existing settings, when updating), e.g. <code class="docutils literal notranslate"><span class="pre">settings={'overlap_variation':</span> <span class="pre">0.005}</span></code>, default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -411,7 +414,7 @@
 <li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
 <li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
 <li><p><strong>material</strong> (<em>str</em><em> or </em><em>~MaterialProperties</em><em> or </em><em>~MaterialSpec</em>) – the material filling the section, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object; must be isotropic, default: “Vacuum”</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that supplies the default window and the wavelength(s) of the section, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that supplies the default window and the wavelength(s) of the section, default: ‘_default’</p></li>
 <li><p><strong>window</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – [nm] the (width, height) of the plane-wave window, which overrides the window of <code class="docutils literal notranslate"><span class="pre">profile</span></code>, default: None (use the <code class="docutils literal notranslate"><span class="pre">window_width</span></code> and <code class="docutils literal notranslate"><span class="pre">window_height</span></code> of <code class="docutils literal notranslate"><span class="pre">profile</span></code>)</p></li>
 <li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of the window’s origin, which is its horizontal center and bottom edge, default: (0, 0)</p></li>
 <li><p><strong>max_order</strong> (<em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>] or </em><em>None</em>) – the largest harmonic order to keep in the x- and y-directions, so that <code class="docutils literal notranslate"><span class="pre">|m|</span> <span class="pre">&lt;=</span> <span class="pre">max_order[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">|n|</span> <span class="pre">&lt;=</span> <span class="pre">max_order[1]</span></code>, default: None</p></li>
@@ -433,10 +436,11 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section beginning</p></li>
-<li><p><strong>profile_end</strong> (<em>str</em>) – label of the profile that defines the section ending</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that defines the section beginning</p></li>
+<li><p><strong>profile_end</strong> (<em>str</em>) – name of the profile that defines the section ending</p></li>
 <li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
 <li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>nonlinear</strong> (<em>SHGProcess</em><em> or </em><em>SFGProcess</em><em> or </em><em>DFGProcess</em><em> or </em><em>None</em>) – declare a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> process on this section (EMode<sup>3D</sup> only), one of <code class="docutils literal notranslate"><span class="pre">SHGProcess(pump_wavelength=...)</span></code>, <code class="docutils literal notranslate"><span class="pre">SFGProcess(pump_wavelength_1=...,</span> <span class="pre">pump_wavelength_2=...)</span></code> or <code class="docutils literal notranslate"><span class="pre">DFGProcess(pump_wavelength=...,</span> <span class="pre">signal_wavelength=...)</span></code> from <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>. You name the process’s <em>input</em> wavelength(s); the remaining one follows from energy conservation and is matched against the section’s own profile wavelengths. Quasi-phase matching is declared on the process with <code class="docutils literal notranslate"><span class="pre">poling_period</span></code> [nm], plus <code class="docutils literal notranslate"><span class="pre">duty_cycle</span></code> (default: 0.5) and <code class="docutils literal notranslate"><span class="pre">qpm_order</span></code> (default: 1); <code class="docutils literal notranslate"><span class="pre">inverted=True</span></code> instead flips the local <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting <code class="docutils literal notranslate"><span class="pre">nonlinear</span></code> when updating an existing section leaves the declared process in place, and passing a new one replaces it. A declared process cannot currently be removed – <code class="docutils literal notranslate"><span class="pre">nonlinear=None</span></code> is indistinguishable from omitting the argument – so redeclare the section under a new name instead. A pump must also be declared, see <code class="docutils literal notranslate"><span class="pre">excitation</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>, and the power-dependent result is read back with <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>. The process also carries <code class="docutils literal notranslate"><span class="pre">z_samples</span></code> (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as <code class="docutils literal notranslate"><span class="pre">get('response').power_vs_z(wavelength)</span></code>, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None</p></li>
 <li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a> (notably <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> and <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code>, which control the automatic z-slicing), default: None</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
@@ -452,7 +456,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile that defines the section’s cross-section outside of the GDS mask</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that defines the section’s cross-section outside of the GDS mask</p></li>
 <li><p><strong>gds_path</strong> (<em>str</em>) – path to the GDS file used to mask the section</p></li>
 <li><p><strong>layer_map</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – mapping of profile shape names to GDS layer numbers, used to determine which shapes in <code class="docutils literal notranslate"><span class="pre">profile</span></code> are masked by which GDS layer</p></li>
 <li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section, default: derived from the GDS bounding box</p></li>
@@ -500,9 +504,22 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pairs</strong> (<em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – a list of <code class="docutils literal notranslate"><span class="pre">('&lt;section_name&gt;.&lt;port_name&gt;',</span> <span class="pre">'&lt;section_name&gt;.&lt;port_name&gt;')</span></code> pairs to connect, e.g. <code class="docutils literal notranslate"><span class="pre">[('a.right',</span> <span class="pre">'b.left'),</span> <span class="pre">('c.right',</span> <span class="pre">'d.left')]</span></code>. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> build time.</p></li>
+<li><p><strong>pairs</strong> (<em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>] or </em><em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>, </em><a class="reference internal" href="#JunctionOverride" title="JunctionOverride"><em>JunctionOverride</em></a><em>]</em><em>]</em>) – a list of <code class="docutils literal notranslate"><span class="pre">('&lt;section_name&gt;.&lt;port_name&gt;',</span> <span class="pre">'&lt;section_name&gt;.&lt;port_name&gt;')</span></code> pairs to connect, e.g. <code class="docutils literal notranslate"><span class="pre">[('a.right',</span> <span class="pre">'b.left'),</span> <span class="pre">('c.right',</span> <span class="pre">'d.left')]</span></code>. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> build time. An entry may carry an optional <strong>third</strong> element, a <a class="reference internal" href="#JunctionOverride" title="JunctionOverride"><code class="xref py py-class docutils literal notranslate"><span class="pre">JunctionOverride</span></code></a>, configuring the junction that connection forms, e.g. <code class="docutils literal notranslate"><span class="pre">[('a.right',</span> <span class="pre">'b.left',</span> <span class="pre">JunctionOverride(junction_normalization=False))]</span></code>.</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="JunctionOverride">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JunctionOverride</span></span></dt>
+<dd><p>Settings for a single junction, passed as the optional third element of a <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> entry. Every parameter left unspecified inherits the value the junction’s sections resolved, so setting one does not disturb the others.</p>
+<p>These settings belong to the <em>connection</em> rather than to either port because each one describes the interface between the two sections – which algebra joins their mode sets, how the resulting scattering matrix is normalized – and not one side of it.</p>
+<p>Only an explicitly connected junction can carry these. A junction formed by the default left/right adjacency has nowhere to declare them, so name that pair in <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> to configure it, which supersedes the adjacency. The internal junctions of a taper or GDS section’s automatic z-slicing are controlled by that section’s <code class="docutils literal notranslate"><span class="pre">settings</span></code> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>junction_normalization</strong> (<em>bool</em><em> or </em><em>str</em><em> or </em><em>None</em>) – how this junction’s scattering matrix is power-normalized – True (full SVD unitarization), False (raw, unnormalized), or ‘gain’ (clip singular values at 1 while keeping the raw lossy mode-matching), default: None (inherit)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -519,6 +536,68 @@
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chi2_spectrum">
+<span class="sig-name descname"><span class="pre">chi2_spectrum</span></span></dt>
+<dd><p>Conversion spectrum of a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section, solved sparsely in wavelength (EMode<sup>3D</sup> only). Returns the signal power out over the pump power in at every wavelength in <code class="docutils literal notranslate"><span class="pre">values</span></code>.</p>
+<p>A nonlinear spectrum oscillates with the phase mismatch, so it cannot be interpolated – at any useful resolution it has to be evaluated point by point. What <em>can</em> be interpolated is what the coupled-mode equations consume: the coupling and the propagation constants, which vary smoothly with wavelength. So the modes are solved at a handful of wavelengths chosen by how fast the mode list is actually moving, and the response is then evaluated at every requested wavelength from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included.</p>
+<p>Quasi-phase matching is included: the grating enters as a wavevector shift and a Fourier coefficient built from <code class="docutils literal notranslate"><span class="pre">poling_period</span></code>, <code class="docutils literal notranslate"><span class="pre">duty_cycle</span></code> and <code class="docutils literal notranslate"><span class="pre">qpm_order</span></code>, none of which depend on wavelength, so a poled section keeps its exact grating while its phase mismatch moves with the interpolated propagation constants.</p>
+<p>Requires a chain with a declared <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section (see <code class="docutils literal notranslate"><span class="pre">nonlinear</span></code> on <a class="reference internal" href="#straight_section" title="straight_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">straight_section</span></code></a>/<a class="reference internal" href="#taper_section" title="taper_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">taper_section</span></code></a>) and a declared pump (<code class="docutils literal notranslate"><span class="pre">excitation</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>list</em><em> or </em><em>array</em>) – pump wavelengths [nm] to report at; the signal wavelength follows the declared process</p></li>
+<li><p><strong>section</strong> (<em>str</em>) – which nonlinear section to scan, default: the only one declared</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – the largest mode-list change tolerated between adjacent solves, default: 1e-3</p></li>
+<li><p><strong>minimum_step</strong> (<em>float</em>) – [nm] the smallest wavelength gap the sampler will bisect into, default: the output spacing, since resolving finer than you asked to see cannot change the reported curve</p></li>
+<li><p><strong>initial_points</strong> (<em>int</em>) – solves to place before any bisection, default: 5</p></li>
+<li><p><strong>power</strong> (<em>float</em>) – [W] pump power, default: the declared excitation’s</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a dictionary with <code class="docutils literal notranslate"><span class="pre">values</span></code>, <code class="docutils literal notranslate"><span class="pre">conversion</span></code> (signal out over pump in), <code class="docutils literal notranslate"><span class="pre">solved_wavelengths</span></code> (where the solver actually ran), and <code class="docutils literal notranslate"><span class="pre">unconverged</span></code> – the intervals, if any, the sampler could not resolve to <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> before reaching <code class="docutils literal notranslate"><span class="pre">minimum_step</span></code>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="free_space_field">
+<span class="sig-name descname"><span class="pre">free_space_field</span></span></dt>
+<dd><p>Declare, or update, a free-space field: a Gaussian beam launched into a port of the chain. This is an <em>excitation</em>, not a section – it does not appear in the scattering matrix or in the layout.</p>
+<p>After <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>, <code class="docutils literal notranslate"><span class="pre">plot(excitation=name)</span></code> (or the plot window’s Mode menu, <code class="docutils literal notranslate"><span class="pre">'&lt;name&gt;</span> <span class="pre">(free</span> <span class="pre">space)'</span></code>) renders the field the beam launches, projected onto the target port’s modes with the same pairing the junctions use. Re-declaring an existing <code class="docutils literal notranslate"><span class="pre">name</span></code> updates only the arguments you give.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – free-space field name, default: the next number</p></li>
+<li><p><strong>port</strong> (<em>str</em>) – the external port the beam enters, either a bare side <code class="docutils literal notranslate"><span class="pre">'left'</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">'right'</span></code>, or a qualified <code class="docutils literal notranslate"><span class="pre">'&lt;section&gt;.&lt;port&gt;'</span></code> name. The beam travels inbound from that port.</p></li>
+<li><p><strong>waist</strong> (<em>float</em>) – [nm] the 1/e field radius <span class="math notranslate nohighlight">\(w\)</span> in <span class="math notranslate nohighlight">\(\exp(-r^2/w^2)\)</span>; required when declaring a new field</p></li>
+<li><p><strong>center</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] beam centre <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> in the port’s cross-section coordinates, default: (0, 0)</p></li>
+<li><p><strong>tilt</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [degrees] <code class="docutils literal notranslate"><span class="pre">(theta_x,</span> <span class="pre">theta_y)</span></code>; a positive <code class="docutils literal notranslate"><span class="pre">theta_x</span></code> steers the beam toward +x. This is the angle <strong>inside the medium the beam travels through</strong>, default: (0, 0)</p></li>
+<li><p><strong>component</strong> (<em>str</em>) – the one transverse E component the beam carries, <code class="docutils literal notranslate"><span class="pre">'Ex'</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">'Ey'</span></code></p></li>
+<li><p><strong>amplitude</strong> (<em>float</em>) – peak field value, default: 1</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm], default: None (each port’s own wavelength)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="free_space_field_diagnostics">
+<span class="sig-name descname"><span class="pre">free_space_field_diagnostics</span></span></dt>
+<dd><p>How much of a declared free-space field’s power the target port’s modal basis actually captures, after <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> has solved the chain. The solver already warns when this falls below 90%; this returns it as a value a script can check or plot instead of parsing a log line.</p>
+<p>A low captured fraction means the port’s modes cannot represent the beam – raise that section’s <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>, or widen its window, before trusting a coupling number computed from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – the free-space field to diagnose</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm] which of a multi-wavelength chain’s ports to diagnose, default: None (the lowest wavelength present)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a <code class="docutils literal notranslate"><span class="pre">FreeSpaceProjection</span></code> with <code class="docutils literal notranslate"><span class="pre">captured_fraction</span></code>, its complement <code class="docutils literal notranslate"><span class="pre">dropped_fraction</span></code>, the resolved <code class="docutils literal notranslate"><span class="pre">port</span></code> and <code class="docutils literal notranslate"><span class="pre">wavelength</span></code>, and the launch basis’s <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
@@ -571,7 +650,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gds_section"><code class="docutils literal notranslate"><span class="pre">gds_section</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#copy_section"><code class="docutils literal notranslate"><span class="pre">copy_section</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connect_ports"><code class="docutils literal notranslate"><span class="pre">connect_ports</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#JunctionOverride"><code class="docutils literal notranslate"><span class="pre">JunctionOverride</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#EME"><code class="docutils literal notranslate"><span class="pre">EME</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chi2_spectrum"><code class="docutils literal notranslate"><span class="pre">chi2_spectrum</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#free_space_field"><code class="docutils literal notranslate"><span class="pre">free_space_field</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#free_space_field_diagnostics"><code class="docutils literal notranslate"><span class="pre">free_space_field_diagnostics</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot_S_matrix"><code class="docutils literal notranslate"><span class="pre">plot_S_matrix</span></code></a></li>
 </ul>
   </nav></div>

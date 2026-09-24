@@ -1,0 +1,509 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Adaptive Scan</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/Adaptive_Scan';</script>
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="EME: Taper" href="EME_Taper.html" />
+    <link rel="prev" title="Dispersion Sweep" href="Dispersion.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="SOI.html">Basic: SOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SiN.html">Bending: SiN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LNOI.html">Angled: LNOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laser.html">Scattering loss: Laser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Open.html">Open a Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dispersion.html">Dispersion Sweep</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Adaptive Scan</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="EME_Taper.html">EME: Taper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Sweep.html">EME: Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_GDS.html">EME: GDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Angled_Facet.html">EME: Angled Facet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="adaptive-scan">
+<h1>Adaptive Scan</h1>
+<p>Highlighted features: <code class="docutils literal notranslate"><span class="pre">sweep(adaptive=True)</span></code> for a fine wavelength spectrum from a sparse set of solves, and the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> that sets how many.</p>
+<p><em>This code example is licensed under the</em> <a class="reference external" href="../_static/LICENSE.html">BSD 3-Clause License</a>.</p>
+<div class="tabs docutils container" data-tabgroup="">
+<ul class="tabbar">
+<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
+Python</li></ul><div class="tab codetab selected" data-id="0">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="c1">## Adaptive wavelength scanning: report a fine spectrum from a few solves.</span>
+<span class="c1">## The scan places solves only where the mode list is still moving and</span>
+<span class="c1">## interpolates the rest, so the cost follows how fast the modes change rather</span>
+<span class="c1">## than how many points are asked for.</span>
+
+<span class="c1">## Set simulation parameters</span>
+<span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span>  <span class="c1"># [nm] resolution</span>
+<span class="n">w_core</span><span class="p">,</span> <span class="n">h_core</span> <span class="o">=</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">220</span>  <span class="c1"># [nm] Si core</span>
+<span class="n">clearance</span> <span class="o">=</span> <span class="mi">1500</span>  <span class="c1"># [nm] cladding on each side</span>
+<span class="n">num_modes</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># [-] both guided across the band below</span>
+
+<span class="n">wav_lo</span><span class="p">,</span> <span class="n">wav_hi</span> <span class="o">=</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">1600</span>  <span class="c1"># [nm]</span>
+<span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">wav_lo</span><span class="p">,</span> <span class="n">wav_hi</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>  <span class="c1"># [nm] where results are wanted</span>
+
+<span class="c1">## Connect and initialize EMode</span>
+<span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">(</span><span class="n">emode_cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">simulation_name</span><span class="o">=</span><span class="s1">&#39;adaptive_scan&#39;</span><span class="p">)</span>
+
+<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="p">(</span><span class="n">wav_lo</span> <span class="o">+</span> <span class="n">wav_hi</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x_resolution</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y_resolution</span><span class="o">=</span><span class="n">dy</span><span class="p">,</span>
+    <span class="n">window_width</span><span class="o">=</span><span class="n">w_core</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">clearance</span><span class="p">,</span> <span class="n">window_height</span><span class="o">=</span><span class="n">h_core</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">clearance</span><span class="p">,</span>
+    <span class="n">num_modes</span><span class="o">=</span><span class="n">num_modes</span><span class="p">,</span> <span class="n">boundary_condition</span><span class="o">=</span><span class="s1">&#39;SS&#39;</span><span class="p">,</span> <span class="n">background_material</span><span class="o">=</span><span class="s1">&#39;SiO2&#39;</span><span class="p">)</span>
+
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;clad&#39;</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="s1">&#39;SiO2&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">clearance</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">w_core</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">h_core</span><span class="p">)</span>
+
+<span class="c1">## How many solves the scan costs is set by `tolerance`, the largest mode-list</span>
+<span class="c1">## change tolerated between neighbouring solves -- not by the number of points.</span>
+<span class="k">for</span> <span class="n">tolerance</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">5e-4</span><span class="p">):</span>
+    <span class="n">scan</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">sweep</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;wavelength&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">wavelengths</span><span class="p">,</span> <span class="n">adaptive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;effective_index&#39;</span><span class="p">])</span>
+    <span class="n">n_solves</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s1">&#39;solved_wavelengths&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">:</span><span class="s1">.0e</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">n_solves</span><span class="si">:</span><span class="s1">3d</span><span class="si">}</span><span class="s1"> solves for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span><span class="si">}</span><span class="s1"> points&#39;</span>
+          <span class="sa">f</span><span class="s1">&#39;  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">n_solves</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">x fewer)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scan</span><span class="p">[</span><span class="s1">&#39;unconverged&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  unresolved intervals: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s2">&quot;unconverged&quot;</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1">## The last scan above is the one kept. Mark where it actually solved.</span>
+<span class="n">solved</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s1">&#39;solved_wavelengths&#39;</span><span class="p">]))</span>
+<span class="n">n_eff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s1">&#39;effective_index&#39;</span><span class="p">]))</span>
+
+<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mi">1550</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">()</span>
+<span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_modes</span><span class="p">):</span>
+    <span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">],</span> <span class="n">n_eff</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;mode </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="c1">## Bisection places the solves, so they are not generally grid points;</span>
+    <span class="c1">## mark them on the interpolant at the nearest reported wavelength.</span>
+    <span class="n">picked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">],</span> <span class="n">solved</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">][</span><span class="n">picked</span><span class="p">],</span> <span class="n">n_eff</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">picked</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+             <span class="n">color</span><span class="o">=</span><span class="n">line</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Effective index&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Adaptive scan: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">solved</span><span class="p">)</span><span class="si">}</span><span class="s1"> solves, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">scan</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">])</span><span class="si">}</span><span class="s1"> points reported&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;adaptive_scan.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+<span class="c1">## Interpolation between solves is linear, so a scan is for reading values off,</span>
+<span class="c1">## not for differentiating twice: a dispersion curve wants solves at every point.</span>
+</pre></div>
+</div>
+</div></div><p>Console output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Adaptive</span> <span class="n">wavelength</span> <span class="n">scan</span> <span class="n">over</span> <span class="mi">1500</span><span class="o">-</span><span class="mi">1600</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">5.5</span> <span class="n">sec</span>
+<span class="n">Adaptive</span> <span class="n">wavelength</span> <span class="n">scan</span> <span class="n">over</span> <span class="mi">1500</span><span class="o">-</span><span class="mi">1600</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">12.3</span> <span class="n">sec</span>
+<span class="n">Adaptive</span> <span class="n">wavelength</span> <span class="n">scan</span> <span class="n">over</span> <span class="mi">1500</span><span class="o">-</span><span class="mi">1600</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">29.6</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
+<span class="n">Exited</span> <span class="n">EMode</span>
+<span class="n">tolerance</span> <span class="mf">1e-02</span><span class="p">:</span>   <span class="mi">5</span> <span class="n">solves</span> <span class="k">for</span> <span class="mi">201</span> <span class="n">points</span>  <span class="p">(</span><span class="mi">40</span><span class="n">x</span> <span class="n">fewer</span><span class="p">)</span>
+<span class="n">tolerance</span> <span class="mf">1e-03</span><span class="p">:</span>  <span class="mi">12</span> <span class="n">solves</span> <span class="k">for</span> <span class="mi">201</span> <span class="n">points</span>  <span class="p">(</span><span class="mi">17</span><span class="n">x</span> <span class="n">fewer</span><span class="p">)</span>
+<span class="n">tolerance</span> <span class="mf">5e-04</span><span class="p">:</span>  <span class="mi">28</span> <span class="n">solves</span> <span class="k">for</span> <span class="mi">201</span> <span class="n">points</span>  <span class="p">(</span><span class="mi">7</span><span class="n">x</span> <span class="n">fewer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Figures:</p>
+<figure class="align-center" style="width: 500px">
+<img alt="../_images/adaptive_scan.png" src="../_images/adaptive_scan.png" style="width: 400px;" />
+</figure>
+<figure class="align-center" style="width: 500px">
+<img alt="../_images/adaptive_Ex.png" src="../_images/adaptive_Ex.png" style="width: 400px;" />
+</figure>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

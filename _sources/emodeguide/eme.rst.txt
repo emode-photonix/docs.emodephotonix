@@ -2,7 +2,7 @@
 EME
 ---
 
-Every section function below accepts a ``ports`` argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use :data:`connect_ports` to wire named ports explicitly instead, including into branching topologies. See :ref:`ports` for the port model and the ``Port`` and ``Bounds`` classes.
+Every section function below accepts a ``ports`` argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use :data:`connect_ports` to wire named ports explicitly instead, including into branching topologies. See :ref:`ports` for the port model, the ``Port`` and ``Bounds`` classes, and :func:`make_angled_facet_port` for declaring an angled facet on a port.
 
 .. data:: EME_settings
 
@@ -22,13 +22,15 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     Define a uniform-cross-section waveguide section for the EME solver. Sections are placed sequentially in the z-direction in the order they are declared (or updated, if ``name`` already exists).
 
     :param str name: section name, default: an auto-generated number
-    :param str profile: label of the profile that defines the section's cross-section
+    :param str profile: name of the profile that defines the section's cross-section
     :param float length: [nm] the length of the section
     :param offset: [nm] transverse displacement of this section relative to whatever its ports connect to; if only a single value is given it is assumed to be the x-offset, default: (0, 0). **Legacy**: this is the same displacement as :class:`Port`'s own ``offset`` applied to every port of the section at once, and setting both on one section raises an error. Prefer declaring ``offset`` on the specific port that sits off-axis.
     :type offset: float or tuple[float, float]
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
-    :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), default: None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` when updating an existing section leaves the declared process in place, and passing a new one replaces it. A declared process cannot currently be removed -- ``nonlinear=None`` is indistinguishable from omitting the argument -- so redeclare the section under a new name instead. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
+    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or None
+    :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), e.g. ``settings={'overlap_variation': 0.005}``, default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -42,7 +44,7 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param float length: [nm] the length of the section
     :param material: the material filling the section, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object; must be isotropic, default: "Vacuum"
     :type material: str or ~MaterialProperties or ~MaterialSpec
-    :param str profile: label of the profile that supplies the default window and the wavelength(s) of the section, default: '_default'
+    :param str profile: name of the profile that supplies the default window and the wavelength(s) of the section, default: '_default'
     :param window: [nm] the (width, height) of the plane-wave window, which overrides the window of ``profile``, default: None (use the ``window_width`` and ``window_height`` of ``profile``)
     :type window: tuple[float, float] or None
     :param offset: [nm] transverse displacement of the window's origin, which is its horizontal center and bottom edge, default: (0, 0)
@@ -62,11 +64,13 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     Define a section that linearly interpolates its cross-section between two profiles for the EME solver, automatically slicing the z-direction to track the mode evolution.
 
     :param str name: section name, default: an auto-generated number
-    :param str profile: label of the profile that defines the section beginning
-    :param str profile_end: label of the profile that defines the section ending
+    :param str profile: name of the profile that defines the section beginning
+    :param str profile_end: name of the profile that defines the section ending
     :param float length: [nm] the length of the section
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` when updating an existing section leaves the declared process in place, and passing a new one replaces it. A declared process cannot currently be removed -- ``nonlinear=None`` is indistinguishable from omitting the argument -- so redeclare the section under a new name instead. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
+    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or None
     :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
@@ -76,7 +80,7 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     Define a section whose cross-section varies along z according to a mask imported from a GDS file, for more complex geometries defined with third-party layout tools.
 
     :param str name: section name, default: an auto-generated number
-    :param str profile: label of the profile that defines the section's cross-section outside of the GDS mask
+    :param str profile: name of the profile that defines the section's cross-section outside of the GDS mask
     :param str gds_path: path to the GDS file used to mask the section
     :param layer_map: mapping of profile shape names to GDS layer numbers, used to determine which shapes in ``profile`` are masked by which GDS layer
     :type layer_map: dict[str, int]
@@ -104,7 +108,7 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
         :param str name: section name
         :param str transform: either 'coupler' (a two-waveguide directional coupler) or 'parameterized_curve' (a single waveguide with arbitrary bending)
-        :param str profile: label of the profile that defines the waveguide cross-section
+        :param str profile: name of the profile that defines the waveguide cross-section
         :param waveguides: the :class:`~emodeconnection.geometry.Path` centerline(s) of the waveguide(s); 'coupler' requires exactly 2, 'parameterized_curve' requires exactly 1
         :type waveguides: list
         :param float length: [nm] the length of the section
@@ -150,9 +154,20 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
     Connecting two ports also **pins their coordinate systems together**: the two ports' origins (the horizontal centre and bottom edge of each cross-section) are made to coincide, so the connection is what positions one section relative to the other. Use :class:`Port`'s ``offset`` to displace a section off that shared origin, and its ``window`` to choose which part of a wider cross-section the port exposes. The first section you declare defines the global frame that plots are drawn in.
 
-    :param pairs: a list of ``('<section_name>.<port_name>', '<section_name>.<port_name>')`` pairs to connect, e.g. ``[('a.right', 'b.left'), ('c.right', 'd.left')]``. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at :data:`EME` build time.
-    :type pairs: list[tuple[str, str]]
+    :param pairs: a list of ``('<section_name>.<port_name>', '<section_name>.<port_name>')`` pairs to connect, e.g. ``[('a.right', 'b.left'), ('c.right', 'd.left')]``. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at :data:`EME` build time. An entry may carry an optional **third** element, a :class:`JunctionOverride`, configuring the junction that connection forms, e.g. ``[('a.right', 'b.left', JunctionOverride(junction_normalization=False))]``.
+    :type pairs: list[tuple[str, str]] or list[tuple[str, str, JunctionOverride]]
     :param str simulation_name: simulation name, default: 'emode'
+
+.. class:: JunctionOverride
+
+    Settings for a single junction, passed as the optional third element of a :data:`connect_ports` entry. Every parameter left unspecified inherits the value the junction's sections resolved, so setting one does not disturb the others.
+
+    These settings belong to the *connection* rather than to either port because each one describes the interface between the two sections -- which algebra joins their mode sets, how the resulting scattering matrix is normalized -- and not one side of it.
+
+    Only an explicitly connected junction can carry these. A junction formed by the default left/right adjacency has nowhere to declare them, so name that pair in :data:`connect_ports` to configure it, which supersedes the adjacency. The internal junctions of a taper or GDS section's automatic z-slicing are controlled by that section's ``settings`` instead.
+
+    :param junction_normalization: how this junction's scattering matrix is power-normalized -- True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: None (inherit)
+    :type junction_normalization: bool or str or None
 
 .. data:: EME
 
@@ -160,6 +175,57 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
     :param bool warm_start: whether to seed each taper/gds section's automatic z-slice refinement from the previously solved chain (when available), instead of re-refining from scratch, default: False
     :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: chi2_spectrum
+
+    Conversion spectrum of a :math:`\chi^{(2)}` section, solved sparsely in wavelength (EMode\ :sup:`3D`\  only). Returns the signal power out over the pump power in at every wavelength in ``values``.
+
+    A nonlinear spectrum oscillates with the phase mismatch, so it cannot be interpolated -- at any useful resolution it has to be evaluated point by point. What *can* be interpolated is what the coupled-mode equations consume: the coupling and the propagation constants, which vary smoothly with wavelength. So the modes are solved at a handful of wavelengths chosen by how fast the mode list is actually moving, and the response is then evaluated at every requested wavelength from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included.
+
+    Quasi-phase matching is included: the grating enters as a wavevector shift and a Fourier coefficient built from ``poling_period``, ``duty_cycle`` and ``qpm_order``, none of which depend on wavelength, so a poled section keeps its exact grating while its phase mismatch moves with the interpolated propagation constants.
+
+    Requires a chain with a declared :math:`\chi^{(2)}` section (see ``nonlinear`` on :data:`straight_section`/:data:`taper_section`) and a declared pump (``excitation`` in :data:`settings`).
+
+    :param values: pump wavelengths [nm] to report at; the signal wavelength follows the declared process
+    :type values: list or array
+    :param str section: which nonlinear section to scan, default: the only one declared
+    :param float tolerance: the largest mode-list change tolerated between adjacent solves, default: 1e-3
+    :param float minimum_step: [nm] the smallest wavelength gap the sampler will bisect into, default: the output spacing, since resolving finer than you asked to see cannot change the reported curve
+    :param int initial_points: solves to place before any bisection, default: 5
+    :param float power: [W] pump power, default: the declared excitation's
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Returns a dictionary with ``values``, ``conversion`` (signal out over pump in), ``solved_wavelengths`` (where the solver actually ran), and ``unconverged`` -- the intervals, if any, the sampler could not resolve to ``tolerance`` before reaching ``minimum_step``.
+
+.. data:: free_space_field
+
+    Declare, or update, a free-space field: a Gaussian beam launched into a port of the chain. This is an *excitation*, not a section -- it does not appear in the scattering matrix or in the layout.
+
+    After :data:`EME`, ``plot(excitation=name)`` (or the plot window's Mode menu, ``'<name> (free space)'``) renders the field the beam launches, projected onto the target port's modes with the same pairing the junctions use. Re-declaring an existing ``name`` updates only the arguments you give.
+
+    :param str name: free-space field name, default: the next number
+    :param str port: the external port the beam enters, either a bare side ``'left'`` (default) or ``'right'``, or a qualified ``'<section>.<port>'`` name. The beam travels inbound from that port.
+    :param float waist: [nm] the 1/e field radius :math:`w` in :math:`\exp(-r^2/w^2)`; required when declaring a new field
+    :param center: [nm] beam centre ``(x, y)`` in the port's cross-section coordinates, default: (0, 0)
+    :type center: tuple[float, float]
+    :param tilt: [degrees] ``(theta_x, theta_y)``; a positive ``theta_x`` steers the beam toward +x. This is the angle **inside the medium the beam travels through**, default: (0, 0)
+    :type tilt: tuple[float, float]
+    :param str component: the one transverse E component the beam carries, ``'Ex'`` (default) or ``'Ey'``
+    :param float amplitude: peak field value, default: 1
+    :param float wavelength: [nm], default: None (each port's own wavelength)
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: free_space_field_diagnostics
+
+    How much of a declared free-space field's power the target port's modal basis actually captures, after :data:`EME` has solved the chain. The solver already warns when this falls below 90%; this returns it as a value a script can check or plot instead of parsing a log line.
+
+    A low captured fraction means the port's modes cannot represent the beam -- raise that section's ``num_modes``, or widen its window, before trusting a coupling number computed from it.
+
+    :param str name: the free-space field to diagnose
+    :param float wavelength: [nm] which of a multi-wavelength chain's ports to diagnose, default: None (the lowest wavelength present)
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Returns a ``FreeSpaceProjection`` with ``captured_fraction``, its complement ``dropped_fraction``, the resolved ``port`` and ``wavelength``, and the launch basis's ``num_modes``.
 
 .. data:: plot_S_matrix
 

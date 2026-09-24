@@ -14,7 +14,7 @@ Multi-Physics
 
         Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 500), which is used to refine the triangular mesh within certain shapes.
 
-        Each material in the EMode material database now has ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), and ``dn_dT`` (1/K).
+        Every material carries ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), ``dn_dT`` (1/K), and ``eps_r_dc``; the defaults are ``1e-10``, infinity, ``0``, and ``1.0`` where no reliable published value has been entered. See the :doc:`Material Database </emodeguide/materials>` page for values and sources.
 
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param float boundary_temperature: Fixed temperature boundary condition in 'K' set along each perimeter indicated by ``boundaries``. Default: 298.
@@ -37,7 +37,9 @@ Multi-Physics
 
         Each material in the EMode material database now has ``eps_r_dc`` (relative permittivity at ~1 kHz).
 
+        The DC field derived here perturbs the permittivity through each material's linear electro-optic (Pockels) tensor ``r`` (``get('<material>')['r']``, m/V): :math:`\Delta(1/n^2)_{ij} = \sum_k r_{ijk} E_k`, then :math:`\Delta\varepsilon = -\varepsilon \cdot \Delta(1/n^2) \cdot \varepsilon`. ``FDM()`` applies this automatically on the next solve (``include_static=False`` to skip it), the same way ``heat()``'s temperature field perturbs the permittivity through ``dn_dT``.
+
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param bool verbose: Control the display of the progress bar. Default: True.
     :param str simulation_name: Simulation name. Default: 'emode'.
-    :return: A dictionary/struct with the mesh points (``p``), mesh triangles (``t``), ``voltage``, and ``eps_dc_grid``.
+    :return: A dictionary/struct with the mesh points (``p``), mesh triangles (``t``), ``voltage``, ``eps_dc_grid``, the per-element electric field (``Ex``, ``Ey``, in V/nm), and ``centroids`` (element centers, in the optical window's frame).

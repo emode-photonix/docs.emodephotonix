@@ -213,11 +213,12 @@ Descriptions of all materials available in built-in material database. This info
 
 .. data:: Pt
 
-    .. math:: n = 4.0
+    .. math:: n = 5.3531 + 7.053i
 
-    Wavelength range: 0.0001 nm to 100000 nm
+    Wavelength range: 1000 nm to 2000 nm
 
-        | Notes: no published refractive index reference; treated as a constant. Included primarily for its ``thermal_conductivity`` and ``resistivity`` values for FEM heat/electrostatic simulations of metal electrodes.
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
 
 .. data:: Si
     
@@ -297,3 +298,435 @@ Descriptions of all materials available in built-in material database. This info
         n = 1.0
     
     Wavelength range: 0.0001 nm to 100000 nm
+
+.. data:: Au
+
+    .. math:: n = 0.5747 + 9.664i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Al
+
+    .. math:: n = 1.5355 + 15.331i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Cu
+
+    .. math:: n = 0.4697 + 10.453i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Ti
+
+    .. math:: n = 3.8245 + 4.417i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: W
+
+    .. math:: n = 2.3733 + 4.815i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Cr
+
+    .. math:: n = 4.2722 + 4.925i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: TiN
+
+    .. math:: n = 3.230 + 5.259i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | E. Shkondin et al., Opt. Mater. Express 7, 4171 (2017).
+        | Notes: 105 nm sputtered TiN at 1550 nm; strongly process-dependent, constant near 1550 nm only.
+
+.. data:: NiCr
+
+    .. math:: n = 3.4418 + 6.754i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | Notes: no published optical constants for NiCr (nichrome); Ni from A. D. Rakic et al., Appl. Opt. 37, 5271 (1998) used as a proxy. Heater/electrode use only; constant near 1550 nm only.
+
+.. data:: GaN
+
+    .. math::
+
+        n_\mathrm{o} &= \left( 1 + \frac{0.298 \lambda^2}{\lambda^2 - 0.3420^2} + \frac{3.909 \lambda^2}{\lambda^2 - 0.1446^2} \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 1 + \frac{0.0117 \lambda^2}{\lambda^2 - 0.4225^2} + \frac{4.437 \lambda^2}{\lambda^2 - 0.1770^2} \right)^{0.5}
+
+    Wavelength range: 458 nm to 1550 nm
+
+        | S. Pezzagna, J. Brault, M. Leroux, J. Massies, and M. de Micheli, "Refractive indices and elasto-optic coefficients of GaN studied by optical waveguiding," J. Appl. Phys. 103, 123112 (2008).
+        | Notes: wurtzite GaN, c-axis on z (n_e).
+
+.. data:: LiTaO3
+
+    .. math::
+
+        n_\mathrm{o} &= \left( 4.51224 + \frac{0.0847522}{\lambda^2 - 0.19876^2} - 0.0239046 \lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 4.52999 + \frac{0.0844313}{\lambda^2 - 0.20344^2} - 0.0237909 \lambda^2 \right)^{0.5}
+
+    Wavelength range: 400 nm to 4000 nm
+
+        | K. S. Abedin and H. Ito, "Temperature-dependent dispersion relation of ferroelectric lithium tantalate," J. Appl. Phys. 80, 6561 (1996).
+        | Notes: congruent LiTaO3 at room temperature; n_e is the z-direction.
+
+.. data:: ZnSe
+
+    .. math::
+
+        n = \left( 1 + \frac{4.45813734 \lambda^2}{\lambda^2 - 0.200859853^2} + \frac{0.467216334 \lambda^2}{\lambda^2 - 0.391371166^2} + \frac{2.89566290 \lambda^2}{\lambda^2 - 47.1362108^2} \right)^{0.5}
+
+    Wavelength range: 540 nm to 18200 nm
+
+        | J. Connolly, B. diBenedetto, and R. Donadio, "Specifications of Raytran material," Proc. SPIE 181, 141 (1979); Sellmeier fit by B. Tatian, Appl. Opt. 23, 4477 (1984).
+        | Notes: CVD ZnSe at 23 C.
+
+Non-optical and nonlinear properties
+-------------------------------------
+
+Every material carries these scalar properties, read back with ``get('<material>')`` and
+used by ``heat()``, ``electrostatic()``, and the chi(2) EME. Uniaxial crystals store the
+optic-axis (extraordinary) value of ``dn_dT`` and ``eps_r_dc``. ``d`` (chi(2)) and ``r``
+(the linear electro-optic, or Pockels, tensor) are both contracted coefficients in the
+crystal frame (pm/V); only the nonzero independent coefficients are listed, and ``--``
+means all zero (or, for ``r``, not applicable -- a material with no ``r`` method). A
+thermal conductivity of ``1e-10``, a ``dn_dT`` of ``0``, or a resistivity of ``inf`` is
+the database default, used where no reliable published value exists. Every non-default
+value has a citation in the material's ``property_refs`` dict
+(``get('<material>')['property_refs']``); consult the source code in ``EMP_materials.py``
+for the full citation text.
+
+Not available (default values used): ``dn_dT`` for HfO2, TiO2, TiO2_rutile, GaP, GaSb,
+InAs, InSb, InGaAs, InGaP, AlGaAs, and GGG; ``d`` for InP. ``r`` is currently only entered
+for LN, LN_MgO, GaAs, InP, AlN, and GaN -- the materials the electrostatic phase-shifter
+example uses; every other material's ``r`` is the base-class zero tensor.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 11 9 9 8 10 22 22
+
+   * - Material
+     - k [W/m*K]
+     - dn/dT [1/K]
+     - eps_r_dc
+     - rho [Ohm*nm]
+     - d [pm/V]
+     - r [pm/V]
+   * - Air
+     - 0.0262
+     - -9e-07
+     - 1.00059
+     - inf
+     - --
+     - --
+   * - Al
+     - 237
+     - 0
+     - 1
+     - 26.5
+     - --
+     - --
+   * - Al2O3
+     - 27.2
+     - 1.31e-05
+     - 9.4
+     - inf
+     - --
+     - --
+   * - AlGaAs
+     - 55
+     - 0
+     - 12.9
+     - inf
+     - d14 = 100, d25 = 100, d36 = 100
+     - --
+   * - AlN
+     - 285
+     - 2.3e-05
+     - 9.14
+     - inf
+     - d15 = -0.1, d24 = -0.1, d31 = -0.1, d32 = -0.1, d33 = 4.3
+     - r13 = 0.11, r23 = 0.11, r33 = 1.16
+   * - Au
+     - 317
+     - 0
+     - 1
+     - 22.14
+     - --
+     - --
+   * - BBO
+     - 1.6
+     - -9.3e-06
+     - 8.1
+     - inf
+     - d15 = 0.04, d16 = -2.2, d21 = -2.2, d22 = 2.2, d24 = 0.04, d31 = 0.04, d32 = 0.04, d33 = 0.04
+     - --
+   * - Cr
+     - 93.9
+     - 0
+     - 1
+     - 126
+     - --
+     - --
+   * - Cu
+     - 401
+     - 0
+     - 1
+     - 16.78
+     - --
+     - --
+   * - GGG
+     - 7.4
+     - 0
+     - 12.11
+     - inf
+     - --
+     - --
+   * - GaAs
+     - 55
+     - 0.000267
+     - 12.9
+     - inf
+     - d14 = 170, d25 = 170, d36 = 170
+     - r41 = -1.5, r52 = -1.5, r63 = -1.5
+   * - GaN
+     - 130
+     - 4.9e-05
+     - 8.9
+     - inf
+     - d15 = 5, d24 = 5, d31 = 5, d32 = 5, d33 = -10
+     - r13 = 0.57, r23 = 0.57, r33 = 1.91
+   * - GaP
+     - 110
+     - 0
+     - 11.1
+     - inf
+     - d14 = 36.9, d25 = 36.9, d36 = 36.9
+     - --
+   * - GaSb
+     - 32
+     - 0
+     - 15.7
+     - inf
+     - --
+     - --
+   * - Ge
+     - 58
+     - 0.0004
+     - 16.2
+     - inf
+     - --
+     - --
+   * - H2O
+     - 0.606
+     - -0.0001
+     - 78.4
+     - inf
+     - --
+     - --
+   * - HfO2
+     - 1.1
+     - 0
+     - 25
+     - inf
+     - --
+     - --
+   * - InAs
+     - 27
+     - 0
+     - 15.15
+     - inf
+     - --
+     - --
+   * - InGaAs
+     - 55
+     - 0
+     - 12.9
+     - inf
+     - --
+     - --
+   * - InGaP
+     - 5.3
+     - 0
+     - 11.8
+     - inf
+     - d14 = 110, d25 = 110, d36 = 110
+     - --
+   * - InP
+     - 68
+     - 0.0002
+     - 12.5
+     - inf
+     - --
+     - r41 = -1.5, r52 = -1.5, r63 = -1.5
+   * - InSb
+     - 18
+     - 0
+     - 16.8
+     - inf
+     - --
+     - --
+   * - LN
+     - 4.6
+     - 3.3e-05
+     - 30
+     - inf
+     - d15 = 4.6, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.6, d31 = 4.6, d32 = 4.6, d33 = 25.2
+     - r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8
+   * - LN_MgO
+     - 4.63
+     - 3.3e-05
+     - 30
+     - inf
+     - d15 = 4.4, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.4, d31 = 4.4, d32 = 4.4, d33 = 25
+     - r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8
+   * - LiTaO3
+     - 4.6
+     - 3.9e-05
+     - 43
+     - inf
+     - d33 = 13.8
+     - --
+   * - NiCr
+     - 11.3
+     - 0
+     - 1
+     - 1080
+     - --
+     - --
+   * - PMMA_495
+     - 1e-10
+     - 0
+     - 1
+     - inf
+     - --
+     - --
+   * - PMMA_950
+     - 1e-10
+     - 0
+     - 1
+     - inf
+     - --
+     - --
+   * - Pt
+     - 71.6
+     - 0
+     - 1
+     - 105
+     - --
+     - --
+   * - SU8_2000
+     - 0.2
+     - -0.00011
+     - 3.28
+     - inf
+     - --
+     - --
+   * - SU8_3000
+     - 0.2
+     - -0.00011
+     - 3.28
+     - inf
+     - --
+     - --
+   * - Si
+     - 149
+     - 0.000186
+     - 11.68
+     - inf
+     - --
+     - --
+   * - SiN
+     - 30
+     - 2.45e-05
+     - 7
+     - inf
+     - --
+     - --
+   * - SiO2
+     - 1.38
+     - 8.7e-06
+     - 3.9
+     - inf
+     - --
+     - --
+   * - Ta2O5
+     - 0.8
+     - 6.8e-06
+     - 22
+     - inf
+     - --
+     - --
+   * - Ti
+     - 21.9
+     - 0
+     - 1
+     - 420
+     - --
+     - --
+   * - TiN
+     - 12
+     - 0
+     - 1
+     - 250
+     - --
+     - --
+   * - TiO2
+     - 8.7
+     - 0
+     - 86
+     - inf
+     - --
+     - --
+   * - TiO2_rutile
+     - 12.5
+     - 0
+     - 170
+     - inf
+     - --
+     - --
+   * - Vacuum
+     - 1e-10
+     - 0
+     - 1
+     - inf
+     - --
+     - --
+   * - W
+     - 174
+     - 0
+     - 1
+     - 52.8
+     - --
+     - --
+   * - ZnSe
+     - 18
+     - 6.1e-05
+     - 9.1
+     - inf
+     - d14 = 30, d25 = 30, d36 = 30
+     - --

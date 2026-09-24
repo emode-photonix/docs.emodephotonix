@@ -323,6 +323,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Material Database</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
@@ -664,11 +665,12 @@ n_\mathrm{e} &amp;= \left( 1 + \frac{2.9804}{1 - (0.02047/ \lambda)^2} + \frac{0
 <dt class="sig sig-object py" id="Pt">
 <span class="sig-name descname"><span class="pre">Pt</span></span></dt>
 <dd><div class="math notranslate nohighlight">
-\[n = 4.0\]</div>
-<p>Wavelength range: 0.0001 nm to 100000 nm</p>
+\[n = 5.3531 + 7.053i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
 <blockquote>
 <div><div class="line-block">
-<div class="line">Notes: no published refractive index reference; treated as a constant. Included primarily for its <code class="docutils literal notranslate"><span class="pre">thermal_conductivity</span></code> and <code class="docutils literal notranslate"><span class="pre">resistivity</span></code> values for FEM heat/electrostatic simulations of metal electrodes.</div>
+<div class="line">A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, “Optical properties of metallic films for vertical-cavity optoelectronic devices,” Appl. Opt. 37, 5271 (1998).</div>
+<div class="line">Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.</div>
 </div>
 </div></blockquote>
 </dd></dl>
@@ -790,6 +792,539 @@ n_\mathrm{e} &amp;= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10
 <p>Wavelength range: 0.0001 nm to 100000 nm</p>
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="Au">
+<span class="sig-name descname"><span class="pre">Au</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 0.5747 + 9.664i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, “Optical properties of metallic films for vertical-cavity optoelectronic devices,” Appl. Opt. 37, 5271 (1998).</div>
+<div class="line">Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="Al">
+<span class="sig-name descname"><span class="pre">Al</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 1.5355 + 15.331i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, “Optical properties of metallic films for vertical-cavity optoelectronic devices,” Appl. Opt. 37, 5271 (1998).</div>
+<div class="line">Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="Cu">
+<span class="sig-name descname"><span class="pre">Cu</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 0.4697 + 10.453i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, “Optical properties of metallic films for vertical-cavity optoelectronic devices,” Appl. Opt. 37, 5271 (1998).</div>
+<div class="line">Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="Ti">
+<span class="sig-name descname"><span class="pre">Ti</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 3.8245 + 4.417i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, “Optical properties of metallic films for vertical-cavity optoelectronic devices,” Appl. Opt. 37, 5271 (1998).</div>
+<div class="line">Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="W">
+<span class="sig-name descname"><span class="pre">W</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 2.3733 + 4.815i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, “Optical properties of metallic films for vertical-cavity optoelectronic devices,” Appl. Opt. 37, 5271 (1998).</div>
+<div class="line">Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="Cr">
+<span class="sig-name descname"><span class="pre">Cr</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 4.2722 + 4.925i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, “Optical properties of metallic films for vertical-cavity optoelectronic devices,” Appl. Opt. 37, 5271 (1998).</div>
+<div class="line">Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="TiN">
+<span class="sig-name descname"><span class="pre">TiN</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 3.230 + 5.259i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">E. Shkondin et al., Opt. Mater. Express 7, 4171 (2017).</div>
+<div class="line">Notes: 105 nm sputtered TiN at 1550 nm; strongly process-dependent, constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="NiCr">
+<span class="sig-name descname"><span class="pre">NiCr</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = 3.4418 + 6.754i\]</div>
+<p>Wavelength range: 1000 nm to 2000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Notes: no published optical constants for NiCr (nichrome); Ni from A. D. Rakic et al., Appl. Opt. 37, 5271 (1998) used as a proxy. Heater/electrode use only; constant near 1550 nm only.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="GaN">
+<span class="sig-name descname"><span class="pre">GaN</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[\begin{split}n_\mathrm{o} &amp;= \left( 1 + \frac{0.298 \lambda^2}{\lambda^2 - 0.3420^2} + \frac{3.909 \lambda^2}{\lambda^2 - 0.1446^2} \right)^{0.5} \\
+n_\mathrm{e} &amp;= \left( 1 + \frac{0.0117 \lambda^2}{\lambda^2 - 0.4225^2} + \frac{4.437 \lambda^2}{\lambda^2 - 0.1770^2} \right)^{0.5}\end{split}\]</div>
+<p>Wavelength range: 458 nm to 1550 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">S. Pezzagna, J. Brault, M. Leroux, J. Massies, and M. de Micheli, “Refractive indices and elasto-optic coefficients of GaN studied by optical waveguiding,” J. Appl. Phys. 103, 123112 (2008).</div>
+<div class="line">Notes: wurtzite GaN, c-axis on z (n_e).</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="LiTaO3">
+<span class="sig-name descname"><span class="pre">LiTaO3</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[\begin{split}n_\mathrm{o} &amp;= \left( 4.51224 + \frac{0.0847522}{\lambda^2 - 0.19876^2} - 0.0239046 \lambda^2 \right)^{0.5} \\
+n_\mathrm{e} &amp;= \left( 4.52999 + \frac{0.0844313}{\lambda^2 - 0.20344^2} - 0.0237909 \lambda^2 \right)^{0.5}\end{split}\]</div>
+<p>Wavelength range: 400 nm to 4000 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">K. S. Abedin and H. Ito, “Temperature-dependent dispersion relation of ferroelectric lithium tantalate,” J. Appl. Phys. 80, 6561 (1996).</div>
+<div class="line">Notes: congruent LiTaO3 at room temperature; n_e is the z-direction.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ZnSe">
+<span class="sig-name descname"><span class="pre">ZnSe</span></span></dt>
+<dd><div class="math notranslate nohighlight">
+\[n = \left( 1 + \frac{4.45813734 \lambda^2}{\lambda^2 - 0.200859853^2} + \frac{0.467216334 \lambda^2}{\lambda^2 - 0.391371166^2} + \frac{2.89566290 \lambda^2}{\lambda^2 - 47.1362108^2} \right)^{0.5}\]</div>
+<p>Wavelength range: 540 nm to 18200 nm</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">J. Connolly, B. diBenedetto, and R. Donadio, “Specifications of Raytran material,” Proc. SPIE 181, 141 (1979); Sellmeier fit by B. Tatian, Appl. Opt. 23, 4477 (1984).</div>
+<div class="line">Notes: CVD ZnSe at 23 C.</div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="non-optical-and-nonlinear-properties">
+<h1>Non-optical and nonlinear properties</h1>
+<p>Every material carries these scalar properties, read back with <code class="docutils literal notranslate"><span class="pre">get('&lt;material&gt;')</span></code> and
+used by <code class="docutils literal notranslate"><span class="pre">heat()</span></code>, <code class="docutils literal notranslate"><span class="pre">electrostatic()</span></code>, and the chi(2) EME. Uniaxial crystals store the
+optic-axis (extraordinary) value of <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> and <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code>. <code class="docutils literal notranslate"><span class="pre">d</span></code> (chi(2)) and <code class="docutils literal notranslate"><span class="pre">r</span></code>
+(the linear electro-optic, or Pockels, tensor) are both contracted coefficients in the
+crystal frame (pm/V); only the nonzero independent coefficients are listed, and <code class="docutils literal notranslate"><span class="pre">--</span></code>
+means all zero (or, for <code class="docutils literal notranslate"><span class="pre">r</span></code>, not applicable – a material with no <code class="docutils literal notranslate"><span class="pre">r</span></code> method). A
+thermal conductivity of <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>, a <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> of <code class="docutils literal notranslate"><span class="pre">0</span></code>, or a resistivity of <code class="docutils literal notranslate"><span class="pre">inf</span></code> is
+the database default, used where no reliable published value exists. Every non-default
+value has a citation in the material’s <code class="docutils literal notranslate"><span class="pre">property_refs</span></code> dict
+(<code class="docutils literal notranslate"><span class="pre">get('&lt;material&gt;')['property_refs']</span></code>); consult the source code in <code class="docutils literal notranslate"><span class="pre">EMP_materials.py</span></code>
+for the full citation text.</p>
+<p>Not available (default values used): <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> for HfO2, TiO2, TiO2_rutile, GaP, GaSb,
+InAs, InSb, InGaAs, InGaP, AlGaAs, and GGG; <code class="docutils literal notranslate"><span class="pre">d</span></code> for InP. <code class="docutils literal notranslate"><span class="pre">r</span></code> is currently only entered
+for LN, LN_MgO, GaAs, InP, AlN, and GaN – the materials the electrostatic phase-shifter
+example uses; every other material’s <code class="docutils literal notranslate"><span class="pre">r</span></code> is the base-class zero tensor.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 12.1%" />
+<col style="width: 9.9%" />
+<col style="width: 9.9%" />
+<col style="width: 8.8%" />
+<col style="width: 11.0%" />
+<col style="width: 24.2%" />
+<col style="width: 24.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Material</p></th>
+<th class="head"><p>k [W/m*K]</p></th>
+<th class="head"><p>dn/dT [1/K]</p></th>
+<th class="head"><p>eps_r_dc</p></th>
+<th class="head"><p>rho [Ohm*nm]</p></th>
+<th class="head"><p>d [pm/V]</p></th>
+<th class="head"><p>r [pm/V]</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Air</p></td>
+<td><p>0.0262</p></td>
+<td><p>-9e-07</p></td>
+<td><p>1.00059</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>Al</p></td>
+<td><p>237</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>26.5</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>Al2O3</p></td>
+<td><p>27.2</p></td>
+<td><p>1.31e-05</p></td>
+<td><p>9.4</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>AlGaAs</p></td>
+<td><p>55</p></td>
+<td><p>0</p></td>
+<td><p>12.9</p></td>
+<td><p>inf</p></td>
+<td><p>d14 = 100, d25 = 100, d36 = 100</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>AlN</p></td>
+<td><p>285</p></td>
+<td><p>2.3e-05</p></td>
+<td><p>9.14</p></td>
+<td><p>inf</p></td>
+<td><p>d15 = -0.1, d24 = -0.1, d31 = -0.1, d32 = -0.1, d33 = 4.3</p></td>
+<td><p>r13 = 0.11, r23 = 0.11, r33 = 1.16</p></td>
+</tr>
+<tr class="row-odd"><td><p>Au</p></td>
+<td><p>317</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>22.14</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>BBO</p></td>
+<td><p>1.6</p></td>
+<td><p>-9.3e-06</p></td>
+<td><p>8.1</p></td>
+<td><p>inf</p></td>
+<td><p>d15 = 0.04, d16 = -2.2, d21 = -2.2, d22 = 2.2, d24 = 0.04, d31 = 0.04, d32 = 0.04, d33 = 0.04</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cr</p></td>
+<td><p>93.9</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>126</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>Cu</p></td>
+<td><p>401</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>16.78</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>GGG</p></td>
+<td><p>7.4</p></td>
+<td><p>0</p></td>
+<td><p>12.11</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>GaAs</p></td>
+<td><p>55</p></td>
+<td><p>0.000267</p></td>
+<td><p>12.9</p></td>
+<td><p>inf</p></td>
+<td><p>d14 = 170, d25 = 170, d36 = 170</p></td>
+<td><p>r41 = -1.5, r52 = -1.5, r63 = -1.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>GaN</p></td>
+<td><p>130</p></td>
+<td><p>4.9e-05</p></td>
+<td><p>8.9</p></td>
+<td><p>inf</p></td>
+<td><p>d15 = 5, d24 = 5, d31 = 5, d32 = 5, d33 = -10</p></td>
+<td><p>r13 = 0.57, r23 = 0.57, r33 = 1.91</p></td>
+</tr>
+<tr class="row-even"><td><p>GaP</p></td>
+<td><p>110</p></td>
+<td><p>0</p></td>
+<td><p>11.1</p></td>
+<td><p>inf</p></td>
+<td><p>d14 = 36.9, d25 = 36.9, d36 = 36.9</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>GaSb</p></td>
+<td><p>32</p></td>
+<td><p>0</p></td>
+<td><p>15.7</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>Ge</p></td>
+<td><p>58</p></td>
+<td><p>0.0004</p></td>
+<td><p>16.2</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>H2O</p></td>
+<td><p>0.606</p></td>
+<td><p>-0.0001</p></td>
+<td><p>78.4</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>HfO2</p></td>
+<td><p>1.1</p></td>
+<td><p>0</p></td>
+<td><p>25</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>InAs</p></td>
+<td><p>27</p></td>
+<td><p>0</p></td>
+<td><p>15.15</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>InGaAs</p></td>
+<td><p>55</p></td>
+<td><p>0</p></td>
+<td><p>12.9</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>InGaP</p></td>
+<td><p>5.3</p></td>
+<td><p>0</p></td>
+<td><p>11.8</p></td>
+<td><p>inf</p></td>
+<td><p>d14 = 110, d25 = 110, d36 = 110</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>InP</p></td>
+<td><p>68</p></td>
+<td><p>0.0002</p></td>
+<td><p>12.5</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>r41 = -1.5, r52 = -1.5, r63 = -1.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>InSb</p></td>
+<td><p>18</p></td>
+<td><p>0</p></td>
+<td><p>16.8</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>LN</p></td>
+<td><p>4.6</p></td>
+<td><p>3.3e-05</p></td>
+<td><p>30</p></td>
+<td><p>inf</p></td>
+<td><p>d15 = 4.6, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.6, d31 = 4.6, d32 = 4.6, d33 = 25.2</p></td>
+<td><p>r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8</p></td>
+</tr>
+<tr class="row-odd"><td><p>LN_MgO</p></td>
+<td><p>4.63</p></td>
+<td><p>3.3e-05</p></td>
+<td><p>30</p></td>
+<td><p>inf</p></td>
+<td><p>d15 = 4.4, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.4, d31 = 4.4, d32 = 4.4, d33 = 25</p></td>
+<td><p>r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8</p></td>
+</tr>
+<tr class="row-even"><td><p>LiTaO3</p></td>
+<td><p>4.6</p></td>
+<td><p>3.9e-05</p></td>
+<td><p>43</p></td>
+<td><p>inf</p></td>
+<td><p>d33 = 13.8</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>NiCr</p></td>
+<td><p>11.3</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>1080</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>PMMA_495</p></td>
+<td><p>1e-10</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>PMMA_950</p></td>
+<td><p>1e-10</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>Pt</p></td>
+<td><p>71.6</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>105</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>SU8_2000</p></td>
+<td><p>0.2</p></td>
+<td><p>-0.00011</p></td>
+<td><p>3.28</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>SU8_3000</p></td>
+<td><p>0.2</p></td>
+<td><p>-0.00011</p></td>
+<td><p>3.28</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>Si</p></td>
+<td><p>149</p></td>
+<td><p>0.000186</p></td>
+<td><p>11.68</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>SiN</p></td>
+<td><p>30</p></td>
+<td><p>2.45e-05</p></td>
+<td><p>7</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>SiO2</p></td>
+<td><p>1.38</p></td>
+<td><p>8.7e-06</p></td>
+<td><p>3.9</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>Ta2O5</p></td>
+<td><p>0.8</p></td>
+<td><p>6.8e-06</p></td>
+<td><p>22</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ti</p></td>
+<td><p>21.9</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>420</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>TiN</p></td>
+<td><p>12</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>250</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>TiO2</p></td>
+<td><p>8.7</p></td>
+<td><p>0</p></td>
+<td><p>86</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>TiO2_rutile</p></td>
+<td><p>12.5</p></td>
+<td><p>0</p></td>
+<td><p>170</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vacuum</p></td>
+<td><p>1e-10</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>inf</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>W</p></td>
+<td><p>174</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>52.8</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZnSe</p></td>
+<td><p>18</p></td>
+<td><p>6.1e-05</p></td>
+<td><p>9.1</p></td>
+<td><p>inf</p></td>
+<td><p>d14 = 30, d25 = 30, d36 = 30</p></td>
+<td><p>–</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 
 
@@ -815,6 +1350,7 @@ n_\mathrm{e} &amp;= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Material Database</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Air"><code class="docutils literal notranslate"><span class="pre">Air</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#AlGaAs"><code class="docutils literal notranslate"><span class="pre">AlGaAs</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#AlN"><code class="docutils literal notranslate"><span class="pre">AlN</span></code></a></li>
@@ -846,7 +1382,22 @@ n_\mathrm{e} &amp;= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TiO2"><code class="docutils literal notranslate"><span class="pre">TiO2</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TiO2_rutile"><code class="docutils literal notranslate"><span class="pre">TiO2_rutile</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Vacuum"><code class="docutils literal notranslate"><span class="pre">Vacuum</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Au"><code class="docutils literal notranslate"><span class="pre">Au</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Al"><code class="docutils literal notranslate"><span class="pre">Al</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Cu"><code class="docutils literal notranslate"><span class="pre">Cu</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Ti"><code class="docutils literal notranslate"><span class="pre">Ti</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#W"><code class="docutils literal notranslate"><span class="pre">W</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Cr"><code class="docutils literal notranslate"><span class="pre">Cr</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TiN"><code class="docutils literal notranslate"><span class="pre">TiN</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#NiCr"><code class="docutils literal notranslate"><span class="pre">NiCr</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GaN"><code class="docutils literal notranslate"><span class="pre">GaN</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#LiTaO3"><code class="docutils literal notranslate"><span class="pre">LiTaO3</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ZnSe"><code class="docutils literal notranslate"><span class="pre">ZnSe</span></code></a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#non-optical-and-nonlinear-properties">Non-optical and nonlinear properties</a></li>
+</ul>
+
   </nav></div>
 
 </div></div>

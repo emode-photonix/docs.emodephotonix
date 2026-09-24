@@ -50,6 +50,7 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/code-tabs.js?v=c983d12e"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/setup';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -322,6 +323,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
@@ -369,9 +371,10 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>profile</strong> (<em>str</em>) – label of the profile these settings apply to, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile these settings apply to, default: ‘_default’</p></li>
 <li><p><strong>wavelength</strong> (<em>float</em>) – [nm] simulation wavelength, default: 1550</p></li>
 <li><p><strong>frequency</strong> (<em>float</em>) – [Hz] simulation frequency (an alternative to setting the wavelength), default: None</p></li>
+<li><p><strong>excitation</strong> (<em>Source</em><em> or </em><em>None</em>) – declare a CW pump driving the circuit (EMode<sup>3D</sup> only), as <code class="docutils literal notranslate"><span class="pre">Source(port=...,</span> <span class="pre">wavelength=...,</span> <span class="pre">mode=0,</span> <span class="pre">power=1.0,</span> <span class="pre">phase=0.0)</span></code> from <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>, where <code class="docutils literal notranslate"><span class="pre">power</span></code> is in W and <code class="docutils literal notranslate"><span class="pre">phase</span></code> in radians. <code class="docutils literal notranslate"><span class="pre">port</span></code> is a bare side (‘left’/’right’) or a qualified ‘&lt;section&gt;.&lt;port&gt;’ name, resolved when the circuit is built, and <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> [nm] is matched against the circuit’s own wavelengths. This is what makes <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> solve the power-dependent response of a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section in addition to the small-signal scattering matrix; the result is read back with <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>, and the declared source with <code class="docutils literal notranslate"><span class="pre">get('sources')</span></code>. Default: None</p></li>
 <li><p><strong>x_resolution</strong> (<em>float</em>) – [nm] resolution in the x-direction, default: 10</p></li>
 <li><p><strong>y_resolution</strong> (<em>float</em>) – [nm] resolution in the y-direction, default: 10</p></li>
 <li><p><strong>window_width</strong> (<em>float</em>) – [nm] simulation window width</p></li>
@@ -390,6 +393,7 @@
 <li><p><strong>pml_kappa_max</strong> (<em>float</em>) – the maximum real coordinate stretch, reached at the outer pml face; must be at least 1, default: 7</p></li>
 <li><p><strong>pml_alpha_max</strong> (<em>float</em>) – the complex-frequency-shifted (CFS) pml term, where 0 disables it; raise it if the solve returns too many artificial pml modes, where <code class="docutils literal notranslate"><span class="pre">0.1*omega*eps_0</span></code> is a reasonable starting point that is small enough to barely move the physical modes, default: 0</p></li>
 <li><p><strong>remove_pml_modes_bool</strong> (<em>bool</em>) – automatically remove the artificial modes of the pml regions from the mode list, identified as modes carrying less than 75% of their power inside the simulation window, default: False</p></li>
+<li><p><strong>pml_seed_bool</strong> (<em>bool</em>) – seed the pml eigensolve with the fundamental mode of the same structure solved without a pml, so the guided fundamental lands at mode 0 without a hand-tuned <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code>; costs one extra single-mode solve, default: False</p></li>
 <li><p><strong>background_material</strong> (<em>str</em><em> or </em><em>~MaterialProperties</em><em> or </em><em>~MaterialSpec</em>) – background material, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object, default: “Vacuum”</p></li>
 <li><p><strong>expansion_resolution</strong> (<em>float</em><em> or </em><em>list</em>) – [nm] single value or list of 4 values for the stretched grid resolution; [north, south, east, west], the grid is gradually transitioned from res to <code class="docutils literal notranslate"><span class="pre">expansion_resolution</span></code>, default: 20</p></li>
 <li><p><strong>expansion_size</strong> (<em>float</em><em> or </em><em>list</em>) – [nm] single value or list of 4 values for the approximate stretched distance; [north, south, east, west], default: 0</p></li>
@@ -397,7 +401,6 @@
 <li><p><strong>generate_chi2</strong> (<em>bool</em>) – whether to generate the second-order nonlinear susceptibility (chi2) tensor for the simulation window, default: False</p></li>
 <li><p><strong>include_heat</strong> (<em>bool</em>) – whether to include heat-related material properties when meshing for FEM heat calculations, default: True</p></li>
 <li><p><strong>propagation_resolution</strong> – [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/10</p></li>
-<li><p><strong>eme_scattering</strong> (<em>bool</em>) – whether or not to automatically calculate scattering for all possible shapes within EME calculations, default: False</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -424,6 +427,7 @@
 <li><p><strong>d</strong> (<em>list</em><em> (</em><em>3x6</em><em>) or </em><em>None</em>) – second-order nonlinear susceptibility d-matrix with shape (3, 6); use None for linear materials, default: None</p></li>
 <li><p><strong>phi</strong> (<em>float</em>) – phi angle of the crystal orientation in cylidrical coordinates, default: 0</p></li>
 <li><p><strong>theta</strong> (<em>float</em>) – theta angle of the crystal orientation in cylidrical coordinates, default: 0</p></li>
+<li><p><strong>property_refs</strong> (<em>dict</em>) – citation string per property name (<code class="docutils literal notranslate"><span class="pre">'d'</span></code>, <code class="docutils literal notranslate"><span class="pre">'r'</span></code>, <code class="docutils literal notranslate"><span class="pre">'thermal_conductivity'</span></code>, <code class="docutils literal notranslate"><span class="pre">'dn_dT'</span></code>, <code class="docutils literal notranslate"><span class="pre">'eps_r_dc'</span></code>, <code class="docutils literal notranslate"><span class="pre">'resistivity'</span></code>), default: {}</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -442,7 +446,7 @@
 </ul>
 </dd>
 </dl>
-<p>Here is an example of several custom materials in the database text file to be imported. See the <code class="docutils literal notranslate"><span class="pre">add_material</span></code> function for parameter details. Each custom material must contain the <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">refractive_index_equation</span></code>, separated by a new line. Comments can be added with ‘#’ or ‘%’.</p>
+<p>Here is an example of several custom materials in the database text file to be imported. See the <code class="docutils literal notranslate"><span class="pre">add_material</span></code> function for parameter details. Each custom material must contain the <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">refractive_index_equation</span></code>, separated by a new line. Comments can be added with ‘#’ or ‘%’. A <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">=</span> <span class="pre">...</span></code> line starts a new record (the spaces around <code class="docutils literal notranslate"><span class="pre">=</span></code> are optional); a record with no <code class="docutils literal notranslate"><span class="pre">refractive_index_equation</span></code> raises an error and nothing in the file is imported. <code class="docutils literal notranslate"><span class="pre">wavelength_range</span></code> is always in um regardless of <code class="docutils literal notranslate"><span class="pre">wavelength_unit</span></code>, and defaults to <code class="docutils literal notranslate"><span class="pre">[0.2,</span> <span class="pre">2.0]</span></code> when omitted. <code class="docutils literal notranslate"><span class="pre">citation</span></code> may contain an <code class="docutils literal notranslate"><span class="pre">=</span></code> sign.</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">name = custom_name_1</div>
@@ -473,6 +477,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to add the shape to, default: ‘_default’</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – shape name, default: an auto-generated number</p></li>
 <li><p><strong>material</strong> (<em>~MaterialSpec</em><em>, </em><em>~MaterialProperties</em><em>, or </em><em>str</em>) – the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: “Vacuum”</p></li>
 <li><p><strong>loss_dB_per_m</strong> (<em>float</em>) – [dB/m] material propagation loss, if not set by the <code class="docutils literal notranslate"><span class="pre">material</span></code> parameter, default: 0</p></li>
@@ -507,7 +512,8 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="reset">
 <span class="sig-name descname"><span class="pre">reset</span></span></dt>
-<dd><p>Clear simulation settings, shape definitions, or both.</p>
+<dd><p>Clear simulation settings, shape definitions, or both, on the default profile.</p>
+<p><code class="docutils literal notranslate"><span class="pre">'shapes'</span></code> removes every user-defined shape from the default profile (the background remains) and discards its mesh, mode list, and analysis results; <code class="docutils literal notranslate"><span class="pre">'settings'</span></code> replaces the default profile with a new one at the default settings, which also removes its shapes, and resets <code class="docutils literal notranslate"><span class="pre">eme_scattering</span></code> and <code class="docutils literal notranslate"><span class="pre">propagation_resolution</span></code>; <code class="docutils literal notranslate"><span class="pre">'all'</span></code> does both. Named profiles created by <a class="reference internal" href="solver-analysis.html#label_profile" title="label_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">label_profile</span></code></a> are not affected. Any other <code class="docutils literal notranslate"><span class="pre">kind</span></code> raises an error.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

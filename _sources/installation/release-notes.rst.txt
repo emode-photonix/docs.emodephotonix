@@ -2,17 +2,71 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.4: September 24, 2026**
+
+* New
+
+  * Second-order nonlinear EME, available with EMode3D. A :data:`straight_section` or :data:`taper_section` takes ``nonlinear=`` with an ``SHGProcess``, ``SFGProcess``, or ``DFGProcess`` naming the process wavelengths. Quasi-phase matching is declared with ``poling_period`` (plus ``duty_cycle`` and ``qpm_order``) on the process, or built by hand from alternating ``inverted=True`` sections, the two routes agree.
+  * A CW pump is declared with ``settings(excitation=Source(port, wavelength, mode, power, phase))``. :data:`EME` still returns the small-signal S-matrix, and now also solves the power-dependent response, available as a ``CircuitResponse`` from ``get('response')``, outgoing and incoming amplitudes at every port, radiated power per wavelength, and convergence. ``get('sources')`` returns the declared excitation.
+  * :data:`chi2_spectrum` returns a nonlinear conversion spectrum (signal out over pump in, at every wavelength asked for) from a handful of mode solves. A :math:`\chi^{(2)}` spectrum oscillates too fast with the phase mismatch to interpolate, but what the coupled-mode equations consume (the coupling and the propagation constants) varies smoothly, so the modes are solved only where the mode list is still moving and the response is then evaluated point by point from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included. Quasi-phase-matched sections are included: the grating enters as a wavevector shift and a Fourier coefficient, neither of which depends on wavelength, so a poled section keeps its exact grating while its phase mismatch moves with the interpolated propagation constants.
+  * ``sweep(key='wavelength', values=..., adaptive=True)`` does the same for an ordinary sweep. ``values`` keeps its meaning (the wavelengths you want results at) and ``adaptive`` changes only where the solver runs: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength adds solves until the mode list stops moving by more than ``tolerance``. Any stretch it could not resolve is reported in ``unconverged`` instead of raising.
+  * Free-space excitation: :data:`free_space_field` declares a Gaussian beam launched into a port. The beam is projected onto that port's modes and drives the field plot through ``plot(excitation=name)`` or the plot window's Mode menu. :data:`free_space_field_diagnostics` returns the fraction of the beam's power the port's modes capture, and the solver warns when it is below 90%. ``tilt`` is the angle inside the medium the beam travels through.
+  * Angled facet ports: :func:`make_angled_facet_port` tilts a port's cross-section about a hinge line, so a facet's reflection back into the guided mode falls off with tilt as it does physically (see :ref:`ports`). A facet cannot sit on a :data:`pwd_section` or on a profile with a PML. ``sweep(key='section, NAME, facet_angle')`` sweeps that tilt.
+  * The solver warns at a facet junction when the waveguide's ``num_modes`` is too small to hold the deflected reflection and R + T under-runs.
+  * Junctions whose two sides carry different numbers of modes (every junction between a waveguide section and a :data:`pwd_section`) now solve the mode-matching equations for the reflected and transmitted amplitudes jointly instead of eliminating the reflected ones first. The two closures coincide when the counts match, so taper and GDS staircases are unchanged. At a waveguide-to-free-space junction the reflection into the fundamental moves by 10-15% (down), the answer no longer depends on the order the two sections were declared, and declaring an angled facet at zero tilt no longer changes it.
+  * Per-junction settings: a :data:`connect_ports` entry accepts a third element, ``JunctionOverride(junction_normalization=...)``, applying to that junction alone.
+  * Field plots: the color scale is normalized to the excitation plane's field family, with a 'Norm' selector (vector or component), the log scale spans -60 dB to 0, an 'abs sum' cross-axis reduction.
+  * ``plot(profile=...)`` renders a stored profile on a simulation that has EME sections declared. Previously the plotter always followed the sections.
+  * :data:`get_fields` with no ``key`` returns all six E and H components.
+  * :data:`material_explorer` with ``file_name=`` saves the figure without opening a window, like :data:`plot`.
+  * Setting ``EMODE_NONINTERACTIVE=1`` makes every :data:`plot` build its figure and return instead of blocking on the window. ``EMODE_EMAIL`` and ``EMODE_PASSWORD`` log in without the login window, for unattended runs.
+  * EMode prints a notice when it checks out a license and a newer release is available. It turns itself on once a release's installers are downloadable.
+  * The default MKL thread count is capped at 16 (an explicit ``MKL_NUM_THREADS`` overrides this setting).
+  * Second-order nonlinear coefficients (``d``) added for GaP, AlN, and InGaP, and for the new materials GaN, LiTaO3, and ZnSe, each with a citation, the BBO, GaAs, AlGaAs, LN, and LN_MgO entries are corrected and cited. :data:`d_matrix` with ``reference=True`` returns the citation. ``get('<material>')`` now includes ``property_refs``, the source of every non-optical and nonlinear value.
+  * Electro-optic (Pockels) coefficients ``r`` for LN, LN_MgO, GaAs, InP, AlN, and GaN. :data:`electrostatic` derives the DC field from the solved potential, and :data:`FDM` then solves the biased waveguide through the r tensor (``include_static``), so a phase shifter's V\ :sub:`pi`\ L comes straight out of :data:`report`.
+  * Thermal and electrical properties (``thermal_conductivity``, ``dn_dT``, ``eps_r_dc``, and ``resistivity`` for metals) filled in for every database material, plus the heater and electrode metals Au, Al, Cu, Ti, W, Cr, TiN, and NiCr with their optical constants at 1550 nm. The :doc:`Material Database </emodeguide/materials>` page tabulates every material's non-optical properties, :math:`\chi^{(2)}` and electro-optic coefficients, and their sources.
+  * :data:`report` and :data:`plot` mark modes that live in the PML: the report gains a ``PML`` column and the plot's mode menu reads ``3, TE, PML``. The designation is available as ``PML_indices`` and ``window_confinement``.
+  * New setting ``pml_seed_bool``: a PML simulation is first solved without its PML, and the eigensolver is then seeded with that fundamental mode, so the guided mode lands at index 0 without a hand-tuned ``max_effective_index``.
+  * New website examples: :doc:`Nonlinear-EME: SHG </examples/EME_SHG>` (GaAs-on-insulator second-harmonic generation, straight and tapered, with both devices' conversion-efficiency spectra), :doc:`Nonlinear-EME: PPLN </examples/EME_PPLN>` (a periodically poled thin-film lithium niobate waveguide doubling a telecom TE pump, with propagation loss from sidewall and surface roughness), :doc:`EME: Angled Facet </examples/EME_Angled_Facet>` (a lensed-fiber Gaussian into an angled-facet taper, swept over facet tilt), :doc:`Heater </examples/Heater>` (a Pt heater above an SOI waveguide, with the power for a :math:`\pi` phase shift), and :doc:`Phase Shifter </examples/Phase_Shifter>` (Au electrodes beside an x-cut LNOI waveguide, with V\ :sub:`pi`\ L).
+  * The :doc:`Variable Descriptions </emodeguide/variables>` page now explains how the simulation file is organized (top-level keys vs. the ``profiles`` dictionary, default and named profiles, multi-wavelength profile sets) and groups variables by where they live. :data:`inspect` is documented.
+
+  * New website examples: :doc:`Adaptive Scan </examples/Adaptive_Scan>` (``sweep(adaptive=True)``, a fine wavelength spectrum from a sparse set of solves) and :doc:`Nonlinear-EME: DFG </examples/EME_DFG>`, difference-frequency generation in periodically poled lithium niobate, with two simultaneous ``Source`` excitations and a three-wavelength profile set.
+  * A sweep or a :data:`chi2_spectrum` no longer prints the mesh and eigensolve of every wavelength it solves. One line for the scan replaces one pair per solve.
+  * A :math:`\chi^{(2)}` section warns when its mode basis still contains PML modes: their large imaginary propagation constants make the coupled-mode solve stiff, and the warning names ``remove_pml_modes_bool``, which drops them.
+  * ``get('response').power_vs_z(wavelength)`` returns the forward power against position along a :math:`\chi^{(2)}` section, from one solve. The coupled-amplitude ODE already integrates along z and used to discard the result, so a pump or second-harmonic power curve cost one full :data:`EME` per length. The forward amplitudes are now recorded after the driven solve converges and returned with the response, stitched across the slices of a refined taper so the curve reads as one. ``amplitude_vs_z`` gives the per-mode complex amplitudes behind it. Sampling is controlled by ``z_samples`` on the process (default 100 points per slice, 0 to switch it off).
+  * :data:`plot` with ``plane='z-x'`` on a :math:`\chi^{(2)}` section draws the driven field. It uses the declared ``excitation`` rather than a unit mode, since conversion depends on pump power, and renders each slice from the amplitudes recorded along it, so the generated wavelength builds along the guide instead of stepping at slice boundaries. ``wavelength=`` picks which wavelength to show. Without a declared excitation the field shown is the small-signal response and the solver says so.
+  * The coupled-amplitude ODE's default tolerances are ``solver_rtol=1e-6`` and ``solver_atol=1e-9``, with ``RK45`` as the default method. Pass ``solver_rtol``, ``solver_atol`` or ``solver_method`` on the process to override any of them. The explicit Runge-Kutta methods (``RK45``, ``RK23``, ``DOP853``) are the usable choices. The coupled amplitudes are complex, and SciPy's implicit solvers (``LSODA``, ``Radau``, ``BDF``) reject a complex initial condition.
+* Fixed
+
+  * :data:`scattering` corrupted the profile it had just reported on, so every later :data:`get` on that simulation failed. The same path also wrote into a material object returned by ``get('<material>')``.
+  * ``get('scattering_loss')`` (and ``sweep(result='scattering_loss')``) returned the per-shape metadata dictionary instead of the loss, and raised an error when more than one shape carried roughness.
+  * In an EMode2D session every internal error was reported as "only available with EMode3D". An unexpected internal error now names only the function that was called.
+  * A saved simulation could not always be reopened: port references came back as plain tuples, section declarations reloaded as dictionaries, and some stored types were unknown to the reader unless that session happened to have imported them first.
+  * ``sweep(result=['mode_order'])`` raised an error, and an unsupported section key failed an assertion instead of naming the key.
+  * A saved simulation reopened only if the reading session happened to have already imported the module defining each stored type. Otherwise it failed with a bare ``KeyError`` naming an internal class. Every tagged type is now imported before the file is read, and an unknown tag raises a proper error.
+  * A :data:`pwd_section` with an offset window is drawn where its field is.
+  * The z panel of a field plot is normalized to the excitation plane, not the global maximum.
+  * A forbidden section name raised an opaque "unexpected exception" instead of the intended error, and a bad value in :data:`EME_settings` or a section's ``settings=`` did the same. :data:`create_profile_set` raised an error on first use.
+  * :data:`reset` accepted any ``kind`` and silently did nothing for a misspelled one. It now raises an error. ``reset('shapes')`` also clears the stale mesh and mode data, so the next :data:`FDM` solves the new geometry instead of the old one.
+  * :data:`import_database` failed on a citation containing ``=``, rejected integer ``wavelength_range`` entries, and defaulted the wavelength range to 200-2000 um instead of 0.2-2.0 um.
+  * ``get(key, profile=...)`` returned the default profile's value for every per-profile variable regardless of ``profile``. A multi-wavelength profile now returns a dict keyed by wavelength.
+  * :data:`refractive_index` on an unknown material raised a raw error. :data:`permeability` returned a nested list for database materials and crashed on numeric input. :data:`create_profile_set` split a bare string into characters and rejected its own documented default set name. :data:`get_shape` crashed before any :data:`scattering`/:data:`confinement` call.
+  * :data:`report` returned a dictionary that paired column headers with mode rows and ignored its ``profile`` argument. It now returns one list per column for the requested profile.
+  * The ``emode`` command line no longer prints a redundant "Opening the EMode Login window..." message.
+  * An exception inside :data:`sweep` left its output-suppression flag set, silencing every later operation in that session.
+  * :data:`scattering` (and any ``FDM(scattering=True)``) failed with "'FDM' failed with an unexpected internal error" on a profile solved with ``remove_pml_modes_bool``. Dropping the absorber's modes leaves the basis shorter than ``num_modes`` asked for, but the per-mode loop still ran over the requested count and indexed past the end of the field arrays. A mode explicitly requested beyond the solved basis now raises an error naming ``mode_list``.
+
 **1.0.3: August 18, 2026**
 
 * New
 
-  * Added the setting ``pml_thickness``, which specifies the PML by physical thickness in nm instead of by a layer count. It is [north, south, east, west] like every other four-sided setting, and 0 on a side falls back to ``num_pml_layers`` there, so the two can be mixed per side. A layer count measures grid cells, so the absorber shrinks as the mesh is refined; ``pml_thickness`` holds it fixed, which is what a resolution convergence sweep needs. See :data:`settings`.
+  * Added the setting ``pml_thickness``, which specifies the PML by physical thickness in nm instead of by a layer count. It is [north, south, east, west] like every other four-sided setting, and 0 on a side falls back to ``num_pml_layers`` there, so the two can be mixed per side. A layer count measures grid cells, so the absorber shrinks as the mesh is refined. ``pml_thickness`` holds it fixed, which is what a resolution convergence sweep needs. See :data:`settings`.
 
 * Fixed
 
   * A simulation with a PML could not be reopened: :data:`open` failed before any plot or solve ran, and the ``.eph`` file was already wrong when it was written.
   * A boundary condition that pins the field at the wall left phantom modes in the mode list: one grid column wide, with exactly zero loss, sorted in among the physical modes. They are removed from the eigenvalue problem now, and genuine modes appear in the slots they were occupying.
-  * The PML now delivers the thickness its profile specifies. The grid gave the absorber smoothed cell widths, so a default 10-layer PML measured 492.8 nm against a design value of 500.0 nm, and the outermost -- most absorbing -- layer absorbed 14% less than intended. Reported radiation loss shifts by a few percent in simulations with a PML.
+  * The PML now delivers the thickness its profile specifies. The grid gave the absorber smoothed cell widths, so a default 10-layer PML measured 492.8 nm against a design value of 500.0 nm, and the outermost (most absorbing) layer absorbed 14% less than intended. Reported radiation loss shifts by a few percent in simulations with a PML.
   * The cached-solution key discarded the PML coordinate stretch, so two profiles differing only in their PML could share a junction S-matrix.
   * Lowering ``num_modes`` with :data:`settings` after a solve produced a mode list that EME could not assemble.
   * ``expansion_size`` validation checked every direction against the north expansion instead of its own, so a valid single-direction expansion could be rejected and a bad resolution could escape the check.
@@ -34,7 +88,7 @@ Release Notes
 
 * Fixed
 
-  * ``remove_pml_modes_bool`` had no effect at all; it now removes the artificial modes of the PML regions from the mode list.
+  * ``remove_pml_modes_bool`` had no effect at all. It now removes the artificial modes of the PML regions from the mode list.
   * The innermost PML layer was transparent, so a PML of N layers had only N-1 absorbing layers, and the PML parameters were missing from the cached-solution key, so two profiles differing only in their PML could share a solution.
   * Shape geometry is now resolved in absolute coordinates, independent of the simulation window.
   * ``scattering()`` raised an error when ``shapes`` or ``mode_list`` was given as a list.
@@ -59,7 +113,7 @@ Release Notes
   * Offset section display x-y view.
   * Settings issues for plots, including window and mesh display for EME.
   * In emodeconnection, the ``save`` parameter no longer shadows the ``save()`` function in EMode.
-  * ``effective_area()``, ``group_index()``, ``orthogonality()``, ``scattering()``, and ``confinement()`` now return the value directly for single-wavelength profiles; a dict keyed by wavelength is returned only for multi-wavelength profiles.
+  * ``effective_area()``, ``group_index()``, ``orthogonality()``, ``scattering()``, and ``confinement()`` now return the value directly for single-wavelength profiles. A dict keyed by wavelength is returned only for multi-wavelength profiles.
   * ``get_fields()`` and ``get_grid()`` return ``FieldSet``/``GridSet`` objects for multi-wavelength profiles, preserving numeric wavelength keys.
 
 **1.0.0: July 8, 2026**

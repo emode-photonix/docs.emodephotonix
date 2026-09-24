@@ -27,7 +27,13 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     Extract data from an existing simulation to your Python environment.
 
     :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables. Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`SMatrix` object.
-    :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
+    :param str profile: name of the profile to extract the data defined by ``key`` from, default: '_default'. A multi-wavelength profile returns a dict keyed by wavelength.
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: inspect
+
+    Return the names of the top-level variables in the simulation file (see :doc:`Variable Descriptions </emodeguide/variables>`). Per-profile results live inside ``profiles`` and are read with ``get(key, profile=...)`` or the typed accessors; names beginning with an underscore are internal.
+
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_fields
@@ -39,7 +45,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param bool include_expand: whether to include the expanded region, default: True
     :param bool include_pml: whether to include the PML region, default: True
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
-    :param str profile: label of the profile to extract the data defined by ``key`` from, default: '_default'
+    :param str profile: name of the profile to extract the data defined by ``key`` from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
     :return: a Field object for a single-wavelength profile, or a FieldSet (a Field for each wavelength, indexable/iterable like a dict[float, Field]) for a multi-wavelength profile.
     :rtype: Field | FieldSet
@@ -51,7 +57,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     :param bool include_expand: whether to include the expanded region, default: True
     :param bool include_pml: whether to include the PML region, default: True
     :param bool unfold: whether to include the full window (unfolded) or strictly the solved window (potentially smaller due to applied symmetries), default: True
-    :param str profile: label of the profile to extract the grid from, default: '_default'
+    :param str profile: name of the profile to extract the grid from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
     :return: a Grid object for a single-wavelength profile, or a GridSet (a Grid for each wavelength, indexable/iterable like a dict[float, Grid]) for a multi-wavelength profile.
     :rtype: Grid | GridSet
@@ -61,19 +67,19 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     Extract shape data from an existing simulation. Returns the shape object with a ``metadata`` dictionary attached (scattering and confinement results for that shape).
 
     :param str key: name of the shape to extract
-    :param str profile: label of the profile to extract the shape from, default: '_default'
+    :param str profile: name of the profile to extract the shape from, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_profile
 
     Extract a full profile object from an existing simulation. Returns a Profile object containing the settings, shapes, grid, and field data associated with the named profile.
 
-    :param str profile: label of the profile to extract, default: '_default'
+    :param str profile: name of the profile to extract, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: create_profile_set
 
-    Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped.
+    Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped. The default ``profile_set_name`` replaces the ``'_default'`` profile.
 
     :param profiles: names of the profiles to group
     :type profiles: str or list[str]
@@ -89,7 +95,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
 .. data:: clear_field_data
 
-    Deletes the following data from every profile to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
+    Deletes the following data from every profile, including the default profile, to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
 
     :param str profile: currently ignored; field data is cleared from all profiles regardless of this argument, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'

@@ -303,7 +303,7 @@
         <div class="sidebar-primary-item">
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
-  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Scripts</span></p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="SOI.html">Basic: SOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SiN.html">Bending: SiN</a></li>
@@ -311,12 +311,19 @@
 <li class="toctree-l1"><a class="reference internal" href="Laser.html">Scattering loss: Laser</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Open a Simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dispersion.html">Dispersion Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Adaptive_Scan.html">Adaptive Scan</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Scripts</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="EME_Taper.html">EME: Taper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_Sweep.html">EME: Sweep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_GDS.html">EME: GDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Angled_Facet.html">EME: Angled Facet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
 </ul>
 </div>
 </nav></div>
@@ -440,9 +447,9 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.3</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.5</span> <span class="n">sec</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">7.2</span> <span class="n">sec</span>
 
 <span class="n">Wavelength</span><span class="p">:</span> <span class="mf">1970.0</span> <span class="n">nm</span>
 
@@ -451,9 +458,9 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
     <span class="n">TE</span><span class="o">-</span><span class="mi">0</span>  <span class="mf">2.094190</span>  <span class="mf">99.8</span> <span class="o">%</span>          <span class="mf">0.000</span>
 
 <span class="n">Exited</span> <span class="n">EMode</span>
-<span class="n">EMode3D</span> <span class="mf">1.0.3</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.5</span> <span class="n">sec</span>
+<span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">6.3</span> <span class="n">sec</span>
 
 <span class="n">Wavelength</span><span class="p">:</span> <span class="mf">985.0</span> <span class="n">nm</span>
 
@@ -463,9 +470,9 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
     <span class="n">TM</span><span class="o">-</span><span class="mi">1</span>  <span class="mf">1.929029</span>  <span class="mf">15.3</span> <span class="o">%</span>          <span class="mf">0.000</span>
 
 <span class="n">Exited</span> <span class="n">EMode</span>
-<span class="n">EMode3D</span> <span class="mf">1.0.3</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
 <span class="n">Exited</span> <span class="n">EMode</span>
-<span class="n">EMode3D</span> <span class="mf">1.0.3</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
 <span class="n">Exited</span> <span class="n">EMode</span>
 </pre></div>
 </div>
