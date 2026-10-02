@@ -85,11 +85,11 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 8.3 sec
-    Solving modes completed in 47.6 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 4.8 sec
+    Solving modes completed in 23.9 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement    core scattering (dB/m)
     --------  --------  ------  -------------  ------------------  ------------------------

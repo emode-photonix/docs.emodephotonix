@@ -60,8 +60,8 @@ Additional options:
     emode-install --help                     # Show all options
     emode-install --list-versions            # Show available versions
     emode-install --update                   # Update to the latest version
-    emode-install --update --version 0.2.5   # Switch to a specific version
-    emode-install --version 0.2.5            # Install a specific version
+    emode-install --update --version 1.0.5   # Switch to a specific version
+    emode-install --version 1.0.5            # Install a specific version
     emode-install --install-dir /opt/bin     # Custom install directory
     emode-install --uninstall                # Remove EMode
     emode-install --uninstall --install-dir /opt/bin  # Remove from custom location
@@ -235,11 +235,20 @@ Four types are available as classes of the emodeconnection package to specify ma
    :param material: Either a *str* pointing to a material in the Material Database, or a MaterialProperties object. Required.
    :type material: ~typing.Union[str, ~MaterialProperties]
 
-   :param theta: The angle of rotation around *y* for the material in radians.
+   :param theta: The angle of rotation around *y* for the material in radians. Default: 0.
    :type theta: ~typing.Optional[float]
 
-   :param phi: The angle of rotation around *z* for the material in radians. This is applied *after* the theta rotation.
+   :param phi: The angle of rotation around *z* for the material in radians, applied *after* the theta rotation. Default: 0.
    :type phi: ~typing.Optional[float]
+
+   :param psi: The angle of rotation around the crystal's own *z* axis in radians, applied *before* the theta rotation. Only a biaxial crystal (such as KTP or LBO) or a nonlinear tensor without symmetry about *z* needs it. Default: 0.
+   :type psi: ~typing.Optional[float]
+
+   The three angles are *z-y-z* Euler angles that turn the crystal, not the simulation axes (an active rotation). A material tensor :math:`T` given on the crystal axes, such as the permittivity, permeability, :math:`\chi^{(2)}` or electro-optic tensor, appears in the simulation frame as :math:`R T R^\mathsf{T}` (with one :math:`R` per index for a higher-rank tensor), where
+
+   .. math:: R = R_z(\phi) \, R_y(\theta) \, R_z(\psi)
+
+   and :math:`R_z`, :math:`R_y` are the usual right-handed rotation matrices about *z* and *y*. Read right to left, the crystal is turned by ``psi`` about its *z* axis first, then by ``theta`` about *y*, then by ``phi`` about *z*. Column *a* of :math:`R` is the direction crystal axis *a* points in the simulation frame, so the crystal *z* axis ends up along :math:`(\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta)`. The simulation's propagation direction *z* then lies along the crystal direction :math:`R^\mathsf{T} \hat{z}`. For example, ``theta=-pi/2, psi=-phi_pm`` points the propagation direction along :math:`(\cos\phi_\mathrm{pm}, \sin\phi_\mathrm{pm}, 0)` in the crystal's *xy* plane.
 
    :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.
    :type x: ~typing.Optional[float]

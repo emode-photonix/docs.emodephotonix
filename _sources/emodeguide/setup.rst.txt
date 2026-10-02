@@ -7,7 +7,7 @@ Simulation setup
     Specify the simulation settings.
 
     :param str profile: name of the profile these settings apply to, default: '_default'
-    :param float wavelength: [nm] simulation wavelength, default: 1550
+    :param float wavelength: [nm] simulation wavelength, or a list of wavelengths for a multi-wavelength profile that ``FDM()``, ``FEM()``, ``solve()`` and ``EME()`` solve at each one. Setting a new wavelength on a multi-wavelength profile starts it over at that wavelength, default: 1550
     :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
     :param excitation: declare a CW pump driving the circuit (EMode\ :sup:`3D`\  only), as ``Source(port=..., wavelength=..., mode=0, power=1.0, phase=0.0)`` from ``emodeconnection``, where ``power`` is in W and ``phase`` in radians. ``port`` is a bare side ('left'/'right') or a qualified '<section>.<port>' name, resolved when the circuit is built, and ``wavelength`` [nm] is matched against the circuit's own wavelengths. This is what makes :data:`EME` solve the power-dependent response of a :math:`\chi^{(2)}` section in addition to the small-signal scattering matrix; the result is read back with ``get('response')``, and the declared source with ``get('sources')``. Default: None
     :type excitation: Source or None
@@ -21,6 +21,16 @@ Simulation setup
     :param str field_to_solve: either 'Et' or 'Ht' to specify whether the transverse electric field or magnetic field is solved, default: 'Et'
     :param float max_effective_index: maximum value for the effective refractive index, if ``max_effective_index`` is 0 the maximum refractive index found in the simulation window is used, default: 0
     :param float tolerance: eigenmode solver convergence tolerance, if ``tolerance`` = 0 the computer's precision is used, default: 1e-12
+    :param int solver_threads: maximum number of threads the sparse solver uses to factor this profile's systems, where 0 lets the solver choose (up to every core), default: 0
+    :param str sparse_solver: sparse direct solver for this profile's solves, one of ``'auto'``, ``'rslab'`` or ``'pardiso'``, where ``'auto'`` uses MKL PARDISO on the x86 installers (Linux, Windows and Intel Mac) and rslab on the Apple silicon installer, and ``'pardiso'`` is available only in the x86 installers, default: 'auto'
+    :param str solver: the mode solver used by ``solve()``, ``EME()`` and ``sweep()``: 'FDM' (finite difference), 'FEM' (finite element, EMode\ :sup:`3D`\  only), or 'default', which is the FDM in every session (the FEM runs only when asked for). Calling ``FDM()`` or ``FEM()`` sets this to that solver, default: 'default'
+    :param int fem_order: (FEM) element order, 1 or 2; order 2 converges much faster for the same mesh, default: 2
+    :param float fem_points_per_wavelength: (FEM) mesh points per wavelength in each material before refinement, default: 4
+    :param float fem_min_angle: [degrees] (FEM) smallest triangle angle allowed in the mesh, at most 34, default: 30
+    :param float fem_refine_fraction: (FEM) fraction of the estimated error that each refinement step targets, marking the fewest triangles that carry it, default: 0.5
+    :param int fem_max_refinements: (FEM) most adaptive refinement steps after the first solve, 0 disables refinement, default: 2
+    :param float fem_neff_tolerance: (FEM) refinement stops once no requested mode's effective index changes by more than this relative amount, default: 1e-6
+    :param int fem_max_dofs: (FEM) refinement stops before a mesh would exceed this many unknowns, default: 2000000
     :param float bend_radius: [nm] waveguide bend radius relative to the center of the window, must be positive and larger than window_width/2, if ``bend_radius`` = 0 no bending is used in the calculation, default: 0
     :param pml_NSEW_bool: indicates whether to use a pml on each of the 4 boundaries, [north, south, east, west], 0: no pml, 1: use pml, default: [0,0,0,0]
     :type pml_NSEW_bool: list, length = 4
@@ -43,6 +53,7 @@ Simulation setup
     :param bool subpixel_avg: whether to use sub-pixel averaging of the permittivity/permeability at shape boundaries for improved accuracy, default: True
     :param bool generate_chi2: whether to generate the second-order nonlinear susceptibility (chi2) tensor for the simulation window, default: False
     :param bool include_heat: whether to include heat-related material properties when meshing for FEM heat calculations, default: True
+    :param bool include_scattering: compute the interfacial scattering loss of every shape with roughness after each solve of this profile, whether the solve comes from ``FDM()``, ``FEM()``, ``solve()``, ``EME()`` or ``sweep()``, the same as calling ``scattering()`` after each one. ``FDM(scattering=True)`` does this for a single solve. Default: False
     :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/10
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -62,8 +73,9 @@ Simulation setup
     :param float eps_r_dc: [-] relative permittivity at ~1 kHz, default: 1.0
     :param d: second-order nonlinear susceptibility d-matrix with shape (3, 6); use None for linear materials, default: None
     :type d: list (3x6) or None
-    :param float phi: phi angle of the crystal orientation in cylidrical coordinates, default: 0
-    :param float theta: theta angle of the crystal orientation in cylidrical coordinates, default: 0
+    :param float phi: [rad] rotation of the crystal about z, applied last, default: 0
+    :param float theta: [rad] rotation of the crystal about y, default: 0
+    :param float psi: [rad] rotation of the crystal about its own z axis, applied first, default: 0. The three angles turn the crystal by R = Rz(phi) Ry(theta) Rz(psi), the same convention as :class:`MaterialSpec`
     :param dict property_refs: citation string per property name (``'d'``, ``'r'``, ``'thermal_conductivity'``, ``'dn_dT'``, ``'eps_r_dc'``, ``'resistivity'``), default: {}
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -102,6 +114,9 @@ Simulation setup
     :param str name: shape name, default: an auto-generated number
     :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
     :type material: ~MaterialSpec, ~MaterialProperties, or str
+
+    A shape's relative permeability comes from its material, for example ``material=MaterialProperties(n=1.5, mu=2.0)``, and the permeability of an etched region from ``fill_material`` in the same way. ``shape()`` has no permeability argument of its own, and the older ``permeability`` and ``fill_permeability`` arguments raise an error that says so.
+
     :param float loss_dB_per_m: [dB/m] material propagation loss, if not set by the ``material`` parameter, default: 0
     :param vertices: list of N vertices that define a closed polygon, or a list of such vertex lists to define multiple disjoint polygons in one shape; if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
     :type vertices: list (N,2), list of list (N,2), or int
@@ -120,9 +135,9 @@ Simulation setup
     :param float sidewall_angle: etched sidewall angle in degrees, 0 is perfectly vertical, 90 is the maximum; only applied to etched features (``height``, ``mask``, and a nonzero ``etch_depth`` must all be specified for this parameter to have any effect), default: 0
     :param fill_material: the material for the fill for this shape.  Takes the same values as material, as well as "transparent_fill" (the default). "transparent_fill" results in the fill being the background.
     :type fill_material: ~MaterialSpec, ~MaterialProperties, or str
-    :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
+    :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, default: [0,0]
     :type correlation_length: float or list
-    :param roughness_rms: interfacial roughness standard deviation in nm rms, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
+    :param roughness_rms: interfacial roughness standard deviation in nm rms, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, default: [0,0]
     :type roughness_rms: float or list
     :param str shape_type: set shape type as 'planar', 'conformal' (only uses ``name``, ``material``, ``height``, and ``priority``), 'polygon' (only uses ``name``, ``vertices``, ``material`` and ``priority``), or 'ellipse' (only uses ``name``, ``material``, ``width``, ``height``, ``position``, ``sidewall_angle`` (the angle of the ellipse), and ``priority``), default: 'planar'
     :param float priority: a number that signifies the order in which shapes will be drawn, a higher priority gets drawn over a lower number priority, default: auto-generated integer based on order called
@@ -139,7 +154,7 @@ Simulation setup
 
     Clear simulation settings, shape definitions, or both, on the default profile.
 
-    ``'shapes'`` removes every user-defined shape from the default profile (the background remains) and discards its mesh, mode list, and analysis results; ``'settings'`` replaces the default profile with a new one at the default settings, which also removes its shapes, and resets ``eme_scattering`` and ``propagation_resolution``; ``'all'`` does both. Named profiles created by :data:`label_profile` are not affected. Any other ``kind`` raises an error.
+    ``'shapes'`` removes every user-defined shape from the default profile (the background remains) and discards its mesh, mode list, and analysis results; ``'settings'`` replaces the default profile with a new one at the default settings, which also removes its shapes, and resets ``propagation_resolution``; ``'all'`` does both. Named profiles created by :data:`label_profile` are not affected. Any other ``kind`` raises an error.
 
     :param str kind: either 'shapes', 'settings', or 'all' to specify what data is cleared, default: 'shapes'
     :param str simulation_name: simulation name, default: 'emode'

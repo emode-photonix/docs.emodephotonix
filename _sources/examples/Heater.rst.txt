@@ -119,21 +119,21 @@ Highlighted features: ``heat_only`` shapes, ``fem_resolution``, ``current``, ``h
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 4.2 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.4 sec
+    Solving modes completed in 2.3 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
         TE-0  2.446865  98.3 %          0.000
  
     Solving heat completed in 0.2 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 4.4 sec
+    Meshing completed in 0.5 sec
+    Solving modes completed in 2.4 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------

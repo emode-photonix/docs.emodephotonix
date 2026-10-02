@@ -171,6 +171,32 @@ Descriptions of all materials available in built-in material database. This info
     
         | S. Adachi, "Optical dispersion relations for GaP, GaAs, GaSb, InP, InAs, InSb, AlxGa1−xAs, and In1−xGaxAsyP1−y," J. Appl. Phys. 66, 6030 (1989).
 
+.. data:: KTP
+
+    .. math::
+
+        n_x &= \left( 3.29100 + \frac{0.04140}{\lambda^2 - 0.03978} + \frac{9.35522}{\lambda^2 - 31.45571} \right)^{0.5} \\
+        n_y &= \left( 3.45018 + \frac{0.04341}{\lambda^2 - 0.04597} + \frac{16.98825}{\lambda^2 - 39.43799} \right)^{0.5} \\
+        n_z &= \left( 4.59423 + \frac{0.06206}{\lambda^2 - 0.04763} + \frac{110.80672}{\lambda^2 - 86.12171} \right)^{0.5}
+
+    Wavelength range: 430 nm to 3540 nm
+
+        | K. Kato and E. Takaoka, "Sellmeier and thermo-optic dispersion formulas for KTP," Appl. Opt. 41, 5040 (2002).
+        | Notes: flux-grown KTiOPO4 at 20 C. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, b and c axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
+
+.. data:: LBO
+
+    .. math::
+
+        n_x &= \left( 2.4542 + \frac{0.01125}{\lambda^2 - 0.01135} - 0.01388 \lambda^2 \right)^{0.5} \\
+        n_y &= \left( 2.5390 + \frac{0.01277}{\lambda^2 - 0.01189} - 0.01849 \lambda^2 + 4.3025 \times 10^{-5} \lambda^4 - 2.9131 \times 10^{-5} \lambda^6 \right)^{0.5} \\
+        n_z &= \left( 2.5865 + \frac{0.0131}{\lambda^2 - 0.01223} - 0.01862 \lambda^2 + 4.5778 \times 10^{-5} \lambda^4 - 3.2526 \times 10^{-5} \lambda^6 \right)^{0.5}
+
+    Wavelength range: 200 nm to 2600 nm
+
+        | K. Kato, "Temperature-tuned 90° phase-matching properties of LiB3O5," IEEE J. Quantum Electron. 30, 2950 (1994).
+        | Notes: LiB3O5 at room temperature. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, c and b axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
+
 .. data:: LN_MgO
     
     .. math::
@@ -410,7 +436,8 @@ Non-optical and nonlinear properties
 
 Every material carries these scalar properties, read back with ``get('<material>')`` and
 used by ``heat()``, ``electrostatic()``, and the chi(2) EME. Uniaxial crystals store the
-optic-axis (extraordinary) value of ``dn_dT`` and ``eps_r_dc``. ``d`` (chi(2)) and ``r``
+optic-axis (extraordinary) value of ``dn_dT`` and ``eps_r_dc``, and the biaxial
+crystals (KTP, LBO) store their z-axis value. ``d`` (chi(2)) and ``r``
 (the linear electro-optic, or Pockels, tensor) are both contracted coefficients in the
 crystal frame (pm/V); only the nonzero independent coefficients are listed, and ``--``
 means all zero (or, for ``r``, not applicable -- a material with no ``r`` method). A
@@ -422,7 +449,7 @@ for the full citation text.
 
 Not available (default values used): ``dn_dT`` for HfO2, TiO2, TiO2_rutile, GaP, GaSb,
 InAs, InSb, InGaAs, InGaP, AlGaAs, and GGG; ``d`` for InP. ``r`` is currently only entered
-for LN, LN_MgO, GaAs, InP, AlN, and GaN -- the materials the electrostatic phase-shifter
+for LN, LN_MgO, GaAs, InP, AlN, GaN, and KTP -- the materials the electrostatic phase-shifter
 example uses; every other material's ``r`` is the base-class zero tensor.
 
 .. list-table::
@@ -589,6 +616,20 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 16.8
      - inf
      - --
+     - --
+   * - KTP
+     - 13
+     - 1.6e-05
+     - 13
+     - inf
+     - d15 = 1.91, d24 = 3.64, d31 = 2.54, d32 = 4.35, d33 = 16.9
+     - r13 = 9.5, r23 = 15.7, r33 = 36.3, r42 = 9.3, r51 = 7.3
+   * - LBO
+     - 3.5
+     - -8.5e-06
+     - 1
+     - inf
+     - d15 = 1.05, d24 = -0.98, d31 = 1.05, d32 = -0.98, d33 = 0.05
      - --
    * - LN
      - 4.6

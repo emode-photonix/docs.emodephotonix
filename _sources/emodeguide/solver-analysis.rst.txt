@@ -2,9 +2,27 @@
 Solver and analysis
 -------------------
 
+.. data:: solve
+
+    Calculate the waveguide modes with the finite-difference (FDM) or the finite-element (FEM) solver. The fields, effective indices, losses and TE fractions are saved as described under ``FDM()``, whichever solver runs.
+
+    :param str solver_method: 'FDM' or 'FEM' runs that solver, the same as calling ``FDM()`` or ``FEM()``, and sets the profile's ``solver`` setting to it. 'default' runs the solver the ``solver`` setting selects, without changing it. That setting is itself 'default' unless changed, which is the FDM in every session, default: 'default'
+    :param profile: profile name to save the solved profile under, default: '_default'
+    :type profile: str or int
+    :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
+    :param float propagation_distance: [nm] where along ``section`` to take the cross-section, default: None
+    :param bool include_heat: whether to include the temperature change from the most recent ``heat()`` solve, default: True
+    :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
+    :param bool verbose: print progress, default: True
+    :param str simulation_name: simulation name, default: 'emode'
+    :return: what ``FDM()`` or ``FEM()`` returns, for whichever solver ran.
+
+    .. note::
+        The FEM solver requires an EMode\ :sup:`3D`\  license, so ``solve()`` needs one whenever it runs the FEM: with ``solver_method='FEM'``, or with 'default' when the profile's ``solver`` setting is 'FEM'. See :data:`FEM` on the Multi-Physics page.
+
 .. data:: FDM
 
-    Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
+    Calculate the waveguide modes using the finite difference method. Calling ``FDM()`` sets the profile's ``solver`` setting to 'FDM', so ``EME()`` and ``sweep()`` then use the FDM too. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
 
     .. math::
         \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
@@ -14,16 +32,19 @@ Solver and analysis
     .. math::
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
+    A multi-wavelength profile (a wavelength list in ``settings()``, or a set from ``create_profile_set()``) is solved at each of its wavelengths, and is saved as one solved profile per wavelength, so ``get()`` returns a dict keyed by wavelength and ``plot()`` and ``EME()`` use the modes at each wavelength. ``FEM()`` and ``solve()`` do the same. The direct return value describes only the longest wavelength.
+
     :param profile: profile name to automatically create a profile after running ``FDM()``, default: '_default'
     :type profile: str or int
     :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
     :param float propagation_distance: [nm] optional propagation distance used to compute an additional propagation phase/loss, default: None
-    :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
-    :param int fLanczos: number of Lanczos vectors used by the eigensolver, default: 5
+    :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none'. It acts in the anisotropic solver only, since the isotropic solver returns forward modes by construction. It is saved in the profile's settings, so a later ``EME()`` or ``sweep()`` that solves this profile again uses it too. Default: 'forward'
+    :param int fLanczos: size of the eigensolver's Krylov subspace as a multiple of the number of modes requested, at least 1. Raise it if the solve does not converge. It is saved in the profile's settings like ``mode_filter``. Default: 5
     :param str solve_type: either 'isotropic', 'anisotropic', or 'auto' to control whether anisotropic materials are solved with the full tensor or reduced to their isotropic diagonal, default: 'auto'
     :param bool include_heat: whether to include heat-related material properties when meshing, default: True
     :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
-    :param bool scattering: whether to automatically calculate interfacial scattering loss for all shapes after solving, default: False
+    :param bool scattering: whether to automatically calculate interfacial scattering loss for all shapes after solving. The ``include_scattering`` setting in :data:`settings` does the same for every solve of the profile. Default: False
+    :param bool verbose: print progress, default: True
     :param str simulation_name: simulation name, default: 'emode'
 
     .. note::
@@ -36,7 +57,7 @@ Solver and analysis
     :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME. The accepted section keys are 'length', 'num_modes', 'minimum_z_step', 'overlap_variation', 'z_slices', 'offset', 'etch_depth', 'sidewall_angle', 'window_width', 'window_height', and 'facet_angle' (the tilt [degrees] of an angled facet on that section, see :func:`make_angled_facet_port`); any other section key raises an error naming it.
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
-    :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
+    :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, where 'FDM' means a mode solve with the solver the ``solver`` setting selects (the FDM or the FEM), default: automatically chosen based on the ``key`` and ``result`` selection
     :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
     :type result: str or list
     :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
@@ -88,6 +109,8 @@ Solver and analysis
 
     Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); a ``PML`` column when the profile was solved with a pml, marking the modes that carry less than 75% of their power inside the window (see ``PML_indices`` and ``window_confinement`` in :doc:`Variable Descriptions </emodeguide/variables>`); per-shape confinement factors and scattering loss (if calculated); effective areas (if calculated).
 
+    The line above the table gives the wavelength and the mode solver that produced the modes, for example ``Wavelength: 1550.0 nm    Solver: FEM``. A saved CSV records both below the table.
+
     Returns the table as a dictionary keyed by profile name, each table holding one list per column. A multi-wavelength profile returns one table per wavelength, keyed by wavelength; an unsolved profile returns an empty table.
 
     :param str profile: profile name, default: '_default'
@@ -98,14 +121,14 @@ Solver and analysis
 
 .. data:: label_profile
 
-    Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under ``name`` in the ``profiles`` dictionary of the simulation file, meshing it first if needed. Named profiles are read with ``profile=NAME`` in :data:`get`, :data:`get_fields`, :data:`get_grid`, :data:`get_shape` and :data:`get_profile`, are the inputs to ``overlap``, ``mode_order`` and the EME section functions, and are not affected by :data:`reset`.
+    Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under ``name`` in the ``profiles`` dictionary of the simulation file, meshing it first if needed. A multi-wavelength profile is saved whole, with each member meshed and keeping its own name. Named profiles are read with ``profile=NAME`` in :data:`get`, :data:`get_fields`, :data:`get_grid`, :data:`get_shape` and :data:`get_profile`, are the inputs to ``overlap``, ``mode_order`` and the EME section functions, and are not affected by :data:`reset`.
 
     :param str name: save the current simulation state to this name, default: '0'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: overlap
 
-    Calculate overlap integral between two modes. The result is saved in the profile metadata as ``overlap`` and is returned by this function.
+    Calculate overlap integral between two modes. The result is returned by this function and saved on the profile named by ``profile_b``, where ``get('overlap', profile=profile_b)`` reads the latest result and ``get('overlaps', profile=profile_b)`` a record of every overlap computed against it (see :doc:`Variable Descriptions </emodeguide/variables>`).
 
         Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
 
@@ -158,7 +181,7 @@ Solver and analysis
     :type aspect_ratio: str or float
     :param bool index_outline: setting index outline, default: True
     :param bool text_display: setting text display, default: True
-    :param bool mesh_display: setting mesh display, default: False
+    :param bool mesh_display: setting mesh display: the finite-difference grid for an FDM solve, or the triangle mesh for an FEM solve (in the cross-section view), default: False
     :param bool window_display: setting window display, default: False
     :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
     :param port: (EME) the input port that the field is excited from, either a port index or a port name (see :class:`Port`), default: 0

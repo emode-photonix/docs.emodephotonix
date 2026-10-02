@@ -17,7 +17,7 @@ Quick reference for initializing, running, and closing an EMode session:
 .. note::
 
    The console output on the example pages below, including all timings,
-   was produced on: AMD EPYC 7763 64-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
+   was produced on: AMD EPYC 9V74 80-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
 
 .. hardware-note-end
 
@@ -62,6 +62,7 @@ Example Scripts
                 * :octicon:`pulse;1em` :doc:`Nonlinear-EME: SHG <examples//EME_SHG>`
                 * :octicon:`zap;1em` :doc:`Nonlinear-EME: PPLN <examples//EME_PPLN>`
                 * :octicon:`arrow-switch;1em` :doc:`Nonlinear-EME: DFG <examples//EME_DFG>`
+                * :octicon:`container;1em` :doc:`FEM: SOI <examples//FEM_SOI>`
                 * :octicon:`flame;1em` :doc:`Heater <examples//Heater>`
                 * :octicon:`plug;1em` :doc:`Phase Shifter <examples//Phase_Shifter>`
 
@@ -90,5 +91,6 @@ Example Scripts
    examples//EME_SHG
    examples//EME_PPLN
    examples//EME_DFG
+   examples//FEM_SOI
    examples//Heater
    examples//Phase_Shifter

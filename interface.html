@@ -50,6 +50,7 @@
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/code-tabs.js?v=c983d12e"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'interface';</script>
     <link rel="icon" href="_static/icon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -383,8 +384,8 @@ run <code class="docutils literal notranslate"><span class="pre">emode-install</
 emode-install<span class="w"> </span>--help<span class="w">                     </span><span class="c1"># Show all options</span>
 emode-install<span class="w"> </span>--list-versions<span class="w">            </span><span class="c1"># Show available versions</span>
 emode-install<span class="w"> </span>--update<span class="w">                   </span><span class="c1"># Update to the latest version</span>
-emode-install<span class="w"> </span>--update<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.2.5<span class="w">   </span><span class="c1"># Switch to a specific version</span>
-emode-install<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.2.5<span class="w">            </span><span class="c1"># Install a specific version</span>
+emode-install<span class="w"> </span>--update<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.0.5<span class="w">   </span><span class="c1"># Switch to a specific version</span>
+emode-install<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.0.5<span class="w">            </span><span class="c1"># Install a specific version</span>
 emode-install<span class="w"> </span>--install-dir<span class="w"> </span>/opt/bin<span class="w">     </span><span class="c1"># Custom install directory</span>
 emode-install<span class="w"> </span>--uninstall<span class="w">                </span><span class="c1"># Remove EMode</span>
 emode-install<span class="w"> </span>--uninstall<span class="w"> </span>--install-dir<span class="w"> </span>/opt/bin<span class="w">  </span><span class="c1"># Remove from custom location</span>
@@ -607,8 +608,19 @@ defaults (typically 0).</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>material</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>~MaterialProperties</em><em>]</em>) – Either a <em>str</em> pointing to a material in the Material Database, or a MaterialProperties object. Required.</p></li>
-<li><p><strong>theta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>y</em> for the material in radians.</p></li>
-<li><p><strong>phi</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>z</em> for the material in radians. This is applied <em>after</em> the theta rotation.</p></li>
+<li><p><strong>theta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>y</em> for the material in radians. Default: 0.</p></li>
+<li><p><strong>phi</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>z</em> for the material in radians, applied <em>after</em> the theta rotation. Default: 0.</p></li>
+<li><p><strong>psi</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around the crystal’s own <em>z</em> axis in radians, applied <em>before</em> the theta rotation. Only a biaxial crystal (such as KTP or LBO) or a nonlinear tensor without symmetry about <em>z</em> needs it. Default: 0.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The three angles are <em>z-y-z</em> Euler angles that turn the crystal, not the simulation axes (an active rotation). A material tensor <span class="math notranslate nohighlight">\(T\)</span> given on the crystal axes, such as the permittivity, permeability, <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> or electro-optic tensor, appears in the simulation frame as <span class="math notranslate nohighlight">\(R T R^\mathsf{T}\)</span> (with one <span class="math notranslate nohighlight">\(R\)</span> per index for a higher-rank tensor), where</p>
+<div class="math notranslate nohighlight">
+\[R = R_z(\phi) \, R_y(\theta) \, R_z(\psi)\]</div>
+<p>and <span class="math notranslate nohighlight">\(R_z\)</span>, <span class="math notranslate nohighlight">\(R_y\)</span> are the usual right-handed rotation matrices about <em>z</em> and <em>y</em>. Read right to left, the crystal is turned by <code class="docutils literal notranslate"><span class="pre">psi</span></code> about its <em>z</em> axis first, then by <code class="docutils literal notranslate"><span class="pre">theta</span></code> about <em>y</em>, then by <code class="docutils literal notranslate"><span class="pre">phi</span></code> about <em>z</em>. Column <em>a</em> of <span class="math notranslate nohighlight">\(R\)</span> is the direction crystal axis <em>a</em> points in the simulation frame, so the crystal <em>z</em> axis ends up along <span class="math notranslate nohighlight">\((\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta)\)</span>. The simulation’s propagation direction <em>z</em> then lies along the crystal direction <span class="math notranslate nohighlight">\(R^\mathsf{T} \hat{z}\)</span>. For example, <code class="docutils literal notranslate"><span class="pre">theta=-pi/2,</span> <span class="pre">psi=-phi_pm</span></code> points the propagation direction along <span class="math notranslate nohighlight">\((\cos\phi_\mathrm{pm}, \sin\phi_\mathrm{pm}, 0)\)</span> in the crystal’s <em>xy</em> plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.</p></li>
 <li><p><strong>loss</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The absorption loss of the material in dB/m.</p></li>
 </ul>

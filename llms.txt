@@ -32,5 +32,6 @@
 - [Nonlinear-EME: SHG](/examples/EME_SHG.html)
 - [Nonlinear-EME: PPLN](/examples/EME_PPLN.html)
 - [Nonlinear-EME: DFG](/examples/EME_DFG.html)
+- [FEM: SOI](/examples/FEM_SOI.html)
 - [Multi-physics: Heater](/examples/Heater.html)
 - [Multi-physics: Phase Shifter](/examples/Phase_Shifter.html)

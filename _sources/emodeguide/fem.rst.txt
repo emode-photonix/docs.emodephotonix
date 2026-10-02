@@ -2,6 +2,22 @@
 Multi-Physics
 -------------
 
+.. data:: FEM
+
+    Calculate the waveguide modes with the full-vector finite-element method. Requires a '3D' license. The cross-section is meshed with triangles that follow every material interface, and the mesh is refined where the modes are under-resolved, as set by the ``fem_*`` settings in ``settings()``. The saved fields, effective indices, losses and TE fractions are the same quantities, with the same normalization, as described under ``FDM()``, so ``get()``, ``get_fields()``, ``report()``, ``plot()`` and ``EME()`` work the same way. Calling ``FEM()`` sets the profile's ``solver`` setting to 'FEM'.
+
+    All ``boundary_condition`` values, PMLs, expansion regions, bends, transformation-optics sections (bends, the ring and general couplers, and simulation-space transforms), lossy and anisotropic materials (including crystals tilted out of the cross-section with ``theta``), and ``heat()`` and ``electrostatic()`` perturbations are supported. A symmetric or antisymmetric boundary on an axis whose mirror a crystal's orientation breaks raises an error, since it would describe a different structure. Field plots sample the FEM solution at ``x_resolution`` and ``y_resolution``, and ``plot(mesh_display=True)`` shows the triangle mesh.
+
+    :param profile: profile name to save the solved profile under, default: '_default'
+    :type profile: str or int
+    :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
+    :param float propagation_distance: [nm] where along ``section`` to take the cross-section, default: None
+    :param bool include_heat: whether to include the temperature change from the most recent ``heat()`` solve, default: True
+    :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
+    :param bool verbose: print progress, default: True
+    :param str simulation_name: simulation name, default: 'emode'
+    :return: a dict with ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, ``TM_indices``, ``PML_indices``, ``mesh`` (``vertices``, ``triangles`` and ``region``, the triangle mesh solved on), and ``refinement`` (``n_eff_history``, ``num_dofs`` and ``num_elements`` per refinement level, and ``stopped_by``, the rule that ended refinement).
+
 .. data:: heat
 
     Run a steady-state thermal simulation of a waveguide cross-section. Requires a '3D' license.

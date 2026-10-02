@@ -6,7 +6,8 @@ Descriptions of the variables stored in a simulation file. Variables are read ba
 :data:`get`, or -- for grids, fields, shapes and whole profiles -- with the typed accessors
 :data:`get_grid`, :data:`get_fields`, :data:`get_shape` and :data:`get_profile`. Some
 variables have an alias, a copy under an older name kept for compatibility. SHAPE stands
-for a shape name and NAME for a profile name.
+for a shape name and NAME for a profile name. :data:`inspect` lists every name :data:`get`
+can read.
 
 How the simulation file is organized
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -14,11 +15,11 @@ How the simulation file is organized
 A simulation file has two levels.
 
 **Top-level variables** describe the file and the EME circuit: ``EMode_simulation_file``,
-``file_type``, ``emode_version``, ``materials``, ``profiles``, ``eme_scattering``,
+``file_type``, ``emode_version``, ``materials``, ``profiles``,
 ``propagation_resolution``, and -- once the corresponding functions have run --
 ``sweep_data``, ``S_matrix`` (through ``get('S_matrix')``), ``response`` and ``sources``.
-:data:`inspect` returns their names. Names beginning with an underscore are internal and
-may change between versions.
+:data:`inspect` returns their names, followed by the per-profile variables and settings
+below. Names beginning with an underscore are internal and may change between versions.
 
 **Profiles** live under the top-level ``profiles`` dictionary, one entry per cross-section.
 ``'_default'`` is the working profile that :data:`settings`, :data:`shape`, :data:`mesh` and
@@ -32,8 +33,9 @@ by wavelength. Every function that reads a profile takes ``profile=NAME``: :data
 :data:`report`, :data:`scattering`, :data:`mesh`, :data:`FDM`, :data:`delete_profile`.
 :data:`reset` acts on ``'_default'`` only and leaves named profiles alone.
 
-**Settings** (window, resolution, boundary condition, PML, ...) are part of the profile
-but are not returned by ``get()``; read them from ``get_profile(NAME).settings``.
+**Settings** (window, resolution, boundary condition, PML, ...) are part of the profile.
+``get(key, profile=NAME)`` returns any of them, under its current name or an older alias,
+and ``get_profile(NAME).settings`` returns them all at once.
 
 Per-profile variables
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -101,7 +103,10 @@ profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wav
         .. math::
             \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
-        Note: :data:`overlap` currently stores this result on the ``'_default'`` profile regardless of ``profile_b``. The value returned directly by the function call is correct.
+        Stored on the profile named by ``profile_b``. It holds the result of the latest :data:`overlap` call against that profile, and ``overlaps`` keeps them all.
+
+    overlaps
+        (*list*) One record per :data:`overlap` call against this profile (as ``profile_b``), each a dict with ``simulation_name_a``, ``profile_a``, ``mode_a``, ``mode_b`` and ``overlap``. Repeating the same pair of modes replaces its record.
 
     permittivity, permeability
         (*list*) The permittivity and permeability arrays are defined by ``mesh`` from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.
@@ -158,7 +163,7 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
         (*bool*) Internal bookkeeping for the file's on-disk (de)serialization state.
 
     eme_scattering
-        (*bool*) Legacy key, retained so old simulation files still load. It has no effect: EME scattering is controlled by ``EME_settings(apply_scattering=...)``.
+        (*bool*) Legacy key, found only in simulation files written before EMode 1.0.5, which still load. It has no effect: EME scattering is controlled by ``EME_settings(apply_scattering=...)``, and ``settings(eme_scattering=...)`` is deprecated and no longer stores it. On a newer file ``get('eme_scattering')`` returns False with a deprecation warning.
 
     materials
         (*list*) Names of every material in the database, built-in and user-added. A user-added material's own properties are returned by ``get(NAME)``; see ``user_material_NAME`` below.
@@ -190,7 +195,11 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
 Settings
 ^^^^^^^^
 
-Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).settings``.
+Read with ``get(key, profile=NAME)``, like the per-profile variables above. A
+multi-wavelength profile returns a ``dict[float, ...]`` keyed by wavelength. A setting
+reads back under the name it was set by, so an alias given to :data:`settings` (such as
+``radius`` or ``N_pml``) works here too. Each is also a field of
+``get_profile(NAME).settings``.
 
 .. glossary::
 
@@ -200,7 +209,9 @@ Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).se
         Alias: ``radius``
 
     boundary_condition
-        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via ``get()``/``inspect()``; use ``BC`` below to read back the resolved boundary condition.
+        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. ``get('boundary_condition')`` returns the string as given (for example ``'TE'``), and ``BC`` below is the resolved boundary condition.
+
+        Alias: ``BC``, as a :data:`settings` argument only. ``get('BC')`` returns the resolved value.
 
     BC
         (*str*) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of '0', 'A', or 'S'. For example, setting the boundary_condition to 'TE' and running FDM() will result in BC changing to either 'SS', '0S', 'S0', or '00', depending on the index profile cross-section symmetry.
@@ -211,8 +222,38 @@ Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).se
     expansion_size
         (*list*) List of the size of the expanded regions in the x- and y-directions.
 
+    fem_max_dofs
+        (*int*) The FEM solver stops refining before the problem exceeds this many unknowns.
+
+    fem_max_refinements
+        (*int*) Maximum number of adaptive FEM refinement passes. 0 disables refinement.
+
+    fem_min_angle
+        (*float*) [degrees] Minimum triangle angle of the FEM mesh, at most 34.
+
+    fem_neff_tolerance
+        (*float*) The FEM solver stops refining once no requested mode's effective index moves by more than this relative amount.
+
+    fem_order
+        (*int*) FEM element order, 1 or 2. Order 2 converges much faster in the effective index.
+
+    fem_points_per_wavelength
+        (*float*) Initial FEM mesh density, as mesh points per wavelength in each material.
+
+    fem_refine_fraction
+        (*float*) Share of the estimated error each adaptive FEM refinement pass targets, in (0, 1].
+
     field_to_solve
         (*str*) Desired transverse field component to solve; either 'Et' or 'Ht'.
+
+    generate_chi2
+        (*bool*) Generate the second-order nonlinear susceptibility (:math:`\chi^{(2)}`) tensor for the simulation window when meshing.
+
+    include_heat
+        (*bool*) Include the temperature change from the most recent ``heat()`` solve in the material properties.
+
+    include_scattering
+        (*bool*) Compute the interfacial scattering loss of every rough shape after each solve of this profile. Set with ``settings(include_scattering=True)``.
 
     max_effective_index
         (*float*) Upper limit for the effective index; the eigensolver's shift, unless ``pml_seed_bool`` derives one automatically.
@@ -252,6 +293,18 @@ Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).se
 
     shape_list, shape_materials
         Removed; use ``get_profile(NAME).shapes`` (or the per-profile ``shapes`` variable above).
+
+    solver
+        (*str*) The mode solver for this profile: ``'default'``, ``'FDM'`` or ``'FEM'``. ``'default'`` is the FDM in every session. The FEM runs only when asked for, with ``solver='FEM'`` or ``FEM()``.
+
+    solver_threads
+        (*int*) Maximum number of threads the sparse solver uses to factor this profile's systems. 0 lets the solver choose, up to every core.
+
+    sparse_solver
+        (*str*) The sparse direct solver for this profile's solves: ``'auto'``, ``'rslab'`` or ``'pardiso'``. ``'auto'`` uses MKL PARDISO on the x86 installers (Linux, Windows and Intel Mac) and rslab on the Apple silicon installer. ``'pardiso'`` is available only in the x86 installers.
+
+    subpixel_avg
+        (*bool*) Use sub-pixel averaging of the permittivity and permeability at shape boundaries.
 
     tolerance
         (*float*) Numerical tolerance for convergence of the effective indices.

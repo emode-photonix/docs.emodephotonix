@@ -368,16 +368,17 @@
 <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>, or – for grids, fields, shapes and whole profiles – with the typed accessors
 <a class="reference internal" href="file-management.html#get_grid" title="get_grid"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_grid</span></code></a>, <a class="reference internal" href="file-management.html#get_fields" title="get_fields"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_fields</span></code></a>, <a class="reference internal" href="file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a> and <a class="reference internal" href="file-management.html#get_profile" title="get_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_profile</span></code></a>. Some
 variables have an alias, a copy under an older name kept for compatibility. SHAPE stands
-for a shape name and NAME for a profile name.</p>
+for a shape name and NAME for a profile name. <a class="reference internal" href="file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a> lists every name <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>
+can read.</p>
 <section id="how-the-simulation-file-is-organized">
 <h2>How the simulation file is organized</h2>
 <p>A simulation file has two levels.</p>
 <p><strong>Top-level variables</strong> describe the file and the EME circuit: <code class="docutils literal notranslate"><span class="pre">EMode_simulation_file</span></code>,
-<code class="docutils literal notranslate"><span class="pre">file_type</span></code>, <code class="docutils literal notranslate"><span class="pre">emode_version</span></code>, <code class="docutils literal notranslate"><span class="pre">materials</span></code>, <code class="docutils literal notranslate"><span class="pre">profiles</span></code>, <code class="docutils literal notranslate"><span class="pre">eme_scattering</span></code>,
+<code class="docutils literal notranslate"><span class="pre">file_type</span></code>, <code class="docutils literal notranslate"><span class="pre">emode_version</span></code>, <code class="docutils literal notranslate"><span class="pre">materials</span></code>, <code class="docutils literal notranslate"><span class="pre">profiles</span></code>,
 <code class="docutils literal notranslate"><span class="pre">propagation_resolution</span></code>, and – once the corresponding functions have run –
 <code class="docutils literal notranslate"><span class="pre">sweep_data</span></code>, <code class="docutils literal notranslate"><span class="pre">S_matrix</span></code> (through <code class="docutils literal notranslate"><span class="pre">get('S_matrix')</span></code>), <code class="docutils literal notranslate"><span class="pre">response</span></code> and <code class="docutils literal notranslate"><span class="pre">sources</span></code>.
-<a class="reference internal" href="file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a> returns their names. Names beginning with an underscore are internal and
-may change between versions.</p>
+<a class="reference internal" href="file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a> returns their names, followed by the per-profile variables and settings
+below. Names beginning with an underscore are internal and may change between versions.</p>
 <p><strong>Profiles</strong> live under the top-level <code class="docutils literal notranslate"><span class="pre">profiles</span></code> dictionary, one entry per cross-section.
 <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> is the working profile that <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>, <a class="reference internal" href="setup.html#shape" title="shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">shape</span></code></a>, <a class="reference internal" href="solver-analysis.html#mesh" title="mesh"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesh</span></code></a> and
 <a class="reference internal" href="solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> act on unless <code class="docutils literal notranslate"><span class="pre">profile=</span></code> is given. <a class="reference internal" href="solver-analysis.html#label_profile" title="label_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">label_profile</span></code></a> saves a copy of it
@@ -389,8 +390,9 @@ by wavelength. Every function that reads a profile takes <code class="docutils l
 <a class="reference internal" href="solver-analysis.html#confinement" title="confinement"><code class="xref py py-data docutils literal notranslate"><span class="pre">confinement</span></code></a>, <a class="reference internal" href="solver-analysis.html#effective_area" title="effective_area"><code class="xref py py-data docutils literal notranslate"><span class="pre">effective_area</span></code></a>, <a class="reference internal" href="solver-analysis.html#group_index" title="group_index"><code class="xref py py-data docutils literal notranslate"><span class="pre">group_index</span></code></a>, <a class="reference internal" href="solver-analysis.html#orthogonality" title="orthogonality"><code class="xref py py-data docutils literal notranslate"><span class="pre">orthogonality</span></code></a>,
 <a class="reference internal" href="solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a>, <a class="reference internal" href="solver-analysis.html#scattering" title="scattering"><code class="xref py py-data docutils literal notranslate"><span class="pre">scattering</span></code></a>, <a class="reference internal" href="solver-analysis.html#mesh" title="mesh"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesh</span></code></a>, <a class="reference internal" href="solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a>, <a class="reference internal" href="file-management.html#delete_profile" title="delete_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">delete_profile</span></code></a>.
 <a class="reference internal" href="setup.html#reset" title="reset"><code class="xref py py-data docutils literal notranslate"><span class="pre">reset</span></code></a> acts on <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> only and leaves named profiles alone.</p>
-<p><strong>Settings</strong> (window, resolution, boundary condition, PML, …) are part of the profile
-but are not returned by <code class="docutils literal notranslate"><span class="pre">get()</span></code>; read them from <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).settings</span></code>.</p>
+<p><strong>Settings</strong> (window, resolution, boundary condition, PML, …) are part of the profile.
+<code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=NAME)</span></code> returns any of them, under its current name or an older alias,
+and <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).settings</span></code> returns them all at once.</p>
 </section>
 <section id="per-profile-variables">
 <h2>Per-profile variables</h2>
@@ -435,7 +437,9 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </div></blockquote>
 <div class="math notranslate nohighlight">
 \[\mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}\]</div>
-<p>Note: <a class="reference internal" href="solver-analysis.html#overlap" title="overlap"><code class="xref py py-data docutils literal notranslate"><span class="pre">overlap</span></code></a> currently stores this result on the <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> profile regardless of <code class="docutils literal notranslate"><span class="pre">profile_b</span></code>. The value returned directly by the function call is correct.</p>
+<p>Stored on the profile named by <code class="docutils literal notranslate"><span class="pre">profile_b</span></code>. It holds the result of the latest <a class="reference internal" href="solver-analysis.html#overlap" title="overlap"><code class="xref py py-data docutils literal notranslate"><span class="pre">overlap</span></code></a> call against that profile, and <code class="docutils literal notranslate"><span class="pre">overlaps</span></code> keeps them all.</p>
+</dd>
+<dt id="term-overlaps">overlaps</dt><dd><p>(<em>list</em>) One record per <a class="reference internal" href="solver-analysis.html#overlap" title="overlap"><code class="xref py py-data docutils literal notranslate"><span class="pre">overlap</span></code></a> call against this profile (as <code class="docutils literal notranslate"><span class="pre">profile_b</span></code>), each a dict with <code class="docutils literal notranslate"><span class="pre">simulation_name_a</span></code>, <code class="docutils literal notranslate"><span class="pre">profile_a</span></code>, <code class="docutils literal notranslate"><span class="pre">mode_a</span></code>, <code class="docutils literal notranslate"><span class="pre">mode_b</span></code> and <code class="docutils literal notranslate"><span class="pre">overlap</span></code>. Repeating the same pair of modes replaces its record.</p>
 </dd>
 <dt id="term-permittivity-permeability">permittivity, permeability</dt><dd><p>(<em>list</em>) The permittivity and permeability arrays are defined by <code class="docutils literal notranslate"><span class="pre">mesh</span></code> from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.</p>
 </dd>
@@ -474,7 +478,7 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </dd>
 <dt id="term-serialized">serialized</dt><dd><p>(<em>bool</em>) Internal bookkeeping for the file’s on-disk (de)serialization state.</p>
 </dd>
-<dt id="term-eme_scattering">eme_scattering</dt><dd><p>(<em>bool</em>) Legacy key, retained so old simulation files still load. It has no effect: EME scattering is controlled by <code class="docutils literal notranslate"><span class="pre">EME_settings(apply_scattering=...)</span></code>.</p>
+<dt id="term-eme_scattering">eme_scattering</dt><dd><p>(<em>bool</em>) Legacy key, found only in simulation files written before EMode 1.0.5, which still load. It has no effect: EME scattering is controlled by <code class="docutils literal notranslate"><span class="pre">EME_settings(apply_scattering=...)</span></code>, and <code class="docutils literal notranslate"><span class="pre">settings(eme_scattering=...)</span></code> is deprecated and no longer stores it. On a newer file <code class="docutils literal notranslate"><span class="pre">get('eme_scattering')</span></code> returns False with a deprecation warning.</p>
 </dd>
 <dt id="term-materials">materials</dt><dd><p>(<em>list</em>) Names of every material in the database, built-in and user-added. A user-added material’s own properties are returned by <code class="docutils literal notranslate"><span class="pre">get(NAME)</span></code>; see <code class="docutils literal notranslate"><span class="pre">user_material_NAME</span></code> below.</p>
 </dd>
@@ -498,12 +502,17 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </section>
 <section id="settings">
 <h2>Settings</h2>
-<p>Part of the profile, not returned by <code class="docutils literal notranslate"><span class="pre">get()</span></code>; read from <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).settings</span></code>.</p>
+<p>Read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=NAME)</span></code>, like the per-profile variables above. A
+multi-wavelength profile returns a <code class="docutils literal notranslate"><span class="pre">dict[float,</span> <span class="pre">...]</span></code> keyed by wavelength. A setting
+reads back under the name it was set by, so an alias given to <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> (such as
+<code class="docutils literal notranslate"><span class="pre">radius</span></code> or <code class="docutils literal notranslate"><span class="pre">N_pml</span></code>) works here too. Each is also a field of
+<code class="docutils literal notranslate"><span class="pre">get_profile(NAME).settings</span></code>.</p>
 <dl class="glossary">
 <dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
 </dd>
-<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via <code class="docutils literal notranslate"><span class="pre">get()</span></code>/<code class="docutils literal notranslate"><span class="pre">inspect()</span></code>; use <code class="docutils literal notranslate"><span class="pre">BC</span></code> below to read back the resolved boundary condition.</p>
+<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. <code class="docutils literal notranslate"><span class="pre">get('boundary_condition')</span></code> returns the string as given (for example <code class="docutils literal notranslate"><span class="pre">'TE'</span></code>), and <code class="docutils literal notranslate"><span class="pre">BC</span></code> below is the resolved boundary condition.</p>
+<p>Alias: <code class="docutils literal notranslate"><span class="pre">BC</span></code>, as a <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> argument only. <code class="docutils literal notranslate"><span class="pre">get('BC')</span></code> returns the resolved value.</p>
 </dd>
 <dt id="term-BC">BC</dt><dd><p>(<em>str</em>) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of ‘0’, ‘A’, or ‘S’. For example, setting the boundary_condition to ‘TE’ and running FDM() will result in BC changing to either ‘SS’, ‘0S’, ‘S0’, or ‘00’, depending on the index profile cross-section symmetry.</p>
 </dd>
@@ -511,7 +520,27 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </dd>
 <dt id="term-expansion_size">expansion_size</dt><dd><p>(<em>list</em>) List of the size of the expanded regions in the x- and y-directions.</p>
 </dd>
+<dt id="term-fem_max_dofs">fem_max_dofs</dt><dd><p>(<em>int</em>) The FEM solver stops refining before the problem exceeds this many unknowns.</p>
+</dd>
+<dt id="term-fem_max_refinements">fem_max_refinements</dt><dd><p>(<em>int</em>) Maximum number of adaptive FEM refinement passes. 0 disables refinement.</p>
+</dd>
+<dt id="term-fem_min_angle">fem_min_angle</dt><dd><p>(<em>float</em>) [degrees] Minimum triangle angle of the FEM mesh, at most 34.</p>
+</dd>
+<dt id="term-fem_neff_tolerance">fem_neff_tolerance</dt><dd><p>(<em>float</em>) The FEM solver stops refining once no requested mode’s effective index moves by more than this relative amount.</p>
+</dd>
+<dt id="term-fem_order">fem_order</dt><dd><p>(<em>int</em>) FEM element order, 1 or 2. Order 2 converges much faster in the effective index.</p>
+</dd>
+<dt id="term-fem_points_per_wavelength">fem_points_per_wavelength</dt><dd><p>(<em>float</em>) Initial FEM mesh density, as mesh points per wavelength in each material.</p>
+</dd>
+<dt id="term-fem_refine_fraction">fem_refine_fraction</dt><dd><p>(<em>float</em>) Share of the estimated error each adaptive FEM refinement pass targets, in (0, 1].</p>
+</dd>
 <dt id="term-field_to_solve">field_to_solve</dt><dd><p>(<em>str</em>) Desired transverse field component to solve; either ‘Et’ or ‘Ht’.</p>
+</dd>
+<dt id="term-generate_chi2">generate_chi2</dt><dd><p>(<em>bool</em>) Generate the second-order nonlinear susceptibility (<span class="math notranslate nohighlight">\(\chi^{(2)}\)</span>) tensor for the simulation window when meshing.</p>
+</dd>
+<dt id="term-include_heat">include_heat</dt><dd><p>(<em>bool</em>) Include the temperature change from the most recent <code class="docutils literal notranslate"><span class="pre">heat()</span></code> solve in the material properties.</p>
+</dd>
+<dt id="term-include_scattering">include_scattering</dt><dd><p>(<em>bool</em>) Compute the interfacial scattering loss of every rough shape after each solve of this profile. Set with <code class="docutils literal notranslate"><span class="pre">settings(include_scattering=True)</span></code>.</p>
 </dd>
 <dt id="term-max_effective_index">max_effective_index</dt><dd><p>(<em>float</em>) Upper limit for the effective index; the eigensolver’s shift, unless <code class="docutils literal notranslate"><span class="pre">pml_seed_bool</span></code> derives one automatically.</p>
 </dd>
@@ -538,6 +567,14 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 <dt id="term-remove_pml_modes_bool">remove_pml_modes_bool</dt><dd><p>(<em>bool</em>) Indicates whether or not to automatically remove artificial modes found in the pml layers.</p>
 </dd>
 <dt id="term-shape_list-shape_materials">shape_list, shape_materials</dt><dd><p>Removed; use <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).shapes</span></code> (or the per-profile <code class="docutils literal notranslate"><span class="pre">shapes</span></code> variable above).</p>
+</dd>
+<dt id="term-solver">solver</dt><dd><p>(<em>str</em>) The mode solver for this profile: <code class="docutils literal notranslate"><span class="pre">'default'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FDM'</span></code> or <code class="docutils literal notranslate"><span class="pre">'FEM'</span></code>. <code class="docutils literal notranslate"><span class="pre">'default'</span></code> is the FDM in every session. The FEM runs only when asked for, with <code class="docutils literal notranslate"><span class="pre">solver='FEM'</span></code> or <code class="docutils literal notranslate"><span class="pre">FEM()</span></code>.</p>
+</dd>
+<dt id="term-solver_threads">solver_threads</dt><dd><p>(<em>int</em>) Maximum number of threads the sparse solver uses to factor this profile’s systems. 0 lets the solver choose, up to every core.</p>
+</dd>
+<dt id="term-sparse_solver">sparse_solver</dt><dd><p>(<em>str</em>) The sparse direct solver for this profile’s solves: <code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rslab'</span></code> or <code class="docutils literal notranslate"><span class="pre">'pardiso'</span></code>. <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> uses MKL PARDISO on the x86 installers (Linux, Windows and Intel Mac) and rslab on the Apple silicon installer. <code class="docutils literal notranslate"><span class="pre">'pardiso'</span></code> is available only in the x86 installers.</p>
+</dd>
+<dt id="term-subpixel_avg">subpixel_avg</dt><dd><p>(<em>bool</em>) Use sub-pixel averaging of the permittivity and permeability at shape boundaries.</p>
 </dd>
 <dt id="term-tolerance">tolerance</dt><dd><p>(<em>float</em>) Numerical tolerance for convergence of the effective indices.</p>
 </dd>

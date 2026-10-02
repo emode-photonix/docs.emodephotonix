@@ -1,0 +1,96 @@
+
+FEM: SOI
+--------
+
+The SOI waveguide of the "Basic: SOI" example, solved with the finite-element mode solver. The mesh follows every material interface, and the solver refines it where the modes are under-resolved. The refinement history shows how the effective indices settle.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import emodeconnection as emc
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 10, 10 # [nm] resolution of the grid used for plotting
+        w_core = 600 # [nm] waveguide core width
+        w_trench = 800 # [nm] waveguide side trench width
+        h_core = 500 # [nm] waveguide core height
+        h_clad = 800 # [nm] waveguide top and bottom clad
+        num_modes = 2 # [-] number of modes
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        ## Settings: the same waveguide as the SOI example, plus the FEM mesh settings
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = w_core + w_trench*2, window_height = h_core + h_clad*2,
+            num_modes = num_modes, background_material = 'Air',
+            fem_points_per_wavelength = 10, fem_max_refinements = 2)
+
+        ## Draw shapes
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad)
+        em.shape(name = 'core', material = 'Si', width = w_core, height = h_core)
+
+        ## Launch the FEM solver, which refines the mesh where the modes need it
+        ## (em.solve(solver_method='FEM') does the same)
+        result = em.FEM()
+
+        ## Show how the effective indices settled as the mesh was refined
+        refinement = result['refinement']
+        print('Refinement level  Unknowns  n_eff (per mode)', flush = True)
+        for level, (dofs, n_eff) in enumerate(zip(refinement['num_dofs'], refinement['n_eff_history'])):
+            print(f'{level:16d}  {dofs:8d}  ' + '  '.join(f'{n.real:.6f}' for n in n_eff), flush = True)
+        print(f"Stopped by: {refinement['stopped_by']}", flush = True)
+
+        ## Display the effective indices, TE fractions, and core confinement
+        em.report()
+
+        ## Plot the fields with the triangle mesh the FEM solved on
+        em.plot(mesh_display = True)
+
+        ## Close EMode
+        em.close()
+
+
+Console output::
+
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.4 sec
+    Solving modes completed in 1.4 sec
+    Refinement level  Unknowns  n_eff (per mode)
+                   0     11613  3.013305  2.966522
+                   1     12481  3.013291  2.966504
+                   2     15407  3.013285  2.966500
+    Stopped by: max_refinements
+
+    Wavelength: 1550.0 nm    Solver: FEM
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)
+    --------  --------  ------  -------------
+        TE-0  3.013285  99.6 %          0.000
+        TM-1  2.966500   0.6 %          0.000
+ 
+    Exited EMode
+
+
+Figures:
+
+.. figure:: Figures/FEM_SOI/0Ex.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/FEM_SOI/1Ey.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/FEM_SOI/mesh.png
+    :width: 500
+    :align: center
+    :figwidth: 500

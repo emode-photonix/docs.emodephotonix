@@ -51,31 +51,31 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
 
     Sweeping setting parameter 'wavelength'...
-    Solving FDM: wavelength = 1000... completed in 7.0 sec
-    Solving FDM: wavelength = 1050... completed in 5.6 sec
-    Solving FDM: wavelength = 1100... completed in 5.4 sec
-    Solving FDM: wavelength = 1150... completed in 5.0 sec
-    Solving FDM: wavelength = 1200... completed in 5.6 sec
-    Solving FDM: wavelength = 1250... completed in 5.3 sec
-    Solving FDM: wavelength = 1300... completed in 5.4 sec
-    Solving FDM: wavelength = 1350... completed in 5.8 sec
-    Solving FDM: wavelength = 1400... completed in 4.9 sec
-    Solving FDM: wavelength = 1450... completed in 5.6 sec
-    Solving FDM: wavelength = 1500... completed in 5.7 sec
-    Solving FDM: wavelength = 1550... completed in 5.5 sec
-    Solving FDM: wavelength = 1600... completed in 5.7 sec
-    Solving FDM: wavelength = 1650... completed in 5.6 sec
-    Solving FDM: wavelength = 1700... completed in 5.1 sec
-    Solving FDM: wavelength = 1750... completed in 5.6 sec
-    Solving FDM: wavelength = 1800... completed in 6.1 sec
-    Solving FDM: wavelength = 1850... completed in 6.3 sec
-    Solving FDM: wavelength = 1900... completed in 5.5 sec
-    Solving FDM: wavelength = 1950... completed in 6.1 sec
-    Solving FDM: wavelength = 2000... completed in 6.0 sec
-     completed in 1 min 58.8 sec
+    Solving FDM: wavelength = 1000... completed in 4.4 sec
+    Solving FDM: wavelength = 1050... completed in 3.9 sec
+    Solving FDM: wavelength = 1100... completed in 3.8 sec
+    Solving FDM: wavelength = 1150... completed in 3.6 sec
+    Solving FDM: wavelength = 1200... completed in 3.9 sec
+    Solving FDM: wavelength = 1250... completed in 3.6 sec
+    Solving FDM: wavelength = 1300... completed in 3.7 sec
+    Solving FDM: wavelength = 1350... completed in 4.0 sec
+    Solving FDM: wavelength = 1400... completed in 3.3 sec
+    Solving FDM: wavelength = 1450... completed in 3.9 sec
+    Solving FDM: wavelength = 1500... completed in 4.0 sec
+    Solving FDM: wavelength = 1550... completed in 3.8 sec
+    Solving FDM: wavelength = 1600... completed in 4.0 sec
+    Solving FDM: wavelength = 1650... completed in 3.9 sec
+    Solving FDM: wavelength = 1700... completed in 3.7 sec
+    Solving FDM: wavelength = 1750... completed in 3.9 sec
+    Solving FDM: wavelength = 1800... completed in 3.9 sec
+    Solving FDM: wavelength = 1850... completed in 4.1 sec
+    Solving FDM: wavelength = 1900... completed in 3.6 sec
+    Solving FDM: wavelength = 1950... completed in 4.1 sec
+    Solving FDM: wavelength = 2000... completed in 4.0 sec
+     completed in 1 min 21.3 sec
     Exited EMode
 
 

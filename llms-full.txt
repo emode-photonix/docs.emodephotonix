@@ -104,6 +104,15 @@ There are two installation methods:
 
         **macOS**
 
+        Download the installer for your Mac: **Apple silicon** (M-series
+        processors, ``EMode-<version>-Mac.pkg``) or **Intel**
+        (``EMode-<version>-Mac-x86.pkg``). To check, open the Apple menu and
+        choose About This Mac: the Chip line reads Apple M... on Apple silicon,
+        and the Processor line names an Intel CPU on an Intel Mac. The Apple
+        silicon build runs natively and is faster. This is the last release
+        with an Intel installer, and earlier versions stay available for
+        download.
+
         Double-click the downloaded ``.pkg`` file and follow the installer
         prompts. Administrator access may be required. EMode will be installed
         to ``/usr/local/bin/emode``.
@@ -116,8 +125,6 @@ There are two installation methods:
 
             unzip EMode-VERSION-Linux.zip
             sh install.sh
-
-**macOS Apple silicon:** EMode runs via Rosetta 2 and you may be prompted to install it on the first run.
 
 4. Run an EMode Example Script
 ------------------------------
@@ -196,8 +203,8 @@ Additional options:
     emode-install --help                     # Show all options
     emode-install --list-versions            # Show available versions
     emode-install --update                   # Update to the latest version
-    emode-install --update --version 0.2.5   # Switch to a specific version
-    emode-install --version 0.2.5            # Install a specific version
+    emode-install --update --version 1.0.5   # Switch to a specific version
+    emode-install --version 1.0.5            # Install a specific version
     emode-install --install-dir /opt/bin     # Custom install directory
     emode-install --uninstall                # Remove EMode
     emode-install --uninstall --install-dir /opt/bin  # Remove from custom location
@@ -369,11 +376,20 @@ Four types are available as classes of the emodeconnection package to specify ma
    :param material: Either a *str* pointing to a material in the Material Database, or a MaterialProperties object. Required.
    :type material: ~typing.Union[str, ~MaterialProperties]
 
-   :param theta: The angle of rotation around *y* for the material in radians.
+   :param theta: The angle of rotation around *y* for the material in radians. Default: 0.
    :type theta: ~typing.Optional[float]
 
-   :param phi: The angle of rotation around *z* for the material in radians. This is applied *after* the theta rotation.
+   :param phi: The angle of rotation around *z* for the material in radians, applied *after* the theta rotation. Default: 0.
    :type phi: ~typing.Optional[float]
+
+   :param psi: The angle of rotation around the crystal's own *z* axis in radians, applied *before* the theta rotation. Only a biaxial crystal (such as KTP or LBO) or a nonlinear tensor without symmetry about *z* needs it. Default: 0.
+   :type psi: ~typing.Optional[float]
+
+   The three angles are *z-y-z* Euler angles that turn the crystal, not the simulation axes (an active rotation). A material tensor :math:`T` given on the crystal axes, such as the permittivity, permeability, :math:`\chi^{(2)}` or electro-optic tensor, appears in the simulation frame as :math:`R T R^\mathsf{T}` (with one :math:`R` per index for a higher-rank tensor), where
+
+   .. math:: R = R_z(\phi) \, R_y(\theta) \, R_z(\psi)
+
+   and :math:`R_z`, :math:`R_y` are the usual right-handed rotation matrices about *z* and *y*. Read right to left, the crystal is turned by ``psi`` about its *z* axis first, then by ``theta`` about *y*, then by ``phi`` about *z*. Column *a* of :math:`R` is the direction crystal axis *a* points in the simulation frame, so the crystal *z* axis ends up along :math:`(\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta)`. The simulation's propagation direction *z* then lies along the crystal direction :math:`R^\mathsf{T} \hat{z}`. For example, ``theta=-pi/2, psi=-phi_pm`` points the propagation direction along :math:`(\cos\phi_\mathrm{pm}, \sin\phi_\mathrm{pm}, 0)` in the crystal's *xy* plane.
 
    :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.
    :type x: ~typing.Optional[float]
@@ -756,7 +772,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     Create a simulation instance with an associated '.eph' file to run the simulation and store data. This function is automatically called when the emodeconnection class is initialized.
 
     :param str save_path: path to save the simulation file relative to the current working directory, default: '.'
-    :param str simulation_name: simulation name, default: 'emode'
+    :param str simulation_name: simulation name. It becomes the file name, so it must be a valid file name on Linux, macOS and Windows alike: not empty, none of the characters ``< > : " / \ | ? *`` or control characters, no trailing dot or space, and not a device name Windows reserves (``CON``, ``PRN``, ``AUX``, ``NUL``, ``COM1`` to ``COM9`` or ``LPT1`` to ``LPT9``, also with an extension). Any other name raises an error. Default: 'emode'
 
 .. data:: open
 
@@ -764,7 +780,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
     :param str save_path: path to open the simulation file relative to the current working directory, default: '.'
     :param str simulation_name: simulation name, default: 'emode'
-    :param new_simulation_name: new simulation name so the old file is not over-written, default: False (the original ``simulation_name`` is reused)
+    :param new_simulation_name: new simulation name so the old file is not over-written, under the same naming rules as ``simulation_name`` in :data:`init`, default: False (the original ``simulation_name`` is reused)
     :type new_simulation_name: bool or str
     :param bool force: if a file with the target name is already open elsewhere, open it anyway instead of auto-renaming to an available filename, default: False
 
@@ -773,14 +789,15 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
     Extract data from an existing simulation to your Python environment.
 
-    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables. Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`SMatrix` object.
+    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables, settings included (``get('num_modes')``). Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`SMatrix` object.
     :param str profile: name of the profile to extract the data defined by ``key`` from, default: '_default'. A multi-wavelength profile returns a dict keyed by wavelength.
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: inspect
 
-    Return the names of the top-level variables in the simulation file (see :doc:`Variable Descriptions </emodeguide/variables>`). Per-profile results live inside ``profiles`` and are read with ``get(key, profile=...)`` or the typed accessors; names beginning with an underscore are internal.
+    Return the names :data:`get` can read (see :doc:`Variable Descriptions </emodeguide/variables>`): the top-level variables in the simulation file, followed by the per-profile variables and settings of ``profile``. Names beginning with an underscore are internal.
 
+    :param str profile: name of the profile whose variables and settings to list, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_fields
@@ -897,8 +914,8 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :type offset: float or tuple[float, float]
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
-    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` when updating an existing section leaves the declared process in place, and passing a new one replaces it. A declared process cannot currently be removed -- ``nonlinear=None`` is indistinguishable from omitting the argument -- so redeclare the section under a new name instead. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
-    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
+    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or False or None
     :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), e.g. ``settings={'overlap_variation': 0.005}``, default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
@@ -938,8 +955,8 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param float length: [nm] the length of the section
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
-    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` when updating an existing section leaves the declared process in place, and passing a new one replaces it. A declared process cannot currently be removed -- ``nonlinear=None`` is indistinguishable from omitting the argument -- so redeclare the section under a new name instead. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
-    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
+    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or False or None
     :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
@@ -1114,6 +1131,22 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
 Multi-Physics
 -------------
+
+.. data:: FEM
+
+    Calculate the waveguide modes with the full-vector finite-element method. Requires a '3D' license. The cross-section is meshed with triangles that follow every material interface, and the mesh is refined where the modes are under-resolved, as set by the ``fem_*`` settings in ``settings()``. The saved fields, effective indices, losses and TE fractions are the same quantities, with the same normalization, as described under ``FDM()``, so ``get()``, ``get_fields()``, ``report()``, ``plot()`` and ``EME()`` work the same way. Calling ``FEM()`` sets the profile's ``solver`` setting to 'FEM'.
+
+    All ``boundary_condition`` values, PMLs, expansion regions, bends, transformation-optics sections (bends, the ring and general couplers, and simulation-space transforms), lossy and anisotropic materials (including crystals tilted out of the cross-section with ``theta``), and ``heat()`` and ``electrostatic()`` perturbations are supported. A symmetric or antisymmetric boundary on an axis whose mirror a crystal's orientation breaks raises an error, since it would describe a different structure. Field plots sample the FEM solution at ``x_resolution`` and ``y_resolution``, and ``plot(mesh_display=True)`` shows the triangle mesh.
+
+    :param profile: profile name to save the solved profile under, default: '_default'
+    :type profile: str or int
+    :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
+    :param float propagation_distance: [nm] where along ``section`` to take the cross-section, default: None
+    :param bool include_heat: whether to include the temperature change from the most recent ``heat()`` solve, default: True
+    :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
+    :param bool verbose: print progress, default: True
+    :param str simulation_name: simulation name, default: 'emode'
+    :return: a dict with ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, ``TM_indices``, ``PML_indices``, ``mesh`` (``vertices``, ``triangles`` and ``region``, the triangle mesh solved on), and ``refinement`` (``n_eff_history``, ``num_dofs`` and ``num_elements`` per refinement level, and ``stopped_by``, the rule that ended refinement).
 
 .. data:: heat
 
@@ -1330,6 +1363,32 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 207 nm to 12400 nm
     
         | S. Adachi, "Optical dispersion relations for GaP, GaAs, GaSb, InP, InAs, InSb, AlxGa1−xAs, and In1−xGaxAsyP1−y," J. Appl. Phys. 66, 6030 (1989).
+
+.. data:: KTP
+
+    .. math::
+
+        n_x &= \left( 3.29100 + \frac{0.04140}{\lambda^2 - 0.03978} + \frac{9.35522}{\lambda^2 - 31.45571} \right)^{0.5} \\
+        n_y &= \left( 3.45018 + \frac{0.04341}{\lambda^2 - 0.04597} + \frac{16.98825}{\lambda^2 - 39.43799} \right)^{0.5} \\
+        n_z &= \left( 4.59423 + \frac{0.06206}{\lambda^2 - 0.04763} + \frac{110.80672}{\lambda^2 - 86.12171} \right)^{0.5}
+
+    Wavelength range: 430 nm to 3540 nm
+
+        | K. Kato and E. Takaoka, "Sellmeier and thermo-optic dispersion formulas for KTP," Appl. Opt. 41, 5040 (2002).
+        | Notes: flux-grown KTiOPO4 at 20 C. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, b and c axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
+
+.. data:: LBO
+
+    .. math::
+
+        n_x &= \left( 2.4542 + \frac{0.01125}{\lambda^2 - 0.01135} - 0.01388 \lambda^2 \right)^{0.5} \\
+        n_y &= \left( 2.5390 + \frac{0.01277}{\lambda^2 - 0.01189} - 0.01849 \lambda^2 + 4.3025 \times 10^{-5} \lambda^4 - 2.9131 \times 10^{-5} \lambda^6 \right)^{0.5} \\
+        n_z &= \left( 2.5865 + \frac{0.0131}{\lambda^2 - 0.01223} - 0.01862 \lambda^2 + 4.5778 \times 10^{-5} \lambda^4 - 3.2526 \times 10^{-5} \lambda^6 \right)^{0.5}
+
+    Wavelength range: 200 nm to 2600 nm
+
+        | K. Kato, "Temperature-tuned 90° phase-matching properties of LiB3O5," IEEE J. Quantum Electron. 30, 2950 (1994).
+        | Notes: LiB3O5 at room temperature. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, c and b axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
 
 .. data:: LN_MgO
     
@@ -1570,7 +1629,8 @@ Non-optical and nonlinear properties
 
 Every material carries these scalar properties, read back with ``get('<material>')`` and
 used by ``heat()``, ``electrostatic()``, and the chi(2) EME. Uniaxial crystals store the
-optic-axis (extraordinary) value of ``dn_dT`` and ``eps_r_dc``. ``d`` (chi(2)) and ``r``
+optic-axis (extraordinary) value of ``dn_dT`` and ``eps_r_dc``, and the biaxial
+crystals (KTP, LBO) store their z-axis value. ``d`` (chi(2)) and ``r``
 (the linear electro-optic, or Pockels, tensor) are both contracted coefficients in the
 crystal frame (pm/V); only the nonzero independent coefficients are listed, and ``--``
 means all zero (or, for ``r``, not applicable -- a material with no ``r`` method). A
@@ -1582,7 +1642,7 @@ for the full citation text.
 
 Not available (default values used): ``dn_dT`` for HfO2, TiO2, TiO2_rutile, GaP, GaSb,
 InAs, InSb, InGaAs, InGaP, AlGaAs, and GGG; ``d`` for InP. ``r`` is currently only entered
-for LN, LN_MgO, GaAs, InP, AlN, and GaN -- the materials the electrostatic phase-shifter
+for LN, LN_MgO, GaAs, InP, AlN, GaN, and KTP -- the materials the electrostatic phase-shifter
 example uses; every other material's ``r`` is the base-class zero tensor.
 
 .. list-table::
@@ -1750,6 +1810,20 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - inf
      - --
      - --
+   * - KTP
+     - 13
+     - 1.6e-05
+     - 13
+     - inf
+     - d15 = 1.91, d24 = 3.64, d31 = 2.54, d32 = 4.35, d33 = 16.9
+     - r13 = 9.5, r23 = 15.7, r33 = 36.3, r42 = 9.3, r51 = 7.3
+   * - LBO
+     - 3.5
+     - -8.5e-06
+     - 1
+     - inf
+     - d15 = 1.05, d24 = -0.98, d31 = 1.05, d32 = -0.98, d33 = 0.05
+     - --
    * - LN
      - 4.6
      - 3.3e-05
@@ -1901,7 +1975,7 @@ Simulation setup
     Specify the simulation settings.
 
     :param str profile: name of the profile these settings apply to, default: '_default'
-    :param float wavelength: [nm] simulation wavelength, default: 1550
+    :param float wavelength: [nm] simulation wavelength, or a list of wavelengths for a multi-wavelength profile that ``FDM()``, ``FEM()``, ``solve()`` and ``EME()`` solve at each one. Setting a new wavelength on a multi-wavelength profile starts it over at that wavelength, default: 1550
     :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
     :param excitation: declare a CW pump driving the circuit (EMode\ :sup:`3D`\  only), as ``Source(port=..., wavelength=..., mode=0, power=1.0, phase=0.0)`` from ``emodeconnection``, where ``power`` is in W and ``phase`` in radians. ``port`` is a bare side ('left'/'right') or a qualified '<section>.<port>' name, resolved when the circuit is built, and ``wavelength`` [nm] is matched against the circuit's own wavelengths. This is what makes :data:`EME` solve the power-dependent response of a :math:`\chi^{(2)}` section in addition to the small-signal scattering matrix; the result is read back with ``get('response')``, and the declared source with ``get('sources')``. Default: None
     :type excitation: Source or None
@@ -1915,6 +1989,16 @@ Simulation setup
     :param str field_to_solve: either 'Et' or 'Ht' to specify whether the transverse electric field or magnetic field is solved, default: 'Et'
     :param float max_effective_index: maximum value for the effective refractive index, if ``max_effective_index`` is 0 the maximum refractive index found in the simulation window is used, default: 0
     :param float tolerance: eigenmode solver convergence tolerance, if ``tolerance`` = 0 the computer's precision is used, default: 1e-12
+    :param int solver_threads: maximum number of threads the sparse solver uses to factor this profile's systems, where 0 lets the solver choose (up to every core), default: 0
+    :param str sparse_solver: sparse direct solver for this profile's solves, one of ``'auto'``, ``'rslab'`` or ``'pardiso'``, where ``'auto'`` uses MKL PARDISO on the x86 installers (Linux, Windows and Intel Mac) and rslab on the Apple silicon installer, and ``'pardiso'`` is available only in the x86 installers, default: 'auto'
+    :param str solver: the mode solver used by ``solve()``, ``EME()`` and ``sweep()``: 'FDM' (finite difference), 'FEM' (finite element, EMode\ :sup:`3D`\  only), or 'default', which is the FDM in every session (the FEM runs only when asked for). Calling ``FDM()`` or ``FEM()`` sets this to that solver, default: 'default'
+    :param int fem_order: (FEM) element order, 1 or 2; order 2 converges much faster for the same mesh, default: 2
+    :param float fem_points_per_wavelength: (FEM) mesh points per wavelength in each material before refinement, default: 4
+    :param float fem_min_angle: [degrees] (FEM) smallest triangle angle allowed in the mesh, at most 34, default: 30
+    :param float fem_refine_fraction: (FEM) fraction of the estimated error that each refinement step targets, marking the fewest triangles that carry it, default: 0.5
+    :param int fem_max_refinements: (FEM) most adaptive refinement steps after the first solve, 0 disables refinement, default: 2
+    :param float fem_neff_tolerance: (FEM) refinement stops once no requested mode's effective index changes by more than this relative amount, default: 1e-6
+    :param int fem_max_dofs: (FEM) refinement stops before a mesh would exceed this many unknowns, default: 2000000
     :param float bend_radius: [nm] waveguide bend radius relative to the center of the window, must be positive and larger than window_width/2, if ``bend_radius`` = 0 no bending is used in the calculation, default: 0
     :param pml_NSEW_bool: indicates whether to use a pml on each of the 4 boundaries, [north, south, east, west], 0: no pml, 1: use pml, default: [0,0,0,0]
     :type pml_NSEW_bool: list, length = 4
@@ -1937,6 +2021,7 @@ Simulation setup
     :param bool subpixel_avg: whether to use sub-pixel averaging of the permittivity/permeability at shape boundaries for improved accuracy, default: True
     :param bool generate_chi2: whether to generate the second-order nonlinear susceptibility (chi2) tensor for the simulation window, default: False
     :param bool include_heat: whether to include heat-related material properties when meshing for FEM heat calculations, default: True
+    :param bool include_scattering: compute the interfacial scattering loss of every shape with roughness after each solve of this profile, whether the solve comes from ``FDM()``, ``FEM()``, ``solve()``, ``EME()`` or ``sweep()``, the same as calling ``scattering()`` after each one. ``FDM(scattering=True)`` does this for a single solve. Default: False
     :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/10
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -1956,8 +2041,9 @@ Simulation setup
     :param float eps_r_dc: [-] relative permittivity at ~1 kHz, default: 1.0
     :param d: second-order nonlinear susceptibility d-matrix with shape (3, 6); use None for linear materials, default: None
     :type d: list (3x6) or None
-    :param float phi: phi angle of the crystal orientation in cylidrical coordinates, default: 0
-    :param float theta: theta angle of the crystal orientation in cylidrical coordinates, default: 0
+    :param float phi: [rad] rotation of the crystal about z, applied last, default: 0
+    :param float theta: [rad] rotation of the crystal about y, default: 0
+    :param float psi: [rad] rotation of the crystal about its own z axis, applied first, default: 0. The three angles turn the crystal by R = Rz(phi) Ry(theta) Rz(psi), the same convention as :class:`MaterialSpec`
     :param dict property_refs: citation string per property name (``'d'``, ``'r'``, ``'thermal_conductivity'``, ``'dn_dT'``, ``'eps_r_dc'``, ``'resistivity'``), default: {}
     :param str simulation_name: simulation name, default: 'emode'
 
@@ -1996,6 +2082,9 @@ Simulation setup
     :param str name: shape name, default: an auto-generated number
     :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
     :type material: ~MaterialSpec, ~MaterialProperties, or str
+
+    A shape's relative permeability comes from its material, for example ``material=MaterialProperties(n=1.5, mu=2.0)``, and the permeability of an etched region from ``fill_material`` in the same way. ``shape()`` has no permeability argument of its own, and the older ``permeability`` and ``fill_permeability`` arguments raise an error that says so.
+
     :param float loss_dB_per_m: [dB/m] material propagation loss, if not set by the ``material`` parameter, default: 0
     :param vertices: list of N vertices that define a closed polygon, or a list of such vertex lists to define multiple disjoint polygons in one shape; if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
     :type vertices: list (N,2), list of list (N,2), or int
@@ -2014,9 +2103,9 @@ Simulation setup
     :param float sidewall_angle: etched sidewall angle in degrees, 0 is perfectly vertical, 90 is the maximum; only applied to etched features (``height``, ``mask``, and a nonzero ``etch_depth`` must all be specified for this parameter to have any effect), default: 0
     :param fill_material: the material for the fill for this shape.  Takes the same values as material, as well as "transparent_fill" (the default). "transparent_fill" results in the fill being the background.
     :type fill_material: ~MaterialSpec, ~MaterialProperties, or str
-    :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
+    :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, default: [0,0]
     :type correlation_length: float or list
-    :param roughness_rms: interfacial roughness standard deviation in nm rms, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, a list the length of the number of edges applies each value to the corresponding edge, default: [0,0]
+    :param roughness_rms: interfacial roughness standard deviation in nm rms, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, default: [0,0]
     :type roughness_rms: float or list
     :param str shape_type: set shape type as 'planar', 'conformal' (only uses ``name``, ``material``, ``height``, and ``priority``), 'polygon' (only uses ``name``, ``vertices``, ``material`` and ``priority``), or 'ellipse' (only uses ``name``, ``material``, ``width``, ``height``, ``position``, ``sidewall_angle`` (the angle of the ellipse), and ``priority``), default: 'planar'
     :param float priority: a number that signifies the order in which shapes will be drawn, a higher priority gets drawn over a lower number priority, default: auto-generated integer based on order called
@@ -2033,7 +2122,7 @@ Simulation setup
 
     Clear simulation settings, shape definitions, or both, on the default profile.
 
-    ``'shapes'`` removes every user-defined shape from the default profile (the background remains) and discards its mesh, mode list, and analysis results; ``'settings'`` replaces the default profile with a new one at the default settings, which also removes its shapes, and resets ``eme_scattering`` and ``propagation_resolution``; ``'all'`` does both. Named profiles created by :data:`label_profile` are not affected. Any other ``kind`` raises an error.
+    ``'shapes'`` removes every user-defined shape from the default profile (the background remains) and discards its mesh, mode list, and analysis results; ``'settings'`` replaces the default profile with a new one at the default settings, which also removes its shapes, and resets ``propagation_resolution``; ``'all'`` does both. Named profiles created by :data:`label_profile` are not affected. Any other ``kind`` raises an error.
 
     :param str kind: either 'shapes', 'settings', or 'all' to specify what data is cleared, default: 'shapes'
     :param str simulation_name: simulation name, default: 'emode'
@@ -2043,9 +2132,27 @@ Simulation setup
 Solver and analysis
 -------------------
 
+.. data:: solve
+
+    Calculate the waveguide modes with the finite-difference (FDM) or the finite-element (FEM) solver. The fields, effective indices, losses and TE fractions are saved as described under ``FDM()``, whichever solver runs.
+
+    :param str solver_method: 'FDM' or 'FEM' runs that solver, the same as calling ``FDM()`` or ``FEM()``, and sets the profile's ``solver`` setting to it. 'default' runs the solver the ``solver`` setting selects, without changing it. That setting is itself 'default' unless changed, which is the FDM in every session, default: 'default'
+    :param profile: profile name to save the solved profile under, default: '_default'
+    :type profile: str or int
+    :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
+    :param float propagation_distance: [nm] where along ``section`` to take the cross-section, default: None
+    :param bool include_heat: whether to include the temperature change from the most recent ``heat()`` solve, default: True
+    :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
+    :param bool verbose: print progress, default: True
+    :param str simulation_name: simulation name, default: 'emode'
+    :return: what ``FDM()`` or ``FEM()`` returns, for whichever solver ran.
+
+    .. note::
+        The FEM solver requires an EMode\ :sup:`3D`\  license, so ``solve()`` needs one whenever it runs the FEM: with ``solver_method='FEM'``, or with 'default' when the profile's ``solver`` setting is 'FEM'. See :data:`FEM` on the Multi-Physics page.
+
 .. data:: FDM
 
-    Calculate the waveguide modes using the finite difference method. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
+    Calculate the waveguide modes using the finite difference method. Calling ``FDM()`` sets the profile's ``solver`` setting to 'FDM', so ``EME()`` and ``sweep()`` then use the FDM too. It automatically runs ``EM_mesh`` as needed (generating ``x``, ``y``, ``permittivity``, and ``permeability``). After solving the mode, the effective index (``effective_index``), mode propagation loss (``loss_dB_per_m``), and field components (``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``) are available, where the fields are normalized to the equation below.
 
     .. math::
         \frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}
@@ -2055,16 +2162,19 @@ Solver and analysis
     .. math::
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
+    A multi-wavelength profile (a wavelength list in ``settings()``, or a set from ``create_profile_set()``) is solved at each of its wavelengths, and is saved as one solved profile per wavelength, so ``get()`` returns a dict keyed by wavelength and ``plot()`` and ``EME()`` use the modes at each wavelength. ``FEM()`` and ``solve()`` do the same. The direct return value describes only the longest wavelength.
+
     :param profile: profile name to automatically create a profile after running ``FDM()``, default: '_default'
     :type profile: str or int
     :param str section: name of an EME section to solve a slice from, instead of the profile's own settings/shapes, default: None
     :param float propagation_distance: [nm] optional propagation distance used to compute an additional propagation phase/loss, default: None
-    :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none', default: 'forward'
-    :param int fLanczos: number of Lanczos vectors used by the eigensolver, default: 5
+    :param str mode_filter: choose to filter the mode list for propagation direction of 'forward', 'backward', or 'none'. It acts in the anisotropic solver only, since the isotropic solver returns forward modes by construction. It is saved in the profile's settings, so a later ``EME()`` or ``sweep()`` that solves this profile again uses it too. Default: 'forward'
+    :param int fLanczos: size of the eigensolver's Krylov subspace as a multiple of the number of modes requested, at least 1. Raise it if the solve does not converge. It is saved in the profile's settings like ``mode_filter``. Default: 5
     :param str solve_type: either 'isotropic', 'anisotropic', or 'auto' to control whether anisotropic materials are solved with the full tensor or reduced to their isotropic diagonal, default: 'auto'
     :param bool include_heat: whether to include heat-related material properties when meshing, default: True
     :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
-    :param bool scattering: whether to automatically calculate interfacial scattering loss for all shapes after solving, default: False
+    :param bool scattering: whether to automatically calculate interfacial scattering loss for all shapes after solving. The ``include_scattering`` setting in :data:`settings` does the same for every solve of the profile. Default: False
+    :param bool verbose: print progress, default: True
     :param str simulation_name: simulation name, default: 'emode'
 
     .. note::
@@ -2077,7 +2187,7 @@ Solver and analysis
     :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME. The accepted section keys are 'length', 'num_modes', 'minimum_z_step', 'overlap_variation', 'z_slices', 'offset', 'etch_depth', 'sidewall_angle', 'window_width', 'window_height', and 'facet_angle' (the tilt [degrees] of an angled facet on that section, see :func:`make_angled_facet_port`); any other section key raises an error naming it.
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
-    :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, default: automatically chosen based on the ``key`` and ``result`` selection
+    :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, where 'FDM' means a mode solve with the solver the ``solver`` setting selects (the FDM or the FEM), default: automatically chosen based on the ``key`` and ``result`` selection
     :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
     :type result: str or list
     :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
@@ -2129,6 +2239,8 @@ Solver and analysis
 
     Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); a ``PML`` column when the profile was solved with a pml, marking the modes that carry less than 75% of their power inside the window (see ``PML_indices`` and ``window_confinement`` in :doc:`Variable Descriptions </emodeguide/variables>`); per-shape confinement factors and scattering loss (if calculated); effective areas (if calculated).
 
+    The line above the table gives the wavelength and the mode solver that produced the modes, for example ``Wavelength: 1550.0 nm    Solver: FEM``. A saved CSV records both below the table.
+
     Returns the table as a dictionary keyed by profile name, each table holding one list per column. A multi-wavelength profile returns one table per wavelength, keyed by wavelength; an unsolved profile returns an empty table.
 
     :param str profile: profile name, default: '_default'
@@ -2139,14 +2251,14 @@ Solver and analysis
 
 .. data:: label_profile
 
-    Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under ``name`` in the ``profiles`` dictionary of the simulation file, meshing it first if needed. Named profiles are read with ``profile=NAME`` in :data:`get`, :data:`get_fields`, :data:`get_grid`, :data:`get_shape` and :data:`get_profile`, are the inputs to ``overlap``, ``mode_order`` and the EME section functions, and are not affected by :data:`reset`.
+    Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under ``name`` in the ``profiles`` dictionary of the simulation file, meshing it first if needed. A multi-wavelength profile is saved whole, with each member meshed and keeping its own name. Named profiles are read with ``profile=NAME`` in :data:`get`, :data:`get_fields`, :data:`get_grid`, :data:`get_shape` and :data:`get_profile`, are the inputs to ``overlap``, ``mode_order`` and the EME section functions, and are not affected by :data:`reset`.
 
     :param str name: save the current simulation state to this name, default: '0'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: overlap
 
-    Calculate overlap integral between two modes. The result is saved in the profile metadata as ``overlap`` and is returned by this function.
+    Calculate overlap integral between two modes. The result is returned by this function and saved on the profile named by ``profile_b``, where ``get('overlap', profile=profile_b)`` reads the latest result and ``get('overlaps', profile=profile_b)`` a record of every overlap computed against it (see :doc:`Variable Descriptions </emodeguide/variables>`).
 
         Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ''Diode lasers and photonic integrated circuits,'' John Wiley \& Sons, 2012.
 
@@ -2199,7 +2311,7 @@ Solver and analysis
     :type aspect_ratio: str or float
     :param bool index_outline: setting index outline, default: True
     :param bool text_display: setting text display, default: True
-    :param bool mesh_display: setting mesh display, default: False
+    :param bool mesh_display: setting mesh display: the finite-difference grid for an FDM solve, or the triangle mesh for an FEM solve (in the cross-section view), default: False
     :param bool window_display: setting window display, default: False
     :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
     :param port: (EME) the input port that the field is excited from, either a port index or a port name (see :class:`Port`), default: 0
@@ -2285,7 +2397,8 @@ Descriptions of the variables stored in a simulation file. Variables are read ba
 :data:`get`, or -- for grids, fields, shapes and whole profiles -- with the typed accessors
 :data:`get_grid`, :data:`get_fields`, :data:`get_shape` and :data:`get_profile`. Some
 variables have an alias, a copy under an older name kept for compatibility. SHAPE stands
-for a shape name and NAME for a profile name.
+for a shape name and NAME for a profile name. :data:`inspect` lists every name :data:`get`
+can read.
 
 How the simulation file is organized
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2293,11 +2406,11 @@ How the simulation file is organized
 A simulation file has two levels.
 
 **Top-level variables** describe the file and the EME circuit: ``EMode_simulation_file``,
-``file_type``, ``emode_version``, ``materials``, ``profiles``, ``eme_scattering``,
+``file_type``, ``emode_version``, ``materials``, ``profiles``,
 ``propagation_resolution``, and -- once the corresponding functions have run --
 ``sweep_data``, ``S_matrix`` (through ``get('S_matrix')``), ``response`` and ``sources``.
-:data:`inspect` returns their names. Names beginning with an underscore are internal and
-may change between versions.
+:data:`inspect` returns their names, followed by the per-profile variables and settings
+below. Names beginning with an underscore are internal and may change between versions.
 
 **Profiles** live under the top-level ``profiles`` dictionary, one entry per cross-section.
 ``'_default'`` is the working profile that :data:`settings`, :data:`shape`, :data:`mesh` and
@@ -2311,8 +2424,9 @@ by wavelength. Every function that reads a profile takes ``profile=NAME``: :data
 :data:`report`, :data:`scattering`, :data:`mesh`, :data:`FDM`, :data:`delete_profile`.
 :data:`reset` acts on ``'_default'`` only and leaves named profiles alone.
 
-**Settings** (window, resolution, boundary condition, PML, ...) are part of the profile
-but are not returned by ``get()``; read them from ``get_profile(NAME).settings``.
+**Settings** (window, resolution, boundary condition, PML, ...) are part of the profile.
+``get(key, profile=NAME)`` returns any of them, under its current name or an older alias,
+and ``get_profile(NAME).settings`` returns them all at once.
 
 Per-profile variables
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -2380,7 +2494,10 @@ profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wav
         .. math::
             \mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_2^* \cdot \vec E_1 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \right|^2 \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
-        Note: :data:`overlap` currently stores this result on the ``'_default'`` profile regardless of ``profile_b``. The value returned directly by the function call is correct.
+        Stored on the profile named by ``profile_b``. It holds the result of the latest :data:`overlap` call against that profile, and ``overlaps`` keeps them all.
+
+    overlaps
+        (*list*) One record per :data:`overlap` call against this profile (as ``profile_b``), each a dict with ``simulation_name_a``, ``profile_a``, ``mode_a``, ``mode_b`` and ``overlap``. Repeating the same pair of modes replaces its record.
 
     permittivity, permeability
         (*list*) The permittivity and permeability arrays are defined by ``mesh`` from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.
@@ -2437,7 +2554,7 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
         (*bool*) Internal bookkeeping for the file's on-disk (de)serialization state.
 
     eme_scattering
-        (*bool*) Legacy key, retained so old simulation files still load. It has no effect: EME scattering is controlled by ``EME_settings(apply_scattering=...)``.
+        (*bool*) Legacy key, found only in simulation files written before EMode 1.0.5, which still load. It has no effect: EME scattering is controlled by ``EME_settings(apply_scattering=...)``, and ``settings(eme_scattering=...)`` is deprecated and no longer stores it. On a newer file ``get('eme_scattering')`` returns False with a deprecation warning.
 
     materials
         (*list*) Names of every material in the database, built-in and user-added. A user-added material's own properties are returned by ``get(NAME)``; see ``user_material_NAME`` below.
@@ -2469,7 +2586,11 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
 Settings
 ^^^^^^^^
 
-Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).settings``.
+Read with ``get(key, profile=NAME)``, like the per-profile variables above. A
+multi-wavelength profile returns a ``dict[float, ...]`` keyed by wavelength. A setting
+reads back under the name it was set by, so an alias given to :data:`settings` (such as
+``radius`` or ``N_pml``) works here too. Each is also a field of
+``get_profile(NAME).settings``.
 
 .. glossary::
 
@@ -2479,7 +2600,9 @@ Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).se
         Alias: ``radius``
 
     boundary_condition
-        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. This setting is not itself retrievable via ``get()``/``inspect()``; use ``BC`` below to read back the resolved boundary condition.
+        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. ``get('boundary_condition')`` returns the string as given (for example ``'TE'``), and ``BC`` below is the resolved boundary condition.
+
+        Alias: ``BC``, as a :data:`settings` argument only. ``get('BC')`` returns the resolved value.
 
     BC
         (*str*) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of '0', 'A', or 'S'. For example, setting the boundary_condition to 'TE' and running FDM() will result in BC changing to either 'SS', '0S', 'S0', or '00', depending on the index profile cross-section symmetry.
@@ -2490,8 +2613,38 @@ Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).se
     expansion_size
         (*list*) List of the size of the expanded regions in the x- and y-directions.
 
+    fem_max_dofs
+        (*int*) The FEM solver stops refining before the problem exceeds this many unknowns.
+
+    fem_max_refinements
+        (*int*) Maximum number of adaptive FEM refinement passes. 0 disables refinement.
+
+    fem_min_angle
+        (*float*) [degrees] Minimum triangle angle of the FEM mesh, at most 34.
+
+    fem_neff_tolerance
+        (*float*) The FEM solver stops refining once no requested mode's effective index moves by more than this relative amount.
+
+    fem_order
+        (*int*) FEM element order, 1 or 2. Order 2 converges much faster in the effective index.
+
+    fem_points_per_wavelength
+        (*float*) Initial FEM mesh density, as mesh points per wavelength in each material.
+
+    fem_refine_fraction
+        (*float*) Share of the estimated error each adaptive FEM refinement pass targets, in (0, 1].
+
     field_to_solve
         (*str*) Desired transverse field component to solve; either 'Et' or 'Ht'.
+
+    generate_chi2
+        (*bool*) Generate the second-order nonlinear susceptibility (:math:`\chi^{(2)}`) tensor for the simulation window when meshing.
+
+    include_heat
+        (*bool*) Include the temperature change from the most recent ``heat()`` solve in the material properties.
+
+    include_scattering
+        (*bool*) Compute the interfacial scattering loss of every rough shape after each solve of this profile. Set with ``settings(include_scattering=True)``.
 
     max_effective_index
         (*float*) Upper limit for the effective index; the eigensolver's shift, unless ``pml_seed_bool`` derives one automatically.
@@ -2531,6 +2684,18 @@ Part of the profile, not returned by ``get()``; read from ``get_profile(NAME).se
 
     shape_list, shape_materials
         Removed; use ``get_profile(NAME).shapes`` (or the per-profile ``shapes`` variable above).
+
+    solver
+        (*str*) The mode solver for this profile: ``'default'``, ``'FDM'`` or ``'FEM'``. ``'default'`` is the FDM in every session. The FEM runs only when asked for, with ``solver='FEM'`` or ``FEM()``.
+
+    solver_threads
+        (*int*) Maximum number of threads the sparse solver uses to factor this profile's systems. 0 lets the solver choose, up to every core.
+
+    sparse_solver
+        (*str*) The sparse direct solver for this profile's solves: ``'auto'``, ``'rslab'`` or ``'pardiso'``. ``'auto'`` uses MKL PARDISO on the x86 installers (Linux, Windows and Intel Mac) and rslab on the Apple silicon installer. ``'pardiso'`` is available only in the x86 installers.
+
+    subpixel_avg
+        (*bool*) Use sub-pixel averaging of the permittivity and permeability at shape boundaries.
 
     tolerance
         (*float*) Numerical tolerance for convergence of the effective indices.
@@ -2636,6 +2801,53 @@ have run for that shape.
 
 Release Notes
 ^^^^^^^^^^^^^
+
+**1.0.5: October 2, 2026**
+
+* New
+
+  * On Apple silicon, EMode's sparse direct solver is now rslab, a supernodal LU and complex-symmetric LDL\ :sup:`T` solver compiled into EMode. Mode solves return the same effective indices as with Intel MKL PARDISO. A mode solve with a PML is about 2.5 to 4.5 times faster (measured on an Apple silicon Mac against the previous release under Rosetta), and a solve without one takes the same time.
+  * EMode runs natively on Apple silicon Macs, without Rosetta. There are now two Mac installers, ``EMode-<version>-Mac.pkg`` for Apple silicon and ``EMode-<version>-Mac-x86.pkg`` for Intel Macs. The Intel installer keeps MKL PARDISO. This is the last release with an Intel installer, and earlier versions stay available for download.
+  * New :data:`settings` options, per profile: ``solver_threads`` caps the number of threads the sparse solver uses (0, the default, lets it choose, up to every core), and ``sparse_solver`` picks the solver (``'auto'``, ``'rslab'`` or ``'pardiso'``). The Linux, Windows and Intel Mac installers keep MKL PARDISO as their default, since it is still faster than rslab on x86 processors, and include rslab as ``sparse_solver='rslab'``. The ``EMODE_SOLVER_THREADS`` environment variable limits the thread count for every profile that does not set its own, and the 16-thread cap on the MKL thread count is gone.
+  * The heat and electrostatic solves use the same solver.
+  * Every installer except the Intel Mac one now meshes FEM cross-sections with the same version of the ``triangle`` mesher, so heat and electrostatic results no longer differ slightly between platforms. On Linux and Windows the mesh changes a little: the :doc:`Phase Shifter </examples/Phase_Shifter>` example's V\ :sub:`pi`\ L moves from 5.39 to 5.10 V·cm.
+  * Full-vector finite-element mode solver, available with EMode\ :sup:`3D`. :data:`FEM` solves a cross-section on a triangle mesh that follows every material interface, with second-order elements, and refines the mesh where the modes need it. Boundaries, PMLs, expansion regions, bends, lossy and anisotropic materials (including crystals tilted out of the cross-section with ``theta``), and heater and electro-optic perturbations work as they do in the FDM, and FEM and FDM sections can meet at a junction. ``plot(mesh_display=True)`` draws the triangle mesh. See the new :doc:`FEM: SOI </examples/FEM_SOI>` example.
+  * New :data:`solve` runs either mode solver. ``solver_method='FDM'`` or ``'FEM'`` is the same as calling :data:`FDM` or :data:`FEM`, and ``'default'`` follows the new ``solver`` setting.
+  * New :data:`settings` option ``solver`` picks the mode solver for :data:`solve`, :data:`EME` and :data:`sweep`. Its default, ``'default'``, is the FDM in every session, so existing scripts solve as before. The FEM runs only when asked for, with ``solver='FEM'``, :data:`FEM` or ``solve(solver_method='FEM')``. Calling :data:`FDM` or :data:`FEM` sets ``solver`` to that method. The ``fem_*`` settings control the FEM mesh and its refinement.
+  * :data:`report` names the mode solver on its wavelength line, for example ``Wavelength: 1550.0 nm    Solver: FEM``, and a saved CSV records it too.
+  * Biaxial crystals. :data:`KTP` and :data:`LBO` are in the material database, each with three principal indices, its :math:`\chi^{(2)}` tensor and, for KTP, its electro-optic tensor. A third orientation angle, ``psi`` (in :class:`MaterialSpec` and :data:`add_material`), turns a crystal about its own z axis before ``theta`` and ``phi``, so a biaxial crystal can take any orientation. Omitted, ``psi`` is 0 and existing simulations are unchanged. See :class:`MaterialSpec` for the convention.
+  * New :data:`settings` option ``include_scattering``: with ``include_scattering=True``, every solve of the profile (by :data:`FDM`, :data:`FEM`, :data:`solve`, :data:`EME` or :data:`sweep`) also computes the interfacial scattering loss of each rough shape. ``FDM(scattering=True)`` still does this for a single solve.
+  * ``nonlinear=False`` on :data:`straight_section` or :data:`taper_section` removes a declared :math:`\chi^{(2)}` process, so the section propagates linearly again.
+* Fixed
+
+  * **Material loss now attenuates.** A lossy material (``loss=`` in dB/m, or a database material with an extinction coefficient) amplified the mode in :data:`EME`: a 200 µm lossy strip transmitted 110% of its power. Lossy modes now have an effective index with a negative imaginary part, and :data:`EME` attenuates them by exactly the reported loss. :data:`refractive_index`, :data:`permittivity` and plots still show n + jk. Profiles solved by an earlier release keep their old sign until they are solved again.
+  * **Symmetric boundaries unfold correctly.** A mode solved with an 'S' or 'A' boundary was unfolded onto the full window with the same sign for every field component, but some components are odd under the mirror. Junctions between a folded and an unfolded section, the :math:`\chi^{(2)}` coupling of folded solves, plane-wave junctions and plots of unfolded fields were all affected. Each component now takes its physical mirror parity.
+  * **A windowed port on a symmetry-folded profile couples correctly.** A port with ``window=`` on a profile solved with an 'S' or 'A' boundary left the mirrored half of its window at zero, so its junction was wrong wherever the window crossed the symmetry plane. Two ports folded the same way at different transverse offsets had the same problem.
+  * The :math:`\chi^{(2)}` coupling of symmetry-folded solves (SHG, SFG, DFG, SPDC) used the pump's symmetry for a signal folded differently from the pump. It now matches a full-window solve.
+  * :data:`chi2_spectrum` left the profiles it re-solved with no scattering data, so ``get('scattering_loss')`` and :data:`report` read zero after a scan. The re-solved profiles now keep their per-mode scattering loss.
+  * **An FDM solve asked for more modes than a structure guides returns its lossy modes.** Past the guided and radiation modes, the solve returned modes with an effective index near 0, and at higher mode counts it failed with "array must not contain infs or NaNs". The next modes are now the lossy ones, with an imaginary effective index, ordered from least to most decay. Guided modes are unchanged.
+  * The FDM solve returns the same modes on every run. Degenerate modes used to come back as a different mixture each time.
+  * **FDM '0' walls are metal on all four sides.** The bottom wall was a magnetic wall half a cell outside the window, and ``field_to_solve='Ht'`` returned modes the ``'Et'`` solve did not. Both now return a metal waveguide's modes. Modes kept away from the walls by a cladding or a PML are unchanged. Modes that reach a wall move: the :doc:`EME: Taper </examples/EME_Taper>` example's printed indices change by up to 3e-4.
+  * A taper whose etch mask is offset from the waveguide center re-centered the mask on every interpolated slice, so the geometry jumped to the center mid-taper. A misspelled :data:`shape` keyword now raises an error instead of being ignored.
+  * A :data:`shape` stacked on a layer that came out empty, such as a fully etched layer, was placed half that layer's height too high. It now sits directly on top of it.
+  * ``FDM(section=..., propagation_distance=...)`` failed on a straight or bend section, or any section whose cross-section does not change along its length.
+  * :data:`group_index` crashed on an FDM profile.
+  * A junction between two differently gridded sections (a confined port, a PML against a plain window, a different resolution or offset) resampled both modes onto a common grid smaller than either and shifted by half a cell. A confined port's S-matrix was off by up to 6e-2. The common grid now covers both sections exactly.
+  * :data:`get` reads back every setting :data:`settings` accepts, including older aliases such as ``radius``. Before, only ``wavelength``, ``background_material`` and ``BC`` worked. :data:`inspect` lists every name :data:`get` can read and takes ``profile=``.
+  * :data:`overlap` stores its result on the profile named by ``profile_b`` instead of always on the default profile, and no longer fails when the default profile has several wavelengths. The new ``get('overlaps')`` keeps one record per pair of modes, so overlaps no longer overwrite each other.
+  * :data:`label_profile` works on a multi-wavelength profile.
+  * ``FDM(verbose=False)`` still printed its progress. It is now quiet.
+  * The ``mode_filter`` and ``fLanczos`` arguments of :data:`FDM` had no effect. They now reach the solver, and a bad value raises an error.
+  * The ``eme_scattering`` option of :data:`settings` never had an effect. It is deprecated: it is still accepted, with a warning that it does nothing. Use ``EME_settings(apply_scattering=True)`` to apply scattering loss in :data:`EME`.
+  * The ``permeability`` and ``fill_permeability`` arguments of :data:`shape` raised an unclear error. The error now explains that a shape's permeability comes from its material, as in ``material=MaterialProperties(n=1.5, mu=2.0)``.
+  * A simulation name that is not a valid file name on every platform, such as ``'run:1'``, is rejected by :data:`init` and :data:`open` with an error that names the problem, instead of producing a simulation file that cannot be written on Windows.
+  * :data:`FDM` failed on a multi-wavelength profile, from a wavelength list in :data:`settings` or from :data:`create_profile_set`. Each wavelength is now solved at its own wavelength and :data:`get` returns the results keyed by wavelength. :data:`EME` on a wavelength list in :data:`settings` failed too.
+  * On a multi-wavelength profile, the results of :data:`get`, :data:`effective_area`, :data:`group_index`, :data:`orthogonality`, :data:`scattering`, :data:`confinement` and :data:`report` could not be indexed by wavelength: ``result[1550.0]`` raised a KeyError. They are now a read-only dict keyed by wavelength, in which ``result[1550]`` and ``result[1550.0]`` are the same entry. :data:`confinement` returns its dictionary of confinement factors per shape directly, as documented, instead of inside a one-element list, so a script that used ``confinement()[0]`` should drop the ``[0]``.
+  * A material given by its permittivity, ``MaterialSpec(material=MaterialProperties(eps=...))``, ignored its ``theta`` and ``phi``, while its ``d`` tensor was rotated by them. Its permittivity now turns with it.
+  * :data:`shape` with a single value for ``roughness_rms`` or ``correlation_length`` raised an error, although the documentation says a single value applies to all interfaces. It now does, and a list of any length other than two raises an error that names the argument.
+  * A lossy anisotropic material rotated off its principal axes (``loss`` with ``theta``, ``phi`` or ``psi``) had its loss applied to every element of its index tensor, which made the loss depend on polarization. The loss is now applied to the diagonal only, as for the unrotated material.
+  * :data:`heat` followed by a mode solve failed with an IndexError when a rotated anisotropic material had a nonzero ``dn_dT``. The heated index of such a material is now its index tensor shifted by ``dn_dT`` times the temperature change.
+  * :data:`refractive_index` with an array of wavelengths failed for a rotated anisotropic material, and for exactly three wavelengths returned a wrong result. It now returns one 3x3 tensor per wavelength.
 
 **1.0.4: September 24, 2026**
 
@@ -3016,7 +3228,7 @@ Quick reference for initializing, running, and closing an EMode session:
 .. note::
 
    The console output on the example pages below, including all timings,
-   was produced on: AMD EPYC 7763 64-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
+   was produced on: AMD EPYC 9V74 80-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
 
 .. hardware-note-end
 
@@ -3061,6 +3273,7 @@ Example Scripts
                 * :octicon:`pulse;1em` :doc:`Nonlinear-EME: SHG <examples//EME_SHG>`
                 * :octicon:`zap;1em` :doc:`Nonlinear-EME: PPLN <examples//EME_PPLN>`
                 * :octicon:`arrow-switch;1em` :doc:`Nonlinear-EME: DFG <examples//EME_DFG>`
+                * :octicon:`container;1em` :doc:`FEM: SOI <examples//FEM_SOI>`
                 * :octicon:`flame;1em` :doc:`Heater <examples//Heater>`
                 * :octicon:`plug;1em` :doc:`Phase Shifter <examples//Phase_Shifter>`
 
@@ -3089,6 +3302,7 @@ Example Scripts
    examples//EME_SHG
    examples//EME_PPLN
    examples//EME_DFG
+   examples//FEM_SOI
    examples//Heater
    examples//Phase_Shifter
 
@@ -3144,11 +3358,11 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 2.3 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.3 sec
+    Solving modes completed in 1.3 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
@@ -3246,11 +3460,11 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.2 sec
-    Solving modes completed in 37.1 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.5 sec
+    Solving modes completed in 18.3 sec
 
-    Wavelength: 980.0 nm
+    Wavelength: 980.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    PML    background confinement    core confinement
     --------  --------  ------  -------------  -----  ------------------------  ------------------
@@ -3351,20 +3565,20 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.0 sec
-    Solving modes completed in 6.3 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 3.7 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
-    Meshing completed in 1.0 sec
-    Solving modes completed in 6.2 sec
+    Meshing completed in 0.6 sec
+    Solving modes completed in 3.5 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
@@ -3484,11 +3698,11 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 8.3 sec
-    Solving modes completed in 47.6 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 4.8 sec
+    Solving modes completed in 23.9 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement    core scattering (dB/m)
     --------  --------  ------  -------------  ------------------  ------------------------
@@ -3620,22 +3834,22 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.3 sec
-    Solving modes completed in 7.2 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 3.7 sec
 
-    Wavelength: 1970.0 nm
+    Wavelength: 1970.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.3 sec
-    Solving modes completed in 6.3 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 3.5 sec
 
-    Wavelength: 985.0 nm
+    Wavelength: 985.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
@@ -3643,9 +3857,9 @@ Console output::
         TM-1  1.929029  15.3 %          0.000
  
     Exited EMode
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
     Exited EMode
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
     Exited EMode
 
 Figures:
@@ -3714,31 +3928,31 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
 
     Sweeping setting parameter 'wavelength'...
-    Solving FDM: wavelength = 1000... completed in 7.0 sec
-    Solving FDM: wavelength = 1050... completed in 5.6 sec
-    Solving FDM: wavelength = 1100... completed in 5.4 sec
-    Solving FDM: wavelength = 1150... completed in 5.0 sec
-    Solving FDM: wavelength = 1200... completed in 5.6 sec
-    Solving FDM: wavelength = 1250... completed in 5.3 sec
-    Solving FDM: wavelength = 1300... completed in 5.4 sec
-    Solving FDM: wavelength = 1350... completed in 5.8 sec
-    Solving FDM: wavelength = 1400... completed in 4.9 sec
-    Solving FDM: wavelength = 1450... completed in 5.6 sec
-    Solving FDM: wavelength = 1500... completed in 5.7 sec
-    Solving FDM: wavelength = 1550... completed in 5.5 sec
-    Solving FDM: wavelength = 1600... completed in 5.7 sec
-    Solving FDM: wavelength = 1650... completed in 5.6 sec
-    Solving FDM: wavelength = 1700... completed in 5.1 sec
-    Solving FDM: wavelength = 1750... completed in 5.6 sec
-    Solving FDM: wavelength = 1800... completed in 6.1 sec
-    Solving FDM: wavelength = 1850... completed in 6.3 sec
-    Solving FDM: wavelength = 1900... completed in 5.5 sec
-    Solving FDM: wavelength = 1950... completed in 6.1 sec
-    Solving FDM: wavelength = 2000... completed in 6.0 sec
-     completed in 1 min 58.8 sec
+    Solving FDM: wavelength = 1000... completed in 4.4 sec
+    Solving FDM: wavelength = 1050... completed in 3.9 sec
+    Solving FDM: wavelength = 1100... completed in 3.8 sec
+    Solving FDM: wavelength = 1150... completed in 3.6 sec
+    Solving FDM: wavelength = 1200... completed in 3.9 sec
+    Solving FDM: wavelength = 1250... completed in 3.6 sec
+    Solving FDM: wavelength = 1300... completed in 3.7 sec
+    Solving FDM: wavelength = 1350... completed in 4.0 sec
+    Solving FDM: wavelength = 1400... completed in 3.3 sec
+    Solving FDM: wavelength = 1450... completed in 3.9 sec
+    Solving FDM: wavelength = 1500... completed in 4.0 sec
+    Solving FDM: wavelength = 1550... completed in 3.8 sec
+    Solving FDM: wavelength = 1600... completed in 4.0 sec
+    Solving FDM: wavelength = 1650... completed in 3.9 sec
+    Solving FDM: wavelength = 1700... completed in 3.7 sec
+    Solving FDM: wavelength = 1750... completed in 3.9 sec
+    Solving FDM: wavelength = 1800... completed in 3.9 sec
+    Solving FDM: wavelength = 1850... completed in 4.1 sec
+    Solving FDM: wavelength = 1900... completed in 3.6 sec
+    Solving FDM: wavelength = 1950... completed in 4.1 sec
+    Solving FDM: wavelength = 2000... completed in 4.0 sec
+     completed in 1 min 21.3 sec
     Exited EMode
 
 A separate script can be used to plot the results.
@@ -3914,12 +4128,12 @@ Highlighted features: ``sweep(adaptive=True)`` for a fine wavelength spectrum fr
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Adaptive wavelength scan over 1500-1600 nm... completed in 5.5 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 12.3 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 29.6 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.7 sec
+    EMode3D 1.0.5 - email
+    Adaptive wavelength scan over 1500-1600 nm... completed in 2.9 sec
+    Adaptive wavelength scan over 1500-1600 nm... completed in 6.6 sec
+    Adaptive wavelength scan over 1500-1600 nm... completed in 14.3 sec
+    Meshing completed in 0.2 sec
+    Solving modes completed in 0.3 sec
     Exited EMode
     tolerance 1e-02:   5 solves for 201 points  (40x fewer)
     tolerance 1e-03:  12 solves for 201 points  (17x fewer)
@@ -4015,102 +4229,94 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 0.4 sec
-    Solving modes completed in 2.2 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.2 sec
+    Solving modes completed in 0.7 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
         TE-0  2.744942  99.8 %          0.000
-        TE-1  1.819117  92.4 %          0.000
-        TM-2  1.665347  11.8 %          0.000
-        TE-3  1.421518  99.9 %          0.000
-        TE-4  1.368426  88.0 %          0.000
-        TM-5  1.359634  12.8 %          0.000
-        TE-6  1.321504  99.9 %          0.000
-        TM-7  1.279963   2.4 %          0.000
-        TE-8  1.250897  98.7 %          0.000
-        TE-9  1.189492  95.8 %          0.000
+        TE-1  1.819107  92.4 %          0.000
+        TM-2  1.665463  11.8 %          0.000
+        TE-3  1.381565  99.9 %          0.000
+        TM-4  1.368264   1.9 %          0.000
+        TM-5  1.349166   0.8 %          0.000
+        TE-6  1.279775  98.0 %          0.000
+        TE-7  1.243507  99.4 %          0.000
+        TE-8  1.219186  96.4 %          0.000
+        TM-9  1.207915   0.5 %          0.000
  
-    Meshing completed in 0.5 sec
-    Solving modes completed in 1.7 sec
+    Meshing completed in 0.3 sec
+    Solving modes completed in 0.7 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff     TE %    Loss (dB/m)
     --------  --------  -------  -------------
         TE-0  2.821143  100.0 %          0.000
         TE-1  2.606186   99.7 %          0.000
         TE-2  2.123806   98.2 %          0.000
-        TM-3  1.939095    4.9 %          0.000
-        TM-4  1.565613   16.9 %          0.000
-        TE-5  1.441070   89.8 %          0.000
-        TE-6  1.391478   82.7 %          0.000
-        TE-7  1.362128   66.6 %          0.000
-        TM-8  1.333348   48.1 %          0.000
-        TE-9  1.285430   69.6 %          0.000
+        TM-3  1.939105    4.9 %          0.000
+        TM-4  1.565876   16.8 %          0.000
+        TE-5  1.430615   75.4 %          0.000
+        TM-6  1.361727   27.9 %          0.000
+        TM-7  1.334510    7.9 %          0.000
+        TE-8  1.305090   95.2 %          0.000
+        TE-9  1.285377   75.9 %          0.000
  
 
     Solving S-matrices...
     Solving section: 1... completed in 0.0 sec
     Solving section: 2...
-    Solving slice at 4000.0 nm... completed in 2.0 sec
-    Solving slice at 6000.0 nm... completed in 2.5 sec
-    Solving slice at 2000.0 nm... completed in 2.2 sec
-    Solving slice at 7000.0 nm... completed in 2.2 sec
-    Solving slice at 5000.0 nm... completed in 2.7 sec
-    Solving slice at 3000.0 nm... completed in 2.2 sec
-    Solving slice at 1000.0 nm... completed in 2.2 sec
-    Solving slice at 7500.0 nm... completed in 2.0 sec
-    Solving slice at 6500.0 nm... completed in 2.2 sec
-    Solving slice at 5500.0 nm... completed in 2.1 sec
-    Solving slice at 4500.0 nm... completed in 2.6 sec
-    Solving slice at 3500.0 nm... completed in 2.2 sec
-    Solving slice at 2500.0 nm... completed in 2.6 sec
-    Solving slice at 1500.0 nm... completed in 2.2 sec
-    Solving slice at 500.0 nm... completed in 2.6 sec
-    Solving slice at 7750.0 nm... completed in 2.1 sec
-    Solving slice at 7250.0 nm... completed in 2.2 sec
-    Solving slice at 6750.0 nm... completed in 2.2 sec
-    Solving slice at 6250.0 nm... completed in 2.6 sec
-    Solving slice at 5750.0 nm... completed in 2.5 sec
-    Solving slice at 5250.0 nm... completed in 2.1 sec
-    Solving slice at 4750.0 nm... completed in 2.6 sec
-    Solving slice at 4250.0 nm... completed in 2.5 sec
-    Solving slice at 3750.0 nm... completed in 2.4 sec
-    Solving slice at 3250.0 nm... completed in 2.1 sec
-    Solving slice at 2750.0 nm... completed in 2.1 sec
-    Solving slice at 2250.0 nm... completed in 2.1 sec
-    Solving slice at 1750.0 nm... completed in 2.5 sec
-    Solving slice at 1250.0 nm... completed in 2.1 sec
-    Solving slice at 750.0 nm... completed in 2.0 sec
-    Solving slice at 250.0 nm... completed in 2.4 sec
-    Solving slice at 6125.0 nm... completed in 2.3 sec
-    Solving slice at 5875.0 nm... completed in 2.3 sec
-    Solving slice at 5375.0 nm... completed in 2.4 sec
-    Solving slice at 5125.0 nm... completed in 2.3 sec
-    Solving slice at 4375.0 nm... completed in 2.0 sec
-    Solving slice at 4125.0 nm... completed in 2.4 sec
-    Solving slice at 3875.0 nm... completed in 2.5 sec
-    Solving slice at 3625.0 nm... completed in 2.5 sec
-    Solving slice at 3375.0 nm... completed in 2.0 sec
-    Solving slice at 3125.0 nm... completed in 2.4 sec
-    Solving slice at 2875.0 nm... completed in 2.3 sec
-    Solving slice at 2625.0 nm... completed in 2.6 sec
-    Solving slice at 2375.0 nm... completed in 2.1 sec
-    Solving slice at 5437.5 nm... completed in 2.5 sec
-    Solving slice at 5312.5 nm... completed in 2.1 sec
-    Solving slice at 5187.5 nm... completed in 2.4 sec
-    Solving slice at 4312.5 nm... completed in 2.2 sec
-    Solving slice at 4187.5 nm... completed in 2.2 sec
-    Solving slice at 2562.5 nm... completed in 2.6 sec
-    Solving slice at 2312.5 nm... completed in 2.2 sec
-    Solving slice at 4218.8 nm... completed in 2.2 sec
-     completed in 2 min 14.5 sec
+    Solving slice at 4000.0 nm... completed in 1.0 sec
+    Solving slice at 6000.0 nm... completed in 1.1 sec
+    Solving slice at 2000.0 nm... completed in 0.9 sec
+    Solving slice at 7000.0 nm... completed in 0.9 sec
+    Solving slice at 5000.0 nm... completed in 1.1 sec
+    Solving slice at 3000.0 nm... completed in 1.1 sec
+    Solving slice at 1000.0 nm... completed in 0.9 sec
+    Solving slice at 7500.0 nm... completed in 0.9 sec
+    Solving slice at 6500.0 nm... completed in 1.1 sec
+    Solving slice at 5500.0 nm... completed in 1.1 sec
+    Solving slice at 4500.0 nm... completed in 0.9 sec
+    Solving slice at 3500.0 nm... completed in 1.0 sec
+    Solving slice at 2500.0 nm... completed in 1.0 sec
+    Solving slice at 1500.0 nm... completed in 0.9 sec
+    Solving slice at 500.0 nm... completed in 1.1 sec
+    Solving slice at 6250.0 nm... completed in 1.1 sec
+    Solving slice at 5750.0 nm... completed in 1.0 sec
+    Solving slice at 5250.0 nm... completed in 1.1 sec
+    Solving slice at 4750.0 nm... completed in 1.0 sec
+    Solving slice at 4250.0 nm... completed in 1.1 sec
+    Solving slice at 3750.0 nm... completed in 1.1 sec
+    Solving slice at 3250.0 nm... completed in 1.0 sec
+    Solving slice at 2750.0 nm... completed in 1.1 sec
+    Solving slice at 1750.0 nm... completed in 0.9 sec
+    Solving slice at 6125.0 nm... completed in 1.1 sec
+    Solving slice at 5875.0 nm... completed in 1.1 sec
+    Solving slice at 3625.0 nm... completed in 1.1 sec
+    Solving slice at 3375.0 nm... completed in 1.2 sec
+    Solving slice at 3125.0 nm... completed in 1.2 sec
+    Solving slice at 1875.0 nm... completed in 1.0 sec
+    Solving slice at 1625.0 nm... completed in 1.0 sec
+    Solving slice at 6062.5 nm... completed in 1.1 sec
+    Solving slice at 5937.5 nm... completed in 1.2 sec
+    Solving slice at 3312.5 nm... completed in 1.1 sec
+    Solving slice at 3187.5 nm... completed in 1.2 sec
+    Solving slice at 1937.5 nm... completed in 1.0 sec
+    Solving slice at 1812.5 nm... completed in 1.1 sec
+    Solving slice at 1687.5 nm... completed in 1.0 sec
+    Solving slice at 6093.8 nm... completed in 1.2 sec
+    Solving slice at 1968.8 nm... completed in 1.0 sec
+    Solving slice at 1906.2 nm... completed in 1.0 sec
+    Solving slice at 1921.9 nm... completed in 1.0 sec
+    Solving slice at 1929.7 nm... completed in 1.0 sec
+    Solving slice at 1925.8 nm... completed in 1.0 sec
+     completed in 56.1 sec
     Solving section: 3... completed in 0.0 sec
-     completed in 2 min 14.5 sec
+     completed in 56.1 sec
     Exited EMode
 
 Figures:
@@ -4210,73 +4416,65 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
 
     Sweeping section parameter 'length'...
     Solving EME: length = 8000...
-    Solving slice at 4000.0 nm... completed in 2.3 sec
-    Solving slice at 6000.0 nm... completed in 2.7 sec
-    Solving slice at 2000.0 nm... completed in 2.3 sec
-    Solving slice at 7000.0 nm... completed in 2.3 sec
-    Solving slice at 5000.0 nm... completed in 2.8 sec
-    Solving slice at 3000.0 nm... completed in 2.4 sec
-    Solving slice at 1000.0 nm... completed in 2.3 sec
-    Solving slice at 7500.0 nm... completed in 2.3 sec
-    Solving slice at 6500.0 nm... completed in 2.4 sec
-    Solving slice at 5500.0 nm... completed in 2.3 sec
-    Solving slice at 4500.0 nm... completed in 2.8 sec
-    Solving slice at 3500.0 nm... completed in 2.3 sec
-    Solving slice at 2500.0 nm... completed in 2.7 sec
-    Solving slice at 1500.0 nm... completed in 2.3 sec
-    Solving slice at 500.0 nm... completed in 2.7 sec
-    Solving slice at 7750.0 nm... completed in 2.3 sec
-    Solving slice at 7250.0 nm... completed in 2.3 sec
-    Solving slice at 6750.0 nm... completed in 2.3 sec
-    Solving slice at 6250.0 nm... completed in 2.8 sec
-    Solving slice at 5750.0 nm... completed in 2.8 sec
-    Solving slice at 5250.0 nm... completed in 2.4 sec
-    Solving slice at 4750.0 nm... completed in 2.8 sec
-    Solving slice at 4250.0 nm... completed in 2.8 sec
-    Solving slice at 3750.0 nm... completed in 2.7 sec
-    Solving slice at 3250.0 nm... completed in 2.3 sec
-    Solving slice at 2750.0 nm... completed in 2.3 sec
-    Solving slice at 2250.0 nm... completed in 2.3 sec
-    Solving slice at 1750.0 nm... completed in 2.8 sec
-    Solving slice at 1250.0 nm... completed in 2.3 sec
-    Solving slice at 750.0 nm... completed in 2.3 sec
-    Solving slice at 250.0 nm... completed in 2.7 sec
-    Solving slice at 6125.0 nm... completed in 2.7 sec
-    Solving slice at 5875.0 nm... completed in 2.7 sec
-    Solving slice at 5375.0 nm... completed in 2.8 sec
-    Solving slice at 5125.0 nm... completed in 2.8 sec
-    Solving slice at 4375.0 nm... completed in 2.3 sec
-    Solving slice at 4125.0 nm... completed in 2.7 sec
-    Solving slice at 3875.0 nm... completed in 2.7 sec
-    Solving slice at 3625.0 nm... completed in 2.8 sec
-    Solving slice at 3375.0 nm... completed in 2.3 sec
-    Solving slice at 3125.0 nm... completed in 2.8 sec
-    Solving slice at 2875.0 nm... completed in 2.3 sec
-    Solving slice at 2625.0 nm... completed in 2.8 sec
-    Solving slice at 2375.0 nm... completed in 2.4 sec
-    Solving slice at 5437.5 nm... completed in 2.8 sec
-    Solving slice at 5312.5 nm... completed in 2.4 sec
-    Solving slice at 5187.5 nm... completed in 2.8 sec
-    Solving slice at 4312.5 nm... completed in 2.4 sec
-    Solving slice at 4187.5 nm... completed in 2.4 sec
-    Solving slice at 2562.5 nm... completed in 2.7 sec
-    Solving slice at 2312.5 nm... completed in 2.1 sec
-    Solving slice at 4218.8 nm... completed in 2.2 sec
-     completed in 2 min 31.1 sec
-    Solving EME: length = 7750... completed in 0.2 sec
+    Solving slice at 4000.0 nm... completed in 1.1 sec
+    Solving slice at 6000.0 nm... completed in 1.1 sec
+    Solving slice at 2000.0 nm... completed in 0.9 sec
+    Solving slice at 7000.0 nm... completed in 1.0 sec
+    Solving slice at 5000.0 nm... completed in 1.2 sec
+    Solving slice at 3000.0 nm... completed in 1.1 sec
+    Solving slice at 1000.0 nm... completed in 1.0 sec
+    Solving slice at 7500.0 nm... completed in 0.9 sec
+    Solving slice at 6500.0 nm... completed in 1.1 sec
+    Solving slice at 5500.0 nm... completed in 1.1 sec
+    Solving slice at 4500.0 nm... completed in 1.0 sec
+    Solving slice at 3500.0 nm... completed in 1.2 sec
+    Solving slice at 2500.0 nm... completed in 1.2 sec
+    Solving slice at 1500.0 nm... completed in 1.0 sec
+    Solving slice at 500.0 nm... completed in 1.2 sec
+    Solving slice at 6250.0 nm... completed in 1.2 sec
+    Solving slice at 5750.0 nm... completed in 1.2 sec
+    Solving slice at 5250.0 nm... completed in 1.2 sec
+    Solving slice at 4750.0 nm... completed in 1.1 sec
+    Solving slice at 4250.0 nm... completed in 1.2 sec
+    Solving slice at 3750.0 nm... completed in 1.2 sec
+    Solving slice at 3250.0 nm... completed in 1.2 sec
+    Solving slice at 2750.0 nm... completed in 1.1 sec
+    Solving slice at 1750.0 nm... completed in 1.0 sec
+    Solving slice at 6125.0 nm... completed in 1.1 sec
+    Solving slice at 5875.0 nm... completed in 1.1 sec
+    Solving slice at 3625.0 nm... completed in 1.1 sec
+    Solving slice at 3375.0 nm... completed in 1.1 sec
+    Solving slice at 3125.0 nm... completed in 1.2 sec
+    Solving slice at 1875.0 nm... completed in 1.0 sec
+    Solving slice at 1625.0 nm... completed in 1.0 sec
+    Solving slice at 6062.5 nm... completed in 1.2 sec
+    Solving slice at 5937.5 nm... completed in 1.2 sec
+    Solving slice at 3312.5 nm... completed in 1.1 sec
+    Solving slice at 3187.5 nm... completed in 1.1 sec
+    Solving slice at 1937.5 nm... completed in 1.0 sec
+    Solving slice at 1812.5 nm... completed in 1.1 sec
+    Solving slice at 1687.5 nm... completed in 1.0 sec
+    Solving slice at 6093.8 nm... completed in 1.2 sec
+    Solving slice at 1968.8 nm... completed in 1.0 sec
+    Solving slice at 1906.2 nm... completed in 1.0 sec
+    Solving slice at 1921.9 nm... completed in 1.0 sec
+    Solving slice at 1929.7 nm... completed in 1.0 sec
+    Solving slice at 1925.8 nm... completed in 1.1 sec
+     completed in 59.7 sec
+    Solving EME: length = 7750... completed in 0.1 sec
     Solving EME: length = 7500... completed in 0.1 sec
     Solving EME: length = 7250... completed in 0.1 sec
     Solving EME: length = 7000... completed in 0.1 sec
     Solving EME: length = 6750... completed in 0.1 sec
     Solving EME: length = 6500... completed in 0.1 sec
-    Solving EME: length = 6250... completed in 0.2 sec
+    Solving EME: length = 6250... completed in 0.1 sec
     Solving EME: length = 6000... completed in 0.1 sec
     Solving EME: length = 5750... completed in 0.1 sec
-    Solving EME: length = 5500... completed in 0.1 sec
+    Solving EME: length = 5500... completed in 0.2 sec
     Solving EME: length = 5250... completed in 0.1 sec
     Solving EME: length = 5000... completed in 0.1 sec
     Solving EME: length = 4750... completed in 0.1 sec
@@ -4299,7 +4497,7 @@ Console output::
     Solving EME: length = 500... completed in 0.1 sec
     Solving EME: length = 250... completed in 0.1 sec
     Solving EME: length = 0... completed in 0.1 sec
-     completed in 2 min 35.5 sec
+     completed in 1 min 3.0 sec
     Exited EMode
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -4552,47 +4750,47 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 2 min 42.7 sec
+    Solving section: sbend... completed in 1 min 24.5 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 2 min 42.7 sec
+     completed in 1 min 24.5 sec
 
     Sweeping section parameter 'length'...
     Solving EME: length = 200000.0... completed in 0.6 sec
-    Solving EME: length = 190000.0... completed in 0.6 sec
-    Solving EME: length = 180000.0... completed in 0.6 sec
-    Solving EME: length = 170000.0... completed in 0.6 sec
-    Solving EME: length = 160000.0... completed in 0.6 sec
-    Solving EME: length = 150000.0... completed in 0.6 sec
-    Solving EME: length = 140000.0... completed in 0.6 sec
-    Solving EME: length = 130000.0... completed in 0.6 sec
-    Solving EME: length = 120000.0... completed in 0.6 sec
-    Solving EME: length = 110000.0... completed in 0.6 sec
-    Solving EME: length = 100000.0... completed in 0.6 sec
-    Solving EME: length = 90000.0... completed in 0.6 sec
-    Solving EME: length = 80000.0... completed in 0.6 sec
-    Solving EME: length = 70000.0... completed in 0.6 sec
-    Solving EME: length = 60000.0... completed in 0.6 sec
-    Solving EME: length = 50000.0... completed in 0.6 sec
-    Solving EME: length = 40000.0... completed in 0.6 sec
-    Solving EME: length = 30000.0... completed in 0.6 sec
-    Solving EME: length = 20000.0... completed in 0.6 sec
-    Solving EME: length = 10000.0... completed in 0.6 sec
-    Solving EME: length = 0.0... completed in 0.6 sec
-     completed in 12.7 sec
+    Solving EME: length = 190000.0... completed in 0.5 sec
+    Solving EME: length = 180000.0... completed in 0.5 sec
+    Solving EME: length = 170000.0... completed in 0.5 sec
+    Solving EME: length = 160000.0... completed in 0.5 sec
+    Solving EME: length = 150000.0... completed in 0.5 sec
+    Solving EME: length = 140000.0... completed in 0.5 sec
+    Solving EME: length = 130000.0... completed in 0.5 sec
+    Solving EME: length = 120000.0... completed in 0.5 sec
+    Solving EME: length = 110000.0... completed in 0.5 sec
+    Solving EME: length = 100000.0... completed in 0.5 sec
+    Solving EME: length = 90000.0... completed in 0.5 sec
+    Solving EME: length = 80000.0... completed in 0.5 sec
+    Solving EME: length = 70000.0... completed in 0.5 sec
+    Solving EME: length = 60000.0... completed in 0.5 sec
+    Solving EME: length = 50000.0... completed in 0.5 sec
+    Solving EME: length = 40000.0... completed in 0.5 sec
+    Solving EME: length = 30000.0... completed in 0.5 sec
+    Solving EME: length = 20000.0... completed in 0.5 sec
+    Solving EME: length = 10000.0... completed in 0.5 sec
+    Solving EME: length = 0.0... completed in 0.5 sec
+     completed in 10.8 sec
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 2.7 sec
+    Solving section: sbend... completed in 2.5 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 2.7 sec
+     completed in 2.5 sec
     Exited EMode
 
 Figures:
@@ -4757,31 +4955,31 @@ angled facet suppresses back-reflection.
 
 Console output::
 
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
 
     Sweeping section parameter 'facet_angle'...
-    Solving EME: facet_angle = 0.0... completed in 9.3 sec
-    Solving EME: facet_angle = 1.0... completed in 6.9 sec
-    Solving EME: facet_angle = 2.0... completed in 6.9 sec
-    Solving EME: facet_angle = 3.0... completed in 6.9 sec
-    Solving EME: facet_angle = 4.0... completed in 6.9 sec
-    Solving EME: facet_angle = 5.0... completed in 7.0 sec
-    Solving EME: facet_angle = 6.0... completed in 6.9 sec
-    Solving EME: facet_angle = 7.0... completed in 6.9 sec
-    Solving EME: facet_angle = 8.0... completed in 6.9 sec
-    Solving EME: facet_angle = 9.0... completed in 6.9 sec
-    Solving EME: facet_angle = 10.0... completed in 6.9 sec
-    Solving EME: facet_angle = 11.0... completed in 7.0 sec
-    Solving EME: facet_angle = 12.0... completed in 6.9 sec
-     completed in 1 min 32.2 sec
+    Solving EME: facet_angle = 0.0... completed in 9.5 sec
+    Solving EME: facet_angle = 1.0... completed in 8.2 sec
+    Solving EME: facet_angle = 2.0... completed in 8.2 sec
+    Solving EME: facet_angle = 3.0... completed in 8.1 sec
+    Solving EME: facet_angle = 4.0... completed in 8.2 sec
+    Solving EME: facet_angle = 5.0... completed in 8.3 sec
+    Solving EME: facet_angle = 6.0... completed in 8.3 sec
+    Solving EME: facet_angle = 7.0... completed in 8.1 sec
+    Solving EME: facet_angle = 8.0... completed in 7.9 sec
+    Solving EME: facet_angle = 9.0... completed in 8.2 sec
+    Solving EME: facet_angle = 10.0... completed in 8.0 sec
+    Solving EME: facet_angle = 11.0... completed in 8.0 sec
+    Solving EME: facet_angle = 12.0... completed in 7.8 sec
+     completed in 1 min 46.9 sec
     Exited EMode
-    EMode3D 1.0.4 - email
+    EMode3D 1.0.5 - email
 
     Solving S-matrices...
     Solving section: fiber_gap... completed in 0.0 sec
-    Solving section: taper... completed in 4 min 29.8 sec
+    Solving section: taper... completed in 1 min 53.8 sec
     Solving section: out_gap... completed in 0.0 sec
-     completed in 4 min 29.8 sec
+     completed in 1 min 53.8 sec
     Exited EMode
     tilt  0.0 deg: R + T =  96.2 %
     tilt  1.0 deg: R + T =  93.5 %
@@ -5088,61 +5286,61 @@ Highlighted features: ``nonlinear`` with an ``SHGProcess`` on a straight and a t
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.7 sec
-    Meshing completed in 0.8 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.5 sec
     Solving modes completed in 1.3 sec
-    Scanning wg_section over 1970.5-1973.5 nm... completed in 3 min 48.6 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 0.8 sec
+    Meshing completed in 0.4 sec
     Solving modes completed in 1.3 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.9 sec
+    Scanning wg_section over 1970.5-1973.5 nm... completed in 2 min 32.7 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 1.2 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.9 sec
 
     Solving S-matrices...
     Solving section: wg_section... completed in 0.2 sec
      completed in 0.2 sec
     Exited EMode
-    EMode3D 1.0.4 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.4 sec
-    Meshing completed in 0.8 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.5 sec
     Solving modes completed in 1.3 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.4 sec
-    Meshing completed in 0.8 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.9 sec
+    Meshing completed in 0.5 sec
     Solving modes completed in 1.2 sec
-    Scanning taper_section over 1970.5-1973.5 nm... completed in 11 min 55.3 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.3 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 0.8 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.9 sec
+    Scanning taper_section over 1970.5-1973.5 nm... completed in 7 min 47.8 sec
+    Meshing completed in 0.5 sec
     Solving modes completed in 1.2 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.9 sec
+    Meshing completed in 0.5 sec
+    Solving modes completed in 1.2 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.9 sec
 
     Solving S-matrices...
-    Solving section: taper_section... completed in 42.5 sec
-     completed in 42.5 sec
+    Solving section: taper_section... completed in 26.9 sec
+     completed in 26.9 sec
     Exited EMode
     harmonic mode list: [2.83814 2.58442 2.09994 2.06181]
-    pump   mode 0: n_eff 2.06182, 1.38 dB/cm (measured 1.5)
+    pump   mode 0: n_eff 2.06181, 1.38 dB/cm (measured 1.5)
     signal mode 3 of 4: n_eff 2.06181, 7.83 dB/cm (measured 16.8)
     straight spectrum: 5 solves for 501 wavelengths
     straight waveguide @ L = 10.0 mm:
       pump in       = 1.0000 mW
-      pump out      = 0.4122 mW
-      signal out    = 179.7960 uW
-      conversion    = 17.98 %
+      pump out      = 0.4158 mW
+      signal out    = 177.1902 uW
+      conversion    = 17.72 %
     taper spectrum: 5 solves for 501 wavelengths
     tapered waveguide @ L = 10.0 mm:
       pump in       = 1.0000 mW
-      pump out      = 0.6988 mW
-      signal out    = 28.9880 uW
-      conversion    = 2.90 %
+      pump out      = 0.6980 mW
+      signal out    = 29.4870 uW
+      conversion    = 2.95 %
 
 Figures:
 
@@ -5370,13 +5568,13 @@ Highlighted features: ``poling_period`` for quasi-phase matching, x-cut lithium 
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.7 sec
-    Solving modes completed in 2.8 sec
-    Meshing completed in 1.7 sec
-    Solving modes completed in 3.3 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 1.0 sec
+    Solving modes completed in 1.4 sec
+    Meshing completed in 1.0 sec
+    Solving modes completed in 1.6 sec
 
-    Wavelength: 775.0 nm
+    Wavelength: 775.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
@@ -5389,15 +5587,15 @@ Console output::
     Solving S-matrices...
     Solving section: ppln_section... completed in 0.4 sec
      completed in 0.4 sec
-    Scanning ppln_section over 1546-1554 nm... completed in 5 min 26.6 sec
+    Scanning ppln_section over 1546-1554 nm... completed in 3 min 36.6 sec
     Exited EMode
     pump: mode 0, n_eff 1.92271, TE 99.7 %
     second harmonic: mode 1, n_eff 2.09800, TE 99.9 %
     pump scattering loss: 0.0421 dB/cm
     second harmonic scattering loss: 0.1048 dB/cm
     poling period: 4.4212 um
-    conversion at 1 mW over 5 mm: 0.946378 %
-    normalized efficiency: 3785.5 %/W/cm^2
+    conversion at 1 mW over 5 mm: 0.946681 %
+    normalized efficiency: 3786.7 %/W/cm^2
     tuning curve: 5 solves for 81 wavelengths
 
 Figures:
@@ -5628,13 +5826,13 @@ Highlighted features: ``DFGProcess`` with ``poling_period``, two simultaneous ``
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.7 sec
-    Solving modes completed in 6.3 sec
-    Meshing completed in 1.7 sec
-    Solving modes completed in 4.8 sec
-    Meshing completed in 1.7 sec
-    Solving modes completed in 5.4 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 1.0 sec
+    Solving modes completed in 3.6 sec
+    Meshing completed in 1.0 sec
+    Solving modes completed in 2.9 sec
+    Meshing completed in 1.0 sec
+    Solving modes completed in 3.3 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.4 sec
@@ -5693,7 +5891,7 @@ Console output::
     idler   1603.45 nm: mode 0, n_eff 1.91144
     poling period: 4.4218 um
     signal gain at 4 mm: 1.232 dB
-    idler at 4 mm: 0.3106 uW
+    idler at 4 mm: 0.3107 uW
     pump depletion: 0.948 %
     Manley-Rowe (signal gained / idler created): 0.9875
 
@@ -5711,6 +5909,102 @@ Figures:
 
 .. figure:: /_images/dfg_pump_Ex.png
     :width: 400
+    :align: center
+    :figwidth: 500
+
+
+
+FEM: SOI
+--------
+
+The SOI waveguide of the "Basic: SOI" example, solved with the finite-element mode solver. The mesh follows every material interface, and the solver refines it where the modes are under-resolved. The refinement history shows how the effective indices settle.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import emodeconnection as emc
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 10, 10 # [nm] resolution of the grid used for plotting
+        w_core = 600 # [nm] waveguide core width
+        w_trench = 800 # [nm] waveguide side trench width
+        h_core = 500 # [nm] waveguide core height
+        h_clad = 800 # [nm] waveguide top and bottom clad
+        num_modes = 2 # [-] number of modes
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        ## Settings: the same waveguide as the SOI example, plus the FEM mesh settings
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = w_core + w_trench*2, window_height = h_core + h_clad*2,
+            num_modes = num_modes, background_material = 'Air',
+            fem_points_per_wavelength = 10, fem_max_refinements = 2)
+
+        ## Draw shapes
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad)
+        em.shape(name = 'core', material = 'Si', width = w_core, height = h_core)
+
+        ## Launch the FEM solver, which refines the mesh where the modes need it
+        ## (em.solve(solver_method='FEM') does the same)
+        result = em.FEM()
+
+        ## Show how the effective indices settled as the mesh was refined
+        refinement = result['refinement']
+        print('Refinement level  Unknowns  n_eff (per mode)', flush = True)
+        for level, (dofs, n_eff) in enumerate(zip(refinement['num_dofs'], refinement['n_eff_history'])):
+            print(f'{level:16d}  {dofs:8d}  ' + '  '.join(f'{n.real:.6f}' for n in n_eff), flush = True)
+        print(f"Stopped by: {refinement['stopped_by']}", flush = True)
+
+        ## Display the effective indices, TE fractions, and core confinement
+        em.report()
+
+        ## Plot the fields with the triangle mesh the FEM solved on
+        em.plot(mesh_display = True)
+
+        ## Close EMode
+        em.close()
+
+Console output::
+
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.4 sec
+    Solving modes completed in 1.4 sec
+    Refinement level  Unknowns  n_eff (per mode)
+                   0     11613  3.013305  2.966522
+                   1     12481  3.013291  2.966504
+                   2     15407  3.013285  2.966500
+    Stopped by: max_refinements
+
+    Wavelength: 1550.0 nm    Solver: FEM
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)
+    --------  --------  ------  -------------
+        TE-0  3.013285  99.6 %          0.000
+        TM-1  2.966500   0.6 %          0.000
+ 
+    Exited EMode
+
+Figures:
+
+.. figure:: /_images/0Ex.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: /_images/1Ey.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: /_images/mesh.png
+    :width: 500
     :align: center
     :figwidth: 500
 
@@ -5835,21 +6129,21 @@ Highlighted features: ``heat_only`` shapes, ``fem_resolution``, ``current``, ``h
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 4.2 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.4 sec
+    Solving modes completed in 2.3 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
         TE-0  2.446865  98.3 %          0.000
  
     Solving heat completed in 0.2 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 4.4 sec
+    Meshing completed in 0.5 sec
+    Solving modes completed in 2.4 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
@@ -6026,21 +6320,21 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.1 sec
-    Solving modes completed in 3.0 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.5 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
         TE-0  1.844836  99.6 %          0.000
  
-    Solving electrostatic completed in 0.2 sec
-    Meshing completed in 1.1 sec
-    Solving modes completed in 10.8 sec
+    Solving electrostatic completed in 0.1 sec
+    Meshing completed in 0.6 sec
+    Solving modes completed in 4.8 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------

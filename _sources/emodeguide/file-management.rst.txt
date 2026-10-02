@@ -9,7 +9,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     Create a simulation instance with an associated '.eph' file to run the simulation and store data. This function is automatically called when the emodeconnection class is initialized.
 
     :param str save_path: path to save the simulation file relative to the current working directory, default: '.'
-    :param str simulation_name: simulation name, default: 'emode'
+    :param str simulation_name: simulation name. It becomes the file name, so it must be a valid file name on Linux, macOS and Windows alike: not empty, none of the characters ``< > : " / \ | ? *`` or control characters, no trailing dot or space, and not a device name Windows reserves (``CON``, ``PRN``, ``AUX``, ``NUL``, ``COM1`` to ``COM9`` or ``LPT1`` to ``LPT9``, also with an extension). Any other name raises an error. Default: 'emode'
 
 .. data:: open
 
@@ -17,7 +17,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
     :param str save_path: path to open the simulation file relative to the current working directory, default: '.'
     :param str simulation_name: simulation name, default: 'emode'
-    :param new_simulation_name: new simulation name so the old file is not over-written, default: False (the original ``simulation_name`` is reused)
+    :param new_simulation_name: new simulation name so the old file is not over-written, under the same naming rules as ``simulation_name`` in :data:`init`, default: False (the original ``simulation_name`` is reused)
     :type new_simulation_name: bool or str
     :param bool force: if a file with the target name is already open elsewhere, open it anyway instead of auto-renaming to an available filename, default: False
 
@@ -26,14 +26,15 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
     Extract data from an existing simulation to your Python environment.
 
-    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables. Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`SMatrix` object.
+    :param str key: name of the variable or parameter to extract. This can also be a list of fields of any combination of [``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``]. See :doc:`Variable Descriptions </emodeguide/variables>` for a complete list and description of all available variables, settings included (``get('num_modes')``). Use ``'S_matrix'`` (EMode\ :sup:`3D`\  only) to retrieve the scattering matrix from a solved EME chain as an :class:`SMatrix` object.
     :param str profile: name of the profile to extract the data defined by ``key`` from, default: '_default'. A multi-wavelength profile returns a dict keyed by wavelength.
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: inspect
 
-    Return the names of the top-level variables in the simulation file (see :doc:`Variable Descriptions </emodeguide/variables>`). Per-profile results live inside ``profiles`` and are read with ``get(key, profile=...)`` or the typed accessors; names beginning with an underscore are internal.
+    Return the names :data:`get` can read (see :doc:`Variable Descriptions </emodeguide/variables>`): the top-level variables in the simulation file, followed by the per-profile variables and settings of ``profile``. Names beginning with an underscore are internal.
 
+    :param str profile: name of the profile whose variables and settings to list, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: get_fields

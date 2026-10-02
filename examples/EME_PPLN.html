@@ -323,6 +323,7 @@
 <li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Nonlinear-EME: PPLN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FEM_SOI.html">FEM: SOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
 </ul>
@@ -550,13 +551,13 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.7</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.8</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.7</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.3</span> <span class="n">sec</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.5</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.4</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.6</span> <span class="n">sec</span>
 
-<span class="n">Wavelength</span><span class="p">:</span> <span class="mf">775.0</span> <span class="n">nm</span>
+<span class="n">Wavelength</span><span class="p">:</span> <span class="mf">775.0</span> <span class="n">nm</span>    <span class="n">Solver</span><span class="p">:</span> <span class="n">FDM</span>
 
   <span class="n">Mode</span> <span class="c1">#     n_eff    TE %    Loss (dB/m)</span>
 <span class="o">--------</span>  <span class="o">--------</span>  <span class="o">------</span>  <span class="o">-------------</span>
@@ -569,15 +570,15 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">Solving</span> <span class="n">S</span><span class="o">-</span><span class="n">matrices</span><span class="o">...</span>
 <span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">ppln_section</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
  <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
-<span class="n">Scanning</span> <span class="n">ppln_section</span> <span class="n">over</span> <span class="mi">1546</span><span class="o">-</span><span class="mi">1554</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mi">5</span> <span class="nb">min</span> <span class="mf">26.6</span> <span class="n">sec</span>
+<span class="n">Scanning</span> <span class="n">ppln_section</span> <span class="n">over</span> <span class="mi">1546</span><span class="o">-</span><span class="mi">1554</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mi">3</span> <span class="nb">min</span> <span class="mf">36.6</span> <span class="n">sec</span>
 <span class="n">Exited</span> <span class="n">EMode</span>
 <span class="n">pump</span><span class="p">:</span> <span class="n">mode</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_eff</span> <span class="mf">1.92271</span><span class="p">,</span> <span class="n">TE</span> <span class="mf">99.7</span> <span class="o">%</span>
 <span class="n">second</span> <span class="n">harmonic</span><span class="p">:</span> <span class="n">mode</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_eff</span> <span class="mf">2.09800</span><span class="p">,</span> <span class="n">TE</span> <span class="mf">99.9</span> <span class="o">%</span>
 <span class="n">pump</span> <span class="n">scattering</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">0.0421</span> <span class="n">dB</span><span class="o">/</span><span class="n">cm</span>
 <span class="n">second</span> <span class="n">harmonic</span> <span class="n">scattering</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">0.1048</span> <span class="n">dB</span><span class="o">/</span><span class="n">cm</span>
 <span class="n">poling</span> <span class="n">period</span><span class="p">:</span> <span class="mf">4.4212</span> <span class="n">um</span>
-<span class="n">conversion</span> <span class="n">at</span> <span class="mi">1</span> <span class="n">mW</span> <span class="n">over</span> <span class="mi">5</span> <span class="n">mm</span><span class="p">:</span> <span class="mf">0.946378</span> <span class="o">%</span>
-<span class="n">normalized</span> <span class="n">efficiency</span><span class="p">:</span> <span class="mf">3785.5</span> <span class="o">%/</span><span class="n">W</span><span class="o">/</span><span class="n">cm</span><span class="o">^</span><span class="mi">2</span>
+<span class="n">conversion</span> <span class="n">at</span> <span class="mi">1</span> <span class="n">mW</span> <span class="n">over</span> <span class="mi">5</span> <span class="n">mm</span><span class="p">:</span> <span class="mf">0.946681</span> <span class="o">%</span>
+<span class="n">normalized</span> <span class="n">efficiency</span><span class="p">:</span> <span class="mf">3786.7</span> <span class="o">%/</span><span class="n">W</span><span class="o">/</span><span class="n">cm</span><span class="o">^</span><span class="mi">2</span>
 <span class="n">tuning</span> <span class="n">curve</span><span class="p">:</span> <span class="mi">5</span> <span class="n">solves</span> <span class="k">for</span> <span class="mi">81</span> <span class="n">wavelengths</span>
 </pre></div>
 </div>

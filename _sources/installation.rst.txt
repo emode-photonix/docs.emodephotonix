@@ -50,6 +50,15 @@ There are two installation methods:
 
         **macOS**
 
+        Download the installer for your Mac: **Apple silicon** (M-series
+        processors, ``EMode-<version>-Mac.pkg``) or **Intel**
+        (``EMode-<version>-Mac-x86.pkg``). To check, open the Apple menu and
+        choose About This Mac: the Chip line reads Apple M... on Apple silicon,
+        and the Processor line names an Intel CPU on an Intel Mac. The Apple
+        silicon build runs natively and is faster. This is the last release
+        with an Intel installer, and earlier versions stay available for
+        download.
+
         Double-click the downloaded ``.pkg`` file and follow the installer
         prompts. Administrator access may be required. EMode will be installed
         to ``/usr/local/bin/emode``.
@@ -62,8 +71,6 @@ There are two installation methods:
 
             unzip EMode-VERSION-Linux.zip
             sh install.sh
-
-**macOS Apple silicon:** EMode runs via Rosetta 2 and you may be prompted to install it on the first run.
 
 4. Run an EMode Example Script
 ------------------------------

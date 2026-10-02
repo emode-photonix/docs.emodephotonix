@@ -70,11 +70,11 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.2 sec
-    Solving modes completed in 37.1 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.5 sec
+    Solving modes completed in 18.3 sec
 
-    Wavelength: 980.0 nm
+    Wavelength: 980.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    PML    background confinement    core confinement
     --------  --------  ------  -------------  -----  ------------------------  ------------------

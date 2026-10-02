@@ -322,6 +322,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Nonlinear-EME: SHG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FEM_SOI.html">FEM: SOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
 </ul>
@@ -635,61 +636,61 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.7</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.5</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
-<span class="n">Scanning</span> <span class="n">wg_section</span> <span class="n">over</span> <span class="mf">1970.5</span><span class="o">-</span><span class="mf">1973.5</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mi">3</span> <span class="nb">min</span> <span class="mf">48.6</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.9</span> <span class="n">sec</span>
+<span class="n">Scanning</span> <span class="n">wg_section</span> <span class="n">over</span> <span class="mf">1970.5</span><span class="o">-</span><span class="mf">1973.5</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mi">2</span> <span class="nb">min</span> <span class="mf">32.7</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.2</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.9</span> <span class="n">sec</span>
 
 <span class="n">Solving</span> <span class="n">S</span><span class="o">-</span><span class="n">matrices</span><span class="o">...</span>
 <span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">wg_section</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
  <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
 <span class="n">Exited</span> <span class="n">EMode</span>
-<span class="n">EMode3D</span> <span class="mf">1.0.4</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.4</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">EMode3D</span> <span class="mf">1.0.5</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.4</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.9</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.2</span> <span class="n">sec</span>
-<span class="n">Scanning</span> <span class="n">taper_section</span> <span class="n">over</span> <span class="mf">1970.5</span><span class="o">-</span><span class="mf">1973.5</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mi">11</span> <span class="nb">min</span> <span class="mf">55.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.9</span> <span class="n">sec</span>
+<span class="n">Scanning</span> <span class="n">taper_section</span> <span class="n">over</span> <span class="mf">1970.5</span><span class="o">-</span><span class="mf">1973.5</span> <span class="n">nm</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mi">7</span> <span class="nb">min</span> <span class="mf">47.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.2</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.9</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.2</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.9</span> <span class="n">sec</span>
 
 <span class="n">Solving</span> <span class="n">S</span><span class="o">-</span><span class="n">matrices</span><span class="o">...</span>
-<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">taper_section</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">42.5</span> <span class="n">sec</span>
- <span class="n">completed</span> <span class="ow">in</span> <span class="mf">42.5</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">taper_section</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">26.9</span> <span class="n">sec</span>
+ <span class="n">completed</span> <span class="ow">in</span> <span class="mf">26.9</span> <span class="n">sec</span>
 <span class="n">Exited</span> <span class="n">EMode</span>
 <span class="n">harmonic</span> <span class="n">mode</span> <span class="nb">list</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.83814</span> <span class="mf">2.58442</span> <span class="mf">2.09994</span> <span class="mf">2.06181</span><span class="p">]</span>
-<span class="n">pump</span>   <span class="n">mode</span> <span class="mi">0</span><span class="p">:</span> <span class="n">n_eff</span> <span class="mf">2.06182</span><span class="p">,</span> <span class="mf">1.38</span> <span class="n">dB</span><span class="o">/</span><span class="n">cm</span> <span class="p">(</span><span class="n">measured</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="n">pump</span>   <span class="n">mode</span> <span class="mi">0</span><span class="p">:</span> <span class="n">n_eff</span> <span class="mf">2.06181</span><span class="p">,</span> <span class="mf">1.38</span> <span class="n">dB</span><span class="o">/</span><span class="n">cm</span> <span class="p">(</span><span class="n">measured</span> <span class="mf">1.5</span><span class="p">)</span>
 <span class="n">signal</span> <span class="n">mode</span> <span class="mi">3</span> <span class="n">of</span> <span class="mi">4</span><span class="p">:</span> <span class="n">n_eff</span> <span class="mf">2.06181</span><span class="p">,</span> <span class="mf">7.83</span> <span class="n">dB</span><span class="o">/</span><span class="n">cm</span> <span class="p">(</span><span class="n">measured</span> <span class="mf">16.8</span><span class="p">)</span>
 <span class="n">straight</span> <span class="n">spectrum</span><span class="p">:</span> <span class="mi">5</span> <span class="n">solves</span> <span class="k">for</span> <span class="mi">501</span> <span class="n">wavelengths</span>
 <span class="n">straight</span> <span class="n">waveguide</span> <span class="o">@</span> <span class="n">L</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="n">mm</span><span class="p">:</span>
   <span class="n">pump</span> <span class="ow">in</span>       <span class="o">=</span> <span class="mf">1.0000</span> <span class="n">mW</span>
-  <span class="n">pump</span> <span class="n">out</span>      <span class="o">=</span> <span class="mf">0.4122</span> <span class="n">mW</span>
-  <span class="n">signal</span> <span class="n">out</span>    <span class="o">=</span> <span class="mf">179.7960</span> <span class="n">uW</span>
-  <span class="n">conversion</span>    <span class="o">=</span> <span class="mf">17.98</span> <span class="o">%</span>
+  <span class="n">pump</span> <span class="n">out</span>      <span class="o">=</span> <span class="mf">0.4158</span> <span class="n">mW</span>
+  <span class="n">signal</span> <span class="n">out</span>    <span class="o">=</span> <span class="mf">177.1902</span> <span class="n">uW</span>
+  <span class="n">conversion</span>    <span class="o">=</span> <span class="mf">17.72</span> <span class="o">%</span>
 <span class="n">taper</span> <span class="n">spectrum</span><span class="p">:</span> <span class="mi">5</span> <span class="n">solves</span> <span class="k">for</span> <span class="mi">501</span> <span class="n">wavelengths</span>
 <span class="n">tapered</span> <span class="n">waveguide</span> <span class="o">@</span> <span class="n">L</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="n">mm</span><span class="p">:</span>
   <span class="n">pump</span> <span class="ow">in</span>       <span class="o">=</span> <span class="mf">1.0000</span> <span class="n">mW</span>
-  <span class="n">pump</span> <span class="n">out</span>      <span class="o">=</span> <span class="mf">0.6988</span> <span class="n">mW</span>
-  <span class="n">signal</span> <span class="n">out</span>    <span class="o">=</span> <span class="mf">28.9880</span> <span class="n">uW</span>
-  <span class="n">conversion</span>    <span class="o">=</span> <span class="mf">2.90</span> <span class="o">%</span>
+  <span class="n">pump</span> <span class="n">out</span>      <span class="o">=</span> <span class="mf">0.6980</span> <span class="n">mW</span>
+  <span class="n">signal</span> <span class="n">out</span>    <span class="o">=</span> <span class="mf">29.4870</span> <span class="n">uW</span>
+  <span class="n">conversion</span>    <span class="o">=</span> <span class="mf">2.95</span> <span class="o">%</span>
 </pre></div>
 </div>
 <p>Figures:</p>

@@ -150,21 +150,21 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
 
 Console output::
 
-    EMode3D 1.0.4 - email
-    Meshing completed in 1.1 sec
-    Solving modes completed in 3.0 sec
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.5 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
         TE-0  1.844836  99.6 %          0.000
  
-    Solving electrostatic completed in 0.2 sec
-    Meshing completed in 1.1 sec
-    Solving modes completed in 10.8 sec
+    Solving electrostatic completed in 0.1 sec
+    Meshing completed in 0.6 sec
+    Solving modes completed in 4.8 sec
 
-    Wavelength: 1550.0 nm
+    Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------

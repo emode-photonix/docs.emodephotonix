@@ -365,6 +365,29 @@
   <section id="multi-physics">
 <h1>Multi-Physics</h1>
 <dl class="py data">
+<dt class="sig sig-object py" id="FEM">
+<span class="sig-name descname"><span class="pre">FEM</span></span></dt>
+<dd><p>Calculate the waveguide modes with the full-vector finite-element method. Requires a ‘3D’ license. The cross-section is meshed with triangles that follow every material interface, and the mesh is refined where the modes are under-resolved, as set by the <code class="docutils literal notranslate"><span class="pre">fem_*</span></code> settings in <code class="docutils literal notranslate"><span class="pre">settings()</span></code>. The saved fields, effective indices, losses and TE fractions are the same quantities, with the same normalization, as described under <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, so <code class="docutils literal notranslate"><span class="pre">get()</span></code>, <code class="docutils literal notranslate"><span class="pre">get_fields()</span></code>, <code class="docutils literal notranslate"><span class="pre">report()</span></code>, <code class="docutils literal notranslate"><span class="pre">plot()</span></code> and <code class="docutils literal notranslate"><span class="pre">EME()</span></code> work the same way. Calling <code class="docutils literal notranslate"><span class="pre">FEM()</span></code> sets the profile’s <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting to ‘FEM’.</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">boundary_condition</span></code> values, PMLs, expansion regions, bends, transformation-optics sections (bends, the ring and general couplers, and simulation-space transforms), lossy and anisotropic materials (including crystals tilted out of the cross-section with <code class="docutils literal notranslate"><span class="pre">theta</span></code>), and <code class="docutils literal notranslate"><span class="pre">heat()</span></code> and <code class="docutils literal notranslate"><span class="pre">electrostatic()</span></code> perturbations are supported. A symmetric or antisymmetric boundary on an axis whose mirror a crystal’s orientation breaks raises an error, since it would describe a different structure. Field plots sample the FEM solution at <code class="docutils literal notranslate"><span class="pre">x_resolution</span></code> and <code class="docutils literal notranslate"><span class="pre">y_resolution</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot(mesh_display=True)</span></code> shows the triangle mesh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>int</em>) – profile name to save the solved profile under, default: ‘_default’</p></li>
+<li><p><strong>section</strong> (<em>str</em>) – name of an EME section to solve a slice from, instead of the profile’s own settings/shapes, default: None</p></li>
+<li><p><strong>propagation_distance</strong> (<em>float</em>) – [nm] where along <code class="docutils literal notranslate"><span class="pre">section</span></code> to take the cross-section, default: None</p></li>
+<li><p><strong>include_heat</strong> (<em>bool</em>) – whether to include the temperature change from the most recent <code class="docutils literal notranslate"><span class="pre">heat()</span></code> solve, default: True</p></li>
+<li><p><strong>include_static</strong> (<em>bool</em>) – whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent <code class="docutils literal notranslate"><span class="pre">electrostatic()</span></code> solve, default: True</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – print progress, default: True</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dict with <code class="docutils literal notranslate"><span class="pre">field</span></code> (a Field object), <code class="docutils literal notranslate"><span class="pre">n_eff_tilde</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_fraction</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">TM_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">PML_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">mesh</span></code> (<code class="docutils literal notranslate"><span class="pre">vertices</span></code>, <code class="docutils literal notranslate"><span class="pre">triangles</span></code> and <code class="docutils literal notranslate"><span class="pre">region</span></code>, the triangle mesh solved on), and <code class="docutils literal notranslate"><span class="pre">refinement</span></code> (<code class="docutils literal notranslate"><span class="pre">n_eff_history</span></code>, <code class="docutils literal notranslate"><span class="pre">num_dofs</span></code> and <code class="docutils literal notranslate"><span class="pre">num_elements</span></code> per refinement level, and <code class="docutils literal notranslate"><span class="pre">stopped_by</span></code>, the rule that ended refinement).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="heat">
 <span class="sig-name descname"><span class="pre">heat</span></span></dt>
 <dd><p>Run a steady-state thermal simulation of a waveguide cross-section. Requires a ‘3D’ license.</p>
@@ -448,6 +471,7 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#FEM"><code class="docutils literal notranslate"><span class="pre">FEM</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#heat"><code class="docutils literal notranslate"><span class="pre">heat</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#electrostatic"><code class="docutils literal notranslate"><span class="pre">electrostatic</span></code></a></li>
 </ul>

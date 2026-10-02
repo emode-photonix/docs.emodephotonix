@@ -372,7 +372,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save_path</strong> (<em>str</em>) – path to save the simulation file relative to the current working directory, default: ‘.’</p></li>
-<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name. It becomes the file name, so it must be a valid file name on Linux, macOS and Windows alike: not empty, none of the characters <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">&gt;</span> <span class="pre">:</span> <span class="pre">&quot;</span> <span class="pre">/</span> <span class="pre">\</span> <span class="pre">|</span> <span class="pre">?</span> <span class="pre">*</span></code> or control characters, no trailing dot or space, and not a device name Windows reserves (<code class="docutils literal notranslate"><span class="pre">CON</span></code>, <code class="docutils literal notranslate"><span class="pre">PRN</span></code>, <code class="docutils literal notranslate"><span class="pre">AUX</span></code>, <code class="docutils literal notranslate"><span class="pre">NUL</span></code>, <code class="docutils literal notranslate"><span class="pre">COM1</span></code> to <code class="docutils literal notranslate"><span class="pre">COM9</span></code> or <code class="docutils literal notranslate"><span class="pre">LPT1</span></code> to <code class="docutils literal notranslate"><span class="pre">LPT9</span></code>, also with an extension). Any other name raises an error. Default: ‘emode’</p></li>
 </ul>
 </dd>
 </dl>
@@ -387,7 +387,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save_path</strong> (<em>str</em>) – path to open the simulation file relative to the current working directory, default: ‘.’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
-<li><p><strong>new_simulation_name</strong> (<em>bool</em><em> or </em><em>str</em>) – new simulation name so the old file is not over-written, default: False (the original <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code> is reused)</p></li>
+<li><p><strong>new_simulation_name</strong> (<em>bool</em><em> or </em><em>str</em>) – new simulation name so the old file is not over-written, under the same naming rules as <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code> in <a class="reference internal" href="#init" title="init"><code class="xref py py-data docutils literal notranslate"><span class="pre">init</span></code></a>, default: False (the original <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code> is reused)</p></li>
 <li><p><strong>force</strong> (<em>bool</em>) – if a file with the target name is already open elsewhere, open it anyway instead of auto-renaming to an available filename, default: False</p></li>
 </ul>
 </dd>
@@ -401,7 +401,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>str</em>) – name of the variable or parameter to extract. This can also be a list of fields of any combination of [<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>]. See <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a> for a complete list and description of all available variables. Use <code class="docutils literal notranslate"><span class="pre">'S_matrix'</span></code> (EMode<sup>3D</sup> only) to retrieve the scattering matrix from a solved EME chain as an <a class="reference internal" href="../interface.html#SMatrix" title="SMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMatrix</span></code></a> object.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – name of the variable or parameter to extract. This can also be a list of fields of any combination of [<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>]. See <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a> for a complete list and description of all available variables, settings included (<code class="docutils literal notranslate"><span class="pre">get('num_modes')</span></code>). Use <code class="docutils literal notranslate"><span class="pre">'S_matrix'</span></code> (EMode<sup>3D</sup> only) to retrieve the scattering matrix from a solved EME chain as an <a class="reference internal" href="../interface.html#SMatrix" title="SMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMatrix</span></code></a> object.</p></li>
 <li><p><strong>profile</strong> (<em>str</em>) – name of the profile to extract the data defined by <code class="docutils literal notranslate"><span class="pre">key</span></code> from, default: ‘_default’. A multi-wavelength profile returns a dict keyed by wavelength.</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
@@ -412,10 +412,13 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="inspect">
 <span class="sig-name descname"><span class="pre">inspect</span></span></dt>
-<dd><p>Return the names of the top-level variables in the simulation file (see <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a>). Per-profile results live inside <code class="docutils literal notranslate"><span class="pre">profiles</span></code> and are read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=...)</span></code> or the typed accessors; names beginning with an underscore are internal.</p>
+<dd><p>Return the names <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a> can read (see <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a>): the top-level variables in the simulation file, followed by the per-profile variables and settings of <code class="docutils literal notranslate"><span class="pre">profile</span></code>. Names beginning with an underscore are internal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile whose variables and settings to list, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
