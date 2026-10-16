@@ -17,7 +17,7 @@ Quick reference for initializing, running, and closing an EMode session:
 .. note::
 
    The console output on the example pages below, including all timings,
-   was produced on: AMD EPYC 9V74 80-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
+   was produced on: AMD EPYC 7763 64-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
 
 .. hardware-note-end
 
@@ -40,6 +40,7 @@ Example Scripts
 
                 * :octicon:`container;1em` :doc:`SOI <examples//SOI>`
                 * :octicon:`iterations;1em` :doc:`SiN <examples//SiN>`
+                * :octicon:`git-compare;1em` :doc:`Bend Mode Solvers <examples//Bend_Solvers>`
                 * :octicon:`zap;1em` :doc:`LNOI <examples//LNOI>`
                 * :octicon:`light-bulb;1em` :doc:`Laser <examples//Laser>`
                 * :octicon:`file;1em` :doc:`Open <examples//Open>`
@@ -59,8 +60,11 @@ Example Scripts
                 * :octicon:`video;1em` :doc:`EME: Sweep <examples//EME_Sweep>`
                 * :octicon:`project-symlink;1em` :doc:`EME: GDS <examples//EME_GDS>`
                 * :octicon:`broadcast;1em` :doc:`EME: Angled Facet <examples//EME_Angled_Facet>`
+                * :octicon:`rss;1em` :doc:`EME: Grating Coupler <examples//EME_Grating_Coupler>`
+                * :octicon:`sync;1em` :doc:`EME: TFLN Ring Resonator <examples//EME_TFLN_Ring>`
                 * :octicon:`pulse;1em` :doc:`Nonlinear-EME: SHG <examples//EME_SHG>`
                 * :octicon:`zap;1em` :doc:`Nonlinear-EME: PPLN <examples//EME_PPLN>`
+                * :octicon:`flame;1em` :doc:`Nonlinear-EME: Supercontinuum <examples//EME_PPLN_Supercontinuum>`
                 * :octicon:`arrow-switch;1em` :doc:`Nonlinear-EME: DFG <examples//EME_DFG>`
                 * :octicon:`container;1em` :doc:`FEM: SOI <examples//FEM_SOI>`
                 * :octicon:`flame;1em` :doc:`Heater <examples//Heater>`
@@ -73,6 +77,7 @@ Example Scripts
 
    examples//SOI
    examples//SiN
+   examples//Bend_Solvers
    examples//LNOI
    examples//Laser
    examples//Open
@@ -88,8 +93,11 @@ Example Scripts
    examples//EME_Sweep
    examples//EME_GDS
    examples//EME_Angled_Facet
+   examples//EME_Grating_Coupler
+   examples//EME_TFLN_Ring
    examples//EME_SHG
    examples//EME_PPLN
+   examples//EME_PPLN_Supercontinuum
    examples//EME_DFG
    examples//FEM_SOI
    examples//Heater

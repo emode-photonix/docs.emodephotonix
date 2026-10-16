@@ -55,9 +55,7 @@ There are two installation methods:
         (``EMode-<version>-Mac-x86.pkg``). To check, open the Apple menu and
         choose About This Mac: the Chip line reads Apple M... on Apple silicon,
         and the Processor line names an Intel CPU on an Intel Mac. The Apple
-        silicon build runs natively and is faster. This is the last release
-        with an Intel installer, and earlier versions stay available for
-        download.
+        silicon build runs natively and is faster.
 
         Double-click the downloaded ``.pkg`` file and follow the installer
         prompts. Administrator access may be required. EMode will be installed

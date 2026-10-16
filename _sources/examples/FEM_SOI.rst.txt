@@ -59,9 +59,9 @@ The SOI waveguide of the "Basic: SOI" example, solved with the finite-element mo
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.4 sec
-    Solving modes completed in 1.4 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.7 sec
     Refinement level  Unknowns  n_eff (per mode)
                    0     11613  3.013305  2.966522
                    1     12481  3.013291  2.966504

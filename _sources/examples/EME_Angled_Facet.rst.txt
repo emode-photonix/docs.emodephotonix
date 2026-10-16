@@ -133,9 +133,11 @@ angled facet suppresses back-reflection.
         report = em2.free_space_field_diagnostics(name='fiber')
         print(report)
 
+        ## 'section' scales each section by its own peak, so the beam spreading in
+        ## the free-space gaps stays visible next to the much brighter guided mode
         em2.plot(
             excitation='fiber', component='Ex', plot_function='abs', plane='z-x',
-            normalization='component')
+            normalization='section')
 
         ## Close EMode
         em2.close()
@@ -143,45 +145,45 @@ angled facet suppresses back-reflection.
 
 Console output::
 
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
 
     Sweeping section parameter 'facet_angle'...
-    Solving EME: facet_angle = 0.0... completed in 9.5 sec
-    Solving EME: facet_angle = 1.0... completed in 8.2 sec
-    Solving EME: facet_angle = 2.0... completed in 8.2 sec
-    Solving EME: facet_angle = 3.0... completed in 8.1 sec
-    Solving EME: facet_angle = 4.0... completed in 8.2 sec
-    Solving EME: facet_angle = 5.0... completed in 8.3 sec
-    Solving EME: facet_angle = 6.0... completed in 8.3 sec
-    Solving EME: facet_angle = 7.0... completed in 8.1 sec
-    Solving EME: facet_angle = 8.0... completed in 7.9 sec
-    Solving EME: facet_angle = 9.0... completed in 8.2 sec
-    Solving EME: facet_angle = 10.0... completed in 8.0 sec
-    Solving EME: facet_angle = 11.0... completed in 8.0 sec
-    Solving EME: facet_angle = 12.0... completed in 7.8 sec
-     completed in 1 min 46.9 sec
+    Solving EME: facet_angle = 0.0... completed in 10.4 sec
+    Solving EME: facet_angle = 1.0... completed in 9.1 sec
+    Solving EME: facet_angle = 2.0... completed in 9.1 sec
+    Solving EME: facet_angle = 3.0... completed in 9.1 sec
+    Solving EME: facet_angle = 4.0... completed in 9.2 sec
+    Solving EME: facet_angle = 5.0... completed in 9.1 sec
+    Solving EME: facet_angle = 6.0... completed in 9.0 sec
+    Solving EME: facet_angle = 7.0... completed in 8.9 sec
+    Solving EME: facet_angle = 8.0... completed in 9.1 sec
+    Solving EME: facet_angle = 9.0... completed in 9.0 sec
+    Solving EME: facet_angle = 10.0... completed in 8.9 sec
+    Solving EME: facet_angle = 11.0... completed in 9.1 sec
+    Solving EME: facet_angle = 12.0... completed in 9.1 sec
+     completed in 1 min 59.2 sec
     Exited EMode
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
 
     Solving S-matrices...
     Solving section: fiber_gap... completed in 0.0 sec
-    Solving section: taper... completed in 1 min 53.8 sec
+    Solving section: taper... completed in 2 min 27.2 sec
     Solving section: out_gap... completed in 0.0 sec
-     completed in 1 min 53.8 sec
+     completed in 2 min 27.2 sec
     Exited EMode
-    tilt  0.0 deg: R + T =  96.2 %
-    tilt  1.0 deg: R + T =  93.5 %
-    tilt  2.0 deg: R + T =  89.9 %
-    tilt  3.0 deg: R + T =  86.5 %
-    tilt  4.0 deg: R + T =  83.5 %
-    tilt  5.0 deg: R + T =  80.8 %
-    tilt  6.0 deg: R + T =  78.4 %
-    tilt  7.0 deg: R + T =  76.6 %
-    tilt  8.0 deg: R + T =  75.7 %
-    tilt  9.0 deg: R + T =  75.1 %
-    tilt 10.0 deg: R + T =  71.8 %
-    tilt 11.0 deg: R + T =  62.5 %
-    tilt 12.0 deg: R + T =  46.7 %
+    tilt  0.0 deg: R + T =  96.0 %
+    tilt  1.0 deg: R + T =  93.3 %
+    tilt  2.0 deg: R + T =  89.7 %
+    tilt  3.0 deg: R + T =  86.3 %
+    tilt  4.0 deg: R + T =  83.3 %
+    tilt  5.0 deg: R + T =  80.6 %
+    tilt  6.0 deg: R + T =  78.2 %
+    tilt  7.0 deg: R + T =  76.5 %
+    tilt  8.0 deg: R + T =  75.6 %
+    tilt  9.0 deg: R + T =  74.9 %
+    tilt 10.0 deg: R + T =  71.6 %
+    tilt 11.0 deg: R + T =  62.3 %
+    tilt 12.0 deg: R + T =  46.6 %
     free-space field 'fiber' at port 'fiber_gap.left' (780 nm): 100.0% captured by a 1022-mode basis
 
 

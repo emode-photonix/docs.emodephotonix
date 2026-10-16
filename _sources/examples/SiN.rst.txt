@@ -2,7 +2,7 @@
 Bending: SiN
 ------------
 
-Highlighted features: bend radius, pml layers, confinement factor, saving plots.
+Highlighted features: bend radius, PMLs, confinement factor, saving plots.
 
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
@@ -17,9 +17,9 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         wavelength = 980 # [nm] wavelength
         dx, dy = 10, 10 # [nm] resolution
         w_core = 2000 # [nm] waveguide core width
-        w_trench = 2500 # [nm] waveguide side trench width
+        w_trench = 1500 # [nm] waveguide side trench width
         h_core = 200 # [nm] waveguide core height
-        h_clad = 2500 # [nm] waveguide top and bottom clad
+        h_clad = 2000 # [nm] waveguide top and bottom clad, above the PML
         window_width = w_core + w_trench*2 # [nm]
         window_height = h_core + h_clad*2 # [nm]
         num_modes = 1 # [-] number of modes
@@ -36,14 +36,17 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         em.add_material(name = 'custom_SiO2',
             refractive_index_equation = equation, wavelength_unit = 'um')
 
-        ## Settings
+        ## Settings: the bend radiates outward, so a PML on the outer (east) wall
+        ## absorbs it, and PMLs on the top and bottom walls absorb what spreads up and
+        ## down. With max_effective_index just above the guided mode, the mode solved
+        ## is the guided mode rather than a PML mode.
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
             window_width = window_width, window_height = window_height,
             num_modes = num_modes, background_material = 'custom_SiO2',
             boundary_condition = boundary, bend_radius = bend_radius + x_off,
-            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 10,
-            max_effective_index = 1.7)
+            pml_NSEW_bool = [1,1,1,0], pml_thickness = [1000,1000,1000,0], pml_kappa_max = 1,
+            max_effective_index = 1.67)
 
         ## Draw shapes
         em.shape(name = 'core', material = 'SiN', width = w_core,
@@ -70,11 +73,11 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.5 sec
-    Solving modes completed in 18.3 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 18.1 sec
 
-    Wavelength: 980.0 nm    Solver: FDM
+    Wavelength: 980.0 nm    Solver: FDM, cylindrical bend
  
       Mode #     n_eff    TE %    Loss (dB/m)    PML    background confinement    core confinement
     --------  --------  ------  -------------  -----  ------------------------  ------------------

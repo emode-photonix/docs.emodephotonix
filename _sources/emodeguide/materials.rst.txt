@@ -12,6 +12,24 @@ Descriptions of all materials available in built-in material database. This info
     
         | P. E. Ciddor, "Refractive index of air: new equations for the visible and near infrared," Appl. Opt. 35, 1566 (1996).
 
+.. data:: Al
+
+    .. math:: n = 1.5355 + 15.331i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Al2O3
+    
+    .. math:: n = \left( 1 + \frac{1.43135}{1 - (7.26631 \times 10^{-2}/ \lambda)^2} + \frac{0.650547}{1 - (0.119324/ \lambda)^2} + \frac{5.34140}{1 - (18.0283/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 200 nm to 5000 nm
+    
+        | (1) I. H. Malitson and M. J. Dodge, "Refractive Index and Birefringence of Synthetic Sapphire," J. Opt. Soc. Am. 62, 1405 (1972).
+        | (2) M. J. Dodge, "Refractive Index" in Handbook of Laser Science and Technology, Volume IV, Optical Materials: Part 2, CRC Press, Boca Raton, 1986, p. 30.
+
 .. data:: AlGaAs
     
     .. math::
@@ -43,16 +61,15 @@ Descriptions of all materials available in built-in material database. This info
     
         | (1) L. Y. Beliaev, E. Shkondin, A. V. Lavrinenko, and O. Takayama, "Thickness-dependent optical properties of aluminum nitride films for mid-infrared wavelengths," J. Vac. Sci. Technol. A 39, 043408 (2021).
         | (2)  L. Y. Beliaev, E. Shkondin, A. V. Lavrinenko, and O. Takayama, "Erratum: Thickness-dependent optical properties of aluminum nitride films for mid-infrared wavelengths," J. Vac. Sci. Technol. A 40, 027001 (2022).
-        
-        
-.. data:: Al2O3
-    
-    .. math:: n = \left( 1 + \frac{1.43135}{1 - (7.26631 \times 10^{-2}/ \lambda)^2} + \frac{0.650547}{1 - (0.119324/ \lambda)^2} + \frac{5.34140}{1 - (18.0283/ \lambda)^2} \right)^{0.5}
-    
-    Wavelength range: 200 nm to 5000 nm
-    
-        | (1) I. H. Malitson and M. J. Dodge, "Refractive Index and Birefringence of Synthetic Sapphire," J. Opt. Soc. Am. 62, 1405 (1972).
-        | (2) M. J. Dodge, "Refractive Index" in Handbook of Laser Science and Technology, Volume IV, Optical Materials: Part 2, CRC Press, Boca Raton, 1986, p. 30.
+
+.. data:: Au
+
+    .. math:: n = 0.5747 + 9.664i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
 
 .. data:: BBO
     
@@ -67,6 +84,24 @@ Descriptions of all materials available in built-in material database. This info
         | (2) G. Tamošauskas, "β-barium borate (BBO) absorption in the 0.188-6.22 μm range," arXiv:2111.01212 [physics.optics] (2021).
         | Notes: The n_e is the z-direction and n_o is the x- and y-direction.
 
+.. data:: Cr
+
+    .. math:: n = 4.2722 + 4.925i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Cu
+
+    .. math:: n = 0.4697 + 10.453i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
 .. data:: GaAs
     
     .. math:: n = \left( 1 + 4.37251 + \frac{5.46674}{1 - (0.443131/ \lambda)^2} + \frac{2.42996 \times 10^{-2}}{1 - (0.874645/ \lambda)^2}  + \frac{1.95752}{1 - (36.9166/ \lambda)^2} \right)^{0.5}
@@ -75,6 +110,18 @@ Descriptions of all materials available in built-in material database. This info
     
         | T. Skauli, P. S. Kuo, K. L. Vodopyanov, T. J. Pinguet, O. Levi, L. A. Eyres, J. S. Harris, M. M. Fejer, B. Gerard, L. Becouarn, and E. Lallier, "Improved dispersion relations for GaAs and applications to nonlinear optics," J. Appl. Phys., 94, 6447 (2003).
         | Notes: 22 deg C
+
+.. data:: GaN
+
+    .. math::
+
+        n_\mathrm{o} &= \left( 1 + \frac{0.298 \lambda^2}{\lambda^2 - 0.3420^2} + \frac{3.909 \lambda^2}{\lambda^2 - 0.1446^2} \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 1 + \frac{0.0117 \lambda^2}{\lambda^2 - 0.4225^2} + \frac{4.437 \lambda^2}{\lambda^2 - 0.1770^2} \right)^{0.5}
+
+    Wavelength range: 458 nm to 1550 nm
+
+        | S. Pezzagna, J. Brault, M. Leroux, J. Massies, and M. de Micheli, "Refractive indices and elasto-optic coefficients of GaN studied by optical waveguiding," J. Appl. Phys. 103, 123112 (2008).
+        | Notes: wurtzite GaN, c-axis on z (n_e).
 
 .. data:: GaP
     
@@ -197,17 +244,17 @@ Descriptions of all materials available in built-in material database. This info
         | K. Kato, "Temperature-tuned 90° phase-matching properties of LiB3O5," IEEE J. Quantum Electron. 30, 2950 (1994).
         | Notes: LiB3O5 at room temperature. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, c and b axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
 
-.. data:: LN_MgO
-    
+.. data:: LiTaO3
+
     .. math::
-        
-        n_\mathrm{o} &= \left( 5.653 + \frac{0.1185}{\lambda^2 - 0.2091^2} + \frac{89.61}{\lambda^2 - 10.85^2} - 0.0197 \lambda^2 \right)^{0.5} \\
-        n_\mathrm{e} &= \left( 5.756 + \frac{0.0983}{\lambda^2 - 0.2020^2} + \frac{189.32}{\lambda^2 - 12.52^2} - 0.0132 \lambda^2 \right)^{0.5}
-    
-    Wavelength range: 500 nm to 4000 nm
-    
-        | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
-        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction. A second dispersion model is available via a ``reference`` keyword, either 'Gayer 2008' (default, shown above) or 'Zelmon 1997', which uses different Sellmeier coefficients, a 400 nm to 5000 nm wavelength range, and a different axis convention.
+
+        n_\mathrm{o} &= \left( 4.51224 + \frac{0.0847522}{\lambda^2 - 0.19876^2} - 0.0239046 \lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 4.52999 + \frac{0.0844313}{\lambda^2 - 0.20344^2} - 0.0237909 \lambda^2 \right)^{0.5}
+
+    Wavelength range: 400 nm to 4000 nm
+
+        | K. S. Abedin and H. Ito, "Temperature-dependent dispersion relation of ferroelectric lithium tantalate," J. Appl. Phys. 80, 6561 (1996).
+        | Notes: congruent LiTaO3 at room temperature; n_e is the z-direction.
 
 .. data:: LN
     
@@ -220,6 +267,26 @@ Descriptions of all materials available in built-in material database. This info
     
         | D. E. Zelmon, D. L. Small, and D. Jundt, "Infrared corrected Sellmeier coefficients for congruently grown lithium niobate and 5 mol. % magnesium oxide-doped lithium niobate," J. Opt. Soc. Am. B 14, 3319 (1997).
         | Notes: z-cut lithium niobate. The n_e is the z-direction and n_o is the x- and y-direction.
+
+.. data:: LN_MgO
+    
+    .. math::
+        
+        n_\mathrm{o} &= \left( 5.653 + \frac{0.1185}{\lambda^2 - 0.2091^2} + \frac{89.61}{\lambda^2 - 10.85^2} - 0.0197 \lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 5.756 + \frac{0.0983}{\lambda^2 - 0.2020^2} + \frac{189.32}{\lambda^2 - 12.52^2} - 0.0132 \lambda^2 \right)^{0.5}
+    
+    Wavelength range: 500 nm to 4000 nm
+    
+        | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
+        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction. A second dispersion model is available via a ``reference`` keyword, either 'Gayer 2008' (default, shown above) or 'Zelmon 1997', which uses different Sellmeier coefficients, a 400 nm to 5000 nm wavelength range, and a different axis convention.
+
+.. data:: NiCr
+
+    .. math:: n = 3.4418 + 6.754i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | Notes: no published optical constants for NiCr (nichrome); Ni from A. D. Rakic et al., Appl. Opt. 37, 5271 (1998) used as a proxy. Heater/electrode use only; constant near 1550 nm only.
 
 .. data:: PMMA_495
     
@@ -279,7 +346,7 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 200 nm to 1100 nm
     
         | `Microchem SU-8 2000 Data Sheet (uncured), (2020). <https://kayakuam.com/wp-content/uploads/2020/08/KAM-SU-8-2000-2000.5-2015-Datasheet-8.13.20-final.pdf>`_
-        
+
 .. data:: SU8_3000
     
     .. math:: n = \left(1.5525 + \frac{6.29 \times 10^{-3}}{\lambda^{2}} + \frac{4.0 \times 10^{-4}}{\lambda^{4}}\right)
@@ -295,6 +362,24 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 500 nm to 5000 nm
     
         | J. A. Black, R. Streater, K. F. Lamee, D. R. Carlson, Su-Peng Yu, and S. B. Papp, "Group-velocity-dispersion engineering of tantala integrated photonics," Opt. Lett. 46, 817 (2021).
+
+.. data:: Ti
+
+    .. math:: n = 3.8245 + 4.417i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: TiN
+
+    .. math:: n = 3.230 + 5.259i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | E. Shkondin et al., Opt. Mater. Express 7, 4171 (2017).
+        | Notes: 105 nm sputtered TiN at 1550 nm; strongly process-dependent, constant near 1550 nm only.
 
 .. data:: TiO2
     
@@ -325,42 +410,6 @@ Descriptions of all materials available in built-in material database. This info
     
     Wavelength range: 0.0001 nm to 100000 nm
 
-.. data:: Au
-
-    .. math:: n = 0.5747 + 9.664i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Al
-
-    .. math:: n = 1.5355 + 15.331i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Cu
-
-    .. math:: n = 0.4697 + 10.453i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Ti
-
-    .. math:: n = 3.8245 + 4.417i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
 .. data:: W
 
     .. math:: n = 2.3733 + 4.815i
@@ -369,56 +418,6 @@ Descriptions of all materials available in built-in material database. This info
 
         | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
         | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Cr
-
-    .. math:: n = 4.2722 + 4.925i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: TiN
-
-    .. math:: n = 3.230 + 5.259i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | E. Shkondin et al., Opt. Mater. Express 7, 4171 (2017).
-        | Notes: 105 nm sputtered TiN at 1550 nm; strongly process-dependent, constant near 1550 nm only.
-
-.. data:: NiCr
-
-    .. math:: n = 3.4418 + 6.754i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | Notes: no published optical constants for NiCr (nichrome); Ni from A. D. Rakic et al., Appl. Opt. 37, 5271 (1998) used as a proxy. Heater/electrode use only; constant near 1550 nm only.
-
-.. data:: GaN
-
-    .. math::
-
-        n_\mathrm{o} &= \left( 1 + \frac{0.298 \lambda^2}{\lambda^2 - 0.3420^2} + \frac{3.909 \lambda^2}{\lambda^2 - 0.1446^2} \right)^{0.5} \\
-        n_\mathrm{e} &= \left( 1 + \frac{0.0117 \lambda^2}{\lambda^2 - 0.4225^2} + \frac{4.437 \lambda^2}{\lambda^2 - 0.1770^2} \right)^{0.5}
-
-    Wavelength range: 458 nm to 1550 nm
-
-        | S. Pezzagna, J. Brault, M. Leroux, J. Massies, and M. de Micheli, "Refractive indices and elasto-optic coefficients of GaN studied by optical waveguiding," J. Appl. Phys. 103, 123112 (2008).
-        | Notes: wurtzite GaN, c-axis on z (n_e).
-
-.. data:: LiTaO3
-
-    .. math::
-
-        n_\mathrm{o} &= \left( 4.51224 + \frac{0.0847522}{\lambda^2 - 0.19876^2} - 0.0239046 \lambda^2 \right)^{0.5} \\
-        n_\mathrm{e} &= \left( 4.52999 + \frac{0.0844313}{\lambda^2 - 0.20344^2} - 0.0237909 \lambda^2 \right)^{0.5}
-
-    Wavelength range: 400 nm to 4000 nm
-
-        | K. S. Abedin and H. Ito, "Temperature-dependent dispersion relation of ferroelectric lithium tantalate," J. Appl. Phys. 80, 6561 (1996).
-        | Notes: congruent LiTaO3 at room temperature; n_e is the z-direction.
 
 .. data:: ZnSe
 
@@ -526,13 +525,6 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 16.78
      - --
      - --
-   * - GGG
-     - 7.4
-     - 0
-     - 12.11
-     - inf
-     - --
-     - --
    * - GaAs
      - 55
      - 0.000267
@@ -565,6 +557,13 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 58
      - 0.0004
      - 16.2
+     - inf
+     - --
+     - --
+   * - GGG
+     - 7.4
+     - 0
+     - 12.11
      - inf
      - --
      - --
@@ -631,6 +630,13 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - inf
      - d15 = 1.05, d24 = -0.98, d31 = 1.05, d32 = -0.98, d33 = 0.05
      - --
+   * - LiTaO3
+     - 4.6
+     - 3.9e-05
+     - 43
+     - inf
+     - d33 = 13.8
+     - --
    * - LN
      - 4.6
      - 3.3e-05
@@ -645,13 +651,6 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - inf
      - d15 = 4.4, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.4, d31 = 4.4, d32 = 4.4, d33 = 25
      - r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8
-   * - LiTaO3
-     - 4.6
-     - 3.9e-05
-     - 43
-     - inf
-     - d33 = 13.8
-     - --
    * - NiCr
      - 11.3
      - 0
@@ -680,20 +679,6 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 105
      - --
      - --
-   * - SU8_2000
-     - 0.2
-     - -0.00011
-     - 3.28
-     - inf
-     - --
-     - --
-   * - SU8_3000
-     - 0.2
-     - -0.00011
-     - 3.28
-     - inf
-     - --
-     - --
    * - Si
      - 149
      - 0.000186
@@ -712,6 +697,20 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 1.38
      - 8.7e-06
      - 3.9
+     - inf
+     - --
+     - --
+   * - SU8_2000
+     - 0.2
+     - -0.00011
+     - 3.28
+     - inf
+     - --
+     - --
+   * - SU8_3000
+     - 0.2
+     - -0.00011
+     - 3.28
      - inf
      - --
      - --

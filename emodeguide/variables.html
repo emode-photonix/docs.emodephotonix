@@ -488,6 +488,10 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </dd>
 <dt id="term-propagation_resolution">propagation_resolution</dt><dd><p>(<em>float</em>) [nm] Sampling resolution used along the propagation direction for EME field reconstruction.</p>
 </dd>
+<dt id="term-pulse_response">pulse_response</dt><dd><p>(<em>PulseResponse</em>) The spectrum of every tracked mode along the chain from the most recent <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> or <a class="reference internal" href="eme.html#pulse_propagate" title="pulse_propagate"><code class="xref py py-data docutils literal notranslate"><span class="pre">pulse_propagate</span></code></a> with a <code class="docutils literal notranslate"><span class="pre">PulsedSource</span></code> excitation; returned by <code class="docutils literal notranslate"><span class="pre">get('pulse_response')</span></code> (EMode<sup>3D</sup> only). See <a class="reference internal" href="eme.html#PulseResponse" title="PulseResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">PulseResponse</span></code></a>.</p>
+</dd>
+<dt id="term-pulsed_source">pulsed_source</dt><dd><p>(<em>PulsedSource</em>) The declared pulsed excitation; returned by <code class="docutils literal notranslate"><span class="pre">get('pulsed_source')</span></code>.</p>
+</dd>
 <dt id="term-response">response</dt><dd><p>(<em>CircuitResponse</em>) The power-dependent nonlinear response from the most recent EME solve with a declared excitation; returned by <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>. It also carries <code class="docutils literal notranslate"><span class="pre">trajectories</span></code>, the forward amplitudes recorded along each <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> slice, read with <code class="docutils literal notranslate"><span class="pre">power_vs_z(wavelength)</span></code> or <code class="docutils literal notranslate"><span class="pre">amplitude_vs_z(wavelength)</span></code>.</p>
 </dd>
 <dt id="term-S_matrix">S_matrix</dt><dd><p>(<em>SMatrix</em>) The scattering matrix from a solved EME chain; returned by <code class="docutils literal notranslate"><span class="pre">get('S_matrix')</span></code> (EMode<sup>3D</sup> only).</p>
@@ -511,6 +515,8 @@ reads back under the name it was set by, so an alias given to <a class="referenc
 <dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
 </dd>
+<dt id="term-bend_method">bend_method</dt><dd><p>(<em>str</em>) How a nonzero <code class="docutils literal notranslate"><span class="pre">bend_radius</span></code> is solved. <code class="docutils literal notranslate"><span class="pre">'cylindrical'</span></code> (the default) adds the bend factor 1 + x/R to the mode solver. <code class="docutils literal notranslate"><span class="pre">'TO'</span></code> solves the straight cross-section with its material transformed by the bend’s conformal map (transformation optics). Both work with the FDM and the FEM. The two methods’ effective indices differ by about 6e-4 at R = 10 um, and their bend losses by about 5 %. With a PML, a bend’s spectrum starts with PML modes, so set <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code> just above the guided mode. An under-resolved bend shows up as spurious bend loss. The ‘Bend Mode Solvers’ example compares the four combinations.</p>
+</dd>
 <dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. <code class="docutils literal notranslate"><span class="pre">get('boundary_condition')</span></code> returns the string as given (for example <code class="docutils literal notranslate"><span class="pre">'TE'</span></code>), and <code class="docutils literal notranslate"><span class="pre">BC</span></code> below is the resolved boundary condition.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">BC</span></code>, as a <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> argument only. <code class="docutils literal notranslate"><span class="pre">get('BC')</span></code> returns the resolved value.</p>
 </dd>
@@ -523,6 +529,8 @@ reads back under the name it was set by, so an alias given to <a class="referenc
 <dt id="term-fem_max_dofs">fem_max_dofs</dt><dd><p>(<em>int</em>) The FEM solver stops refining before the problem exceeds this many unknowns.</p>
 </dd>
 <dt id="term-fem_max_refinements">fem_max_refinements</dt><dd><p>(<em>int</em>) Maximum number of adaptive FEM refinement passes. 0 disables refinement.</p>
+</dd>
+<dt id="term-fem_mesh_wavelength">fem_mesh_wavelength</dt><dd><p>(<em>float</em>) [nm] The FEM solver builds and refines its mesh at this wavelength and solves every wavelength on it. 0 meshes each solve at its own wavelength.</p>
 </dd>
 <dt id="term-fem_min_angle">fem_min_angle</dt><dd><p>(<em>float</em>) [degrees] Minimum triangle angle of the FEM mesh, at most 34.</p>
 </dd>

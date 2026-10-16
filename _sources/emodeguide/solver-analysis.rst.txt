@@ -58,12 +58,19 @@ Solver and analysis
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
     :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, where 'FDM' means a mode solve with the solver the ``solver`` setting selects (the FDM or the FEM), default: automatically chosen based on the ``key`` and ``result`` selection
-    :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
+    :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss', 'mode_order' and 'monitor_coupling' are accepted. 'monitor_coupling' collects :data:`monitor_coupling` for the monitor named by ``monitor`` and the beam described by ``beam``. With a ``key`` that is one of the beam's arguments ('angle', 'mode_field_diameter', 'center', 'index' or 'polarization') the solved chain is reused and only the overlap is evaluated at each value, with no solve, and ``sweep_data`` also carries ``power_through_plane`` and ``overlap``. Any other key needs ``solve_type='EME'`` and solves the chain at each value. default: 'effective_index'
     :type result: str or list
     :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
     :param bool adaptive: only for a wavelength sweep. ``values`` keeps its meaning -- the wavelengths you want results at -- and ``adaptive`` changes only *where the solver runs*: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength places further solves until the mode list stops moving by more than ``tolerance``, or the gap reaches ``minimum_step``. The requested wavelengths are then filled in by interpolating the solved mode lists, which is much cheaper than solving every point when the modes vary smoothly. ``sweep_data`` additionally carries ``solved_wavelengths`` (where the solver actually ran) and ``unconverged`` (any stretch the sampler gave up on, reported rather than raised). Default: False
     :param float tolerance: with ``adaptive``, the largest mode-list change tolerated between adjacent solves, default: 1e-3
     :param float minimum_step: [nm] with ``adaptive``, the smallest wavelength gap the sampler will bisect into, default: the spacing of ``values``
+    :param str method: either 'direct' or 'interpolated'. 'interpolated' is only for ``key='wavelength'`` with ``result='S_matrix'`` (EMode\ :sup:`3D`\  only): the circuit is solved and refined once at the current wavelength with :data:`EME`, every cross-section in it is solved at ``num_nodes`` wavelengths (Chebyshev-Lobatto nodes, ends included) over ``wavelength_range``, and the S-matrix at each of ``values`` is rebuilt from the propagation constants and junctions interpolated between them, so no wavelength in ``values`` solves anything. It suits the hundreds of wavelengths a resonator spectrum needs. A mode that cannot be followed across the range carries nothing in the result. ``sweep_data`` additionally carries ``num_nodes`` and ``interpolation_residual``, the largest error in any S-matrix element at one node predicted from the others, and a warning is logged when it exceeds ``interpolation_tolerance``. Default: 'direct'
+    :param int num_nodes: with ``method='interpolated'``, the number of wavelengths every cross-section is solved at, at least 4. Add nodes, or narrow the range, when ``interpolation_residual`` is too large, default: 8
+    :param wavelength_range: [nm] with ``method='interpolated'``, the range the nodes span, which must contain every one of ``values``, default: the range of ``values``
+    :type wavelength_range: tuple[float, float]
+    :param float interpolation_tolerance: with ``method='interpolated'``, the largest ``interpolation_residual`` accepted without a warning, default: 1e-4
+    :param str monitor: with ``result='monitor_coupling'``, the name of the monitor (see :data:`monitor`), default: None
+    :param dict beam: with ``result='monitor_coupling'``, the keyword arguments of :data:`monitor_coupling` that describe the beam, ``mode_field_diameter`` at least, for example ``beam=dict(mode_field_diameter=10.4e3)``. A beam ``key`` overrides its entry here at each value, default: None
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: confinement
@@ -172,9 +179,10 @@ Solver and analysis
 
     Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.
 
-    For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``pwd_section()``, ``taper_section()``, or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
+    For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``pwd_section()``, ``taper_section()``, ``bend_section()`` or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
 
-    :param str component: field component or index, 'Ex/y/z'; 'Hx/y/z'; 'Sx/y/z'; 'Index'; 'Shapes', default: 'Ex'
+    :param component: field component or index, 'Ex/y/z', 'Hx/y/z', 'Sx/y/z', 'Index' or 'Shapes', default: None ('Ex', or 'Index' for a circuit with a closed loop)
+    :type component: str or None
     :param str plot_function: plotting function, 'real'; 'imag'; 'abs'; 'abs^2'; 'log', default: 'real'
     :param int mode: mode number, default: 0
     :param aspect_ratio: the height:width aspect ratio, 'norm' uses the normal aspect ratio of 0.707, 'real' uses the real aspect ratio defined by the simulation window, or a float specifies the aspect ratio, default: 'norm'
@@ -186,7 +194,7 @@ Solver and analysis
     :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
     :param port: (EME) the input port that the field is excited from, either a port index or a port name (see :class:`Port`), default: 0
     :type port: int or str
-    :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
+    :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y'. The 'z-y' panel also draws the plane of each :data:`monitor`, default: 'z-x'
     :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: 'sum' (default), which totals the field across the fixed transverse axis, or 'mean', which averages it, default: None
     :type slice_position: float or None
     :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward)
@@ -195,7 +203,8 @@ Solver and analysis
     :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, smaller is finer; 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
     :type resolution: float or str
     :param str excitation: (EME) render the field launched by a free-space field declared with :data:`free_space_field`, instead of unit amplitude in ``mode`` at ``port``. It also selects which port the field is viewed at. This is the only API surface for viewing one; in the plot window the same choice appears in the Mode menu as ``'<name> (free space)'``. Default: None
-    :param str normalization: the field family the colour scale is normalized to, either 'vector' (the full transverse vector at the excitation plane) or 'component' (the plotted component alone), default: 'vector'
+    :param str view: (EME) what the 'z-x' panel shows, either 'layout' (every section where its connections place it on the chip, bends turning and sections after a turn turned with them, both axes in um) or 'simulation' (the circuit unrolled along its length, as solved), default: 'layout'. The 'Physical space' checkbox in the plot window switches between them. Field components follow the guide on the layout, while 'Index' and 'Shapes' stay unrolled. A circuit with a closed loop (a ring closed with :data:`connect_ports`) has no field reconstruction yet: its 'z-x' panel draws the layout outline only, 'Index' and 'Shapes' show its cross-sections, and asking for a field component raises an error.
+    :param str normalization: the field family the colour scale is normalized to, 'vector' (the full transverse vector at the excitation plane), 'component' (the plotted component alone) or 'section' (each section of a 'z-x' or 'z-y' panel scaled by its own peak, so a dim section such as a free-space gap stays visible), default: 'vector'
     :param profile: render a stored profile by name instead of the EME section. Once a simulation has declared sections, the plot always follows the section, so this is the only way to view a profile saved by an earlier ``FDM(profile=...)`` call. An unknown name raises an error listing the available profiles, default: None
     :type profile: str or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None

@@ -177,6 +177,12 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
     propagation_resolution
         (*float*) [nm] Sampling resolution used along the propagation direction for EME field reconstruction.
 
+    pulse_response
+        (*PulseResponse*) The spectrum of every tracked mode along the chain from the most recent :data:`EME` or :data:`pulse_propagate` with a ``PulsedSource`` excitation; returned by ``get('pulse_response')`` (EMode\ :sup:`3D`\  only). See :class:`PulseResponse`.
+
+    pulsed_source
+        (*PulsedSource*) The declared pulsed excitation; returned by ``get('pulsed_source')``.
+
     response
         (*CircuitResponse*) The power-dependent nonlinear response from the most recent EME solve with a declared excitation; returned by ``get('response')``. It also carries ``trajectories``, the forward amplitudes recorded along each :math:`\chi^{(2)}` slice, read with ``power_vs_z(wavelength)`` or ``amplitude_vs_z(wavelength)``.
 
@@ -208,6 +214,9 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
 
         Alias: ``radius``
 
+    bend_method
+        (*str*) How a nonzero ``bend_radius`` is solved. ``'cylindrical'`` (the default) adds the bend factor 1 + x/R to the mode solver. ``'TO'`` solves the straight cross-section with its material transformed by the bend's conformal map (transformation optics). Both work with the FDM and the FEM. The two methods' effective indices differ by about 6e-4 at R = 10 um, and their bend losses by about 5 %. With a PML, a bend's spectrum starts with PML modes, so set ``max_effective_index`` just above the guided mode. An under-resolved bend shows up as spurious bend loss. The 'Bend Mode Solvers' example compares the four combinations.
+
     boundary_condition
         (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. ``get('boundary_condition')`` returns the string as given (for example ``'TE'``), and ``BC`` below is the resolved boundary condition.
 
@@ -227,6 +236,9 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
 
     fem_max_refinements
         (*int*) Maximum number of adaptive FEM refinement passes. 0 disables refinement.
+
+    fem_mesh_wavelength
+        (*float*) [nm] The FEM solver builds and refines its mesh at this wavelength and solves every wavelength on it. 0 meshes each solve at its own wavelength.
 
     fem_min_angle
         (*float*) [degrees] Minimum triangle angle of the FEM mesh, at most 34.

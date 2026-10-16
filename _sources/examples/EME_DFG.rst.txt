@@ -212,13 +212,13 @@ Highlighted features: ``DFGProcess`` with ``poling_period``, two simultaneous ``
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 1.0 sec
-    Solving modes completed in 3.6 sec
-    Meshing completed in 1.0 sec
-    Solving modes completed in 2.9 sec
-    Meshing completed in 1.0 sec
-    Solving modes completed in 3.3 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.7 sec
+    Solving modes completed in 4.6 sec
+    Meshing completed in 1.7 sec
+    Solving modes completed in 3.9 sec
+    Meshing completed in 1.7 sec
+    Solving modes completed in 4.3 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.4 sec
@@ -278,7 +278,7 @@ Console output::
     poling period: 4.4218 um
     signal gain at 4 mm: 1.232 dB
     idler at 4 mm: 0.3107 uW
-    pump depletion: 0.948 %
+    pump depletion: 0.946 %
     Manley-Rowe (signal gained / idler created): 0.9875
 
 

@@ -97,6 +97,8 @@ Open the EMode Login GUI from a Python session to login to your EMode Photonix a
 
 To clear active sessions, select an option from the dropdown in the *Active Sessions* header row and click *Clear*. This terminates the selected sessions without consuming a license seat and refreshes the session table. The options are 'none' (default), 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest' (the latest non-roaming session), and 'oldest' (the oldest non-roaming session).
 
+The window refreshes the *Active Sessions* table every 30 seconds while it is the active window, and at once when it regains focus. The periodic refresh pauses after 15 minutes without a key press or click, and resumes on the next one. Click *Refresh* in the *Active Sessions* header row to fetch the table at any time.
+
 Command-line login
 ^^^^^^^^^^^^^^^^^^
 
@@ -387,8 +389,16 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
    A ``Port`` carries two offsets that mean different things: ``window.offset`` says *which part of this section's cross-section the port exposes*, while ``offset`` says *where this section sits* relative to what the port connects to. In short, ``window`` answers "which part of me?" and ``offset`` answers "where am I?". A window never moves a section, and an offset never crops one.
 
    :param str name: Port name, unique within its section.
-   :param window: A rectangular sub-region of the port's full cross-section to isolate, positioned within *this section's own* cross-section. Must overlap the section's profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), the port's mode is solved independently on just this window instead of the section's full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section's entire cross-section).
+   :param window: A rectangular sub-region of the port's full cross-section to isolate, positioned within *this section's own* cross-section. Must overlap the section's profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), or on a connected port that shares its side with other windows, the port's modes are solved on just this window instead of the section's full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section's entire cross-section).
    :type window: Bounds or None
+
+   A windowed port behaves as follows.
+
+   * A window keeps only the modes its content guides, those whose effective index is above what the layer stacks at its edges guide. The rest are standing waves between the window's walls, which the section does not have, so they are dropped, and a windowed port can have fewer modes than ``num_modes``. At least one mode, the one of largest index, is always kept. A section's own ports, without a window, keep all their modes.
+   * Several windows on one side of a section (the bus and ring arms of a ring coupler, say) are matched to the section together, in one junction, and then read out as separate ports, so together they conserve power. A window connected to another section with :data:`connect_ports` takes part in the same junction and passes its light on to that section from there. A connection windowed on both of its ends keeps a junction of its own.
+   * With the FDM, each edge of a window is moved to the nearest cell edge of the section's own mesh (by at most half a cell), so the window and the section share their grid and the junction stays reciprocal.
+   * Each windowed port is placed in the layout on its own window, so a section connected to one window is laid out on that window.
+
    :param str side: Which end of the section this port is declared on, either 'left' or 'right'.
    :param offset: [nm] transverse displacement of this section's cross-section relative to the port it connects to: ``offset=(1300, 0)`` places this section's content 1300 nm in +x from the connection's shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler's input port ``offset`` so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section ``offset=`` argument (see :doc:`EME </emodeguide/eme>`) is this same displacement applied to every port at once; setting both on one section raises an :class:`ArgumentError`.
    :type offset: tuple[float, float]

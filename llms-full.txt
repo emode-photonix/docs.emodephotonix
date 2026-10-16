@@ -109,9 +109,7 @@ There are two installation methods:
         (``EMode-<version>-Mac-x86.pkg``). To check, open the Apple menu and
         choose About This Mac: the Chip line reads Apple M... on Apple silicon,
         and the Processor line names an Intel CPU on an Intel Mac. The Apple
-        silicon build runs natively and is faster. This is the last release
-        with an Intel installer, and earlier versions stay available for
-        download.
+        silicon build runs natively and is faster.
 
         Double-click the downloaded ``.pkg`` file and follow the installer
         prompts. Administrator access may be required. EMode will be installed
@@ -239,6 +237,8 @@ Open the EMode Login GUI from a Python session to login to your EMode Photonix a
    emc.EModeLogin()
 
 To clear active sessions, select an option from the dropdown in the *Active Sessions* header row and click *Clear*. This terminates the selected sessions without consuming a license seat and refreshes the session table. The options are 'none' (default), 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest' (the latest non-roaming session), and 'oldest' (the oldest non-roaming session).
+
+The window refreshes the *Active Sessions* table every 30 seconds while it is the active window, and at once when it regains focus. The periodic refresh pauses after 15 minutes without a key press or click, and resumes on the next one. Click *Refresh* in the *Active Sessions* header row to fetch the table at any time.
 
 Command-line login
 ^^^^^^^^^^^^^^^^^^
@@ -528,8 +528,16 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
    A ``Port`` carries two offsets that mean different things: ``window.offset`` says *which part of this section's cross-section the port exposes*, while ``offset`` says *where this section sits* relative to what the port connects to. In short, ``window`` answers "which part of me?" and ``offset`` answers "where am I?". A window never moves a section, and an offset never crops one.
 
    :param str name: Port name, unique within its section.
-   :param window: A rectangular sub-region of the port's full cross-section to isolate, positioned within *this section's own* cross-section. Must overlap the section's profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), the port's mode is solved independently on just this window instead of the section's full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section's entire cross-section).
+   :param window: A rectangular sub-region of the port's full cross-section to isolate, positioned within *this section's own* cross-section. Must overlap the section's profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), or on a connected port that shares its side with other windows, the port's modes are solved on just this window instead of the section's full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section's entire cross-section).
    :type window: Bounds or None
+
+   A windowed port behaves as follows.
+
+   * A window keeps only the modes its content guides, those whose effective index is above what the layer stacks at its edges guide. The rest are standing waves between the window's walls, which the section does not have, so they are dropped, and a windowed port can have fewer modes than ``num_modes``. At least one mode, the one of largest index, is always kept. A section's own ports, without a window, keep all their modes.
+   * Several windows on one side of a section (the bus and ring arms of a ring coupler, say) are matched to the section together, in one junction, and then read out as separate ports, so together they conserve power. A window connected to another section with :data:`connect_ports` takes part in the same junction and passes its light on to that section from there. A connection windowed on both of its ends keeps a junction of its own.
+   * With the FDM, each edge of a window is moved to the nearest cell edge of the section's own mesh (by at most half a cell), so the window and the section share their grid and the junction stays reciprocal.
+   * Each windowed port is placed in the layout on its own window, so a section connected to one window is laid out on that window.
+
    :param str side: Which end of the section this port is declared on, either 'left' or 'right'.
    :param offset: [nm] transverse displacement of this section's cross-section relative to the port it connects to: ``offset=(1300, 0)`` places this section's content 1300 nm in +x from the connection's shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler's input port ``offset`` so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section ``offset=`` argument (see :doc:`EME </emodeguide/eme>`) is this same displacement applied to every port at once; setting both on one section raises an :class:`ArgumentError`.
    :type offset: tuple[float, float]
@@ -897,11 +905,22 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param apply_scattering: whether interfacial scattering loss is automatically applied to the S-matrix, either for every wavelength (True), no wavelengths (False), or only the listed wavelengths, default: False
     :type apply_scattering: bool or list[float]
     :param str beta_interpolation: either 'uniform' or 'linear' to specify how the propagation constant is interpolated between z-slices of a taper/gds section, default: 'uniform'
-    :param junction_normalization: controls how junction S-matrices are power-normalized; either a single bool/'gain' value applied to both junction kinds, or a dict with 'inter_section' and 'intra_section' keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: 'gain' for inter-section junctions and True for intra-section junctions
+    :param junction_normalization: controls how junction S-matrices are power-normalized; either a single bool/'gain' value applied to both junction kinds, or a dict with 'inter_section' and 'intra_section' keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: 'gain' for inter-section junctions and True for intra-section junctions. It applies to junctions with a plane-wave side (:data:`pwd_section`) or an angled facet. A junction between two mode-solved cross-sections conserves power by construction and is not normalized.
     :type junction_normalization: bool or str or dict
     :param float overlap_variation: threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01
     :param float minimum_z_step: [nm] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1
+    :param float snap_window: the fraction of a slice's length around its midpoint within which the automatic z-slicing bisects at a cross-section already solved elsewhere (for the same settings, mesh and wavelength) instead of at the midpoint, which saves a mode solve wherever two tapers or GDS sections share widths. 0 always bisects at the midpoint, default: 0.25
+    :param str initial_slices: how a taper or GDS section is sliced before the automatic z-slicing bisection refines it, either 'auto' (boundaries placed where the cross-section changes, from its rasterized refractive index: none along a straight run, evenly along a linear taper, densely inside a short fast feature, and at every corner of a GDS outline) or 'single' (one slice, the behavior before EMode 1.0.6). Refinement still runs afterward and decides the final slicing, so the choice moves results only within its tolerance and changes how many rounds it takes. A ``warm_start`` in :data:`EME` takes its slices from the previous solve instead, default: 'auto'
     :param str simulation_name: simulation name, default: 'emode'
+
+    A section's own ``settings`` dictionary accepts the keys above (except ``simulation_name``), and four more that tune the 'auto' initial slicing. They are rarely needed, and ``EME_settings`` does not take them.
+
+    * ``schedule_samples``: the number of positions along the section at which the refractive index is rasterized (no mode solve) to find where it changes, at least 2, default: 128
+    * ``schedule_change_per_slice``: the relative change in the rasterized index that one initial slice spans, so a smaller value starts with more slices, default: 0.05
+    * ``schedule_max_slices``: the largest number of initial slices, default: 64
+    * ``schedule_coarsen``: how many times coarser than the profile's mesh the index is rasterized, at least 1, default: 4
+
+    For example, ``taper_section(..., settings={'schedule_change_per_slice': 0.02})``. Initial slice boundaries closer together than ``minimum_z_step`` are merged.
 
 .. data:: straight_section
 
@@ -914,8 +933,8 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :type offset: float or tuple[float, float]
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
-    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
-    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or False or None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse's nonlinearity is declared instead with a ``PulsedProcess``, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
+    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or PulsedProcess or False or None
     :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), e.g. ``settings={'overlap_variation': 0.005}``, default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
@@ -955,8 +974,27 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param float length: [nm] the length of the section
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
-    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. Default: None
-    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or False or None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse's nonlinearity is declared instead with a ``PulsedProcess``, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
+    :type nonlinear: SHGProcess or SFGProcess or DFGProcess or PulsedProcess or False or None
+    :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
+    :type settings: dict or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: bend_section
+
+    Define a circular bend for the EME solver: the cross-section of ``profile`` swept along an arc. The bend is placed in the layout like any other section, and sections declared after it continue from its end, turned by ``sweep_angle``.
+
+    An anisotropic crystal is fixed in the chip, so the guide sees it turn along the bend. When a material is anisotropic in the plane of the chip (x-cut lithium niobate, for example), the bend is sliced along its heading and refined like a taper, and every section placed after a turn sees the crystal turned with it. A bend of an isotropic material, or of a crystal whose optic axis is vertical (z-cut thin film), is a single slice and a single mode solve. A :data:`copy_section` reuses its source's S-matrix, so it raises an error when its own placement would show the crystal differently, and asks for the copy to be declared as its own section.
+
+    A bend has no mirror symmetry about x, so an x symmetry wall in the profile's ``boundary_condition`` (such as '0S' or 'SA') is replaced by '0' with a warning, and 'TE', 'TM', 'TE-h' and 'TM-h' keep only the vertical fold. Updating an existing bend changes only the arguments given.
+
+    :param str name: section name, default: an auto-generated number
+    :param str profile: name of the profile that defines the cross-section
+    :param float radius: [nm] the bend radius, measured to the origin of the profile's x axis, must be positive, required for a new bend
+    :param float sweep_angle: [rad] the angle the bend turns through, positive toward +x and negative toward -x, not zero, required for a new bend
+    :param str method: how each slice is solved, either 'cylindrical' (the bend in cylindrical coordinates, as ``bend_radius`` in :data:`settings`) or 'TO' (transformation optics, see ``bend_method`` in :data:`settings`), default: 'cylindrical'
+    :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
+    :type ports: list[Port] or None
     :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
@@ -978,6 +1016,8 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :type port_poses: dict
     :param bool heal: whether to heal small gaps/self-intersections in the imported GDS polygons before meshing, default: True
     :param float grow: amount to grow imported GDS polygons by, to close small gaps, default: 1e-3
+    :param nonlinear: declare a pulse's nonlinearity on this section as a ``PulsedProcess`` (see :ref:`pulsed nonlinear propagation <pulsed-propagation>`), ``False`` to remove one. The CW :math:`\chi^{(2)}` processes are not available on a GDS section. Default: None
+    :type nonlinear: PulsedProcess or False or None
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
     :param settings: per-section overrides of the :data:`EME_settings`, default: None
@@ -1052,14 +1092,20 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
     Only an explicitly connected junction can carry these. A junction formed by the default left/right adjacency has nowhere to declare them, so name that pair in :data:`connect_ports` to configure it, which supersedes the adjacency. The internal junctions of a taper or GDS section's automatic z-slicing are controlled by that section's ``settings`` instead.
 
-    :param junction_normalization: how this junction's scattering matrix is power-normalized -- True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: None (inherit)
+    :param junction_normalization: how this junction's scattering matrix is power-normalized -- True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), for a junction with a plane-wave side or an angled facet, default: None (inherit)
     :type junction_normalization: bool or str or None
 
 .. data:: EME
 
-    Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME).
+    Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME). Before solving anything it checks the layout (see :data:`check_layout`) and raises an error when two sections overlap or a loop of connected sections misses closing (its two ports more than ``minimum_z_step`` apart, or more than 1e-6 rad from facing each other), and warns when a section's outline crosses itself or a section is reached by no connection.
 
     :param bool warm_start: whether to seed each taper/gds section's automatic z-slice refinement from the previously solved chain (when available), instead of re-refining from scratch, default: False
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: check_layout
+
+    Check the layout of the declared sections without solving. Every section is placed where its connections put it and drawn top down from its shapes that do not span the window. Returns a ``LayoutReport`` with ``overlaps`` (pairs of sections whose outlines overlap, as ``(section, section, area)`` with the area in nm\ :sup:`2`, where sections that only share a port edge do not overlap), ``self_intersecting`` (sections whose own outline crosses itself, such as a bend swept past a full turn), ``closures`` (for each connection that closes a loop, how far apart its two ports are in nm and how far from facing each other in radians), and ``unplaced`` (sections no connection reaches, which are placed after the section declared before them). ``max_closure()`` returns the largest closure distance and angle, or zeros without a loop. ``plot(view='layout')`` draws the same layout. ``LayoutReport`` is defined in ``emodeconnection``.
+
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: chi2_spectrum
@@ -1085,16 +1131,16 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
 .. data:: free_space_field
 
-    Declare, or update, a free-space field: a Gaussian beam launched into a port of the chain. This is an *excitation*, not a section -- it does not appear in the scattering matrix or in the layout.
+    Declare, or update, a free-space field: a Gaussian beam launched into a port of the chain. This is an *excitation*, not a section. It does not appear in the scattering matrix or in the layout.
 
     After :data:`EME`, ``plot(excitation=name)`` (or the plot window's Mode menu, ``'<name> (free space)'``) renders the field the beam launches, projected onto the target port's modes with the same pairing the junctions use. Re-declaring an existing ``name`` updates only the arguments you give.
 
     :param str name: free-space field name, default: the next number
     :param str port: the external port the beam enters, either a bare side ``'left'`` (default) or ``'right'``, or a qualified ``'<section>.<port>'`` name. The beam travels inbound from that port.
-    :param float waist: [nm] the 1/e field radius :math:`w` in :math:`\exp(-r^2/w^2)`; required when declaring a new field
-    :param center: [nm] beam centre ``(x, y)`` in the port's cross-section coordinates, default: (0, 0)
+    :param float waist: [nm] the 1/e field radius :math:`w` in :math:`\exp(-r^2/w^2)`, required when declaring a new field
+    :param center: [nm] beam center ``(x, y)`` in the port's cross-section coordinates, default: (0, 0)
     :type center: tuple[float, float]
-    :param tilt: [degrees] ``(theta_x, theta_y)``; a positive ``theta_x`` steers the beam toward +x. This is the angle **inside the medium the beam travels through**, default: (0, 0)
+    :param tilt: [degrees] ``(theta_x, theta_y)``, where a positive ``theta_x`` steers the beam toward +x. This is the angle **inside the medium the beam travels through**, default: (0, 0)
     :type tilt: tuple[float, float]
     :param str component: the one transverse E component the beam carries, ``'Ex'`` (default) or ``'Ey'``
     :param float amplitude: peak field value, default: 1
@@ -1103,9 +1149,9 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
 .. data:: free_space_field_diagnostics
 
-    How much of a declared free-space field's power the target port's modal basis actually captures, after :data:`EME` has solved the chain. The solver already warns when this falls below 90%; this returns it as a value a script can check or plot instead of parsing a log line.
+    How much of a declared free-space field's power the target port's modal basis actually captures, after :data:`EME` has solved the chain. The solver already warns when this falls below 90%. This returns it as a value a script can check or plot instead of parsing a log line.
 
-    A low captured fraction means the port's modes cannot represent the beam -- raise that section's ``num_modes``, or widen its window, before trusting a coupling number computed from it.
+    A low captured fraction means the port's modes cannot represent the beam. Raise that section's ``num_modes``, or widen its window, before trusting a coupling number computed from it.
 
     :param str name: the free-space field to diagnose
     :param float wavelength: [nm] which of a multi-wavelength chain's ports to diagnose, default: None (the lowest wavelength present)
@@ -1126,6 +1172,141 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
     :param str file_type: file type for saving a plot, ‘pdf’ or ‘png’, default: '' (no extension is added to ``file_name`` unless a file type is given)
     :param str simulation_name: simulation name, default: 'emode'
+
+.. _monitors:
+
+Monitors
+^^^^^^^^
+
+A monitor is a plane inside the chain on which the solved field is sampled after :data:`EME`. It is output only: it is not a port, does not enter the scattering matrix and does not change the solve, so monitors can be added, moved or removed without solving again. The plane runs across the full window in x and is tilted about x, so it can sample the light a grating coupler radiates upward. :data:`monitor_field` returns the field on it, and :data:`monitor_coupling` its coupling to a tilted Gaussian beam, such as the mode of a fiber above a grating. ``plot()`` draws each monitor's plane on the 'z-y' panel, and ``sweep(result='monitor_coupling')`` sweeps the coupling (see :data:`sweep`). The 'EME: Grating Coupler' example uses all three.
+
+.. data:: monitor
+
+    Declare a monitor. Declaring the same name again replaces it.
+
+    :param str name: the monitor's name
+    :param float w: [nm] the position along the chain, from its left port, that the plane passes through
+    :param float y: [nm] the height that the plane passes through at ``w``. An untilted plane must lie inside the window, between 0 and ``window_height``
+    :param float angle: [degrees] the tilt of the plane about x from horizontal, strictly between -90 and 90, where a positive angle tips the far end of the plane up, default: 0
+    :param length: [nm] the extent along the plane, centered on (``w``, ``y``), default: None (as far as the chain and the window allow)
+    :type length: float or None
+    :param resolution: [nm] the sampling step along the plane, default: None (the window's ``x_resolution``)
+    :type resolution: float or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: monitor_field
+
+    The field on a monitor's plane after :data:`EME`, for 1 W launched in one mode of one port.
+
+    :param str name: the monitor's name
+    :param str port: the external port the chain is excited from, default: 'left'
+    :param int mode: the launched mode, default: 0
+    :param wavelength: [nm] which of a multi-wavelength chain's wavelengths to use, the nearest one present, default: None (the chain's first)
+    :type wavelength: float or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Returns a ``PlaneField`` with ``fields``, a dictionary of the six components ('Ex', 'Ey', 'Ez', 'Hx', 'Hy', 'Hz') on the plane, each a complex array of shape (len(x), len(s)), where ``x`` [nm] runs across the plane and ``s`` [nm] along it, at chain positions ``w`` and heights ``y`` [nm]. ``Sn`` is the time-averaged Poynting flux through the plane (positive along its upward normal), ``power_through_plane`` [W] its integral, and ``power_in`` the 1 W launched, so ``power_through_plane`` is also the fraction of the launched power that crosses the plane.
+
+.. data:: monitor_coupling
+
+    The coupling between a launched waveguide mode and a Gaussian beam through a monitor's plane, after :data:`EME`. It is the fraction of the launched power crossing the plane times the normalized overlap of the field's ``polarization`` component with the beam. By reciprocity the same number is the coupling from the beam into the launched mode, which is the figure a grating coupler is designed for. Only the overlap is computed, so trying other beams costs no solve.
+
+    :param str name: the monitor's name
+    :param float mode_field_diameter: [nm] the beam's mode field diameter, for example 10.4e3 for SMF-28 at 1550 nm
+    :param float angle: [degrees] the beam's angle from the plane's normal, positive toward +s (along the chain), default: 0
+    :param center: [nm] the beam's center (x, s) on the plane, default: None (centered on the plane)
+    :type center: tuple[float, float] or None
+    :param index: the refractive index of the medium the beam travels in, default: None (the profile's background material)
+    :type index: float or None
+    :param str polarization: the field component the beam couples to, 'x', 'y', or 's' (along the plane), default: 'x'
+    :param str port: the launching port, default: 'left'
+    :param int mode: the launched mode, default: 0
+    :param wavelength: [nm] which of a multi-wavelength chain's wavelengths to use, default: None (the chain's first)
+    :type wavelength: float or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Returns a ``BeamCoupling`` with ``coupling``, its two factors ``power_fraction`` and ``overlap``, and the beam it was computed for (``mode_field_diameter``, ``center``, ``angle``, ``index``, ``polarization``) at ``wavelength``.
+
+.. _pulsed-propagation:
+
+Pulsed nonlinear propagation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A femtosecond pulse is declared as the excitation, ``settings(excitation=PulsedSource(...))``, and a section's nonlinearity with ``nonlinear=PulsedProcess(...)`` on :data:`straight_section`, :data:`taper_section` or :data:`gds_section` (EMode\ :sup:`3D`\  only). :data:`EME` refines the chain at the pulse's center wavelength, solves each distinct cross-section at ``dispersion_samples`` wavelengths across the pulse's band, and propagates the pulse forward through every slice and junction with :math:`\chi^{(2)}`, Kerr (:math:`\chi^{(3)}`), Raman and two-photon absorption. Reflections and power scattered into modes that are not tracked are discarded and reported, with a warning where that is not safe. The classes below are imported from ``emodeconnection``.
+
+The nonlinear coefficients come from the materials: :math:`\chi^{(2)}` from the material's :math:`d` tensor, :math:`\chi^{(3)}` from its nonlinear index :math:`n_2` as :math:`\chi^{(3)} = \tfrac{4}{3}\varepsilon_0 c n^2 n_2`, the Raman response from the material that holds most of the Kerr overlap, and two-photon absorption from its coefficient :math:`\beta_\mathrm{TPA}`, active only for photon pairs above the material's bandgap. In the material database, ``SiO2``, ``SiN``, ``LN`` and ``LN_MgO`` carry :math:`n_2`, ``SiO2`` (Blow and Wood) and ``LN``/``LN_MgO`` (four A\ :sub:`1`\ (TO) lines, Bache and Schiek) a Raman response, and ``Si``, ``AlGaAs``, ``LN`` and ``LN_MgO`` a two-photon coefficient, each with its reference. A material of your own takes the same through ``MaterialProperties(n=..., n2=..., raman=(fraction, [(weight, position, half_width), ...]), tpa=..., bandgap=...)``, with :math:`n_2` in m\ :sup:`2`/W, the Raman line positions and half widths in cm\ :sup:`-1`, :math:`\beta_\mathrm{TPA}` in m/W and the bandgap in eV. ``PulsedProcess(chi3=True)`` raises an error naming a material that has no :math:`n_2` (silicon, for one).
+
+.. class:: PulsedSource
+
+    A pulse launched into one port of the circuit, for ``settings(excitation=...)``.
+
+    :param float center_wavelength: [nm] the carrier wavelength, inside ``wavelength_range``
+    :param float duration: [fs] the intensity FWHM, required except for ``shape='cw'``
+    :param float energy: [pJ] the pulse energy, give exactly one of ``energy`` and ``peak_power``
+    :param float peak_power: [W] the peak power
+    :param str port: the launch port, default: 'left'
+    :param mode: the tracked mode that carries the pulse, or a dictionary ``{mode: amplitude}`` of complex amplitudes that splits it between tracked modes (normalized, so only their ratios matter), default: 0
+    :type mode: int or dict
+    :param str shape: 'sech', 'gaussian', or 'cw' (a continuous wave of ``peak_power`` at ``center_wavelength``, with no ``duration`` or ``energy``), default: 'sech'
+    :param float chirp: the chirp :math:`C` of :math:`\exp(j C t^2 / 2 T_0^2)`, where a positive value raises the instantaneous frequency across the pulse, default: 0
+    :param float repetition_rate: [Hz] for average powers, default: None
+    :param wavelength_range: [nm] the span of the frequency grid, default: (450, 3500)
+    :type wavelength_range: tuple[float, float]
+    :param int num_points: frequency points, even and at least 16, which with ``wavelength_range`` set the time window (the number of points over the frequency span, 28 ps at the defaults), default: 16384
+    :param int alias: oversampling of the real-field products, 1, 2 or 3 (2 suffices for :math:`\chi^{(2)}`, 3 for :math:`\chi^{(3)}`), default: 2
+
+.. class:: PulsedProcess
+
+    The nonlinear optics of one section for a pulsed simulation, for a section's ``nonlinear=``.
+
+    :param bool chi2: include :math:`\chi^{(2)}`, default: True
+    :param bool chi3: include the Kerr effect, default: True
+    :param bool raman: include the delayed Raman part of the Kerr response, default: True
+    :param str raman_mode: 'dominant' (the response of the strongest field pattern, fast) or 'full', default: 'dominant'
+    :param tpa: two-photon absorption on (True), off (False), or on wherever a material has a coefficient (None), default: None
+    :type tpa: bool or None
+    :param modes: the tracked mode indices at the center wavelength, default: None (the source's mode or modes)
+    :type modes: list[int] or None
+    :param poling: the section's domain pattern, default: None (unpoled)
+    :type poling: Poling or None
+    :param int dispersion_samples: wavelengths at which each cross-section is solved, Chebyshev nodes over the source's ``wavelength_range``, at least 4, default: 24
+    :param float pattern_threshold: singular value, relative to the first, below which field patterns are dropped, in [0, 1), default: 1e-3
+    :param int max_rank: the largest number of field patterns, default: 12
+
+.. class:: Poling
+
+    The domain pattern of a poled section. Give exactly one of ``period``, ``z_knots`` with ``periods``, and ``domain_walls``.
+
+    :param float period: [nm] a constant poling period
+    :param z_knots: [nm] positions along the section at which ``periods`` are given, interpolated between them (a chirp), at least 2
+    :type z_knots: list[float]
+    :param periods: [nm] the local period at each knot
+    :type periods: list[float]
+    :param domain_walls: [nm] explicit domain wall positions along the section, strictly increasing
+    :type domain_walls: list[float]
+    :param float duty_cycle: the fraction of each period in the first domain, default: 0.5
+    :param str interpolation: 'linear' or 'spline' between the knots, default: 'linear'
+    :param bool inverted_first: start with an inverted domain, default: False
+    :param float jitter_rms: [nm] rms of a Gaussian random displacement of every wall, for fabrication tolerance studies, default: 0
+    :param int seed: the seed of the jitter, default: None
+
+.. class:: PulseResponse
+
+    Returned by ``get('pulse_response')`` after :data:`EME` or :data:`pulse_propagate`. ``spectrum`` is (records, modes, points), the root-energy spectrum of every tracked mode in :math:`\sqrt{\mathrm{J/Hz}}` on ``frequency`` [Hz], with ``wavelength`` [nm] the same axis, ``z`` [nm] the record positions and ``energy`` [pJ] per record and mode. ``junction_loss`` is, per junction, the fraction of the arriving energy that left the tracked modes there, and ``rank_per_slice`` and ``samples_per_slice`` report the field patterns and mode solves of each slice. ``edge_energy`` is, per record, the fraction of the energy in the outer 5 % of the time window, ``domain_walls`` [nm] the positions along the chain of the domain walls the run used (jitter included), and ``steps`` and ``rejected_steps`` count the propagation steps.
+
+    ``band_energy(wavelength_min, wavelength_max, z=None, mode=None)`` returns the energy [pJ] in a band at the record nearest ``z`` (default: the output), summed over the tracked modes unless ``mode`` is given. ``band_power(...)`` returns the average power [W] of a pulse train, with ``repetition_rate`` taken from the source unless given. ``psd(z, mode)`` returns the spectral density in dB relative to 1 pJ/nm, ``envelope(z, mode)`` the time [fs] and complex envelope [:math:`\sqrt{\mathrm{W}}`], and ``energy_outside_window()`` the largest fraction of the energy found in the outer 5 % of the time window. Above about 1e-3 the pulse is wrapping around the window, and ``num_points`` should grow.
+
+.. data:: pulse_propagate
+
+    Propagate the pulse again through the chain the last :data:`EME` prepared, without any mode solve (EMode\ :sup:`3D`\  only). Use it to try another poling, for example a chirp or fabrication jitter on the domain walls, at the cost of the propagation alone.
+
+    :param poling: a new domain pattern for every section with a ``PulsedProcess`` (a single ``Poling``), or for the named sections (a dictionary of section name to ``Poling``), default: None (keep the declared poling)
+    :type poling: Poling or dict or None
+    :param int records: number of evenly spaced positions along the chain at which the spectrum is recorded, default: 100
+    :param float local_error: relative error allowed per propagation step, default: 1e-6
+    :param str simulation_name: simulation name, default: 'emode'
+
+    The prepared chain lives for the session. After ``open()`` of a saved file, run :data:`EME` again first. The result is read back with ``get('pulse_response')``.
 
 
 
@@ -1205,6 +1386,24 @@ Descriptions of all materials available in built-in material database. This info
     
         | P. E. Ciddor, "Refractive index of air: new equations for the visible and near infrared," Appl. Opt. 35, 1566 (1996).
 
+.. data:: Al
+
+    .. math:: n = 1.5355 + 15.331i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Al2O3
+    
+    .. math:: n = \left( 1 + \frac{1.43135}{1 - (7.26631 \times 10^{-2}/ \lambda)^2} + \frac{0.650547}{1 - (0.119324/ \lambda)^2} + \frac{5.34140}{1 - (18.0283/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 200 nm to 5000 nm
+    
+        | (1) I. H. Malitson and M. J. Dodge, "Refractive Index and Birefringence of Synthetic Sapphire," J. Opt. Soc. Am. 62, 1405 (1972).
+        | (2) M. J. Dodge, "Refractive Index" in Handbook of Laser Science and Technology, Volume IV, Optical Materials: Part 2, CRC Press, Boca Raton, 1986, p. 30.
+
 .. data:: AlGaAs
     
     .. math::
@@ -1236,16 +1435,15 @@ Descriptions of all materials available in built-in material database. This info
     
         | (1) L. Y. Beliaev, E. Shkondin, A. V. Lavrinenko, and O. Takayama, "Thickness-dependent optical properties of aluminum nitride films for mid-infrared wavelengths," J. Vac. Sci. Technol. A 39, 043408 (2021).
         | (2)  L. Y. Beliaev, E. Shkondin, A. V. Lavrinenko, and O. Takayama, "Erratum: Thickness-dependent optical properties of aluminum nitride films for mid-infrared wavelengths," J. Vac. Sci. Technol. A 40, 027001 (2022).
-        
-        
-.. data:: Al2O3
-    
-    .. math:: n = \left( 1 + \frac{1.43135}{1 - (7.26631 \times 10^{-2}/ \lambda)^2} + \frac{0.650547}{1 - (0.119324/ \lambda)^2} + \frac{5.34140}{1 - (18.0283/ \lambda)^2} \right)^{0.5}
-    
-    Wavelength range: 200 nm to 5000 nm
-    
-        | (1) I. H. Malitson and M. J. Dodge, "Refractive Index and Birefringence of Synthetic Sapphire," J. Opt. Soc. Am. 62, 1405 (1972).
-        | (2) M. J. Dodge, "Refractive Index" in Handbook of Laser Science and Technology, Volume IV, Optical Materials: Part 2, CRC Press, Boca Raton, 1986, p. 30.
+
+.. data:: Au
+
+    .. math:: n = 0.5747 + 9.664i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
 
 .. data:: BBO
     
@@ -1260,6 +1458,24 @@ Descriptions of all materials available in built-in material database. This info
         | (2) G. Tamošauskas, "β-barium borate (BBO) absorption in the 0.188-6.22 μm range," arXiv:2111.01212 [physics.optics] (2021).
         | Notes: The n_e is the z-direction and n_o is the x- and y-direction.
 
+.. data:: Cr
+
+    .. math:: n = 4.2722 + 4.925i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Cu
+
+    .. math:: n = 0.4697 + 10.453i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
 .. data:: GaAs
     
     .. math:: n = \left( 1 + 4.37251 + \frac{5.46674}{1 - (0.443131/ \lambda)^2} + \frac{2.42996 \times 10^{-2}}{1 - (0.874645/ \lambda)^2}  + \frac{1.95752}{1 - (36.9166/ \lambda)^2} \right)^{0.5}
@@ -1268,6 +1484,18 @@ Descriptions of all materials available in built-in material database. This info
     
         | T. Skauli, P. S. Kuo, K. L. Vodopyanov, T. J. Pinguet, O. Levi, L. A. Eyres, J. S. Harris, M. M. Fejer, B. Gerard, L. Becouarn, and E. Lallier, "Improved dispersion relations for GaAs and applications to nonlinear optics," J. Appl. Phys., 94, 6447 (2003).
         | Notes: 22 deg C
+
+.. data:: GaN
+
+    .. math::
+
+        n_\mathrm{o} &= \left( 1 + \frac{0.298 \lambda^2}{\lambda^2 - 0.3420^2} + \frac{3.909 \lambda^2}{\lambda^2 - 0.1446^2} \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 1 + \frac{0.0117 \lambda^2}{\lambda^2 - 0.4225^2} + \frac{4.437 \lambda^2}{\lambda^2 - 0.1770^2} \right)^{0.5}
+
+    Wavelength range: 458 nm to 1550 nm
+
+        | S. Pezzagna, J. Brault, M. Leroux, J. Massies, and M. de Micheli, "Refractive indices and elasto-optic coefficients of GaN studied by optical waveguiding," J. Appl. Phys. 103, 123112 (2008).
+        | Notes: wurtzite GaN, c-axis on z (n_e).
 
 .. data:: GaP
     
@@ -1390,17 +1618,17 @@ Descriptions of all materials available in built-in material database. This info
         | K. Kato, "Temperature-tuned 90° phase-matching properties of LiB3O5," IEEE J. Quantum Electron. 30, 2950 (1994).
         | Notes: LiB3O5 at room temperature. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, c and b axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
 
-.. data:: LN_MgO
-    
+.. data:: LiTaO3
+
     .. math::
-        
-        n_\mathrm{o} &= \left( 5.653 + \frac{0.1185}{\lambda^2 - 0.2091^2} + \frac{89.61}{\lambda^2 - 10.85^2} - 0.0197 \lambda^2 \right)^{0.5} \\
-        n_\mathrm{e} &= \left( 5.756 + \frac{0.0983}{\lambda^2 - 0.2020^2} + \frac{189.32}{\lambda^2 - 12.52^2} - 0.0132 \lambda^2 \right)^{0.5}
-    
-    Wavelength range: 500 nm to 4000 nm
-    
-        | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
-        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction. A second dispersion model is available via a ``reference`` keyword, either 'Gayer 2008' (default, shown above) or 'Zelmon 1997', which uses different Sellmeier coefficients, a 400 nm to 5000 nm wavelength range, and a different axis convention.
+
+        n_\mathrm{o} &= \left( 4.51224 + \frac{0.0847522}{\lambda^2 - 0.19876^2} - 0.0239046 \lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 4.52999 + \frac{0.0844313}{\lambda^2 - 0.20344^2} - 0.0237909 \lambda^2 \right)^{0.5}
+
+    Wavelength range: 400 nm to 4000 nm
+
+        | K. S. Abedin and H. Ito, "Temperature-dependent dispersion relation of ferroelectric lithium tantalate," J. Appl. Phys. 80, 6561 (1996).
+        | Notes: congruent LiTaO3 at room temperature; n_e is the z-direction.
 
 .. data:: LN
     
@@ -1413,6 +1641,26 @@ Descriptions of all materials available in built-in material database. This info
     
         | D. E. Zelmon, D. L. Small, and D. Jundt, "Infrared corrected Sellmeier coefficients for congruently grown lithium niobate and 5 mol. % magnesium oxide-doped lithium niobate," J. Opt. Soc. Am. B 14, 3319 (1997).
         | Notes: z-cut lithium niobate. The n_e is the z-direction and n_o is the x- and y-direction.
+
+.. data:: LN_MgO
+    
+    .. math::
+        
+        n_\mathrm{o} &= \left( 5.653 + \frac{0.1185}{\lambda^2 - 0.2091^2} + \frac{89.61}{\lambda^2 - 10.85^2} - 0.0197 \lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 5.756 + \frac{0.0983}{\lambda^2 - 0.2020^2} + \frac{189.32}{\lambda^2 - 12.52^2} - 0.0132 \lambda^2 \right)^{0.5}
+    
+    Wavelength range: 500 nm to 4000 nm
+    
+        | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
+        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction. A second dispersion model is available via a ``reference`` keyword, either 'Gayer 2008' (default, shown above) or 'Zelmon 1997', which uses different Sellmeier coefficients, a 400 nm to 5000 nm wavelength range, and a different axis convention.
+
+.. data:: NiCr
+
+    .. math:: n = 3.4418 + 6.754i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | Notes: no published optical constants for NiCr (nichrome); Ni from A. D. Rakic et al., Appl. Opt. 37, 5271 (1998) used as a proxy. Heater/electrode use only; constant near 1550 nm only.
 
 .. data:: PMMA_495
     
@@ -1472,7 +1720,7 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 200 nm to 1100 nm
     
         | `Microchem SU-8 2000 Data Sheet (uncured), (2020). <https://kayakuam.com/wp-content/uploads/2020/08/KAM-SU-8-2000-2000.5-2015-Datasheet-8.13.20-final.pdf>`_
-        
+
 .. data:: SU8_3000
     
     .. math:: n = \left(1.5525 + \frac{6.29 \times 10^{-3}}{\lambda^{2}} + \frac{4.0 \times 10^{-4}}{\lambda^{4}}\right)
@@ -1488,6 +1736,24 @@ Descriptions of all materials available in built-in material database. This info
     Wavelength range: 500 nm to 5000 nm
     
         | J. A. Black, R. Streater, K. F. Lamee, D. R. Carlson, Su-Peng Yu, and S. B. Papp, "Group-velocity-dispersion engineering of tantala integrated photonics," Opt. Lett. 46, 817 (2021).
+
+.. data:: Ti
+
+    .. math:: n = 3.8245 + 4.417i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: TiN
+
+    .. math:: n = 3.230 + 5.259i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | E. Shkondin et al., Opt. Mater. Express 7, 4171 (2017).
+        | Notes: 105 nm sputtered TiN at 1550 nm; strongly process-dependent, constant near 1550 nm only.
 
 .. data:: TiO2
     
@@ -1518,42 +1784,6 @@ Descriptions of all materials available in built-in material database. This info
     
     Wavelength range: 0.0001 nm to 100000 nm
 
-.. data:: Au
-
-    .. math:: n = 0.5747 + 9.664i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Al
-
-    .. math:: n = 1.5355 + 15.331i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Cu
-
-    .. math:: n = 0.4697 + 10.453i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Ti
-
-    .. math:: n = 3.8245 + 4.417i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
 .. data:: W
 
     .. math:: n = 2.3733 + 4.815i
@@ -1562,56 +1792,6 @@ Descriptions of all materials available in built-in material database. This info
 
         | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
         | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: Cr
-
-    .. math:: n = 4.2722 + 4.925i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
-        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
-
-.. data:: TiN
-
-    .. math:: n = 3.230 + 5.259i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | E. Shkondin et al., Opt. Mater. Express 7, 4171 (2017).
-        | Notes: 105 nm sputtered TiN at 1550 nm; strongly process-dependent, constant near 1550 nm only.
-
-.. data:: NiCr
-
-    .. math:: n = 3.4418 + 6.754i
-
-    Wavelength range: 1000 nm to 2000 nm
-
-        | Notes: no published optical constants for NiCr (nichrome); Ni from A. D. Rakic et al., Appl. Opt. 37, 5271 (1998) used as a proxy. Heater/electrode use only; constant near 1550 nm only.
-
-.. data:: GaN
-
-    .. math::
-
-        n_\mathrm{o} &= \left( 1 + \frac{0.298 \lambda^2}{\lambda^2 - 0.3420^2} + \frac{3.909 \lambda^2}{\lambda^2 - 0.1446^2} \right)^{0.5} \\
-        n_\mathrm{e} &= \left( 1 + \frac{0.0117 \lambda^2}{\lambda^2 - 0.4225^2} + \frac{4.437 \lambda^2}{\lambda^2 - 0.1770^2} \right)^{0.5}
-
-    Wavelength range: 458 nm to 1550 nm
-
-        | S. Pezzagna, J. Brault, M. Leroux, J. Massies, and M. de Micheli, "Refractive indices and elasto-optic coefficients of GaN studied by optical waveguiding," J. Appl. Phys. 103, 123112 (2008).
-        | Notes: wurtzite GaN, c-axis on z (n_e).
-
-.. data:: LiTaO3
-
-    .. math::
-
-        n_\mathrm{o} &= \left( 4.51224 + \frac{0.0847522}{\lambda^2 - 0.19876^2} - 0.0239046 \lambda^2 \right)^{0.5} \\
-        n_\mathrm{e} &= \left( 4.52999 + \frac{0.0844313}{\lambda^2 - 0.20344^2} - 0.0237909 \lambda^2 \right)^{0.5}
-
-    Wavelength range: 400 nm to 4000 nm
-
-        | K. S. Abedin and H. Ito, "Temperature-dependent dispersion relation of ferroelectric lithium tantalate," J. Appl. Phys. 80, 6561 (1996).
-        | Notes: congruent LiTaO3 at room temperature; n_e is the z-direction.
 
 .. data:: ZnSe
 
@@ -1719,13 +1899,6 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 16.78
      - --
      - --
-   * - GGG
-     - 7.4
-     - 0
-     - 12.11
-     - inf
-     - --
-     - --
    * - GaAs
      - 55
      - 0.000267
@@ -1758,6 +1931,13 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 58
      - 0.0004
      - 16.2
+     - inf
+     - --
+     - --
+   * - GGG
+     - 7.4
+     - 0
+     - 12.11
      - inf
      - --
      - --
@@ -1824,6 +2004,13 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - inf
      - d15 = 1.05, d24 = -0.98, d31 = 1.05, d32 = -0.98, d33 = 0.05
      - --
+   * - LiTaO3
+     - 4.6
+     - 3.9e-05
+     - 43
+     - inf
+     - d33 = 13.8
+     - --
    * - LN
      - 4.6
      - 3.3e-05
@@ -1838,13 +2025,6 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - inf
      - d15 = 4.4, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.4, d31 = 4.4, d32 = 4.4, d33 = 25
      - r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8
-   * - LiTaO3
-     - 4.6
-     - 3.9e-05
-     - 43
-     - inf
-     - d33 = 13.8
-     - --
    * - NiCr
      - 11.3
      - 0
@@ -1873,20 +2053,6 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 105
      - --
      - --
-   * - SU8_2000
-     - 0.2
-     - -0.00011
-     - 3.28
-     - inf
-     - --
-     - --
-   * - SU8_3000
-     - 0.2
-     - -0.00011
-     - 3.28
-     - inf
-     - --
-     - --
    * - Si
      - 149
      - 0.000186
@@ -1905,6 +2071,20 @@ example uses; every other material's ``r`` is the base-class zero tensor.
      - 1.38
      - 8.7e-06
      - 3.9
+     - inf
+     - --
+     - --
+   * - SU8_2000
+     - 0.2
+     - -0.00011
+     - 3.28
+     - inf
+     - --
+     - --
+   * - SU8_3000
+     - 0.2
+     - -0.00011
+     - 3.28
      - inf
      - --
      - --
@@ -1977,8 +2157,8 @@ Simulation setup
     :param str profile: name of the profile these settings apply to, default: '_default'
     :param float wavelength: [nm] simulation wavelength, or a list of wavelengths for a multi-wavelength profile that ``FDM()``, ``FEM()``, ``solve()`` and ``EME()`` solve at each one. Setting a new wavelength on a multi-wavelength profile starts it over at that wavelength, default: 1550
     :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
-    :param excitation: declare a CW pump driving the circuit (EMode\ :sup:`3D`\  only), as ``Source(port=..., wavelength=..., mode=0, power=1.0, phase=0.0)`` from ``emodeconnection``, where ``power`` is in W and ``phase`` in radians. ``port`` is a bare side ('left'/'right') or a qualified '<section>.<port>' name, resolved when the circuit is built, and ``wavelength`` [nm] is matched against the circuit's own wavelengths. This is what makes :data:`EME` solve the power-dependent response of a :math:`\chi^{(2)}` section in addition to the small-signal scattering matrix; the result is read back with ``get('response')``, and the declared source with ``get('sources')``. Default: None
-    :type excitation: Source or None
+    :param excitation: declare a CW pump driving the circuit (EMode\ :sup:`3D`\  only), as ``Source(port=..., wavelength=..., mode=0, power=1.0, phase=0.0)`` from ``emodeconnection``, where ``power`` is in W and ``phase`` in radians. ``port`` is a bare side ('left'/'right') or a qualified '<section>.<port>' name, resolved when the circuit is built, and ``wavelength`` [nm] is matched against the circuit's own wavelengths. This is what makes :data:`EME` solve the power-dependent response of a :math:`\chi^{(2)}` section in addition to the small-signal scattering matrix; the result is read back with ``get('response')``, and the declared source with ``get('sources')``. A ``PulsedSource`` instead launches a femtosecond pulse for the pulsed nonlinear solver, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
+    :type excitation: Source or PulsedSource or None
     :param float x_resolution: [nm] resolution in the x-direction, default: 10
     :param float y_resolution: [nm] resolution in the y-direction, default: 10
     :param float window_width: [nm] simulation window width
@@ -1999,7 +2179,9 @@ Simulation setup
     :param int fem_max_refinements: (FEM) most adaptive refinement steps after the first solve, 0 disables refinement, default: 2
     :param float fem_neff_tolerance: (FEM) refinement stops once no requested mode's effective index changes by more than this relative amount, default: 1e-6
     :param int fem_max_dofs: (FEM) refinement stops before a mesh would exceed this many unknowns, default: 2000000
+    :param float fem_mesh_wavelength: [nm] (FEM) build and refine the mesh at this wavelength and solve every wavelength on it, so the results of a wavelength scan change smoothly with wavelength. 0 meshes each solve at its own wavelength. ``sweep()`` over wavelength, a wavelength list and a pulsed simulation set it to their shortest wavelength when it is 0, default: 0
     :param float bend_radius: [nm] waveguide bend radius relative to the center of the window, must be positive and larger than window_width/2, if ``bend_radius`` = 0 no bending is used in the calculation, default: 0
+    :param str bend_method: how a nonzero ``bend_radius`` is solved, either 'cylindrical' (the bend factor 1 + x/R added to the mode solver) or 'TO' (the straight cross-section solved with its material transformed by the bend's conformal map, transformation optics). Both work with the FDM and the FEM, in 2D and 3D sessions, and their effective indices differ by about 6e-4 at R = 10 um. With a PML, set ``max_effective_index`` just above the guided mode, since a TO bend's spectrum starts with PML modes. ``report()`` names the method next to the solver, and the 'Bend Mode Solvers' example compares the two, default: 'cylindrical'
     :param pml_NSEW_bool: indicates whether to use a pml on each of the 4 boundaries, [north, south, east, west], 0: no pml, 1: use pml, default: [0,0,0,0]
     :type pml_NSEW_bool: list, length = 4
     :param num_pml_layers: number of pml layers to use, either a single value that is applied to all boundaries or a list of 4 values; [north, south, east, west], default: 10
@@ -2188,12 +2370,19 @@ Solver and analysis
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
     :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, where 'FDM' means a mode solve with the solver the ``solver`` setting selects (the FDM or the FEM), default: automatically chosen based on the ``key`` and ``result`` selection
-    :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss' and 'mode_order' are accepted. default: 'effective_index'
+    :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss', 'mode_order' and 'monitor_coupling' are accepted. 'monitor_coupling' collects :data:`monitor_coupling` for the monitor named by ``monitor`` and the beam described by ``beam``. With a ``key`` that is one of the beam's arguments ('angle', 'mode_field_diameter', 'center', 'index' or 'polarization') the solved chain is reused and only the overlap is evaluated at each value, with no solve, and ``sweep_data`` also carries ``power_through_plane`` and ``overlap``. Any other key needs ``solve_type='EME'`` and solves the chain at each value. default: 'effective_index'
     :type result: str or list
     :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
     :param bool adaptive: only for a wavelength sweep. ``values`` keeps its meaning -- the wavelengths you want results at -- and ``adaptive`` changes only *where the solver runs*: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength places further solves until the mode list stops moving by more than ``tolerance``, or the gap reaches ``minimum_step``. The requested wavelengths are then filled in by interpolating the solved mode lists, which is much cheaper than solving every point when the modes vary smoothly. ``sweep_data`` additionally carries ``solved_wavelengths`` (where the solver actually ran) and ``unconverged`` (any stretch the sampler gave up on, reported rather than raised). Default: False
     :param float tolerance: with ``adaptive``, the largest mode-list change tolerated between adjacent solves, default: 1e-3
     :param float minimum_step: [nm] with ``adaptive``, the smallest wavelength gap the sampler will bisect into, default: the spacing of ``values``
+    :param str method: either 'direct' or 'interpolated'. 'interpolated' is only for ``key='wavelength'`` with ``result='S_matrix'`` (EMode\ :sup:`3D`\  only): the circuit is solved and refined once at the current wavelength with :data:`EME`, every cross-section in it is solved at ``num_nodes`` wavelengths (Chebyshev-Lobatto nodes, ends included) over ``wavelength_range``, and the S-matrix at each of ``values`` is rebuilt from the propagation constants and junctions interpolated between them, so no wavelength in ``values`` solves anything. It suits the hundreds of wavelengths a resonator spectrum needs. A mode that cannot be followed across the range carries nothing in the result. ``sweep_data`` additionally carries ``num_nodes`` and ``interpolation_residual``, the largest error in any S-matrix element at one node predicted from the others, and a warning is logged when it exceeds ``interpolation_tolerance``. Default: 'direct'
+    :param int num_nodes: with ``method='interpolated'``, the number of wavelengths every cross-section is solved at, at least 4. Add nodes, or narrow the range, when ``interpolation_residual`` is too large, default: 8
+    :param wavelength_range: [nm] with ``method='interpolated'``, the range the nodes span, which must contain every one of ``values``, default: the range of ``values``
+    :type wavelength_range: tuple[float, float]
+    :param float interpolation_tolerance: with ``method='interpolated'``, the largest ``interpolation_residual`` accepted without a warning, default: 1e-4
+    :param str monitor: with ``result='monitor_coupling'``, the name of the monitor (see :data:`monitor`), default: None
+    :param dict beam: with ``result='monitor_coupling'``, the keyword arguments of :data:`monitor_coupling` that describe the beam, ``mode_field_diameter`` at least, for example ``beam=dict(mode_field_diameter=10.4e3)``. A beam ``key`` overrides its entry here at each value, default: None
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: confinement
@@ -2302,9 +2491,10 @@ Solver and analysis
 
     Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.
 
-    For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``pwd_section()``, ``taper_section()``, or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
+    For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``pwd_section()``, ``taper_section()``, ``bend_section()`` or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
 
-    :param str component: field component or index, 'Ex/y/z'; 'Hx/y/z'; 'Sx/y/z'; 'Index'; 'Shapes', default: 'Ex'
+    :param component: field component or index, 'Ex/y/z', 'Hx/y/z', 'Sx/y/z', 'Index' or 'Shapes', default: None ('Ex', or 'Index' for a circuit with a closed loop)
+    :type component: str or None
     :param str plot_function: plotting function, 'real'; 'imag'; 'abs'; 'abs^2'; 'log', default: 'real'
     :param int mode: mode number, default: 0
     :param aspect_ratio: the height:width aspect ratio, 'norm' uses the normal aspect ratio of 0.707, 'real' uses the real aspect ratio defined by the simulation window, or a float specifies the aspect ratio, default: 'norm'
@@ -2316,7 +2506,7 @@ Solver and analysis
     :param bool legend: setting inclusion of a legend on the index and shape plots, default: True
     :param port: (EME) the input port that the field is excited from, either a port index or a port name (see :class:`Port`), default: 0
     :type port: int or str
-    :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y', default: 'z-x'
+    :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y'. The 'z-y' panel also draws the plane of each :data:`monitor`, default: 'z-x'
     :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: 'sum' (default), which totals the field across the fixed transverse axis, or 'mean', which averages it, default: None
     :type slice_position: float or None
     :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward)
@@ -2325,7 +2515,8 @@ Solver and analysis
     :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, smaller is finer; 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
     :type resolution: float or str
     :param str excitation: (EME) render the field launched by a free-space field declared with :data:`free_space_field`, instead of unit amplitude in ``mode`` at ``port``. It also selects which port the field is viewed at. This is the only API surface for viewing one; in the plot window the same choice appears in the Mode menu as ``'<name> (free space)'``. Default: None
-    :param str normalization: the field family the colour scale is normalized to, either 'vector' (the full transverse vector at the excitation plane) or 'component' (the plotted component alone), default: 'vector'
+    :param str view: (EME) what the 'z-x' panel shows, either 'layout' (every section where its connections place it on the chip, bends turning and sections after a turn turned with them, both axes in um) or 'simulation' (the circuit unrolled along its length, as solved), default: 'layout'. The 'Physical space' checkbox in the plot window switches between them. Field components follow the guide on the layout, while 'Index' and 'Shapes' stay unrolled. A circuit with a closed loop (a ring closed with :data:`connect_ports`) has no field reconstruction yet: its 'z-x' panel draws the layout outline only, 'Index' and 'Shapes' show its cross-sections, and asking for a field component raises an error.
+    :param str normalization: the field family the colour scale is normalized to, 'vector' (the full transverse vector at the excitation plane), 'component' (the plotted component alone) or 'section' (each section of a 'z-x' or 'z-y' panel scaled by its own peak, so a dim section such as a free-space gap stays visible), default: 'vector'
     :param profile: render a stored profile by name instead of the EME section. Once a simulation has declared sections, the plot always follows the section, so this is the only way to view a profile saved by an earlier ``FDM(profile=...)`` call. An unknown name raises an error listing the available profiles, default: None
     :type profile: str or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
@@ -2568,6 +2759,12 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
     propagation_resolution
         (*float*) [nm] Sampling resolution used along the propagation direction for EME field reconstruction.
 
+    pulse_response
+        (*PulseResponse*) The spectrum of every tracked mode along the chain from the most recent :data:`EME` or :data:`pulse_propagate` with a ``PulsedSource`` excitation; returned by ``get('pulse_response')`` (EMode\ :sup:`3D`\  only). See :class:`PulseResponse`.
+
+    pulsed_source
+        (*PulsedSource*) The declared pulsed excitation; returned by ``get('pulsed_source')``.
+
     response
         (*CircuitResponse*) The power-dependent nonlinear response from the most recent EME solve with a declared excitation; returned by ``get('response')``. It also carries ``trajectories``, the forward amplitudes recorded along each :math:`\chi^{(2)}` slice, read with ``power_vs_z(wavelength)`` or ``amplitude_vs_z(wavelength)``.
 
@@ -2599,6 +2796,9 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
 
         Alias: ``radius``
 
+    bend_method
+        (*str*) How a nonzero ``bend_radius`` is solved. ``'cylindrical'`` (the default) adds the bend factor 1 + x/R to the mode solver. ``'TO'`` solves the straight cross-section with its material transformed by the bend's conformal map (transformation optics). Both work with the FDM and the FEM. The two methods' effective indices differ by about 6e-4 at R = 10 um, and their bend losses by about 5 %. With a PML, a bend's spectrum starts with PML modes, so set ``max_effective_index`` just above the guided mode. An under-resolved bend shows up as spurious bend loss. The 'Bend Mode Solvers' example compares the four combinations.
+
     boundary_condition
         (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. ``get('boundary_condition')`` returns the string as given (for example ``'TE'``), and ``BC`` below is the resolved boundary condition.
 
@@ -2618,6 +2818,9 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
 
     fem_max_refinements
         (*int*) Maximum number of adaptive FEM refinement passes. 0 disables refinement.
+
+    fem_mesh_wavelength
+        (*float*) [nm] The FEM solver builds and refines its mesh at this wavelength and solves every wavelength on it. 0 meshes each solve at its own wavelength.
 
     fem_min_angle
         (*float*) [degrees] Minimum triangle angle of the FEM mesh, at most 34.
@@ -2801,6 +3004,54 @@ have run for that shape.
 
 Release Notes
 ^^^^^^^^^^^^^
+
+**1.0.6**
+
+* Changed
+
+  * On Apple silicon, the sparse direct solver is rslab 1.1.2 (from 1.1.0).
+  * The Intel Mac installer continues, although the 1.0.5 notes announced 1.0.5 as its last release.
+  * Improved EME junctions between mode-solved cross-sections: they conserve power and converge as modes are added, especially at large mode numbers, and across the mode solvers and their meshes. Results can move slightly from 1.0.5.
+  * A taper or GDS section now starts refinement from slices placed where its cross-section changes (``EME_settings(initial_slices='auto')``, the new default), read from its rasterized refractive index: none along a straight run, evenly along a linear taper, densely inside a short fast feature, and at every corner of a GDS outline. Refinement still runs afterward and decides the final slicing, so results change only within its tolerance, and it takes fewer rounds. ``EME_settings(initial_slices='single')`` restores the one-slice start of earlier versions.
+  * ``EME()`` and ``plot()`` use less memory.
+
+* New
+
+  * ``plot(normalization='section')`` scales each section of a 'z-x' or 'z-y' panel (a straight, a taper, a free-space gap) by its own peak, so a section that carries little of the launched field, such as the free-space gap after an angled facet, is still visible. The 'Norm' selector in the plot window offers it too. Brightness is then not comparable across sections.
+  * ``plot(view='layout')``, the new default, draws the 'z-x' panel as the chip layout: every section where its connections place it, a bend as an arc and the sections after it turned with it, the field following the guide, both axes in um. ``view='simulation'`` is the unrolled display of earlier versions, and the 'Physical space' checkbox switches between them.
+  * ``check_layout()`` reports overlapping sections, a section whose outline crosses itself, how far each loop of connected sections misses closing, and sections no connection reaches. ``EME()`` runs it first and refuses an overlap or a loop that misses by more than ``minimum_z_step`` before solving anything, and warns about a self-intersecting outline.
+  * ``sweep(key='wavelength', values=..., result='S_matrix', method='interpolated')`` sweeps a circuit's S-matrix over hundreds of wavelengths for the cost of a few: the circuit is refined once, each cross-section is solved at ``num_nodes`` wavelengths (default 8), and the S-matrix at every requested wavelength is rebuilt from propagation constants and junctions interpolated between them. ``sweep_data`` reports the node count and the interpolation residual at a held-out node, with a warning above ``interpolation_tolerance``.
+  * ``bend_section(name, profile, radius, sweep_angle, method)`` declares a circular bend (``sweep_angle`` in radians, positive toward +x), solved with the bend in cylindrical coordinates (``method='cylindrical'``, the default) or by transformation optics (``method='TO'``). Sections declared after it continue from its end. An anisotropic crystal turns with the guide: a bend in x-cut lithium niobate is sliced along its heading, and a section placed after a turn sees the crystal turned. A bend of an isotropic material is one mode solve. ``copy_section`` raises when a copy's placement would show the crystal differently from its source, rather than reusing the wrong S-matrix.
+  * Monitors: ``monitor(name, w, y, angle, length, resolution)`` declares a plane inside the chain (output only, not a port), ``monitor_field(name)`` returns the solved field on it for 1 W launched with the power through it, and ``monitor_coupling(name, mode_field_diameter, angle)`` its coupling to a tilted Gaussian beam such as a fiber mode, the figure a grating coupler is designed for. By reciprocity the same number is the coupling from the fiber into the waveguide. ``sweep(result='monitor_coupling', monitor=, beam=)`` sweeps the beam's angle, size or position without solving again, or any other key with a solve at each value, and ``plot()`` draws each monitor's plane on the 'z-y' panel. The website has a new example, 'EME: Grating Coupler'.
+  * A new website example, 'Bend Mode Solvers': the SiN bend of 'Bending: SiN' solved by the FDM with ``bend_method='cylindrical'`` and ``'TO'`` on four grids and by the FEM on six fixed meshes, with each solve's effective index, its error against the finest FEM mesh, its bend loss and its runtime, and plots of the effective-index and bend-loss errors against runtime.
+  * The 'Bending: SiN' example uses the window and PMLs of 'Bend Mode Solvers': PMLs on the bend's outer, top and bottom walls (1 µm, ``pml_kappa_max=1``), 2 µm of cladding and 1.5 µm of trench, and a ``max_effective_index`` just above the guided mode.
+  * A new website example, 'EME: TFLN Ring Resonator': a racetrack ring in x-cut thin-film lithium niobate, closed with ``connect_ports``, its coupler's bus and ring arms windowed ports, the through-port spectrum over several free spectral ranges from ``sweep(method='interpolated')``, with the free spectral range, extinction and loaded quality factor of each resonance, and the field built up around the ring on resonance, drawn on the chip.
+  * Pulsed nonlinear propagation through an EME chain (EMode3D). ``settings(excitation=PulsedSource(...))`` declares a femtosecond pulse, ``straight_section(nonlinear=PulsedProcess(...))`` or ``taper_section(...)`` a section's nonlinearity and poling (``Poling``: a period, a period varying along the section, or explicit domain walls), and ``EME()`` refines the chain, solves each slice at a set of sample wavelengths and propagates the pulse through every slice and junction. ``get('pulse_response')`` returns the spectrum of every tracked mode along the chain, with ``band_energy()`` and ``band_power()`` for the energy and average power in a wavelength band. ``pulse_propagate(poling=...)`` reruns the propagation with another poling without solving any mode again. ``gds_section(nonlinear=PulsedProcess(...))`` declares a pulse's nonlinearity on a GDS section too. The website has a new example, 'Nonlinear-EME: Supercontinuum', and the EME guide a section on pulsed propagation. Each section's chi(2), Kerr (chi(3)), Raman and two-photon absorption come from its materials: ``PulsedProcess(chi3=True)`` takes chi(3) from every material's ``n2`` and raises naming a material that has none, the Raman response is that of the material holding most of the Kerr overlap, and two-photon absorption (on by default where a material has a coefficient, ``tpa=False`` to turn it off) acts only on photon pairs above the bandgap. The run warns when the pulse will drift far enough to wrap around the time window, when energy reached the window's edges, and when the band leaves a material's index model, and it refuses a band where an index model has no finite value (silicon's fit has a pole at 1135 nm).
+  * Nonlinear material data for the pulsed solver: ``n2`` for SiO2, SiN, LN and LN_MgO, the Raman response of fused silica (Blow and Wood) and lithium niobate (its four A1(TO) lines, Bache and Schiek), two-photon absorption coefficients for Si, AlGaAs, LN and LN_MgO, and bandgaps for those and for SiO2, SiN and GaAs, each with its reference in ``property_refs``. A user material takes the same through ``MaterialProperties(n2=, raman=, tpa=, bandgap=)``, with ``raman=(fraction, [(weight, position, half_width), ...])`` in cm^-1.
+  * ``settings(bend_method='TO')`` solves a bend by transformation optics: the straight cross-section is solved with its material transformed by the bend's conformal map, instead of adding the bend factor 1 + x / R to the solver (``bend_method='cylindrical'``, the default). It works with the FDM and the FEM, in 2D and 3D sessions alike (the transformed tensor of an isotropic material is diagonal), and agrees with the cylindrical method to about 6e-4 in the effective index and 5 % in bend loss at R = 10 um. With a PML, set ``max_effective_index`` just above the guided mode: a TO bend's spectrum starts with PML modes. ``report()`` names the method next to the solver.
+
+* Fixed
+
+  * With ``EMODE_NONINTERACTIVE=1``, a ``plot()`` could hang. It no longer shows a window in that mode.
+  * On Apple silicon, a circuit with large free-space ports could run out of memory. The sparse solver now solves the port modes in small blocks.
+  * Under a PML, a lossy absorber mode could come out as mode 0, ahead of the guided mode. Guided modes now come first, and ``remove_pml_modes_bool`` is more reliable.
+  * In a lossy medium, some lossy modes grew along the guide instead of decaying, so an EME chain could amplify. Every mode of a passive structure now decays.
+  * ``sweep(key='wavelength', solve_type='EME')`` never returned its data.
+  * A function whose first argument is not ``key``, such as ``monitor_field('plane')``, failed when that argument was given positionally.
+  * ``monitor_field()`` and ``monitor_coupling()`` failed on a chain built with ``copy_section``, such as a grating.
+  * A wavelength scan with the FEM solved each wavelength on a different mesh, which added about 1e-5 of noise to the effective index. Wavelength scans now share one mesh (the new setting ``fem_mesh_wavelength`` chooses its wavelength).
+  * A mirrored section (``copy_section(mirror=True)``) and a bend toward -x were laid out in the wrong place.
+  * The 'z-x' outline left out shapes given by a ``width`` rather than a ``mask``.
+  * A symmetry wall in x, including the one ``boundary_condition='TE'`` or ``'TM'`` adds, folded a bend about x, which a bend does not allow. A bend now keeps only the vertical fold, and an explicit x wall is replaced by ``'0'`` with a warning.
+  * ``plot()`` of a circuit with a loop (a ring closed with ``connect_ports``) failed. It now draws the ring's layout, cross-sections and field. ``EME()`` of a ring with no open port no longer fails.
+  * Windowed ports (``Port(window=...)``): several windows on one side of a section now conserve power and are reciprocal, connected or not, each window keeps only the modes its content guides, and each is placed on its own window in the layout. Results with windowed ports move slightly.
+  * A section after a bend could meet it off-center when anything upstream was offset. Sections now meet centered along any path.
+  * A refined taper or GDS section with interface roughness and ``EME_settings(apply_scattering=True)`` raised an error.
+
+* Faster
+
+  * Refinement bisects a slice at an already-solved cross-section near its midpoint when there is one (``EME_settings(snap_window=0.25)``, a fraction of the slice, 0 to disable), so a taper or GDS section that passes through widths another one solved reuses those solves.
+  * Refinement reuses a solved cross-section wherever the geometry repeats it: the mirror-image half of a taper declared as two sections, or a GDS cell that tapers up and back down. Interpolated and cut geometry is rounded to about 1e-6 nm, so the two halves no longer differ in the last bits and miss the cache (one slice in six re-solved on a mirrored taper).
 
 **1.0.5: October 2, 2026**
 
@@ -3228,7 +3479,7 @@ Quick reference for initializing, running, and closing an EMode session:
 .. note::
 
    The console output on the example pages below, including all timings,
-   was produced on: AMD EPYC 9V74 80-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
+   was produced on: AMD EPYC 7763 64-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
 
 .. hardware-note-end
 
@@ -3251,6 +3502,7 @@ Example Scripts
 
                 * :octicon:`container;1em` :doc:`SOI <examples//SOI>`
                 * :octicon:`iterations;1em` :doc:`SiN <examples//SiN>`
+                * :octicon:`git-compare;1em` :doc:`Bend Mode Solvers <examples//Bend_Solvers>`
                 * :octicon:`zap;1em` :doc:`LNOI <examples//LNOI>`
                 * :octicon:`light-bulb;1em` :doc:`Laser <examples//Laser>`
                 * :octicon:`file;1em` :doc:`Open <examples//Open>`
@@ -3270,8 +3522,11 @@ Example Scripts
                 * :octicon:`video;1em` :doc:`EME: Sweep <examples//EME_Sweep>`
                 * :octicon:`project-symlink;1em` :doc:`EME: GDS <examples//EME_GDS>`
                 * :octicon:`broadcast;1em` :doc:`EME: Angled Facet <examples//EME_Angled_Facet>`
+                * :octicon:`rss;1em` :doc:`EME: Grating Coupler <examples//EME_Grating_Coupler>`
+                * :octicon:`sync;1em` :doc:`EME: TFLN Ring Resonator <examples//EME_TFLN_Ring>`
                 * :octicon:`pulse;1em` :doc:`Nonlinear-EME: SHG <examples//EME_SHG>`
                 * :octicon:`zap;1em` :doc:`Nonlinear-EME: PPLN <examples//EME_PPLN>`
+                * :octicon:`flame;1em` :doc:`Nonlinear-EME: Supercontinuum <examples//EME_PPLN_Supercontinuum>`
                 * :octicon:`arrow-switch;1em` :doc:`Nonlinear-EME: DFG <examples//EME_DFG>`
                 * :octicon:`container;1em` :doc:`FEM: SOI <examples//FEM_SOI>`
                 * :octicon:`flame;1em` :doc:`Heater <examples//Heater>`
@@ -3284,6 +3539,7 @@ Example Scripts
 
    examples//SOI
    examples//SiN
+   examples//Bend_Solvers
    examples//LNOI
    examples//Laser
    examples//Open
@@ -3299,8 +3555,11 @@ Example Scripts
    examples//EME_Sweep
    examples//EME_GDS
    examples//EME_Angled_Facet
+   examples//EME_Grating_Coupler
+   examples//EME_TFLN_Ring
    examples//EME_SHG
    examples//EME_PPLN
+   examples//EME_PPLN_Supercontinuum
    examples//EME_DFG
    examples//FEM_SOI
    examples//Heater
@@ -3358,9 +3617,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.3 sec
-    Solving modes completed in 1.3 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.5 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -3393,7 +3652,7 @@ Figures:
 Bending: SiN
 ------------
 
-Highlighted features: bend radius, pml layers, confinement factor, saving plots.
+Highlighted features: bend radius, PMLs, confinement factor, saving plots.
 
 *This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
 
@@ -3408,9 +3667,9 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         wavelength = 980 # [nm] wavelength
         dx, dy = 10, 10 # [nm] resolution
         w_core = 2000 # [nm] waveguide core width
-        w_trench = 2500 # [nm] waveguide side trench width
+        w_trench = 1500 # [nm] waveguide side trench width
         h_core = 200 # [nm] waveguide core height
-        h_clad = 2500 # [nm] waveguide top and bottom clad
+        h_clad = 2000 # [nm] waveguide top and bottom clad, above the PML
         window_width = w_core + w_trench*2 # [nm]
         window_height = h_core + h_clad*2 # [nm]
         num_modes = 1 # [-] number of modes
@@ -3427,14 +3686,17 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
         em.add_material(name = 'custom_SiO2',
             refractive_index_equation = equation, wavelength_unit = 'um')
 
-        ## Settings
+        ## Settings: the bend radiates outward, so a PML on the outer (east) wall
+        ## absorbs it, and PMLs on the top and bottom walls absorb what spreads up and
+        ## down. With max_effective_index just above the guided mode, the mode solved
+        ## is the guided mode rather than a PML mode.
         em.settings(
             wavelength = wavelength, x_resolution = dx, y_resolution = dy,
             window_width = window_width, window_height = window_height,
             num_modes = num_modes, background_material = 'custom_SiO2',
             boundary_condition = boundary, bend_radius = bend_radius + x_off,
-            pml_NSEW_bool = [0,0,1,1], num_pml_layers = 10,
-            max_effective_index = 1.7)
+            pml_NSEW_bool = [1,1,1,0], pml_thickness = [1000,1000,1000,0], pml_kappa_max = 1,
+            max_effective_index = 1.67)
 
         ## Draw shapes
         em.shape(name = 'core', material = 'SiN', width = w_core,
@@ -3460,11 +3722,11 @@ Highlighted features: bend radius, pml layers, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.5 sec
-    Solving modes completed in 18.3 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 18.1 sec
 
-    Wavelength: 980.0 nm    Solver: FDM
+    Wavelength: 980.0 nm    Solver: FDM, cylindrical bend
  
       Mode #     n_eff    TE %    Loss (dB/m)    PML    background confinement    core confinement
     --------  --------  ------  -------------  -----  ------------------------  ------------------
@@ -3483,6 +3745,190 @@ Figures:
     :width: 400
     :align: center
     :figwidth: 500
+
+
+Bend Mode Solvers
+-----------------
+
+The SiN bend of :doc:`Bending: SiN <SiN>` solved with the bend in cylindrical coordinates
+(``bend_method='cylindrical'``, grid coordinate transformation) and by transformation optics
+(``bend_method='TO'``, material transformed by the bend's conformal map), to compare how fast each
+converges. The FDM is solved on four grids and the FEM on six fixed meshes
+(``fem_max_refinements=0``), and each solve's effective index and bend loss are compared against the
+finest FEM mesh.
+
+The window and PMLs are optimized by convergence studies run separately. The bend radiates outward, so
+PMLs on the outer (east), top and bottom walls absorb the radiated light, and the guided mode's
+imaginary index is its bend loss. The FEM's PML absorbs fully in 500 nm, where the FDM's needs 1 µm.
+``max_effective_index`` sits just above the guided mode, so the one mode solved is the guided mode
+rather than a PML mode. A fine mesh in the core (the shape's ``fem_resolution``) lets the FEM resolve
+the mode even at 1 point per wavelength, so its first solve uses a 100 nm core mesh and the rest 50 nm.
+
+The FEM is the best method all-around, but it requires EMode3D. Even its fastest solve is closer to the
+converged effective index than any FDM solve, so more points per wavelength mainly refine its bend
+loss, which converges much faster than the FDM's. With EMode2D, the FDM with ``bend_method='TO'``
+gives better effective index convergence than the FDM in cylindrical coordinates, but its error stops
+falling on the finest grids, and it does not give a reliable bend loss yet. The FDM in cylindrical
+coordinates converges slowest for the effective index, but its bend loss converges steadily, so use it
+when loss is important. With the FDM, choose a grid that puts the waveguide's edges on grid lines, as
+every grid here does, or the effective index jumps from one grid spacing to the next. The FEM meshes
+the shapes' edges and needs no such care.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import sys
+        import time
+        import numpy as np
+        import emodeconnection as emc
+        from matplotlib import pyplot as plt
+
+        ## Set simulation parameters: the SiN bend of the 'Bending: SiN' example
+        wavelength = 980  # [nm] wavelength
+        w_core = 2000  # [nm] waveguide core width
+        w_trench = 1500  # [nm] waveguide side trench width
+        h_core = 200  # [nm] waveguide core height
+        h_clad = 2000  # [nm] waveguide top and bottom clad, above the PML
+        window_width = w_core + w_trench*2  # [nm]
+        window_height = h_core + h_clad*2  # [nm]
+        bend_radius = 20e3  # [nm] bend radius at the center of the core
+        x_off = 500  # [nm] core offset, so the bend radius is measured at the core
+
+        ## The FDM grids all put the core's edges on grid lines (each divides 100 nm),
+        ## and the FEM meshes are fixed (no refinement), from coarse to fine.
+        resolutions = [50, 25, 20, 10]  # [nm]
+        fem_meshes = [(1, 100), (1, 50), (2, 50), (3, 50), (4, 50), (6, 50)]  # FEM (points per wavelength, core mesh [nm])
+
+        em = emc.EMode(emode_cmd=sys.argv[1:], simulation_name='bend_solvers')
+
+        ## Define common settings and the waveguide core
+        em.settings(
+            wavelength=wavelength, window_width=window_width, window_height=window_height,
+            num_modes=1, boundary_condition='00', background_material='SiO2',
+            bend_radius=bend_radius + x_off,
+            pml_NSEW_bool=[1, 1, 1, 0], pml_kappa_max=1, max_effective_index=1.67,
+            tolerance=1e-6, fem_max_refinements=0, fem_min_angle=33)
+        em.shape(name='core', material='SiN', width=w_core, height=h_core,
+                 position=[-x_off, window_height/2], fem_resolution=50)
+
+        def solve(solver, method, resolution=20, points=4, core_mesh=50):
+            ## The FEM's PML absorbs fully in 500 nm, the FDM's needs 1 um
+            pml = 500 if solver == 'FEM' else 1000
+            em.settings(solver=solver, bend_method=method,
+                        x_resolution=resolution, y_resolution=resolution,
+                        fem_points_per_wavelength=points, pml_thickness=[pml, pml, pml, 0])
+            em.shape(name='core', fem_resolution=core_mesh)
+            start = time.time()
+            em.solve()
+            elapsed = time.time() - start
+            n_eff = float(np.asarray(em.get('effective_index'))[0])
+            loss = float(np.asarray(em.get('loss_dB_per_m'))[0])
+            return n_eff, loss, elapsed
+
+        ## Run all resolutions and bend methods for FDM
+        rows = []
+        for method in ('cylindrical', 'TO'):
+            for resolution in resolutions:
+                n_eff, loss, elapsed = solve('FDM', method, resolution=resolution)
+                rows.append(('FDM', method, f'{resolution} nm', n_eff, loss, elapsed))
+
+        ## Run all resolutions for FEM
+        for points, core_mesh in fem_meshes:
+            n_eff, loss, elapsed = solve('FEM', 'cylindrical', points=points, core_mesh=core_mesh)
+            rows.append(('FEM', 'cylindrical', f'{points}/wl, {core_mesh} nm', n_eff, loss, elapsed))
+
+        ## Plot the guided mode of the finest FEM mesh
+        em.plot(component='Ex', file_name='bend_FEM', file_type='png')
+
+        ## Print each solve's error against the finest FEM mesh
+        reference = rows[-1][3]
+        print(f'\n{"solver":7s}{"method":13s}{"mesh":>14s}{"n_eff":>11s}{"error":>10s}{"dB/m":>8s}{"time (s)":>10s}')
+        for solver, method, mesh, n_eff, loss, elapsed in rows:
+            print(f'{solver:7s}{method:13s}{mesh:>14s}{n_eff:>11.6f}{n_eff - reference:>10.1e}{loss:>8.4f}{elapsed:>10.1f}')
+
+        ## Plot effective index and bend loss errors against solve time
+        loss_reference = rows[-1][4]
+        fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+        for solver, method, marker in (('FDM', 'cylindrical', 'o'), ('FDM', 'TO', 's'), ('FEM', 'cylindrical', '^')):
+            picked = [r for r in rows[:-1] if r[:2] == (solver, method)]
+            times = [r[5] for r in picked]
+            axes[0].loglog(times, [abs(r[3] - reference) for r in picked], marker=marker, label=f'{solver}, {method}')
+            axes[1].loglog(times, [abs(r[4] - loss_reference) / loss_reference for r in picked], marker=marker, label=f'{solver}, {method}')
+        axes[0].set_ylabel('|n_eff error|')
+        axes[1].set_ylabel('|bend loss error| / bend loss')
+        for ax in axes:
+            ax.set_xlabel('solve time (s)')
+            ax.grid(True, which='both', alpha=0.3)
+        axes[0].legend()
+        fig.tight_layout()
+        fig.savefig('bend_solvers_convergence.png', dpi=300)
+
+        em.close()
+
+Console output::
+
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.2 sec
+    Solving modes completed in 0.8 sec
+    Meshing completed in 0.3 sec
+    Solving modes completed in 4.0 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 6.8 sec
+    Meshing completed in 0.7 sec
+    Solving modes completed in 47.5 sec
+    Meshing completed in 0.3 sec
+    Solving modes completed in 0.8 sec
+    Meshing completed in 0.7 sec
+    Solving modes completed in 3.4 sec
+    Meshing completed in 1.0 sec
+    Solving modes completed in 6.0 sec
+    Meshing completed in 3.2 sec
+    Solving modes completed in 31.5 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 1.3 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 3.1 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 5.9 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 10.1 sec
+    Meshing completed in 0.5 sec
+    Solving modes completed in 22.9 sec
+    Exited EMode
+
+    solver method                 mesh      n_eff     error    dB/m  time (s)
+    FDM    cylindrical           50 nm   1.663104  -2.9e-03  0.0248       1.0
+    FDM    cylindrical           25 nm   1.665276  -7.1e-04  0.0180       4.3
+    FDM    cylindrical           20 nm   1.665535  -4.6e-04  0.0174       7.3
+    FDM    cylindrical           10 nm   1.665877  -1.1e-04  0.0166      48.7
+    FDM    TO                    50 nm   1.665358  -6.3e-04  0.0000       1.2
+    FDM    TO                    25 nm   1.665919  -7.0e-05  0.0002       4.3
+    FDM    TO                    20 nm   1.665974  -1.6e-05  0.0003       7.2
+    FDM    TO                    10 nm   1.666021   3.1e-05  0.0003      35.8
+    FEM    cylindrical    1/wl, 100 nm   1.665985  -5.2e-06  0.0168       2.8
+    FEM    cylindrical     1/wl, 50 nm   1.665982  -7.5e-06  0.0166       3.4
+    FEM    cylindrical     2/wl, 50 nm   1.665982  -7.5e-06  0.0165       4.5
+    FEM    cylindrical     3/wl, 50 nm   1.665987  -3.3e-06  0.0164       8.2
+    FEM    cylindrical     4/wl, 50 nm   1.665987  -3.2e-06  0.0164      12.1
+    FEM    cylindrical     6/wl, 50 nm   1.665990   0.0e+00  0.0164      27.7
+
+Figures:
+
+.. figure:: /_images/bend_solvers_convergence.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: /_images/bend_FEM.png
+    :width: 400
+    :align: center
+    :figwidth: 400
 
 
 
@@ -3565,9 +4011,9 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 3.7 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.0 sec
+    Solving modes completed in 4.1 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -3575,8 +4021,8 @@ Console output::
     --------  --------  ------  -------------  ------------------
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
-    Meshing completed in 0.6 sec
-    Solving modes completed in 3.5 sec
+    Meshing completed in 1.0 sec
+    Solving modes completed in 3.9 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -3585,7 +4031,7 @@ Console output::
         TE-0  1.789642  99.1 %          0.000              83.4 %
  
     Exited EMode
-    Power overlap: 99.836 %
+    Power overlap: 99.837 %
 
     Refractive index of LN: [2.13057033 2.20881269 2.20881269]
     O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
@@ -3698,15 +4144,15 @@ The structure is taken roughly from: M. A. Tran, D. Huang, and J. E. Bowers, "Tu
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 4.8 sec
-    Solving modes completed in 23.9 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 8.5 sec
+    Solving modes completed in 25.9 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement    core scattering (dB/m)
     --------  --------  ------  -------------  ------------------  ------------------------
-        TE-0  3.290919  99.8 %          0.000              49.8 %                   218.019
+        TE-0  3.290919  99.8 %          0.000              49.8 %                   218.011
  
     Exited EMode
     Scattering loss from all vertical edges: 217.8 dB/m
@@ -3834,9 +4280,9 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 3.7 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.3 sec
+    Solving modes completed in 4.2 sec
 
     Wavelength: 1970.0 nm    Solver: FDM
  
@@ -3845,9 +4291,9 @@ Console output::
         TE-0  2.094190  99.8 %          0.000
  
     Exited EMode
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 3.5 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.3 sec
+    Solving modes completed in 4.0 sec
 
     Wavelength: 985.0 nm    Solver: FDM
  
@@ -3857,9 +4303,9 @@ Console output::
         TM-1  1.929029  15.3 %          0.000
  
     Exited EMode
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
     Exited EMode
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
     Exited EMode
 
 Figures:
@@ -3928,31 +4374,31 @@ The sweep function is demonstrated to calculate dispersion of a waveguide. See f
 
 Console output::
 
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
 
     Sweeping setting parameter 'wavelength'...
-    Solving FDM: wavelength = 1000... completed in 4.4 sec
-    Solving FDM: wavelength = 1050... completed in 3.9 sec
-    Solving FDM: wavelength = 1100... completed in 3.8 sec
-    Solving FDM: wavelength = 1150... completed in 3.6 sec
-    Solving FDM: wavelength = 1200... completed in 3.9 sec
-    Solving FDM: wavelength = 1250... completed in 3.6 sec
-    Solving FDM: wavelength = 1300... completed in 3.7 sec
-    Solving FDM: wavelength = 1350... completed in 4.0 sec
-    Solving FDM: wavelength = 1400... completed in 3.3 sec
-    Solving FDM: wavelength = 1450... completed in 3.9 sec
-    Solving FDM: wavelength = 1500... completed in 4.0 sec
-    Solving FDM: wavelength = 1550... completed in 3.8 sec
-    Solving FDM: wavelength = 1600... completed in 4.0 sec
-    Solving FDM: wavelength = 1650... completed in 3.9 sec
-    Solving FDM: wavelength = 1700... completed in 3.7 sec
-    Solving FDM: wavelength = 1750... completed in 3.9 sec
-    Solving FDM: wavelength = 1800... completed in 3.9 sec
-    Solving FDM: wavelength = 1850... completed in 4.1 sec
-    Solving FDM: wavelength = 1900... completed in 3.6 sec
-    Solving FDM: wavelength = 1950... completed in 4.1 sec
-    Solving FDM: wavelength = 2000... completed in 4.0 sec
-     completed in 1 min 21.3 sec
+    Solving FDM: wavelength = 1000... completed in 5.5 sec
+    Solving FDM: wavelength = 1050... completed in 5.1 sec
+    Solving FDM: wavelength = 1100... completed in 4.9 sec
+    Solving FDM: wavelength = 1150... completed in 4.6 sec
+    Solving FDM: wavelength = 1200... completed in 5.0 sec
+    Solving FDM: wavelength = 1250... completed in 4.8 sec
+    Solving FDM: wavelength = 1300... completed in 4.9 sec
+    Solving FDM: wavelength = 1350... completed in 5.2 sec
+    Solving FDM: wavelength = 1400... completed in 4.4 sec
+    Solving FDM: wavelength = 1450... completed in 5.1 sec
+    Solving FDM: wavelength = 1500... completed in 5.2 sec
+    Solving FDM: wavelength = 1550... completed in 5.0 sec
+    Solving FDM: wavelength = 1600... completed in 5.2 sec
+    Solving FDM: wavelength = 1650... completed in 4.9 sec
+    Solving FDM: wavelength = 1700... completed in 4.7 sec
+    Solving FDM: wavelength = 1750... completed in 5.0 sec
+    Solving FDM: wavelength = 1800... completed in 5.1 sec
+    Solving FDM: wavelength = 1850... completed in 5.3 sec
+    Solving FDM: wavelength = 1900... completed in 4.8 sec
+    Solving FDM: wavelength = 1950... completed in 5.3 sec
+    Solving FDM: wavelength = 2000... completed in 5.1 sec
+     completed in 1 min 45.1 sec
     Exited EMode
 
 A separate script can be used to plot the results.
@@ -4128,16 +4574,16 @@ Highlighted features: ``sweep(adaptive=True)`` for a fine wavelength spectrum fr
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Adaptive wavelength scan over 1500-1600 nm... completed in 2.9 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 6.6 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 14.3 sec
-    Meshing completed in 0.2 sec
-    Solving modes completed in 0.3 sec
+    EMode3D 1.0.6 - email
+    Adaptive wavelength scan over 1500-1600 nm... completed in 4.2 sec
+    Adaptive wavelength scan over 1500-1600 nm... completed in 10.9 sec
+    Adaptive wavelength scan over 1500-1600 nm... completed in 24.2 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.4 sec
     Exited EMode
     tolerance 1e-02:   5 solves for 201 points  (40x fewer)
-    tolerance 1e-03:  12 solves for 201 points  (17x fewer)
-    tolerance 5e-04:  28 solves for 201 points  (7x fewer)
+    tolerance 1e-03:  14 solves for 201 points  (14x fewer)
+    tolerance 5e-04:  32 solves for 201 points  (6x fewer)
 
 Figures:
 
@@ -4229,9 +4675,9 @@ The simplest EMode example of an EME simulation.
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.2 sec
-    Solving modes completed in 0.7 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.8 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -4248,8 +4694,8 @@ Console output::
         TE-8  1.219186  96.4 %          0.000
         TM-9  1.207915   0.5 %          0.000
  
-    Meshing completed in 0.3 sec
-    Solving modes completed in 0.7 sec
+    Meshing completed in 0.5 sec
+    Solving modes completed in 0.8 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -4269,54 +4715,56 @@ Console output::
 
     Solving S-matrices...
     Solving section: 1... completed in 0.0 sec
-    Solving section: 2...
-    Solving slice at 4000.0 nm... completed in 1.0 sec
-    Solving slice at 6000.0 nm... completed in 1.1 sec
-    Solving slice at 2000.0 nm... completed in 0.9 sec
-    Solving slice at 7000.0 nm... completed in 0.9 sec
-    Solving slice at 5000.0 nm... completed in 1.1 sec
-    Solving slice at 3000.0 nm... completed in 1.1 sec
-    Solving slice at 1000.0 nm... completed in 0.9 sec
-    Solving slice at 7500.0 nm... completed in 0.9 sec
-    Solving slice at 6500.0 nm... completed in 1.1 sec
-    Solving slice at 5500.0 nm... completed in 1.1 sec
-    Solving slice at 4500.0 nm... completed in 0.9 sec
-    Solving slice at 3500.0 nm... completed in 1.0 sec
-    Solving slice at 2500.0 nm... completed in 1.0 sec
-    Solving slice at 1500.0 nm... completed in 0.9 sec
-    Solving slice at 500.0 nm... completed in 1.1 sec
-    Solving slice at 6250.0 nm... completed in 1.1 sec
-    Solving slice at 5750.0 nm... completed in 1.0 sec
-    Solving slice at 5250.0 nm... completed in 1.1 sec
-    Solving slice at 4750.0 nm... completed in 1.0 sec
-    Solving slice at 4250.0 nm... completed in 1.1 sec
-    Solving slice at 3750.0 nm... completed in 1.1 sec
-    Solving slice at 3250.0 nm... completed in 1.0 sec
-    Solving slice at 2750.0 nm... completed in 1.1 sec
-    Solving slice at 1750.0 nm... completed in 0.9 sec
-    Solving slice at 6125.0 nm... completed in 1.1 sec
-    Solving slice at 5875.0 nm... completed in 1.1 sec
-    Solving slice at 3625.0 nm... completed in 1.1 sec
-    Solving slice at 3375.0 nm... completed in 1.2 sec
-    Solving slice at 3125.0 nm... completed in 1.2 sec
-    Solving slice at 1875.0 nm... completed in 1.0 sec
-    Solving slice at 1625.0 nm... completed in 1.0 sec
-    Solving slice at 6062.5 nm... completed in 1.1 sec
-    Solving slice at 5937.5 nm... completed in 1.2 sec
-    Solving slice at 3312.5 nm... completed in 1.1 sec
-    Solving slice at 3187.5 nm... completed in 1.2 sec
-    Solving slice at 1937.5 nm... completed in 1.0 sec
-    Solving slice at 1812.5 nm... completed in 1.1 sec
-    Solving slice at 1687.5 nm... completed in 1.0 sec
-    Solving slice at 6093.8 nm... completed in 1.2 sec
-    Solving slice at 1968.8 nm... completed in 1.0 sec
-    Solving slice at 1906.2 nm... completed in 1.0 sec
-    Solving slice at 1921.9 nm... completed in 1.0 sec
-    Solving slice at 1929.7 nm... completed in 1.0 sec
-    Solving slice at 1925.8 nm... completed in 1.0 sec
-     completed in 56.1 sec
+    Solving section: 2...Meshing completed in 0.4 sec
+    Solving modes completed in 0.9 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 1.0 sec
+    Solving slice at 6666.7 nm... completed in 1.4 sec
+    Solving slice at 4000.0 nm... completed in 1.4 sec
+    Solving slice at 1333.3 nm... completed in 1.2 sec
+    Solving slice at 7333.3 nm... completed in 1.2 sec
+    Solving slice at 6000.0 nm... completed in 1.4 sec
+    Solving slice at 4666.7 nm... completed in 1.3 sec
+    Solving slice at 3333.3 nm... completed in 1.3 sec
+    Solving slice at 2000.0 nm... completed in 1.2 sec
+    Solving slice at 666.7 nm... completed in 1.4 sec
+    Solving slice at 7666.7 nm... completed in 1.2 sec
+    Solving slice at 6333.3 nm... completed in 1.4 sec
+    Solving slice at 5666.7 nm... completed in 1.4 sec
+    Solving slice at 5000.0 nm... completed in 1.5 sec
+    Solving slice at 4333.3 nm... completed in 1.4 sec
+    Solving slice at 3666.7 nm... completed in 1.4 sec
+    Solving slice at 3000.0 nm... completed in 1.4 sec
+    Solving slice at 2333.3 nm... completed in 1.5 sec
+    Solving slice at 1666.7 nm... completed in 1.3 sec
+    Solving slice at 333.3 nm... completed in 1.4 sec
+    Solving slice at 6166.7 nm... completed in 1.4 sec
+    Solving slice at 5833.3 nm... completed in 1.4 sec
+    Solving slice at 5166.7 nm... completed in 1.4 sec
+    Solving slice at 4833.3 nm... completed in 1.4 sec
+    Solving slice at 4500.0 nm... completed in 1.3 sec
+    Solving slice at 4166.7 nm... completed in 1.4 sec
+    Solving slice at 3833.3 nm... completed in 1.4 sec
+    Solving slice at 3500.0 nm... completed in 1.4 sec
+    Solving slice at 3166.7 nm... completed in 1.4 sec
+    Solving slice at 2833.3 nm... completed in 1.4 sec
+    Solving slice at 1833.3 nm... completed in 1.2 sec
+    Solving slice at 6083.3 nm... completed in 1.4 sec
+    Solving slice at 5916.7 nm... completed in 1.4 sec
+    Solving slice at 3416.7 nm... completed in 1.4 sec
+    Solving slice at 3250.0 nm... completed in 1.4 sec
+    Solving slice at 3083.3 nm... completed in 1.3 sec
+    Solving slice at 1916.7 nm... completed in 1.2 sec
+    Solving slice at 1750.0 nm... completed in 1.2 sec
+    Solving slice at 6125.0 nm... completed in 1.4 sec
+    Solving slice at 1958.3 nm... completed in 1.2 sec
+    Solving slice at 6104.2 nm... completed in 1.4 sec
+    Solving slice at 1937.5 nm... completed in 1.2 sec
+    Solving slice at 1927.1 nm... completed in 1.2 sec
+    Solving slice at 1921.9 nm... completed in 1.2 sec
+     completed in 1 min 13.6 sec
     Solving section: 3... completed in 0.0 sec
-     completed in 56.1 sec
+     completed in 1 min 13.6 sec
     Exited EMode
 
 Figures:
@@ -4416,88 +4864,87 @@ In practice, a taper length needs to be optimized to ensure proper modal transmi
 
 Console output::
 
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
 
     Sweeping section parameter 'length'...
     Solving EME: length = 8000...
-    Solving slice at 4000.0 nm... completed in 1.1 sec
-    Solving slice at 6000.0 nm... completed in 1.1 sec
-    Solving slice at 2000.0 nm... completed in 0.9 sec
-    Solving slice at 7000.0 nm... completed in 1.0 sec
-    Solving slice at 5000.0 nm... completed in 1.2 sec
-    Solving slice at 3000.0 nm... completed in 1.1 sec
-    Solving slice at 1000.0 nm... completed in 1.0 sec
-    Solving slice at 7500.0 nm... completed in 0.9 sec
-    Solving slice at 6500.0 nm... completed in 1.1 sec
-    Solving slice at 5500.0 nm... completed in 1.1 sec
-    Solving slice at 4500.0 nm... completed in 1.0 sec
-    Solving slice at 3500.0 nm... completed in 1.2 sec
-    Solving slice at 2500.0 nm... completed in 1.2 sec
-    Solving slice at 1500.0 nm... completed in 1.0 sec
-    Solving slice at 500.0 nm... completed in 1.2 sec
-    Solving slice at 6250.0 nm... completed in 1.2 sec
-    Solving slice at 5750.0 nm... completed in 1.2 sec
-    Solving slice at 5250.0 nm... completed in 1.2 sec
-    Solving slice at 4750.0 nm... completed in 1.1 sec
-    Solving slice at 4250.0 nm... completed in 1.2 sec
-    Solving slice at 3750.0 nm... completed in 1.2 sec
-    Solving slice at 3250.0 nm... completed in 1.2 sec
-    Solving slice at 2750.0 nm... completed in 1.1 sec
-    Solving slice at 1750.0 nm... completed in 1.0 sec
-    Solving slice at 6125.0 nm... completed in 1.1 sec
-    Solving slice at 5875.0 nm... completed in 1.1 sec
-    Solving slice at 3625.0 nm... completed in 1.1 sec
-    Solving slice at 3375.0 nm... completed in 1.1 sec
-    Solving slice at 3125.0 nm... completed in 1.2 sec
-    Solving slice at 1875.0 nm... completed in 1.0 sec
-    Solving slice at 1625.0 nm... completed in 1.0 sec
-    Solving slice at 6062.5 nm... completed in 1.2 sec
-    Solving slice at 5937.5 nm... completed in 1.2 sec
-    Solving slice at 3312.5 nm... completed in 1.1 sec
-    Solving slice at 3187.5 nm... completed in 1.1 sec
-    Solving slice at 1937.5 nm... completed in 1.0 sec
-    Solving slice at 1812.5 nm... completed in 1.1 sec
-    Solving slice at 1687.5 nm... completed in 1.0 sec
-    Solving slice at 6093.8 nm... completed in 1.2 sec
-    Solving slice at 1968.8 nm... completed in 1.0 sec
-    Solving slice at 1906.2 nm... completed in 1.0 sec
-    Solving slice at 1921.9 nm... completed in 1.0 sec
-    Solving slice at 1929.7 nm... completed in 1.0 sec
-    Solving slice at 1925.8 nm... completed in 1.1 sec
-     completed in 59.7 sec
-    Solving EME: length = 7750... completed in 0.1 sec
-    Solving EME: length = 7500... completed in 0.1 sec
-    Solving EME: length = 7250... completed in 0.1 sec
-    Solving EME: length = 7000... completed in 0.1 sec
-    Solving EME: length = 6750... completed in 0.1 sec
-    Solving EME: length = 6500... completed in 0.1 sec
-    Solving EME: length = 6250... completed in 0.1 sec
-    Solving EME: length = 6000... completed in 0.1 sec
-    Solving EME: length = 5750... completed in 0.1 sec
-    Solving EME: length = 5500... completed in 0.2 sec
-    Solving EME: length = 5250... completed in 0.1 sec
-    Solving EME: length = 5000... completed in 0.1 sec
-    Solving EME: length = 4750... completed in 0.1 sec
-    Solving EME: length = 4500... completed in 0.1 sec
-    Solving EME: length = 4250... completed in 0.1 sec
-    Solving EME: length = 4000... completed in 0.1 sec
-    Solving EME: length = 3750... completed in 0.1 sec
-    Solving EME: length = 3500... completed in 0.1 sec
-    Solving EME: length = 3250... completed in 0.1 sec
-    Solving EME: length = 3000... completed in 0.1 sec
-    Solving EME: length = 2750... completed in 0.1 sec
-    Solving EME: length = 2500... completed in 0.1 sec
-    Solving EME: length = 2250... completed in 0.1 sec
-    Solving EME: length = 2000... completed in 0.1 sec
-    Solving EME: length = 1750... completed in 0.1 sec
-    Solving EME: length = 1500... completed in 0.1 sec
-    Solving EME: length = 1250... completed in 0.1 sec
-    Solving EME: length = 1000... completed in 0.1 sec
-    Solving EME: length = 750... completed in 0.1 sec
-    Solving EME: length = 500... completed in 0.1 sec
-    Solving EME: length = 250... completed in 0.1 sec
-    Solving EME: length = 0... completed in 0.1 sec
-     completed in 1 min 3.0 sec
+    Solving slice at 6666.7 nm... completed in 1.4 sec
+    Solving slice at 4000.0 nm... completed in 1.4 sec
+    Solving slice at 1333.3 nm... completed in 1.2 sec
+    Solving slice at 7333.3 nm... completed in 1.2 sec
+    Solving slice at 6000.0 nm... completed in 1.4 sec
+    Solving slice at 4666.7 nm... completed in 1.5 sec
+    Solving slice at 3333.3 nm... completed in 1.4 sec
+    Solving slice at 2000.0 nm... completed in 1.2 sec
+    Solving slice at 666.7 nm... completed in 1.3 sec
+    Solving slice at 7666.7 nm... completed in 1.2 sec
+    Solving slice at 6333.3 nm... completed in 1.4 sec
+    Solving slice at 5666.7 nm... completed in 1.4 sec
+    Solving slice at 5000.0 nm... completed in 1.4 sec
+    Solving slice at 4333.3 nm... completed in 1.4 sec
+    Solving slice at 3666.7 nm... completed in 1.4 sec
+    Solving slice at 3000.0 nm... completed in 1.4 sec
+    Solving slice at 2333.3 nm... completed in 1.4 sec
+    Solving slice at 1666.7 nm... completed in 1.2 sec
+    Solving slice at 333.3 nm... completed in 1.4 sec
+    Solving slice at 6166.7 nm... completed in 1.4 sec
+    Solving slice at 5833.3 nm... completed in 1.4 sec
+    Solving slice at 5166.7 nm... completed in 1.4 sec
+    Solving slice at 4833.3 nm... completed in 1.4 sec
+    Solving slice at 4500.0 nm... completed in 1.2 sec
+    Solving slice at 4166.7 nm... completed in 1.4 sec
+    Solving slice at 3833.3 nm... completed in 1.4 sec
+    Solving slice at 3500.0 nm... completed in 1.4 sec
+    Solving slice at 3166.7 nm... completed in 1.4 sec
+    Solving slice at 2833.3 nm... completed in 1.4 sec
+    Solving slice at 1833.3 nm... completed in 1.2 sec
+    Solving slice at 6083.3 nm... completed in 1.4 sec
+    Solving slice at 5916.7 nm... completed in 1.4 sec
+    Solving slice at 3416.7 nm... completed in 1.4 sec
+    Solving slice at 3250.0 nm... completed in 1.4 sec
+    Solving slice at 3083.3 nm... completed in 1.4 sec
+    Solving slice at 1916.7 nm... completed in 1.2 sec
+    Solving slice at 1750.0 nm... completed in 1.2 sec
+    Solving slice at 6125.0 nm... completed in 1.4 sec
+    Solving slice at 1958.3 nm... completed in 1.3 sec
+    Solving slice at 6104.2 nm... completed in 1.4 sec
+    Solving slice at 1937.5 nm... completed in 1.2 sec
+    Solving slice at 1927.1 nm... completed in 1.2 sec
+    Solving slice at 1921.9 nm... completed in 1.2 sec
+     completed in 1 min 32.9 sec
+    Solving EME: length = 7750... completed in 0.5 sec
+    Solving EME: length = 7500... completed in 0.5 sec
+    Solving EME: length = 7250... completed in 0.5 sec
+    Solving EME: length = 7000... completed in 0.5 sec
+    Solving EME: length = 6750... completed in 0.5 sec
+    Solving EME: length = 6500... completed in 0.5 sec
+    Solving EME: length = 6250... completed in 0.5 sec
+    Solving EME: length = 6000... completed in 0.5 sec
+    Solving EME: length = 5750... completed in 0.5 sec
+    Solving EME: length = 5500... completed in 0.5 sec
+    Solving EME: length = 5250... completed in 0.5 sec
+    Solving EME: length = 5000... completed in 0.5 sec
+    Solving EME: length = 4750... completed in 0.5 sec
+    Solving EME: length = 4500... completed in 0.5 sec
+    Solving EME: length = 4250... completed in 0.5 sec
+    Solving EME: length = 4000... completed in 0.5 sec
+    Solving EME: length = 3750... completed in 0.5 sec
+    Solving EME: length = 3500... completed in 0.5 sec
+    Solving EME: length = 3250... completed in 0.5 sec
+    Solving EME: length = 3000... completed in 0.5 sec
+    Solving EME: length = 2750... completed in 0.5 sec
+    Solving EME: length = 2500... completed in 0.5 sec
+    Solving EME: length = 2250... completed in 0.5 sec
+    Solving EME: length = 2000... completed in 0.5 sec
+    Solving EME: length = 1750... completed in 0.5 sec
+    Solving EME: length = 1500... completed in 0.5 sec
+    Solving EME: length = 1250... completed in 0.5 sec
+    Solving EME: length = 1000... completed in 0.5 sec
+    Solving EME: length = 750... completed in 0.5 sec
+    Solving EME: length = 500... completed in 0.5 sec
+    Solving EME: length = 250... completed in 0.5 sec
+    Solving EME: length = 0... completed in 0.3 sec
+     completed in 1 min 48.2 sec
     Exited EMode
 
 While no figures are generated in the EMode script, a separate script can be used to plot the results.
@@ -4750,47 +5197,47 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 1 min 24.5 sec
+    Solving section: sbend... completed in 2 min 41.7 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 1 min 24.5 sec
+     completed in 2 min 41.7 sec
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 200000.0... completed in 0.6 sec
-    Solving EME: length = 190000.0... completed in 0.5 sec
-    Solving EME: length = 180000.0... completed in 0.5 sec
-    Solving EME: length = 170000.0... completed in 0.5 sec
-    Solving EME: length = 160000.0... completed in 0.5 sec
-    Solving EME: length = 150000.0... completed in 0.5 sec
-    Solving EME: length = 140000.0... completed in 0.5 sec
-    Solving EME: length = 130000.0... completed in 0.5 sec
-    Solving EME: length = 120000.0... completed in 0.5 sec
-    Solving EME: length = 110000.0... completed in 0.5 sec
-    Solving EME: length = 100000.0... completed in 0.5 sec
-    Solving EME: length = 90000.0... completed in 0.5 sec
+    Solving EME: length = 200000.0... completed in 0.5 sec
+    Solving EME: length = 190000.0... completed in 0.4 sec
+    Solving EME: length = 180000.0... completed in 0.4 sec
+    Solving EME: length = 170000.0... completed in 0.4 sec
+    Solving EME: length = 160000.0... completed in 0.4 sec
+    Solving EME: length = 150000.0... completed in 0.4 sec
+    Solving EME: length = 140000.0... completed in 0.4 sec
+    Solving EME: length = 130000.0... completed in 0.4 sec
+    Solving EME: length = 120000.0... completed in 0.4 sec
+    Solving EME: length = 110000.0... completed in 0.4 sec
+    Solving EME: length = 100000.0... completed in 0.4 sec
+    Solving EME: length = 90000.0... completed in 0.4 sec
     Solving EME: length = 80000.0... completed in 0.5 sec
-    Solving EME: length = 70000.0... completed in 0.5 sec
-    Solving EME: length = 60000.0... completed in 0.5 sec
-    Solving EME: length = 50000.0... completed in 0.5 sec
-    Solving EME: length = 40000.0... completed in 0.5 sec
-    Solving EME: length = 30000.0... completed in 0.5 sec
-    Solving EME: length = 20000.0... completed in 0.5 sec
-    Solving EME: length = 10000.0... completed in 0.5 sec
-    Solving EME: length = 0.0... completed in 0.5 sec
-     completed in 10.8 sec
+    Solving EME: length = 70000.0... completed in 0.4 sec
+    Solving EME: length = 60000.0... completed in 0.4 sec
+    Solving EME: length = 50000.0... completed in 0.4 sec
+    Solving EME: length = 40000.0... completed in 0.4 sec
+    Solving EME: length = 30000.0... completed in 0.4 sec
+    Solving EME: length = 20000.0... completed in 0.4 sec
+    Solving EME: length = 10000.0... completed in 0.4 sec
+    Solving EME: length = 0.0... completed in 0.4 sec
+     completed in 8.7 sec
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 2.5 sec
+    Solving section: sbend... completed in 1.1 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 2.5 sec
+     completed in 1.1 sec
     Exited EMode
 
 Figures:
@@ -4946,54 +5393,56 @@ angled facet suppresses back-reflection.
         report = em2.free_space_field_diagnostics(name='fiber')
         print(report)
 
+        ## 'section' scales each section by its own peak, so the beam spreading in
+        ## the free-space gaps stays visible next to the much brighter guided mode
         em2.plot(
             excitation='fiber', component='Ex', plot_function='abs', plane='z-x',
-            normalization='component')
+            normalization='section')
 
         ## Close EMode
         em2.close()
 
 Console output::
 
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
 
     Sweeping section parameter 'facet_angle'...
-    Solving EME: facet_angle = 0.0... completed in 9.5 sec
-    Solving EME: facet_angle = 1.0... completed in 8.2 sec
-    Solving EME: facet_angle = 2.0... completed in 8.2 sec
-    Solving EME: facet_angle = 3.0... completed in 8.1 sec
-    Solving EME: facet_angle = 4.0... completed in 8.2 sec
-    Solving EME: facet_angle = 5.0... completed in 8.3 sec
-    Solving EME: facet_angle = 6.0... completed in 8.3 sec
-    Solving EME: facet_angle = 7.0... completed in 8.1 sec
-    Solving EME: facet_angle = 8.0... completed in 7.9 sec
-    Solving EME: facet_angle = 9.0... completed in 8.2 sec
-    Solving EME: facet_angle = 10.0... completed in 8.0 sec
-    Solving EME: facet_angle = 11.0... completed in 8.0 sec
-    Solving EME: facet_angle = 12.0... completed in 7.8 sec
-     completed in 1 min 46.9 sec
+    Solving EME: facet_angle = 0.0... completed in 10.4 sec
+    Solving EME: facet_angle = 1.0... completed in 9.1 sec
+    Solving EME: facet_angle = 2.0... completed in 9.1 sec
+    Solving EME: facet_angle = 3.0... completed in 9.1 sec
+    Solving EME: facet_angle = 4.0... completed in 9.2 sec
+    Solving EME: facet_angle = 5.0... completed in 9.1 sec
+    Solving EME: facet_angle = 6.0... completed in 9.0 sec
+    Solving EME: facet_angle = 7.0... completed in 8.9 sec
+    Solving EME: facet_angle = 8.0... completed in 9.1 sec
+    Solving EME: facet_angle = 9.0... completed in 9.0 sec
+    Solving EME: facet_angle = 10.0... completed in 8.9 sec
+    Solving EME: facet_angle = 11.0... completed in 9.1 sec
+    Solving EME: facet_angle = 12.0... completed in 9.1 sec
+     completed in 1 min 59.2 sec
     Exited EMode
-    EMode3D 1.0.5 - email
+    EMode3D 1.0.6 - email
 
     Solving S-matrices...
     Solving section: fiber_gap... completed in 0.0 sec
-    Solving section: taper... completed in 1 min 53.8 sec
+    Solving section: taper... completed in 2 min 27.2 sec
     Solving section: out_gap... completed in 0.0 sec
-     completed in 1 min 53.8 sec
+     completed in 2 min 27.2 sec
     Exited EMode
-    tilt  0.0 deg: R + T =  96.2 %
-    tilt  1.0 deg: R + T =  93.5 %
-    tilt  2.0 deg: R + T =  89.9 %
-    tilt  3.0 deg: R + T =  86.5 %
-    tilt  4.0 deg: R + T =  83.5 %
-    tilt  5.0 deg: R + T =  80.8 %
-    tilt  6.0 deg: R + T =  78.4 %
-    tilt  7.0 deg: R + T =  76.6 %
-    tilt  8.0 deg: R + T =  75.7 %
-    tilt  9.0 deg: R + T =  75.1 %
-    tilt 10.0 deg: R + T =  71.8 %
-    tilt 11.0 deg: R + T =  62.5 %
-    tilt 12.0 deg: R + T =  46.7 %
+    tilt  0.0 deg: R + T =  96.0 %
+    tilt  1.0 deg: R + T =  93.3 %
+    tilt  2.0 deg: R + T =  89.7 %
+    tilt  3.0 deg: R + T =  86.3 %
+    tilt  4.0 deg: R + T =  83.3 %
+    tilt  5.0 deg: R + T =  80.6 %
+    tilt  6.0 deg: R + T =  78.2 %
+    tilt  7.0 deg: R + T =  76.5 %
+    tilt  8.0 deg: R + T =  75.6 %
+    tilt  9.0 deg: R + T =  74.9 %
+    tilt 10.0 deg: R + T =  71.6 %
+    tilt 11.0 deg: R + T =  62.3 %
+    tilt 12.0 deg: R + T =  46.6 %
     free-space field 'fiber' at port 'fiber_gap.left' (780 nm): 100.0% captured by a 1022-mode basis
 
 Figures:
@@ -5004,6 +5453,386 @@ Figures:
     :figwidth: 500
 
 .. figure:: /_images/facet_coupling_Ex.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+
+EME: Grating Coupler
+--------------------
+
+A shallow-etch silicon grating coupler: how much of the guided light it sends up toward a fiber, how
+much is lost to the substrate, and the fiber angle that couples best.
+
+The grating is uniform across its width, so it is solved as a slab, with a window two cells wide and
+periodic in x. A PML above and below absorbs the light the grating radiates once it has left the
+window. That light is carried by the lossy modes of each cross-section, so the basis needs many of
+them (100 here). The junctions between the etched and unetched cross-sections conserve power at any
+number of modes, so what is transmitted, reflected and radiated adds up to the power launched.
+
+A monitor, a plane inside the circuit, samples the field 1 um above the silicon.
+``monitor_coupling()`` gives its overlap with a tilted Gaussian beam (a 10.4 um fiber mode here),
+and a ``sweep()`` over the beam's angle reuses the solved field, so it costs no further solve. By
+reciprocity the same number is the coupling from the fiber into the waveguide.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import sys
+        import numpy as np
+        import emodeconnection as emc
+        from matplotlib import pyplot as plt
+
+        ## Set simulation parameters
+        wavelength = 1550  # [nm] wavelength
+        dx, dy = 20, 20  # [nm] resolution
+        h_core = 220  # [nm] silicon thickness
+        etch = 70  # [nm] grating etch depth
+        period = 630  # [nm] grating period
+        fill = 0.5  # [-] unetched fraction of each period
+        num_periods = 20  # [-]
+        h_box = 2000  # [nm] buried oxide
+        h_air = 2000  # [nm] air above the silicon
+        lead = 2000  # [nm] unetched waveguide before and after the grating
+        mfd = 10.4e3  # [nm] fiber mode field diameter
+        num_modes = 100  # [-] enough for the radiated light, see below
+
+        ## The grating is uniform along x, so it is solved as a slab: a window two
+        ## cells wide and periodic in x. A PML above and below absorbs the light the
+        ## grating radiates once it has left the window, so the lossy modes in the
+        ## basis carry the radiation.
+        em = emc.EMode(emode_cmd=sys.argv[1:], simulation_name='grating_coupler')
+
+        em.settings(
+            wavelength=wavelength, x_resolution=dx, y_resolution=dy,
+            window_width=2 * dx, window_height=h_box + h_core + h_air,
+            num_modes=num_modes, boundary_condition='0P',
+            pml_NSEW_bool=[1, 1, 0, 0], num_pml_layers=10,
+            background_material='Air')
+
+        em.shape(name='BOX', material='SiO2', height=h_box)
+        em.shape(name='core', material='Si', height=h_core)
+        em.label_profile(name='unetched')
+
+        em.shape(name='core', material='Si', height=h_core - etch)
+        em.label_profile(name='etched')
+
+        ## Draw EME sections: a lead, the periods, and a lead out
+        em.straight_section(name='lead_in', profile='unetched', length=lead)
+        em.straight_section(name='gap', profile='etched', length=period * (1 - fill))
+        em.straight_section(name='tooth', profile='unetched', length=period * fill)
+        for _ in range(num_periods - 1):
+            em.copy_section(section_name='gap')
+            em.copy_section(section_name='tooth')
+        em.straight_section(name='lead_out', profile='unetched', length=lead)
+
+        em.EME()
+
+        ## A monitor 1 um above the silicon, centered on the grating
+        z_center = lead + num_periods * period / 2
+        em.monitor(name='fiber_plane', w=z_center, y=h_box + h_core + 1000)
+
+        ## Where the power goes, for 1 W in the fundamental mode
+        S = em.get('S_matrix')
+        T = np.abs(S.transmission(0, 1)[0, 0]) ** 2
+        R = np.abs(S.reflection(0)[0, 0]) ** 2
+        up = em.monitor_field('fiber_plane').power_through_plane
+        print(f'transmitted: {T * 100:.1f} %')
+        print(f'reflected: {R * 100:.1f} %')
+        print(f'radiated up through the monitor: {up * 100:.1f} %')
+        print(f'the rest, mostly into the substrate: {(1 - T - R - up) * 100:.1f} %')
+
+        ## Coupling to a fiber at each tilt: the solved field is reused, only the
+        ## overlap with the tilted Gaussian is evaluated again
+        angles = np.arange(0, 25.1, 1)  # [deg]
+        data = em.sweep(key='angle', values=angles, result='monitor_coupling',
+                        monitor='fiber_plane', beam=dict(mode_field_diameter=mfd))
+        coupling = np.asarray(data['monitor_coupling'])
+        best = angles[np.argmax(coupling)]
+        print(f'best fiber angle: {best:.0f} deg, coupling {10 * np.log10(coupling.max()):.2f} dB')
+
+        plt.figure(figsize=(6, 4))
+        plt.plot(angles, 10 * np.log10(coupling), marker='o', ms=3)
+        plt.xlabel('Fiber angle (degrees)')
+        plt.ylabel('Coupling to the fiber (dB)')
+        plt.grid(True, alpha=0.3)
+        plt.savefig('grating_coupling_vs_angle.png', dpi=300, bbox_inches='tight')
+
+        ## The field along the grating: the guided mode decays as it radiates, up
+        ## toward the fiber and down into the substrate, at the grating's angle
+        em.plot(component='Ex', plane='z-y', plot_function='real')
+
+        em.close()
+
+Console output::
+
+    EMode3D 1.0.6 - email
+
+    Solving S-matrices...
+    Solving section: lead_in... completed in 0.0 sec
+    Solving section: gap... completed in 0.0 sec
+    Solving section: tooth... completed in 0.0 sec
+    Solving section: 4... completed in 0.0 sec
+    Solving section: 5... completed in 0.0 sec
+    Solving section: 6... completed in 0.0 sec
+    Solving section: 7... completed in 0.0 sec
+    Solving section: 8... completed in 0.0 sec
+    Solving section: 9... completed in 0.0 sec
+    Solving section: 10... completed in 0.0 sec
+    Solving section: 11... completed in 0.0 sec
+    Solving section: 12... completed in 0.0 sec
+    Solving section: 13... completed in 0.0 sec
+    Solving section: 14... completed in 0.0 sec
+    Solving section: 15... completed in 0.0 sec
+    Solving section: 16... completed in 0.0 sec
+    Solving section: 17... completed in 0.0 sec
+    Solving section: 18... completed in 0.0 sec
+    Solving section: 19... completed in 0.0 sec
+    Solving section: 20... completed in 0.0 sec
+    Solving section: 21... completed in 0.0 sec
+    Solving section: 22... completed in 0.0 sec
+    Solving section: 23... completed in 0.0 sec
+    Solving section: 24... completed in 0.0 sec
+    Solving section: 25... completed in 0.0 sec
+    Solving section: 26... completed in 0.0 sec
+    Solving section: 27... completed in 0.0 sec
+    Solving section: 28... completed in 0.0 sec
+    Solving section: 29... completed in 0.0 sec
+    Solving section: 30... completed in 0.0 sec
+    Solving section: 31... completed in 0.0 sec
+    Solving section: 32... completed in 0.0 sec
+    Solving section: 33... completed in 0.0 sec
+    Solving section: 34... completed in 0.0 sec
+    Solving section: 35... completed in 0.0 sec
+    Solving section: 36... completed in 0.0 sec
+    Solving section: 37... completed in 0.0 sec
+    Solving section: 38... completed in 0.0 sec
+    Solving section: 39... completed in 0.0 sec
+    Solving section: 40... completed in 0.0 sec
+    Solving section: 41... completed in 0.0 sec
+    Solving section: lead_out... completed in 0.0 sec
+     completed in 0.0 sec
+    Sweeping the beam's angle on monitor 'fiber_plane'... completed in 44.2 sec
+    Exited EMode
+    transmitted: 5.4 %
+    reflected: 0.4 %
+    radiated up through the monitor: 36.1 %
+    the rest, mostly into the substrate: 58.1 %
+    best fiber angle: 12 deg, coupling -5.92 dB
+
+Figures:
+
+.. figure:: /_images/grating_coupling_vs_angle.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: /_images/grating_Ex.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+
+EME: TFLN Ring Resonator
+------------------------
+
+A racetrack ring resonator in x-cut thin-film lithium niobate: the through-port spectrum over a few
+free spectral ranges, with the free spectral range, extinction and loaded quality factor of each
+resonance, and the field around the ring on resonance.
+
+The ring is a straight coupler, where the bus and the ring run side by side, two half-circle
+``bend_section``\ s and a straight back side, closed on itself with ``connect_ports``. Windowed ports
+give the coupler's bus and ring arms their own ports, so the ring can be closed while the bus stays
+open. ``check_layout()`` confirms the loop closes before anything is solved.
+
+The crystal is fixed on the chip, so along each bend the guide sees it turn: the extraordinary axis
+lies across the guide at the ends of a half circle and along it in the middle. Each bend is sliced
+along its heading and every slice is solved in its own frame. The crystal turns in steps from slice
+to slice, which costs a little power in each half circle, so the bends are refined more finely than
+the default (``overlap_variation=0.003``).
+
+The spectrum comes from ``sweep(method='interpolated')``: the circuit is refined once, its
+cross-sections are solved at a few wavelengths, and the S-matrix at each of the 2000 wavelengths is
+rebuilt from them, so the sweep costs a few solves rather than 2000. The resonance wavelengths agree
+with the same refined circuit solved directly to better than 0.001 nm. The depth of a resonance is more
+sensitive, since near critical coupling it amplifies small differences in the coupling and the
+round-trip loss.
+
+The circuit is then refined and solved directly at the middle resonance, with the wavelength set on
+both labeled profiles, and ``plot(view='layout')`` draws the field of each section where the layout
+places it: the light the bus couples in builds up around the ring. Refined at that wavelength, the
+circuit's resonance moves by about 0.02 nm, a quarter of its width, so the ring is close to its peak.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import sys
+        import numpy as np
+        import emodeconnection as emc
+        from emodeconnection import MaterialSpec, Port, Bounds
+        from matplotlib import pyplot as plt
+
+        ## Set simulation parameters
+        wavelength = 1550  # [nm] center wavelength
+        dx, dy = 50, 50  # [nm] resolution
+        h_film = 600  # [nm] lithium niobate film thickness
+        etch = 400  # [nm] ridge etch depth
+        w_core = 1200  # [nm] ridge width
+        h_box = 1000  # [nm] buried oxide
+        window_height = 2600  # [nm]
+        gap = 300  # [nm] bus to ring gap
+        radius = 30e3  # [nm] bend radius
+        coupler_length = 20e3  # [nm] straight coupling length
+        num_modes = 4  # [-]
+
+        ## The ring is a racetrack: a straight coupler where the bus and the ring
+        ## run side by side, two half-circle bends and a straight back side. The
+        ## x-cut crystal stays fixed on the chip, so along each bend the guide sees
+        ## it turn, and every slice of a bend is solved in its own frame.
+        em = emc.EMode(emode_cmd=sys.argv[1:], simulation_name='tfln_ring')
+
+        x_cut = MaterialSpec(material='LN_MgO', theta=np.pi / 2)
+
+        em.settings(
+            wavelength=wavelength, x_resolution=dx, y_resolution=dy,
+            window_width=4000, window_height=window_height,
+            num_modes=num_modes, boundary_condition='00',
+            background_material='Air')
+
+        em.shape(name='BOX', material='SiO2', height=h_box)
+        em.shape(name='core', material=x_cut, height=h_film, etch_depth=etch, mask=w_core)
+        em.label_profile(name='ring')
+
+        ## The coupler's cross-section holds both guides, each centered in its own
+        ## half of the window
+        d = (gap + w_core) / 2  # [nm] each guide's distance from the center
+        em.settings(window_width=4 * d + 2000, num_modes=2 * num_modes)
+        em.shape(name='core', mask=[w_core, w_core], mask_offset=[-d, d])
+        em.label_profile(name='pair')
+
+        ## A window on each side of the coupler gives the bus and the ring their own
+        ## ports, so the ring can be closed while the bus stays open
+        window = lambda x: Bounds(window_width=2 * d, window_height=window_height, offset=(x, 0.0))
+        em.straight_section(
+            name='coupler', profile='pair', length=coupler_length,
+            ports=[Port(name='bus_in', side='left', window=window(-d)),
+                   Port(name='ring_in', side='left', window=window(d)),
+                   Port(name='bus_out', side='right', window=window(-d)),
+                   Port(name='ring_out', side='right', window=window(d))])
+
+        ## The bends are refined more finely than the default: the crystal turns in
+        ## steps from slice to slice, and the default slicing loses about 1.6 % of
+        ## the power in each half circle to that staircase
+        bend_settings = {'overlap_variation': 0.003}
+        em.bend_section(name='bend_1', profile='ring', radius=radius,
+                        sweep_angle=np.pi, settings=bend_settings)
+        em.straight_section(name='back', profile='ring', length=coupler_length)
+        em.bend_section(name='bend_2', profile='ring', radius=radius,
+                        sweep_angle=np.pi, settings=bend_settings)
+
+        em.connect_ports(pairs=[('coupler.ring_out', 'bend_1.left'),
+                                ('bend_1.right', 'back.left'),
+                                ('back.right', 'bend_2.left'),
+                                ('bend_2.right', 'coupler.ring_in')])
+
+        ## The loop has to close on itself before anything is solved
+        report = em.check_layout()
+        distance, angle = report.max_closure()
+        print(f'the loop closes to {distance:.1e} nm and {angle:.1e} rad')
+
+        em.EME()
+
+        ## The through-port spectrum over a few free spectral ranges. The circuit is
+        ## refined once, its cross-sections are solved at a few wavelengths, and the
+        ## S-matrix at every wavelength below is rebuilt from them.
+        wavelengths = np.arange(1546.0, 1556.0, 0.005)  # [nm]
+        data = em.sweep(key='wavelength', values=wavelengths, result='S_matrix',
+                        method='interpolated', num_nodes=6,
+                        wavelength_range=(wavelengths[0], wavelengths[-1]))
+        T = np.array([np.abs(S.block('coupler.bus_out', 'coupler.bus_in')[0, 0]) ** 2
+                      for S in data['S_matrix']])
+
+        ## The resonances, their spacing, depth and loaded quality factor
+        dips = np.where((T[1:-1] < T[:-2]) & (T[1:-1] < T[2:]) & (T[1:-1] < 0.9))[0] + 1
+        fsr = np.mean(np.diff(wavelengths[dips]))
+        print(f'free spectral range: {fsr:.2f} nm')
+        for k in dips:
+            half = (1 + T[k]) / 2
+            lo, hi = k, k
+            while lo > 0 and T[lo] < half:
+                lo -= 1
+            while hi < len(T) - 1 and T[hi] < half:
+                hi += 1
+            width = wavelengths[hi] - wavelengths[lo]
+            print(f'resonance at {wavelengths[k]:.3f} nm: extinction {-10 * np.log10(T[k]):.1f} dB, '
+                  f'loaded Q {wavelengths[k] / width:.0f}')
+
+        ## The field around the ring on its middle resonance, solved there directly
+        ## and drawn where the layout places each section. The sections are built on
+        ## the labeled profiles, so the wavelength is set on each of them.
+        resonance = wavelengths[dips[len(dips) // 2]]
+        for name in ('ring', 'pair'):
+            em.settings(profile=name, wavelength=resonance)
+        em.EME()
+        em.plot(component='Ex', plot_function='abs', plane='z-x', view='layout',
+                file_name='tfln_ring_field', file_type='png')
+
+        em.close()
+
+        plt.figure(figsize=(7, 3.5))
+        plt.plot(wavelengths, 10 * np.log10(T))
+        plt.xlabel('Wavelength (nm)')
+        plt.ylabel('Through port (dB)')
+        plt.grid(True, alpha=0.3)
+        plt.savefig('tfln_ring_spectrum.png', dpi=300, bbox_inches='tight')
+
+Console output::
+
+    EMode3D 1.0.6 - email
+
+    Solving S-matrices...
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: bend_1... completed in 39.4 sec
+    Solving section: back... completed in 0.0 sec
+    Solving section: bend_2... completed in 39.0 sec
+     completed in 1 min 18.4 sec
+
+    Solving S-matrices...
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: bend_1... completed in 2.1 sec
+    Solving section: back... completed in 0.0 sec
+    Solving section: bend_2... completed in 2.1 sec
+     completed in 4.2 sec
+
+    Solving S-matrices...
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: bend_1... completed in 46.2 sec
+    Solving section: back... completed in 0.0 sec
+    Solving section: bend_2... completed in 46.2 sec
+     completed in 1 min 32.4 sec
+    Exited EMode
+    the loop closes to 7.5e-12 nm and 0.0e+00 rad
+    free spectral range: 4.49 nm
+    resonance at 1546.830 nm: extinction 3.5 dB, loaded Q 17187
+    resonance at 1551.305 nm: extinction 3.7 dB, loaded Q 17237
+    resonance at 1555.810 nm: extinction 4.1 dB, loaded Q 16377
+
+Figures:
+
+.. figure:: /_images/tfln_ring_field.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: /_images/tfln_ring_spectrum.png
     :width: 500
     :align: center
     :figwidth: 500
@@ -5286,60 +6115,60 @@ Highlighted features: ``nonlinear`` with an ``SHGProcess`` on a straight and a t
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.5 sec
-    Solving modes completed in 1.3 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 1.3 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.9 sec
-    Scanning wg_section over 1970.5-1973.5 nm... completed in 2 min 32.7 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 1.2 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.9 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.5 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.5 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.1 sec
+    Scanning wg_section over 1970.5-1973.5 nm... completed in 3 min 53.9 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.4 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.0 sec
 
     Solving S-matrices...
     Solving section: wg_section... completed in 0.2 sec
      completed in 0.2 sec
     Exited EMode
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.5 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.5 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.0 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.4 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.0 sec
+    Scanning taper_section over 1970.5-1973.5 nm... completed in 11 min 0.6 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.4 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.0 sec
+    Meshing completed in 0.8 sec
     Solving modes completed in 1.3 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.9 sec
-    Meshing completed in 0.5 sec
-    Solving modes completed in 1.2 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.9 sec
-    Scanning taper_section over 1970.5-1973.5 nm... completed in 7 min 47.8 sec
-    Meshing completed in 0.5 sec
-    Solving modes completed in 1.2 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.9 sec
-    Meshing completed in 0.5 sec
-    Solving modes completed in 1.2 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.9 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 1.0 sec
 
     Solving S-matrices...
-    Solving section: taper_section... completed in 26.9 sec
-     completed in 26.9 sec
+    Solving section: taper_section... completed in 34.2 sec
+     completed in 34.2 sec
     Exited EMode
     harmonic mode list: [2.83814 2.58442 2.09994 2.06181]
-    pump   mode 0: n_eff 2.06181, 1.38 dB/cm (measured 1.5)
+    pump   mode 0: n_eff 2.06181, 1.37 dB/cm (measured 1.5)
     signal mode 3 of 4: n_eff 2.06181, 7.83 dB/cm (measured 16.8)
     straight spectrum: 5 solves for 501 wavelengths
     straight waveguide @ L = 10.0 mm:
       pump in       = 1.0000 mW
       pump out      = 0.4158 mW
-      signal out    = 177.1902 uW
+      signal out    = 177.2278 uW
       conversion    = 17.72 %
     taper spectrum: 5 solves for 501 wavelengths
     tapered waveguide @ L = 10.0 mm:
       pump in       = 1.0000 mW
-      pump out      = 0.6980 mW
-      signal out    = 29.4870 uW
+      pump out      = 0.6981 mW
+      signal out    = 29.4935 uW
       conversion    = 2.95 %
 
 Figures:
@@ -5568,10 +6397,10 @@ Highlighted features: ``poling_period`` for quasi-phase matching, x-cut lithium 
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 1.0 sec
-    Solving modes completed in 1.4 sec
-    Meshing completed in 1.0 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.7 sec
+    Solving modes completed in 1.5 sec
+    Meshing completed in 1.7 sec
     Solving modes completed in 1.6 sec
 
     Wavelength: 775.0 nm    Solver: FDM
@@ -5585,17 +6414,17 @@ Console output::
  
 
     Solving S-matrices...
-    Solving section: ppln_section... completed in 0.4 sec
-     completed in 0.4 sec
-    Scanning ppln_section over 1546-1554 nm... completed in 3 min 36.6 sec
+    Solving section: ppln_section... completed in 0.3 sec
+     completed in 0.3 sec
+    Scanning ppln_section over 1546-1554 nm... completed in 5 min 22.5 sec
     Exited EMode
     pump: mode 0, n_eff 1.92271, TE 99.7 %
     second harmonic: mode 1, n_eff 2.09800, TE 99.9 %
-    pump scattering loss: 0.0421 dB/cm
-    second harmonic scattering loss: 0.1048 dB/cm
+    pump scattering loss: 0.0420 dB/cm
+    second harmonic scattering loss: 0.1046 dB/cm
     poling period: 4.4212 um
-    conversion at 1 mW over 5 mm: 0.946681 %
-    normalized efficiency: 3786.7 %/W/cm^2
+    conversion at 1 mW over 5 mm: 0.944178 %
+    normalized efficiency: 3776.7 %/W/cm^2
     tuning curve: 5 solves for 81 wavelengths
 
 Figures:
@@ -5614,6 +6443,271 @@ Figures:
     :width: 400
     :align: center
     :figwidth: 500
+
+
+
+Nonlinear-EME: Supercontinuum
+-----------------------------
+
+Highlighted features: a femtosecond ``PulsedSource``, ``PulsedProcess`` with :math:`\chi^{(2)}`, Kerr and Raman taken from the materials, a chirped ``Poling``, two tracked TE modes, ``band_energy`` and ``band_power`` of the output, and :data:`pulse_propagate` to rerun with jittered domain walls without a mode solve.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import sys
+        import time
+
+        import emodeconnection as emc
+        import numpy as np
+        from matplotlib import pyplot as plt
+
+        ## Supercontinuum in chirped periodically poled thin-film lithium niobate.
+        ## A 50 fs, 100 pJ pulse at 1550 nm is doubled and broadened by chi(2) and
+        ## chi(3) together. The poling period is chirped from the SHG period at the
+        ## input to a shorter one at the output, so the phase-matched wavelength
+        ## sweeps toward the blue as the spectrum grows. The ridge is the one of the
+        ## PPLN example.
+
+        ## Set simulation parameters
+        center_wavelength = 1550.0  # [nm]
+        dx, dy = 20, 20  # [nm] resolution
+        w_core = 1600  # [nm] ridge top width
+        h_film, h_ridge = 600, 300  # [nm] LN film thickness and etch depth
+        h_box, h_clad = 2000, 1000  # [nm] SiO2 below and above
+        sidewall_angle = 15  # [deg] from vertical
+        length = 1e6  # [nm] 1 mm
+        duration = 50.0  # [fs] intensity FWHM
+        energy = 100.0  # [pJ]
+        repetition_rate = 100e6  # [Hz]
+        wavelength_range = (650.0, 2600.0)  # [nm] the pulse's frequency grid
+        num_points = 2048  # frequency points (the time window is 5.9 ps)
+        chirp_ratio = 0.8  # output period over input period
+        ## Two modes and three nonlinearities need many field patterns, and the Kerr
+        ## term costs the fourth power of their number. Four keep the run to minutes.
+        max_rank = 4
+
+        window_width = w_core + 2 * 2000
+        window_height = h_box + h_film + h_clad
+
+        ## theta = pi/2 puts the optic axis along simulation x: x-cut.
+        ln_x_cut = emc.MaterialSpec(material='LN_MgO', theta=np.pi / 2)
+
+        em = emc.EMode(emode_cmd=sys.argv[1:], simulation_name='ppln_sc', verbose=True)
+
+        def build_ridge(wavelength, num_modes, name):
+            """The ridge at one wavelength, solved and labeled."""
+            em.settings(
+                wavelength=wavelength,
+                x_resolution=dx,
+                y_resolution=dy,
+                window_width=window_width,
+                window_height=window_height,
+                num_modes=num_modes,
+                background_material='SiO2',
+            )
+            em.shape(name='BOX', material='SiO2', height=h_box)
+            em.shape(
+                name='LN',
+                material=ln_x_cut,
+                fill_material='SiO2',
+                height=h_film,
+                mask=w_core,
+                etch_depth=h_ridge,
+                sidewall_angle=sidewall_angle,
+            )
+            em.shape(name='clad', material='SiO2', height=h_clad)
+            em.FDM()
+            em.label_profile(name=name)
+
+        def te_modes(profile, count):
+            """The first `count` modes that are mostly TE, in eigenvalue order."""
+            n_eff = np.real(np.asarray(em.get('effective_index', profile=profile)))
+            te = np.asarray(em.get('TE_fraction', profile=profile))
+            picked = [i for i in range(len(n_eff)) if te[i] > 0.5][:count]
+            return picked, n_eff[picked]
+
+        ## The two lowest TE modes at the pump are tracked through the whole band.
+        build_ridge(center_wavelength / 2, 6, 'sh')
+        (i_sh,), (n_sh,) = te_modes('sh', 1)
+        build_ridge(center_wavelength, 6, 'ridge')
+        tracked, n_pump = te_modes('ridge', 2)
+        print(f'tracked TE modes {tracked}, n_eff {n_pump[0]:.5f} and {n_pump[1]:.5f}')
+
+        ## The SHG period from the fundamental TE modes, chirped toward the output.
+        beta_pump = 2 * np.pi * n_pump[0] / (center_wavelength * 1e-9)
+        beta_sh = 2 * np.pi * n_sh / (center_wavelength / 2 * 1e-9)
+        shg_period = 2 * np.pi / (beta_sh - 2 * beta_pump) * 1e9  # [nm]
+        poling = emc.Poling(z_knots=[0, length], periods=[shg_period, chirp_ratio * shg_period])
+        print(f'poling period: {shg_period * 1e-3:.4f} um to {chirp_ratio * shg_period * 1e-3:.4f} um')
+
+        em.straight_section(
+            name='ppln',
+            profile='ridge',
+            length=length,
+            nonlinear=emc.PulsedProcess(modes=tracked, poling=poling, max_rank=max_rank),
+        )
+        em.settings(
+            excitation=emc.PulsedSource(
+                center_wavelength=center_wavelength,
+                duration=duration,
+                energy=energy,
+                mode=tracked[0],
+                repetition_rate=repetition_rate,
+                wavelength_range=wavelength_range,
+                num_points=num_points,
+            )
+        )
+        start = time.perf_counter()
+        em.EME()
+        print(f'EME() with the pulse: {time.perf_counter() - start:.0f} s')
+        r = em.get('pulse_response')
+        print(f'field patterns: {r.rank_per_slice[0]}, propagation steps: {r.steps}')
+
+        band = (700.0, 800.0)  # [nm]
+        print(f'output energy: {r.energy[-1].sum():.2f} pJ of {energy:.0f} pJ')
+        for mode in tracked:
+            print(f'  in TE mode {mode}: {r.energy[-1][r.modes.index(mode)]:.3f} pJ')
+        print(
+            f'{band[0]:.0f}-{band[1]:.0f} nm: {r.band_energy(*band):.3f} pJ, '
+            f'{r.band_power(*band) * 1e3:.2f} mW average at {repetition_rate * 1e-6:.0f} MHz'
+        )
+        print(f'energy at the time window edges: {r.energy_outside_window():.1e}')
+
+        ## The same chip with fabrication jitter on every domain wall: no mode solve.
+        start = time.perf_counter()
+        jittered = emc.Poling(
+            z_knots=[0, length],
+            periods=[shg_period, chirp_ratio * shg_period],
+            jitter_rms=100.0,
+            seed=1,
+        )
+        em.pulse_propagate(poling=jittered)
+        print(f'pulse_propagate() with jittered walls: {time.perf_counter() - start:.0f} s')
+        rj = em.get('pulse_response')
+        print(f'{band[0]:.0f}-{band[1]:.0f} nm with 100 nm rms wall jitter: {rj.band_energy(*band):.3f} pJ')
+
+        ## Spectral map: the energy spectral density along the chip, both modes summed.
+        lam = r.wavelength
+        order = np.argsort(lam)
+        psd = np.array([r.psd(z=z) for z in r.z])[:, order]
+        fig, ax = plt.subplots(figsize=(6.5, 4.5))
+        mesh = ax.pcolormesh(
+            lam[order], np.asarray(r.z) * 1e-6, psd - psd.max(), vmin=-60, vmax=0, shading='auto'
+        )
+        fig.colorbar(mesh, ax=ax, label='Spectral density (dB)')
+        ax.set_xlabel('Wavelength (nm)')
+        ax.set_ylabel('z (mm)')
+        ax.set_title('Supercontinuum along the chirped PPLN ridge')
+        fig.tight_layout()
+        fig.savefig('ppln_supercontinuum_map.png', dpi=300, bbox_inches='tight')
+
+        ## Output spectrum, with the 700-800 nm band shaded.
+        fig, ax = plt.subplots(figsize=(6.5, 4))
+        ax.plot(lam[order], r.psd()[order] - psd.max(), label='poling as designed')
+        ax.plot(lam[order], rj.psd()[order] - psd.max(), lw=0.8, label='100 nm rms wall jitter')
+        ax.axvspan(*band, color='0.85', zorder=0)
+        ax.set_xlim(*wavelength_range)
+        ax.set_ylim(-80, 5)
+        ax.set_xlabel('Wavelength (nm)')
+        ax.set_ylabel('Spectral density (dB)')
+        ax.set_title(f'Output after {length * 1e-6:.0f} mm')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        fig.tight_layout()
+        fig.savefig('ppln_supercontinuum_output.png', dpi=300, bbox_inches='tight')
+
+        ## Close EMode
+        em.close()
+
+Console output::
+
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.7 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.2 sec
+
+    Solving S-matrices...
+    Solving section: ppln... completed in 0.0 sec
+     completed in 0.0 sec
+    Preparing the pulse chain...Meshing completed in 1.2 sec
+    Solving modes completed in 1.8 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.4 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.7 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.5 sec
+    Meshing completed in 1.3 sec
+    Solving modes completed in 2.5 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.3 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.5 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.3 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.3 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.4 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.3 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.6 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.4 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.6 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.8 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.6 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.7 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.8 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 2.3 sec
+     completed in 1 min 45.9 sec
+    Propagating the pulse... completed in 3 min 13.5 sec
+    Exited EMode
+    tracked TE modes [0, 2], n_eff 1.92271 and 1.82064
+    poling period: 4.4212 um to 3.5369 um
+    EME() with the pulse: 300 s
+    field patterns: 4, propagation steps: 2212
+    output energy: 99.90 pJ of 100 pJ
+      in TE mode 0: 99.900 pJ
+      in TE mode 2: 0.000 pJ
+    700-800 nm: 40.791 pJ, 4.08 mW average at 100 MHz
+    energy at the time window edges: 5.1e-09
+    pulse_propagate() with jittered walls: 194 s
+    700-800 nm with 100 nm rms wall jitter: 38.408 pJ
+
+Figures:
+
+.. figure:: /_images/ppln_supercontinuum_map.png
+    :width: 500
+    :align: center
+    :figwidth: 600
+
+.. figure:: /_images/ppln_supercontinuum_output.png
+    :width: 500
+    :align: center
+    :figwidth: 600
 
 
 
@@ -5826,13 +6920,13 @@ Highlighted features: ``DFGProcess`` with ``poling_period``, two simultaneous ``
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 1.0 sec
-    Solving modes completed in 3.6 sec
-    Meshing completed in 1.0 sec
-    Solving modes completed in 2.9 sec
-    Meshing completed in 1.0 sec
-    Solving modes completed in 3.3 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.7 sec
+    Solving modes completed in 4.6 sec
+    Meshing completed in 1.7 sec
+    Solving modes completed in 3.9 sec
+    Meshing completed in 1.7 sec
+    Solving modes completed in 4.3 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.4 sec
@@ -5892,7 +6986,7 @@ Console output::
     poling period: 4.4218 um
     signal gain at 4 mm: 1.232 dB
     idler at 4 mm: 0.3107 uW
-    pump depletion: 0.948 %
+    pump depletion: 0.946 %
     Manley-Rowe (signal gained / idler created): 0.9875
 
 Figures:
@@ -5973,9 +7067,9 @@ The SOI waveguide of the "Basic: SOI" example, solved with the finite-element mo
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.4 sec
-    Solving modes completed in 1.4 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 1.7 sec
     Refinement level  Unknowns  n_eff (per mode)
                    0     11613  3.013305  2.966522
                    1     12481  3.013291  2.966504
@@ -6129,9 +7223,9 @@ Highlighted features: ``heat_only`` shapes, ``fem_resolution``, ``current``, ``h
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.4 sec
-    Solving modes completed in 2.3 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 2.5 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -6140,8 +7234,8 @@ Console output::
         TE-0  2.446865  98.3 %          0.000
  
     Solving heat completed in 0.2 sec
-    Meshing completed in 0.5 sec
-    Solving modes completed in 2.4 sec
+    Meshing completed in 0.8 sec
+    Solving modes completed in 2.6 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -6320,9 +7414,9 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 1.5 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.1 sec
+    Solving modes completed in 1.6 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -6330,9 +7424,9 @@ Console output::
     --------  --------  ------  -------------
         TE-0  1.844836  99.6 %          0.000
  
-    Solving electrostatic completed in 0.1 sec
-    Meshing completed in 0.6 sec
-    Solving modes completed in 4.8 sec
+    Solving electrostatic completed in 0.2 sec
+    Meshing completed in 1.1 sec
+    Solving modes completed in 5.0 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  

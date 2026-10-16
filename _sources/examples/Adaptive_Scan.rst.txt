@@ -84,16 +84,16 @@ Highlighted features: ``sweep(adaptive=True)`` for a fine wavelength spectrum fr
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Adaptive wavelength scan over 1500-1600 nm... completed in 2.9 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 6.6 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 14.3 sec
-    Meshing completed in 0.2 sec
-    Solving modes completed in 0.3 sec
+    EMode3D 1.0.6 - email
+    Adaptive wavelength scan over 1500-1600 nm... completed in 4.2 sec
+    Adaptive wavelength scan over 1500-1600 nm... completed in 10.9 sec
+    Adaptive wavelength scan over 1500-1600 nm... completed in 24.2 sec
+    Meshing completed in 0.4 sec
+    Solving modes completed in 0.4 sec
     Exited EMode
     tolerance 1e-02:   5 solves for 201 points  (40x fewer)
-    tolerance 1e-03:  12 solves for 201 points  (17x fewer)
-    tolerance 5e-04:  28 solves for 201 points  (7x fewer)
+    tolerance 1e-03:  14 solves for 201 points  (14x fewer)
+    tolerance 5e-04:  32 solves for 201 points  (6x fewer)
 
 
 Figures:

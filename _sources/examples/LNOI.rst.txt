@@ -79,9 +79,9 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 3.7 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.0 sec
+    Solving modes completed in 4.1 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -89,8 +89,8 @@ Console output::
     --------  --------  ------  -------------  ------------------
         TE-0  1.767903  98.8 %          0.000              82.2 %
  
-    Meshing completed in 0.6 sec
-    Solving modes completed in 3.5 sec
+    Meshing completed in 1.0 sec
+    Solving modes completed in 3.9 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -99,7 +99,7 @@ Console output::
         TE-0  1.789642  99.1 %          0.000              83.4 %
  
     Exited EMode
-    Power overlap: 99.836 %
+    Power overlap: 99.837 %
 
     Refractive index of LN: [2.13057033 2.20881269 2.20881269]
     O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).

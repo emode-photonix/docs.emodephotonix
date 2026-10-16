@@ -196,10 +196,10 @@ Highlighted features: ``poling_period`` for quasi-phase matching, x-cut lithium 
 
 Console output::
 
-    EMode3D 1.0.5 - email
-    Meshing completed in 1.0 sec
-    Solving modes completed in 1.4 sec
-    Meshing completed in 1.0 sec
+    EMode3D 1.0.6 - email
+    Meshing completed in 1.7 sec
+    Solving modes completed in 1.5 sec
+    Meshing completed in 1.7 sec
     Solving modes completed in 1.6 sec
 
     Wavelength: 775.0 nm    Solver: FDM
@@ -213,17 +213,17 @@ Console output::
  
 
     Solving S-matrices...
-    Solving section: ppln_section... completed in 0.4 sec
-     completed in 0.4 sec
-    Scanning ppln_section over 1546-1554 nm... completed in 3 min 36.6 sec
+    Solving section: ppln_section... completed in 0.3 sec
+     completed in 0.3 sec
+    Scanning ppln_section over 1546-1554 nm... completed in 5 min 22.5 sec
     Exited EMode
     pump: mode 0, n_eff 1.92271, TE 99.7 %
     second harmonic: mode 1, n_eff 2.09800, TE 99.9 %
-    pump scattering loss: 0.0421 dB/cm
-    second harmonic scattering loss: 0.1048 dB/cm
+    pump scattering loss: 0.0420 dB/cm
+    second harmonic scattering loss: 0.1046 dB/cm
     poling period: 4.4212 um
-    conversion at 1 mW over 5 mm: 0.946681 %
-    normalized efficiency: 3786.7 %/W/cm^2
+    conversion at 1 mW over 5 mm: 0.944178 %
+    normalized efficiency: 3776.7 %/W/cm^2
     tuning curve: 5 solves for 81 wavelengths
 
 

@@ -54,7 +54,7 @@
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Angled: LNOI" href="LNOI.html" />
+    <link rel="next" title="Bend Mode Solvers" href="Bend_Solvers.html" />
     <link rel="prev" title="Basic: SOI" href="SOI.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -307,6 +307,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="SOI.html">Basic: SOI</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Bending: SiN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Bend_Solvers.html">Bend Mode Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LNOI.html">Angled: LNOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Laser.html">Scattering loss: Laser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Open.html">Open a Simulation</a></li>
@@ -319,8 +320,11 @@
 <li class="toctree-l1"><a class="reference internal" href="EME_Sweep.html">EME: Sweep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_GDS.html">EME: GDS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_Angled_Facet.html">EME: Angled Facet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Grating_Coupler.html">EME: Grating Coupler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_TFLN_Ring.html">EME: TFLN Ring Resonator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Supercontinuum.html">Nonlinear-EME: Supercontinuum</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FEM_SOI.html">FEM: SOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
@@ -360,7 +364,7 @@
                   
   <section id="bending-sin">
 <h1>Bending: SiN</h1>
-<p>Highlighted features: bend radius, pml layers, confinement factor, saving plots.</p>
+<p>Highlighted features: bend radius, PMLs, confinement factor, saving plots.</p>
 <p><em>This code example is licensed under the</em> <a class="reference external" href="../_static/LICENSE.html">BSD 3-Clause License</a>.</p>
 <div class="tabs docutils container" data-tabgroup="">
 <ul class="tabbar">
@@ -372,9 +376,9 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">wavelength</span> <span class="o">=</span> <span class="mi">980</span> <span class="c1"># [nm] wavelength</span>
 <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="c1"># [nm] resolution</span>
 <span class="n">w_core</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1"># [nm] waveguide core width</span>
-<span class="n">w_trench</span> <span class="o">=</span> <span class="mi">2500</span> <span class="c1"># [nm] waveguide side trench width</span>
+<span class="n">w_trench</span> <span class="o">=</span> <span class="mi">1500</span> <span class="c1"># [nm] waveguide side trench width</span>
 <span class="n">h_core</span> <span class="o">=</span> <span class="mi">200</span> <span class="c1"># [nm] waveguide core height</span>
-<span class="n">h_clad</span> <span class="o">=</span> <span class="mi">2500</span> <span class="c1"># [nm] waveguide top and bottom clad</span>
+<span class="n">h_clad</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1"># [nm] waveguide top and bottom clad, above the PML</span>
 <span class="n">window_width</span> <span class="o">=</span> <span class="n">w_core</span> <span class="o">+</span> <span class="n">w_trench</span><span class="o">*</span><span class="mi">2</span> <span class="c1"># [nm]</span>
 <span class="n">window_height</span> <span class="o">=</span> <span class="n">h_core</span> <span class="o">+</span> <span class="n">h_clad</span><span class="o">*</span><span class="mi">2</span> <span class="c1"># [nm]</span>
 <span class="n">num_modes</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># [-] number of modes</span>
@@ -391,14 +395,17 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 <span class="n">em</span><span class="o">.</span><span class="n">add_material</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;custom_SiO2&#39;</span><span class="p">,</span>
     <span class="n">refractive_index_equation</span> <span class="o">=</span> <span class="n">equation</span><span class="p">,</span> <span class="n">wavelength_unit</span> <span class="o">=</span> <span class="s1">&#39;um&#39;</span><span class="p">)</span>
 
-<span class="c1">## Settings</span>
+<span class="c1">## Settings: the bend radiates outward, so a PML on the outer (east) wall</span>
+<span class="c1">## absorbs it, and PMLs on the top and bottom walls absorb what spreads up and</span>
+<span class="c1">## down. With max_effective_index just above the guided mode, the mode solved</span>
+<span class="c1">## is the guided mode rather than a PML mode.</span>
 <span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
     <span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">x_resolution</span> <span class="o">=</span> <span class="n">dx</span><span class="p">,</span> <span class="n">y_resolution</span> <span class="o">=</span> <span class="n">dy</span><span class="p">,</span>
     <span class="n">window_width</span> <span class="o">=</span> <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="n">window_height</span><span class="p">,</span>
     <span class="n">num_modes</span> <span class="o">=</span> <span class="n">num_modes</span><span class="p">,</span> <span class="n">background_material</span> <span class="o">=</span> <span class="s1">&#39;custom_SiO2&#39;</span><span class="p">,</span>
     <span class="n">boundary_condition</span> <span class="o">=</span> <span class="n">boundary</span><span class="p">,</span> <span class="n">bend_radius</span> <span class="o">=</span> <span class="n">bend_radius</span> <span class="o">+</span> <span class="n">x_off</span><span class="p">,</span>
-    <span class="n">pml_NSEW_bool</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_pml_layers</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">max_effective_index</span> <span class="o">=</span> <span class="mf">1.7</span><span class="p">)</span>
+    <span class="n">pml_NSEW_bool</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">pml_thickness</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">pml_kappa_max</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">max_effective_index</span> <span class="o">=</span> <span class="mf">1.67</span><span class="p">)</span>
 
 <span class="c1">## Draw shapes</span>
 <span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;SiN&#39;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">w_core</span><span class="p">,</span>
@@ -424,11 +431,11 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.5</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">18.3</span> <span class="n">sec</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.6</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">18.1</span> <span class="n">sec</span>
 
-<span class="n">Wavelength</span><span class="p">:</span> <span class="mf">980.0</span> <span class="n">nm</span>    <span class="n">Solver</span><span class="p">:</span> <span class="n">FDM</span>
+<span class="n">Wavelength</span><span class="p">:</span> <span class="mf">980.0</span> <span class="n">nm</span>    <span class="n">Solver</span><span class="p">:</span> <span class="n">FDM</span><span class="p">,</span> <span class="n">cylindrical</span> <span class="n">bend</span>
 
   <span class="n">Mode</span> <span class="c1">#     n_eff    TE %    Loss (dB/m)    PML    background confinement    core confinement</span>
 <span class="o">--------</span>  <span class="o">--------</span>  <span class="o">------</span>  <span class="o">-------------</span>  <span class="o">-----</span>  <span class="o">------------------------</span>  <span class="o">------------------</span>
