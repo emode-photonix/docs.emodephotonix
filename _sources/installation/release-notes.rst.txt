@@ -106,43 +106,6 @@ Release Notes
   * The pulsed Kerr, Raman and two-photon absorption terms need 4.5 to 6.6 times less memory, and the full Raman response is 3.2 times faster. The 'Nonlinear-EME: Supercontinuum' example's :data:`EME` takes 115 s instead of 300 s.
   * An x-cut bend's refinement with 8 modes takes under a minute, where it did not finish in 10 minutes.
 
-* Known issues
-
-  * A bare 'wavelength' key moves a labeled EME chain in sweep() but not in evaluate(), a multi-key sweep or optimize()
-  * A LicenseError with no license type names EMode2D
-  * A shape filling a y-periodic window is averaged with the background at the window's edge
-  * A user material with a scalar eps fails to mesh
-  * A zero-length taper section switches off scattering loss for the whole EME chain
-  * Al2O3 is stored isotropic though sapphire is uniaxial
-  * An angled facet cannot sit on a profile with a PML
-  * Bend and transformed sections: subpixel average stays arithmetic for the normal component
-  * Better condition the confined-waveguide to PWD overlap inverse
-  * EM_open on a missing file: UnboundLocalError, and an empty file left behind
-  * EME sweep warm start reuses a previous chain whose settings or profiles have changed
-  * EME taper slices apply their left cross-section's scattering loss, a first-order slicing error
-  * EME_settings() does not accept schedule_* keys
-  * emode-install: verify the installer's SHA-256 before installing
-  * Exact backward partners for a lossy turned crystal: a second shift-invert solve at -sigma
-  * FDM at 50 nm underestimates an x-cut bend's mode conversion fourfold
-  * FDM subpixel average stays arithmetic in cells that mix a full-tensor anisotropic material
-  * FEM solve runs out of memory when a window edge lies on a core edge
-  * Interpolated sweep's residual warns on the MMI from a near-cutoff lossy mode while its outputs agree to 2e-4
-  * KTP and LBO data: missing tensors and vendor-only values
-  * mode_filter='backward' cannot return backward modes
-  * PARDISO rejects an FEM solve with PMLs as a 'completely uniform refractive index profile'
-  * Per-axis dn_dT and eps_r_dc data for the uniaxial crystals
-  * Pulsed nonlinear operator below R^4: empirical cubature for Kerr, TPA and Raman
-  * Pulsed solver: free-carrier absorption and dispersion
-  * PWD sections sample their window at a fixed 10 nm, whatever the profile's resolution
-  * Replace nominal bandgaps (SiO2, SiN) and the estimated AlGaAs TPA
-  * Scattering loss does not converge with the sampling grid
-  * Silicon has no n2, and its TPA coefficient is used unchanged near the band edge
-  * Square junction creates power when the bases hold PML (lossy) modes
-  * Taper refinement never converges when the basis holds window (box) modes
-  * The default PML is marginal for a guided mode's evanescent tail
-  * Turned crystal with lossy modes: a junction is passive on its lossless channels only to 3e-6
-  * Update AlGaAs model
-
 **1.0.6**
 
 * Changed
