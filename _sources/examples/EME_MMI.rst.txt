@@ -1,0 +1,500 @@
+EME: MMI
+--------
+
+Two multimode interference (MMI) couplers in silicon at 1550 nm: a 1x2 splitter whose length is
+swept around the self-imaging estimate, and a 2x2 coupler whose width and length are optimized
+together for a 50/50 split with ``optimize()``.
+
+Both couplers are silicon strips 220 nm thick in silica, built from three straight sections: the
+access waveguides, the MMI body and the output waveguides. A window around each access waveguide
+gives it its own port, so the S-matrix names each arm, and ``boundary_condition='TE-v'`` folds the
+window to halve the solve.
+
+The self-imaging lengths that follow from the beat length :math:`L_\pi` are only estimates for a
+high-contrast guide, and the best images form a few percent shorter. A length sweep reuses the
+solved modes and solves nothing, so the example sweeps the length first and lets the optimizer
+refine from the best image. Light reflected between the two ends of the MMI body makes the split
+ripple with the length, and each trough of that ripple is a local optimum, so the optimizer is kept
+within one ripple period of its starting point.
+
+The optimized 2x2 splits close to 50/50, with the through port leading the cross port by close to
+the ideal 90 degrees, and it keeps a balanced split over several tens of nanometers around 1550 nm.
+Every console report also says where the rest of the power goes: the higher-order modes of the
+output waveguides, the reflection back into the input, and the light scattered into the cladding.
+The access waveguides meet the MMI straight, with no tapers, which a fabricated device adds to lower
+the loss.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import sys
+        import numpy as np
+        import emodeconnection as emc
+        from emodeconnection import Port, Bounds, Parameter, Objective
+        from matplotlib import pyplot as plt
+
+        ## Set simulation parameters
+        wavelength = 1550  # [nm] wavelength
+        dx, dy = 25, 25  # [nm] resolution
+        h_core = 220  # [nm] silicon thickness
+        w_access = 1000  # [nm] access waveguide width at the MMI
+        pitch = 1500  # [nm] center-to-center spacing of the access waveguides
+        access_length = 2000  # [nm] length of each access section
+        w_1x2 = 3000  # [nm] 1x2 MMI width, its outputs at +/- w_1x2 / 4
+        w_2x2 = 4500  # [nm] 2x2 MMI width, its ports at +/- w_2x2 / 6
+        window_height = 2000  # [nm]
+        num_modes = 30  # [-]
+
+        ## The cross-sections are silicon strips in silica, symmetric top to bottom,
+        ## so boundary_condition='TE-v' folds the window at its middle and keeps the
+        ## TE-like modes, the ones an MMI for TE light is designed with. A window
+        ## around each access waveguide gives it its own port.
+        d = pitch / 2  # [nm] each access waveguide's distance from the center
+        window = lambda x: Bounds(window_width=pitch, window_height=window_height, offset=(x, 0.0))
+        arms = lambda side: [Port(name='a', side=side, window=window(-d)),
+                             Port(name='b', side=side, window=window(d))]
+
+
+        def mmi(name, width, num_inputs):
+            """Declare an MMI with one or two inputs and two outputs, and return its beat length."""
+            em = emc.EMode(emode_cmd=sys.argv[1:], simulation_name=name)
+            em.settings(
+                wavelength=wavelength, x_resolution=dx, y_resolution=dy,
+                window_width=width + 2000, window_height=window_height,
+                num_modes=num_modes, boundary_condition='TE-v',
+                background_material='SiO2')
+            em.shape(name='core', material='Si', height=h_core, etch_depth=h_core,
+                     position=[0, window_height / 2], mask=w_access)
+            em.label_profile(name='single')
+            em.shape(name='core', mask=[w_access, w_access], mask_offset=[-d, d])
+            em.label_profile(name='pair')
+
+            ## The MMI body is the default profile, so a 'shape, core, mask' key
+            ## changes its width. Its two lowest modes give the beat length L_pi.
+            em.shape(name='core', mask=width, mask_offset=0)
+            em.FDM()
+            n_eff = np.real(np.asarray(em.get('effective_index')))
+            beat_length = wavelength / (2 * (n_eff[0] - n_eff[1]))
+
+            if num_inputs == 1:
+                em.straight_section(name='in', profile='single', length=access_length)
+            else:
+                em.straight_section(name='in', profile='pair', length=access_length, ports=arms('left'))
+            em.straight_section(name='mmi', profile='_default', length=beat_length)
+            em.straight_section(name='out', profile='pair', length=access_length, ports=arms('right'))
+            return em, beat_length
+
+
+        def report(label, S, into):
+            """Print where the power launched into port `into` goes."""
+            a = np.abs(S.block('out.a', into)[0, 0]) ** 2
+            b = np.abs(S.block('out.b', into)[0, 0]) ** 2
+            reflected = np.sum(np.abs(S.block(into, into)[:, 0]) ** 2)
+            higher = (np.sum(np.abs(S.block('out.a', into)[1:, 0]) ** 2)
+                      + np.sum(np.abs(S.block('out.b', into)[1:, 0]) ** 2))
+            print(f'{label} power in output a: {a:.4f}')
+            print(f'{label} power in output b: {b:.4f}')
+            print(f'{label} excess loss: {-10 * np.log10(a + b):.3f} dB')
+            print(f'{label} imbalance, a over b: {round(10 * np.log10(a / b), 3) + 0.0:.3f} dB')
+            print(f'{label} reflection: {10 * np.log10(reflected):.1f} dB')
+            print(f'{label} power in higher-order output modes: {higher:.4f}')
+            print(f'{label} power scattered out of the guides: {1 - a - b - reflected - higher:.4f}')
+
+
+        ## ---------------------------------------------------------------- the 1x2
+        ## One input on the axis forms two images at 3 L_pi / 8. That estimate uses
+        ## only the two lowest modes, so the length is swept around it. A length
+        ## sweep reuses the solved modes and solves nothing.
+        em, beat_length = mmi('mmi_1x2', w_1x2, num_inputs=1)
+        print(f'1x2 beat length L_pi: {beat_length:.0f} nm')
+        print(f'1x2 self-imaging length 3 L_pi / 8: {3 * beat_length / 8:.0f} nm')
+
+        lengths = 3 * beat_length / 8 * np.linspace(0.85, 1.1, 26)  # [nm]
+        data = em.sweep(key='section, mmi, length', values=lengths, result='S_matrix')
+        T = np.array([np.abs(S.block('out.a', 'in.left')[0, 0]) ** 2
+                      + np.abs(S.block('out.b', 'in.left')[0, 0]) ** 2 for S in data['S_matrix']])
+        best_length = lengths[np.argmax(T)]
+        print(f'1x2 best length: {best_length:.0f} nm')
+
+        em.straight_section(name='mmi', length=best_length)
+        em.EME()
+        report('1x2', em.get('S_matrix'), 'in.left')
+        em.plot(component='Ex', plot_function='abs', plane='z-x', view='layout',
+                file_name='mmi_1x2_field', file_type='png')
+        em.close()
+
+        plt.figure(figsize=(6, 3.5))
+        plt.plot(lengths / 1e3, T)
+        plt.axvline(3 * beat_length / 8e3, color='gray', ls='--', label='3 L$_\\pi$ / 8')
+        plt.xlabel('MMI length (um)')
+        plt.ylabel('Power in both outputs')
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        plt.savefig('mmi_1x2_length.png', dpi=300, bbox_inches='tight')
+
+        ## ---------------------------------------------------------------- the 2x2
+        ## Inputs at a third of the way from the axis to each edge excite only the
+        ## modes that image in pairs, so a 50/50 split forms at L_pi / 2.
+        em, beat_length = mmi('mmi_2x2', w_2x2, num_inputs=2)
+        x0 = beat_length / 2
+        print(f'2x2 beat length L_pi: {beat_length:.0f} nm')
+        print(f'2x2 self-imaging length L_pi / 2: {x0:.0f} nm')
+
+        ## How far both outputs are from 0.5, the quantity the optimizer minimizes
+        through = Objective('S_power', out='out.a', into='in.a', goal='target', target=0.5)
+        cross = Objective('S_power', out='out.b', into='in.a', goal='target', target=0.5)
+        distance = lambda S: ((np.abs(S.block('out.a', 'in.a')[0, 0]) ** 2 - 0.5) ** 2
+                              + (np.abs(S.block('out.b', 'in.a')[0, 0]) ** 2 - 0.5) ** 2)
+
+        ## Light reflected at the two ends of the MMI body ripples the split with
+        ## the length, with a period of about half a wavelength in the guide
+        ## (270 nm), and every trough of that ripple is a local minimum. A length
+        ## sweep at the starting width, which solves nothing, finds the best image.
+        ## The optimizer then adjusts the width and the length together within
+        ## 100 nm of it, less than half the ripple's period, so it stays in that
+        ## trough.
+        lengths = x0 * np.arange(0.9, 1.05, 0.002)  # [nm]
+        data = em.sweep(key='section, mmi, length', values=lengths, result='S_matrix')
+        start = lengths[np.argmin([distance(S) for S in data['S_matrix']])]
+        print(f'2x2 best length at {w_2x2} nm wide: {start:.0f} nm')
+
+        res = em.optimize(
+            parameters=[Parameter('shape, core, mask', bounds=(w_2x2 - 300, w_2x2 + 300), x0=w_2x2),
+                        Parameter('section, mmi, length', bounds=(start - 100, start + 100), x0=start)],
+            objective=[through, cross],
+            max_evaluations=80, tolerance=1e-5)
+        width, length = res.x
+        print(f'2x2 optimizer: {res.status} after {res.evaluations} evaluations in {res.seconds:.0f} s')
+        print(f'2x2 optimized width: {width:.1f} nm')
+        print(f'2x2 optimized length: {length:.0f} nm')
+
+        ## The simulation is left solved at the best point
+        S = em.get('S_matrix')
+        report('2x2', S, 'in.a')
+        phase_through = np.angle(S.block('out.a', 'in.a')[0, 0], deg=True)
+        phase_cross = np.angle(S.block('out.b', 'in.a')[0, 0], deg=True)
+        print(f'2x2 through-port phase: {phase_through:.1f} deg')
+        print(f'2x2 cross-port phase: {phase_cross:.1f} deg')
+        print(f'2x2 phase difference, through minus cross: '
+              f'{(phase_through - phase_cross + 180) % 360 - 180:.1f} deg')
+        em.plot(component='Ex', plot_function='abs', plane='z-x', view='layout',
+                file_name='mmi_2x2_field', file_type='png')
+
+        ## The bandwidth of the optimized 2x2 over 200 nm. The sections are built on
+        ## the labeled profile 'pair' and on the default profile, so the wavelength
+        ## is set on both before each solve.
+        wavelengths = np.linspace(1450, 1650, 11)  # [nm]
+        P_through, P_cross = [], []
+        for wl in wavelengths:
+            em.settings(wavelength=wl)
+            em.settings(profile='pair', wavelength=wl)
+            em.EME()
+            S = em.get('S_matrix')
+            P_through.append(np.abs(S.block('out.a', 'in.a')[0, 0]) ** 2)
+            P_cross.append(np.abs(S.block('out.b', 'in.a')[0, 0]) ** 2)
+        P_through, P_cross = np.array(P_through), np.array(P_cross)
+
+        ## The band where the imbalance stays within 0.5 dB and the excess loss
+        ## below 1 dB, read off the solved wavelengths by linear interpolation
+        fine = np.linspace(wavelengths[0], wavelengths[-1], 1001)
+        imbalance = np.interp(fine, wavelengths, 10 * np.log10(P_through / P_cross))
+        excess_loss = np.interp(fine, wavelengths, -10 * np.log10(P_through + P_cross))
+        band = fine[(np.abs(imbalance) <= 0.5) & (excess_loss <= 1)]
+        print(f'2x2 band, imbalance within 0.5 dB and excess loss below 1 dB, from: {band.min():.0f} nm')
+        print(f'2x2 band, imbalance within 0.5 dB and excess loss below 1 dB, to: {band.max():.0f} nm')
+        em.close()
+
+        plt.figure(figsize=(6, 3.5))
+        plt.plot(wavelengths, 10 * np.log10(P_through), marker='o', ms=3, label='through')
+        plt.plot(wavelengths, 10 * np.log10(P_cross), marker='o', ms=3, label='cross')
+        plt.plot(wavelengths, 10 * np.log10(P_through + P_cross), color='gray', ls='--', label='total')
+        plt.xlabel('Wavelength (nm)')
+        plt.ylabel('Transmission (dB)')
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        plt.savefig('mmi_2x2_spectrum.png', dpi=300, bbox_inches='tight')
+
+
+Console output::
+
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.1 sec
+    1x2 beat length L_pi: 22224 nm
+    1x2 self-imaging length 3 L_pi / 8: 8334 nm
+
+    Sweeping section parameter 'length'...
+    Solving EME: length = 9167.570794645791... completed in 3.9 sec
+    Solving EME: length = 9084.229241967192... completed in 0.5 sec
+    Solving EME: length = 9000.887689288595... completed in 0.5 sec
+    Solving EME: length = 8917.546136609997... completed in 0.5 sec
+    Solving EME: length = 8834.204583931398... completed in 0.5 sec
+    Solving EME: length = 8750.8630312528... completed in 0.5 sec
+    Solving EME: length = 8667.521478574201... completed in 0.5 sec
+    Solving EME: length = 8584.179925895603... completed in 0.5 sec
+    Solving EME: length = 8500.838373217006... completed in 0.5 sec
+    Solving EME: length = 8417.496820538407... completed in 0.5 sec
+    Solving EME: length = 8334.15526785981... completed in 0.5 sec
+    Solving EME: length = 8250.813715181212... completed in 0.5 sec
+    Solving EME: length = 8167.472162502613... completed in 0.5 sec
+    Solving EME: length = 8084.130609824015... completed in 0.5 sec
+    Solving EME: length = 8000.789057145416... completed in 0.5 sec
+    Solving EME: length = 7917.447504466818... completed in 0.5 sec
+    Solving EME: length = 7834.105951788221... completed in 0.5 sec
+    Solving EME: length = 7750.764399109623... completed in 0.5 sec
+    Solving EME: length = 7667.4228464310245... completed in 0.5 sec
+    Solving EME: length = 7584.081293752427... completed in 0.5 sec
+    Solving EME: length = 7500.739741073829... completed in 0.6 sec
+    Solving EME: length = 7417.39818839523... completed in 0.5 sec
+    Solving EME: length = 7334.056635716632... completed in 0.5 sec
+    Solving EME: length = 7250.715083038034... completed in 0.5 sec
+    Solving EME: length = 7167.373530359436... completed in 0.5 sec
+    Solving EME: length = 7084.031977680837... completed in 0.5 sec
+     completed in 16.9 sec
+    1x2 best length: 7751 nm
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+    1x2 power in output a: 0.4921
+    1x2 power in output b: 0.4921
+    1x2 excess loss: 0.069 dB
+    1x2 imbalance, a over b: 0.000 dB
+    1x2 reflection: -26.9 dB
+    1x2 power in higher-order output modes: 0.0045
+    1x2 power scattered out of the guides: 0.0092
+    Exited EMode
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.5 sec
+    2x2 beat length L_pi: 49996 nm
+    2x2 self-imaging length L_pi / 2: 24998 nm
+
+    Sweeping section parameter 'length'...
+    Solving EME: length = 26248.14318521147... completed in 3.3 sec
+    Solving EME: length = 26198.146722001537... completed in 0.4 sec
+    Solving EME: length = 26148.150258791615... completed in 0.4 sec
+    Solving EME: length = 26098.153795581682... completed in 0.4 sec
+    Solving EME: length = 26048.157332371764... completed in 0.4 sec
+    Solving EME: length = 25998.16086916183... completed in 0.4 sec
+    Solving EME: length = 25948.16440595191... completed in 0.4 sec
+    Solving EME: length = 25898.167942741977... completed in 0.4 sec
+    Solving EME: length = 25848.171479532055... completed in 0.4 sec
+    Solving EME: length = 25798.175016322122... completed in 0.4 sec
+    Solving EME: length = 25748.178553112204... completed in 0.4 sec
+    Solving EME: length = 25698.18208990227... completed in 0.4 sec
+    Solving EME: length = 25648.18562669235... completed in 0.4 sec
+    Solving EME: length = 25598.189163482417... completed in 0.5 sec
+    Solving EME: length = 25548.192700272495... completed in 0.4 sec
+    Solving EME: length = 25498.196237062562... completed in 0.4 sec
+    Solving EME: length = 25448.199773852644... completed in 0.4 sec
+    Solving EME: length = 25398.20331064271... completed in 0.4 sec
+    Solving EME: length = 25348.20684743279... completed in 0.4 sec
+    Solving EME: length = 25298.210384222857... completed in 0.4 sec
+    Solving EME: length = 25248.213921012935... completed in 0.4 sec
+    Solving EME: length = 25198.217457803003... completed in 0.4 sec
+    Solving EME: length = 25148.220994593084... completed in 0.4 sec
+    Solving EME: length = 25098.22453138315... completed in 0.4 sec
+    Solving EME: length = 25048.22806817323... completed in 0.4 sec
+    Solving EME: length = 24998.231604963297... completed in 0.4 sec
+    Solving EME: length = 24948.235141753372... completed in 0.4 sec
+    Solving EME: length = 24898.238678543446... completed in 0.4 sec
+    Solving EME: length = 24848.24221533352... completed in 0.4 sec
+    Solving EME: length = 24798.245752123592... completed in 0.4 sec
+    Solving EME: length = 24748.249288913667... completed in 0.4 sec
+    Solving EME: length = 24698.25282570374... completed in 0.4 sec
+    Solving EME: length = 24648.256362493812... completed in 0.4 sec
+    Solving EME: length = 24598.259899283887... completed in 0.4 sec
+    Solving EME: length = 24548.26343607396... completed in 0.4 sec
+    Solving EME: length = 24498.266972864032... completed in 0.5 sec
+    Solving EME: length = 24448.270509654107... completed in 0.4 sec
+    Solving EME: length = 24398.27404644418... completed in 0.4 sec
+    Solving EME: length = 24348.277583234252... completed in 0.4 sec
+    Solving EME: length = 24298.281120024327... completed in 0.4 sec
+    Solving EME: length = 24248.2846568144... completed in 0.4 sec
+    Solving EME: length = 24198.288193604472... completed in 0.4 sec
+    Solving EME: length = 24148.291730394547... completed in 0.4 sec
+    Solving EME: length = 24098.29526718462... completed in 0.4 sec
+    Solving EME: length = 24048.298803974692... completed in 0.4 sec
+    Solving EME: length = 23998.302340764767... completed in 0.4 sec
+    Solving EME: length = 23948.30587755484... completed in 0.4 sec
+    Solving EME: length = 23898.309414344913... completed in 0.4 sec
+    Solving EME: length = 23848.312951134987... completed in 0.4 sec
+    Solving EME: length = 23798.31648792506... completed in 0.4 sec
+    Solving EME: length = 23748.320024715133... completed in 0.4 sec
+    Solving EME: length = 23698.323561505207... completed in 0.4 sec
+    Solving EME: length = 23648.32709829528... completed in 0.4 sec
+    Solving EME: length = 23598.330635085353... completed in 0.4 sec
+    Solving EME: length = 23548.334171875427... completed in 0.4 sec
+    Solving EME: length = 23498.337708665502... completed in 0.4 sec
+    Solving EME: length = 23448.341245455573... completed in 0.4 sec
+    Solving EME: length = 23398.344782245647... completed in 0.4 sec
+    Solving EME: length = 23348.348319035722... completed in 0.4 sec
+    Solving EME: length = 23298.351855825793... completed in 0.4 sec
+    Solving EME: length = 23248.355392615867... completed in 0.4 sec
+    Solving EME: length = 23198.358929405942... completed in 0.4 sec
+    Solving EME: length = 23148.362466196013... completed in 0.4 sec
+    Solving EME: length = 23098.366002986088... completed in 0.4 sec
+    Solving EME: length = 23048.369539776162... completed in 0.4 sec
+    Solving EME: length = 22998.373076566233... completed in 0.4 sec
+    Solving EME: length = 22948.376613356308... completed in 0.5 sec
+    Solving EME: length = 22898.380150146382... completed in 0.5 sec
+    Solving EME: length = 22848.383686936453... completed in 0.4 sec
+    Solving EME: length = 22798.387223726528... completed in 0.4 sec
+    Solving EME: length = 22748.390760516602... completed in 0.4 sec
+    Solving EME: length = 22698.394297306673... completed in 0.4 sec
+    Solving EME: length = 22648.397834096748... completed in 0.4 sec
+    Solving EME: length = 22598.401370886822... completed in 0.4 sec
+    Solving EME: length = 22548.404907676893... completed in 0.4 sec
+    Solving EME: length = 22498.408444466968... completed in 0.4 sec
+     completed in 34.4 sec
+    2x2 best length at 4500 nm wide: 23998 nm
+    Evaluation 0: shape, core, mask = 4500, section, mmi, length = 23998.302, objective 0.0023482157 (1.87 sec)
+    Evaluation 1: shape, core, mask = 4650, section, mmi, length = 23998.302, objective 0.036699685 (2.50 sec)
+    Evaluation 2: shape, core, mask = 4500, section, mmi, length = 24048.302, objective 0.0023683407 (0.40 sec)
+    Evaluation 3: shape, core, mask = 4350, section, mmi, length = 23998.302, objective 0.04705888 (2.61 sec)
+    Evaluation 4: shape, core, mask = 4500, section, mmi, length = 23948.302, objective 0.0024998768 (0.40 sec)
+    Evaluation 5: shape, core, mask = 4509.8269, section, mmi, length = 24017.445, objective 0.0023380028 (2.48 sec)
+    Evaluation 6: shape, core, mask = 4513.3643, section, mmi, length = 24029.889, objective 0.0023795618 (2.51 sec)
+    Evaluation 7: shape, core, mask = 4509.6145, section, mmi, length = 24004.945, objective 0.0023532808 (2.52 sec)
+    Evaluation 8: shape, core, mask = 4494.8448, section, mmi, length = 24017.688, objective 0.0024509977 (2.49 sec)
+    Evaluation 9: shape, core, mask = 4504.322, section, mmi, length = 24022.096, objective 0.002312403 (2.45 sec)
+    Evaluation 10: shape, core, mask = 4504.7059, section, mmi, length = 24017.098, objective 0.0023133875 (2.47 sec)
+    Evaluation 11: shape, core, mask = 4506.2111, section, mmi, length = 24020.833, objective 0.0023136024 (2.53 sec)
+    Evaluation 12: shape, core, mask = 4507.6698, section, mmi, length = 24022.659, objective 0.0023186783 (2.53 sec)
+    Evaluation 13: shape, core, mask = 4505.2054, section, mmi, length = 24023.311, objective 0.0023118001 (2.45 sec)
+    Evaluation 14: shape, core, mask = 4505.2457, section, mmi, length = 24022.289, objective 0.0023119031 (2.52 sec)
+    Evaluation 15: shape, core, mask = 4505.3951, section, mmi, length = 24023.807, objective 0.0023118562 (2.56 sec)
+    Evaluation 16: shape, core, mask = 4503.7143, section, mmi, length = 24023.256, objective 0.0023136937 (2.50 sec)
+    Evaluation 17: shape, core, mask = 4505.0762, section, mmi, length = 24023.044, objective 0.0023118001 (2.49 sec)
+    Evaluation 18: shape, core, mask = 4506.6871, section, mmi, length = 24023.233, objective 0.0023143734 (2.47 sec)
+    Evaluation 19: shape, core, mask = 4505.1081, section, mmi, length = 24023.377, objective 0.0023117845 (2.43 sec)
+    Evaluation 20: shape, core, mask = 4505.1235, section, mmi, length = 24023.524, objective 0.0023117802 (2.44 sec)
+    Evaluation 21: shape, core, mask = 4505.1378, section, mmi, length = 24023.672, objective 0.0023117775 (2.50 sec)
+    Evaluation 22: shape, core, mask = 4505.1728, section, mmi, length = 24023.872, objective 0.002311778 (2.53 sec)
+    Evaluation 23: shape, core, mask = 4504.8252, section, mmi, length = 24023.677, objective 0.0023118561 (2.56 sec)
+    Evaluation 24: shape, core, mask = 4505.1131, section, mmi, length = 24023.776, objective 0.0023117752 (2.51 sec)
+    Evaluation 25: shape, core, mask = 4505.1138, section, mmi, length = 24023.923, objective 0.0023117745 (2.55 sec)
+    Evaluation 26: shape, core, mask = 4505.2622, section, mmi, length = 24023.931, objective 0.0023117959 (2.52 sec)
+    Evaluation 27: shape, core, mask = 4505.0599, section, mmi, length = 24023.97, objective 0.002311778 (2.56 sec)
+    Evaluation 28: shape, core, mask = 4505.1142, section, mmi, length = 24023.897, objective 0.0023117745 (2.52 sec)
+    Evaluation 29: shape, core, mask = 4505.1156, section, mmi, length = 24023.914, objective 0.0023117745 (2.54 sec)
+    Evaluation 30: shape, core, mask = 4505.125, section, mmi, length = 24023.904, objective 0.0023117746 (2.54 sec)
+    Evaluation 31: shape, core, mask = 4505.1439, section, mmi, length = 24023.917, objective 0.0023117753 (2.54 sec)
+    Evaluation 32: shape, core, mask = 4505.1161, section, mmi, length = 24023.919, objective 0.0023117745 (2.53 sec)
+    Evaluation 33: shape, core, mask = 4505.1171, section, mmi, length = 24023.929, objective 0.0023117745 (2.49 sec)
+    Evaluation 34: shape, core, mask = 4505.1101, section, mmi, length = 24023.919, objective 0.0023117745 (2.52 sec)
+    Evaluation 35: shape, core, mask = 4505.1163, section, mmi, length = 24023.921, objective 0.0023117745 (2.58 sec)
+    Evaluation 36: shape, core, mask = 4505.1221, section, mmi, length = 24023.919, objective 0.0023117745 (2.58 sec)
+    Optimization converged after 37 evaluations in 90.9 sec: best evaluation 32, objective 0.0023117745
+    2x2 optimizer: converged after 37 evaluations in 91 s
+    2x2 optimized width: 4505.1 nm
+    2x2 optimized length: 24024 nm
+    2x2 power in output a: 0.4640
+    2x2 power in output b: 0.4681
+    2x2 excess loss: 0.305 dB
+    2x2 imbalance, a over b: -0.039 dB
+    2x2 reflection: -32.9 dB
+    2x2 power in higher-order output modes: 0.0331
+    2x2 power scattered out of the guides: 0.0343
+    2x2 through-port phase: -40.4 deg
+    2x2 cross-port phase: -127.7 deg
+    2x2 phase difference, through minus cross: 87.4 deg
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+
+    Solving S-matrices...
+    Solving section: in... completed in 0.0 sec
+    Solving section: mmi... completed in 0.0 sec
+    Solving section: out... completed in 0.0 sec
+     completed in 0.0 sec
+    2x2 band, imbalance within 0.5 dB and excess loss below 1 dB, from: 1490 nm
+    2x2 band, imbalance within 0.5 dB and excess loss below 1 dB, to: 1575 nm
+    Exited EMode
+
+
+Figures:
+
+.. figure:: Figures/EME_MMI/mmi_1x2_length.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_MMI/mmi_1x2_field.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_MMI/mmi_2x2_field.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_MMI/mmi_2x2_spectrum.png
+    :width: 500
+    :align: center
+    :figwidth: 500

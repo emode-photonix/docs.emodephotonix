@@ -27,7 +27,7 @@ Highlighted features: ``nonlinear`` with an ``SHGProcess`` on a straight and a t
         ## SPIE 13890, 138900A (2026), doi:10.1117/12.3079411.
 
         ## Set simulation parameters
-        pump_wavelength = 1971.805  # [nm] TE00 pump
+        pump_wavelength = 1971.958  # [nm] TE00 pump, phase matched on this grid
         signal_wavelength = pump_wavelength / 2  # [nm] second harmonic
         dx, dy = 10, 10  # [nm] resolution
         w_core = 1450  # [nm] core width at best phase-matching
@@ -38,8 +38,13 @@ Highlighted features: ``nonlinear`` with an ``SHGProcess`` on a straight and a t
         roughness_rms = [4.5, 0.2]  # [nm]
         correlation_length = [100.0, 100.0]  # [nm]
 
-        window_width = w_core + 2 * w_trench
-        window_height = h_core + 2 * h_clad
+        ## Each side of the window is rounded up to a whole even number of cells, which
+        ## keeps the core's top and bottom faces on grid lines. Phase matching holds the
+        ## two indices within 1e-5 of each other, far tighter than a 10 nm grid resolves
+        ## them: halving dy moves the TM harmonic's index by 4e-3. So the pump wavelength
+        ## is the phase-matched one for this grid, and a finer grid needs it found again.
+        window_width = 2 * dx * np.ceil((w_core + 2 * w_trench) / (2 * dx))
+        window_height = 2 * dy * np.ceil((h_core + 2 * h_clad) / (2 * dy))
 
         pump_power = 1e-3  # [W] 1 mW pump
         spectrum_points = 501  # wavelengths reported by each scan
@@ -282,61 +287,61 @@ Highlighted features: ``nonlinear`` with an ``SHGProcess`` on a straight and a t
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.5 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.5 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.1 sec
-    Scanning wg_section over 1970.5-1973.5 nm... completed in 3 min 53.9 sec
-    Meshing completed in 0.8 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
     Solving modes completed in 1.4 sec
-    Meshing completed in 0.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.1 sec
+    harmonic mode list: [2.83793 2.58385 2.09845 2.06155]
+    pump   mode 0: n_eff 2.06155, 1.26 dB/cm (measured 1.5)
+    signal mode 3 of 4: n_eff 2.06155, 7.80 dB/cm (measured 16.8)
+    Scanning wg_section over 1970.5-1973.5 nm... completed in 2 min 47.5 sec
+    straight spectrum: 5 solves for 501 wavelengths
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.4 sec
+    Meshing completed in 0.0 sec
     Solving modes completed in 1.0 sec
 
     Solving S-matrices...
     Solving section: wg_section... completed in 0.2 sec
-     completed in 0.2 sec
+     completed in 0.4 sec
+    straight waveguide @ L = 10.0 mm:
+      pump in       = 1.0000 mW
+      pump out      = 0.4206 mW
+      signal out    = 185.3205 uW
+      conversion    = 18.53 %
     Exited EMode
-    EMode3D 1.0.6 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.5 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.0 sec
-    Meshing completed in 0.8 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
     Solving modes completed in 1.4 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.0 sec
-    Scanning taper_section over 1970.5-1973.5 nm... completed in 11 min 0.6 sec
-    Meshing completed in 0.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.1 sec
+    Meshing completed in 0.1 sec
     Solving modes completed in 1.4 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 1.0 sec
-    Meshing completed in 0.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.1 sec
+    Scanning taper_section over 1970.5-1973.5 nm... completed in 8 min 33.1 sec
+    taper spectrum: 5 solves for 501 wavelengths
+    Meshing completed in 0.0 sec
     Solving modes completed in 1.3 sec
-    Meshing completed in 0.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.0 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.3 sec
+    Meshing completed in 0.0 sec
     Solving modes completed in 1.0 sec
 
     Solving S-matrices...
-    Solving section: taper_section... completed in 34.2 sec
-     completed in 34.2 sec
-    Exited EMode
-    harmonic mode list: [2.83814 2.58442 2.09994 2.06181]
-    pump   mode 0: n_eff 2.06181, 1.37 dB/cm (measured 1.5)
-    signal mode 3 of 4: n_eff 2.06181, 7.83 dB/cm (measured 16.8)
-    straight spectrum: 5 solves for 501 wavelengths
-    straight waveguide @ L = 10.0 mm:
-      pump in       = 1.0000 mW
-      pump out      = 0.4158 mW
-      signal out    = 177.2278 uW
-      conversion    = 17.72 %
-    taper spectrum: 5 solves for 501 wavelengths
+    Solving section: taper_section... completed in 22.5 sec
+     completed in 22.8 sec
     tapered waveguide @ L = 10.0 mm:
       pump in       = 1.0000 mW
-      pump out      = 0.6981 mW
-      signal out    = 29.4935 uW
-      conversion    = 2.95 %
+      pump out      = 0.7051 mW
+      signal out    = 28.3817 uW
+      conversion    = 2.84 %
+    Exited EMode
 
 
 Figures:

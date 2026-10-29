@@ -1,0 +1,241 @@
+
+EME: GDS
+--------
+
+To simulate more complex structures, a GDS import function is used to support any geometry that can be created on a mask GDS file. This example shows how an s-bend structure can be created in a GDS file, imported to EMode, and simulated as part of a directional coupler.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+First, the GDS is created.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        from phidl import CrossSection, Device
+        import phidl.path as pp
+        from phidl import quickplot as qp
+        from phidl import set_quickplot_options
+        from matplotlib import pyplot as plt
+
+        ## Parameters
+        width_wg = 0.6 # [um]
+        gap_input = 2.0 # [um]
+        gap_output = 0.3 # [um]
+        L_bend = 6.0 # [um]
+
+        ## Create the first CrossSection
+        X1 = CrossSection()
+        X1.add(width = width_wg,
+            offset = -gap_input/2 - width_wg/2, layer = 1,
+            name = 'wg1', ports = ('in1', 'out1'))
+
+        X1.add(width = width_wg,
+            offset = gap_input/2 + width_wg/2, layer = 1,
+            name = 'wg2')
+
+        ## Create the second CrossSection
+        X2 = CrossSection()
+        X2.add(width = width_wg,
+            offset = -gap_output/2 - width_wg/2, layer = 1,
+            name = 'wg1', ports = ('in2', 'out2'))
+
+        X2.add(width = width_wg,
+            offset = gap_output/2 + width_wg/2, layer = 1,
+            name = 'wg2')
+
+        ## Transition from first to second CrossSection
+        Xtrans = pp.transition(cross_section1 = X1, cross_section2 = X2, width_type = 'sine')
+        P3 = pp.straight(length = L_bend)
+        WG_trans = P3.extrude(Xtrans)
+
+        ## Place all CrossSection extrusions
+        D = Device()
+        wgt = D << WG_trans
+
+        ## Quickplot to view and save the layout
+        set_quickplot_options(show_ports = False, show_subports = False)
+        qp(D)
+
+        ax = plt.gca()
+        ax.set_xlabel('x (\u03BCm)')
+        ax.set_ylabel('y (\u03BCm)')
+        # quickplot pads the view by 10 % of the bounding box; clip back to the
+        # geometry. 'box' rather than the default 'datalim' so equal aspect is kept by
+        # resizing the axes instead of re-widening the limits we just set.
+        ax.set_aspect('equal', adjustable = 'box')
+        ax.set_xlim(D.bbox[0][0], D.bbox[1][0])
+        ax.set_ylim(D.bbox[0][1], D.bbox[1][1])
+
+        plt.savefig('sbend.png', dpi = 300, bbox_inches = 'tight')
+
+        ## Save gds file
+        D.write_gds('sbend.gds')
+
+.. figure:: Figures/EME_GDS/sbend.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+Next, the directional coupler device is created and simulated for a short coupler length. The sweep function is used to optimize  the coupler length for 100 % coupling, and the propagation is re-plotted.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import emodeconnection as emc
+        from matplotlib import pyplot as plt
+        import numpy as np
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 20, 20 # [nm] resolution
+        h_core = 220 # [nm] waveguide core height
+        h_clad = 1200 # [nm] waveguide top and bottom clad
+        width_wg = 600 # [nm]
+        gap = 300 # [nm]
+        input_gap = 2000 # [nm]
+
+        window_height = h_core + h_clad*2
+
+        num_modes = 2 # [-] number of modes
+        BC = 'TE-v'
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        ## Settings
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_height = window_height, num_modes = num_modes,
+            boundary_condition = BC, background_material = 'SiO2')
+
+        ## Draw shapes
+        em.shape(name = 'BOX', material = 'SiO2',
+            height = h_clad)
+
+        em.shape(name = 'core', material = 'Si',
+            height = h_core, etch_depth = h_core)
+
+        ## Create profiles
+        em.settings(window_width = 6200)
+        em.label_profile(name = 'slab')
+
+        em.settings(window_width = 2600)
+        em.shape(name = 'core', mask = width_wg)
+        em.label_profile(name = 'io_waveguide')
+
+        em.settings(window_width = 2600)
+        em.shape(name = 'core', mask = [width_wg, width_wg],
+            mask_offset = [-gap/2-width_wg/2, gap/2+width_wg/2])
+        em.label_profile(name = 'coupler')
+
+        ## Draw EME sections
+        em.straight_section(name = 'input',
+            profile = 'io_waveguide', length = 1000,
+            offset = input_gap/2 + width_wg/2)
+
+        em.gds_section(name = 'sbend',
+            gds_path = 'sbend.gds', profile = 'slab',
+            layer_map = {'core': 1},
+            length = 10e3) # modify length of gds
+
+        em.straight_section(name = 'coupler',
+            profile = 'coupler', length = 30e3)
+
+        em.copy_section(section_name = 'sbend', mirror = True)
+
+        em.straight_section(name = 'output',
+            profile = 'io_waveguide', length = 1000,
+            offset = -input_gap/2 - width_wg/2)
+
+        ## Run EME and plot results
+        em.EME()
+        em.plot()
+
+        ## Sweep the coupler length and plot results
+        data = em.sweep(key = 'section, coupler, length',
+            values = np.arange(0, 200.1e3, 10000),
+            result = ['S_matrix'])
+
+        transmission = np.array([s.transmission() for s in data['S_matrix']])
+        plt.plot(data['values']*1e-3, np.abs(transmission[:,0,0])**2*100)
+        plt.xlabel("Coupler length (\u03BCm)")
+        plt.ylabel("Transmission (%)")
+        plt.autoscale(enable = True, axis = 'x', tight = True)
+        plt.ylim([0,100])
+        plt.savefig('transmission_plot.png', dpi = 300, bbox_inches = 'tight')
+
+        ## Plot final design for 100 % coupler
+        em.straight_section(name = 'coupler', length = 180e3)
+        em.EME()
+        em.plot()
+
+        ## Close EMode
+        em.close()
+
+
+Console output::
+
+    EMode3D 1.0.6 - email
+
+    Solving S-matrices...
+    Solving section: input... completed in 0.0 sec
+    Solving section: sbend... completed in 2 min 41.7 sec
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: 4... completed in 0.0 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 2 min 41.7 sec
+
+    Sweeping section parameter 'length'...
+    Solving EME: length = 200000.0... completed in 0.5 sec
+    Solving EME: length = 190000.0... completed in 0.4 sec
+    Solving EME: length = 180000.0... completed in 0.4 sec
+    Solving EME: length = 170000.0... completed in 0.4 sec
+    Solving EME: length = 160000.0... completed in 0.4 sec
+    Solving EME: length = 150000.0... completed in 0.4 sec
+    Solving EME: length = 140000.0... completed in 0.4 sec
+    Solving EME: length = 130000.0... completed in 0.4 sec
+    Solving EME: length = 120000.0... completed in 0.4 sec
+    Solving EME: length = 110000.0... completed in 0.4 sec
+    Solving EME: length = 100000.0... completed in 0.4 sec
+    Solving EME: length = 90000.0... completed in 0.4 sec
+    Solving EME: length = 80000.0... completed in 0.5 sec
+    Solving EME: length = 70000.0... completed in 0.4 sec
+    Solving EME: length = 60000.0... completed in 0.4 sec
+    Solving EME: length = 50000.0... completed in 0.4 sec
+    Solving EME: length = 40000.0... completed in 0.4 sec
+    Solving EME: length = 30000.0... completed in 0.4 sec
+    Solving EME: length = 20000.0... completed in 0.4 sec
+    Solving EME: length = 10000.0... completed in 0.4 sec
+    Solving EME: length = 0.0... completed in 0.4 sec
+     completed in 8.7 sec
+
+    Solving S-matrices...
+    Solving section: input... completed in 0.0 sec
+    Solving section: sbend... completed in 1.1 sec
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: 4... completed in 0.0 sec
+    Solving section: output... completed in 0.0 sec
+     completed in 1.1 sec
+    Exited EMode
+
+
+Figures:
+
+.. figure:: Figures/EME_GDS/coupler_1.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_GDS/coupler_sweep.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/EME_GDS/coupler_2.png
+    :width: 500
+    :align: center
+    :figwidth: 500

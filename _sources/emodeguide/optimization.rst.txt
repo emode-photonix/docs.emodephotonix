@@ -1,0 +1,122 @@
+Optimization
+------------
+
+:data:`optimize` finds the parameters of a simulation you have already set up that give the best value of a quantity you choose, within bounds and constraints (EMode\ :sup:`3D`\  only). The parameters are named with the keys of :data:`sweep`: a setting (``'wavelength'``), one profile's setting (``'setting, <profile>, <name>'``), a shape property (``'shape, <name>, <property>'``), a section property (``'section, <name>, <property>'``), or an argument of a :data:`monitor_coupling` beam (``'beam, <name>'``).
+
+Every evaluation starts from the simulation as declared when :data:`optimize` is called. It sets each parameter, solves what the objectives need (a mode solve for a mode quantity, :data:`EME` for an S-matrix or a monitor coupling) and records the result, so an evaluation depends only on its parameters, whatever ran before it. A cross-section that an earlier evaluation solved is not solved again: optimizing a section length solves the modes once, and optimizing a beam's angle on a solved chain solves nothing. At the end, the simulation is left solved at the best point, so :data:`get`, :data:`plot` and :data:`EME` read it.
+
+The objectives and constraints are declared as data with the classes below, imported from ``emodeconnection``:
+
+.. code-block:: python
+
+    from emodeconnection import Parameter, Objective, Constraint
+
+    res = em.optimize(
+        parameters=[Parameter('section, coupler, length', bounds=(5e3, 40e3), x0=15e3)],
+        objective=Objective('S_power', out='coupler.out_right', into='coupler.in_left'),
+        constraints=[Constraint('section, coupler, length', '<=', 30e3)],
+    )
+    print(res.parameters, res.objective, res.status)
+
+.. data:: optimize
+
+    Find the parameters that give the best objective, within bounds and constraints.
+
+    :param parameters: what to vary, a ``Parameter`` or a list of them
+    :param objective: what to improve, an ``Objective`` or a list of them, whose weighted sum is improved
+    :param constraints: limits on a parameter or on an objective's quantity, a ``Constraint`` or a list of them, default: None
+    :param str method: 'cobyqa' (bounds and constraints, no derivatives), 'nelder-mead' or 'powell' (bounds, constraints by a penalty), 'differential_evolution' (a global search over finite bounds, constraints too), 'l-bfgs-b' (bounds, with a gradient) or 'slsqp' (bounds and constraints, with a gradient), default: 'cobyqa'
+    :param gradient: how 'l-bfgs-b' and 'slsqp' get a gradient: 'finite_difference' evaluates the point and one step in each parameter, default: None (the pulsed adjoint for a poling design with pulse objectives, finite differences otherwise)
+    :type gradient: str or None
+    :param int max_evaluations: the most evaluations to make, default: 100
+    :param max_time: [s] the most time to run, default: None (no limit)
+    :type max_time: float or None
+    :param float tolerance: the convergence tolerance, relative to each parameter's range, default: 1e-4
+    :param int seed: the random seed of 'differential_evolution', so a run can be repeated, default: 0
+    :param bool apply_best: leave the simulation solved at the best point, default: True
+    :param record: a file to write each evaluation to as one line of JSON as it completes, so an interrupted run keeps its history, default: None
+    :type record: str or None
+    :param snapshot: also write the starting point to this ``.eph`` file, which :data:`evaluate` can evaluate from in another session, default: None
+    :type snapshot: str or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Returns an ``OptimizationResult``.
+
+    A constraint on a parameter (``'<='`` or ``'>='``) narrows that parameter's bounds, so it is met exactly. A constraint on an objective's quantity is met to the method's tolerance. Each method spends evaluations differently: 'cobyqa' needs a few evaluations per parameter per step, finite differences one more evaluation than there are parameters per gradient, and 'differential_evolution' fifteen per parameter per generation. The result of a mode solve reproduces to about 1e-9 on the same grid, so set ``tolerance`` above that for objectives read from a mode solve.
+
+.. class:: Parameter(key, bounds=None, x0=None, shape=(), step=None)
+
+    A quantity to vary.
+
+    :param str key: the parameter, as a :data:`sweep` key, ``'beam, <name>'`` (one of 'angle', 'mode_field_diameter', 'center', 'index' and 'polarization'), or ``'poling, <section>, domain_lengths'``, the length [nm] of every domain of a section with a ``PulsedProcess`` (``'poling, <section>, domain_lengths[k]'`` for domain k alone)
+    :param bounds: (min, max), either end None for no limit, default: None
+    :param x0: the starting value, default: None (the value the simulation holds now, or for a beam argument the value in the objective's ``beam``)
+    :type x0: float or None
+    :param step: the finite-difference step as a fraction of the bounded range (or of the value when unbounded), default: None (1e-6)
+    :type step: float or None
+
+    :param shape: the shape of a list of values, such as ``(n,)``, for ``'poling, <section>, domain_lengths'``, default: () (one value, or for the domain lengths the number of domains the section holds now)
+    :type shape: tuple
+
+    A shape's ``'position'`` given one value moves the shape in x and keeps its height. ``bounds`` of a list of values is one ``(min, max)`` for every element, or a list of them, one per element.
+
+**Poling design.** Every domain of a poled section can be a free variable. ``Parameter('poling, <section>, domain_lengths', bounds=(1500, 6000))`` varies the length of each domain within a fabrication minimum and maximum, starting from the section's declared poling as domains (``Poling.to_domain_lengths``). ``'poling, <section>, total_length'``, the sum of the domain lengths, can be constrained (``Constraint('poling, ppln, total_length', '<=', 5e6)``), which costs no evaluation. Each evaluation propagates the pulse through the chain the last :data:`EME` prepared, with new domain walls, and solves no mode. With 'l-bfgs-b' or 'slsqp' and ``'band_energy'`` or ``'band_average'`` objectives, the gradient with respect to every domain comes from one adjoint propagation, so one evaluation with its gradient costs one and a half to two and a half propagations, whatever the number of domains. With ``gradient='finite_difference'`` a gradient costs one propagation per domain, which suits tens of domains but not thousands.
+
+.. class:: Objective(kind, goal='maximize', target=None, weight=1.0, ...)
+
+    A quantity to improve. ``kind`` and the arguments that select it:
+
+    * ``'S_power'`` and ``'S_phase'``: :math:`|S|^2` and the phase of one S-matrix element. ``out`` and ``into`` name the ports, by name (its mode 0), as ``'<port>_<mode>'``, or as a mode index of the whole matrix, and ``wavelength`` picks one wavelength of a multi-wavelength circuit.
+    * ``'monitor_coupling'``: :data:`monitor_coupling` of the monitor ``monitor`` for the beam ``beam``, a dict of that function's arguments.
+    * ``'effective_index'``, ``'group_index'`` and ``'loss'`` (dB/m): of mode ``mode`` (default 0) of ``profile`` (default the default profile).
+    * ``'band_energy'`` (pJ) and ``'band_average'`` (average power, W): of a pulse after pulsed propagation, between the wavelengths ``band = (min, max)`` in nm, for tracked mode ``mode`` (default all of them).
+    * ``'parameter'``: the value of the parameter ``key`` itself, to make a device as short or as narrow as its constraints allow.
+
+    :param str goal: 'maximize', 'minimize', or 'target', which minimizes the squared distance to ``target``, default: 'maximize'
+    :param target: the value to reach with ``goal='target'``, default: None
+    :type target: float or None
+    :param float weight: the objective's weight in a list of them, default: 1.0
+
+    ``value(results)`` returns the objective's quantity from an evaluation's results.
+
+.. class:: Constraint(quantity, op, value)
+
+    A limit.
+
+    :param quantity: a parameter key, or an ``Objective`` whose quantity is limited
+    :type quantity: str or Objective
+    :param str op: '<=', '>=' or '=='
+    :param float value: the limit
+
+.. class:: OptimizationResult
+
+    What :data:`optimize` returns. ``parameters`` is the best point by key and ``x`` the same as a list, ``objective`` and ``constraints`` its values, and ``goal`` says whether the objective was maximized or minimized. With several objectives that are not all maximized, ``objective`` is the minimized sum of each one's value (minimized), negative value (maximized) or squared distance from its target, each times its weight. ``status`` is 'converged', 'budget' (``max_evaluations`` ran out), 'time' (``max_time`` ran out) or 'failed', and ``message`` says more. ``history`` lists every evaluation as an ``Evaluation`` with its ``index``, ``parameters``, ``objective``, ``constraints``, the ``results`` the objectives read, ``seconds``, ``solves`` (the mode solves it made), ``cache_hits`` (the solves and junctions it reused) and ``cached`` (a point the run had already evaluated, which costs nothing). ``best`` is the best evaluation, ``evaluations`` the number actually solved and ``seconds`` the run's time. ``to_json()`` gives the whole result as plain JSON-ready data.
+
+.. data:: evaluate
+
+    Evaluate the simulation at one point. It starts from the simulation's snapshot (:data:`snapshot`, or the simulation as it was at the first evaluation), sets every parameter, solves what the results need and returns a record. The same parameters give the same results whatever ran before. Available in every session.
+
+    :param dict parameters: {key: value} for every parameter, with the keys of :data:`optimize`
+    :param results: the quantities to return, any :data:`get` key, 'S_matrix' or 'monitor_coupling', default: 'effective_index'
+    :type results: str or list
+    :param snapshot: a snapshot file to evaluate from instead of this simulation's snapshot, default: None
+    :type snapshot: str or None
+    :param monitor: the monitor of a 'monitor_coupling' result, default: None
+    :type monitor: str or None
+    :param beam: the arguments of :data:`monitor_coupling` for a 'monitor_coupling' result, default: None
+    :type beam: dict or None
+    :param profile: the profile a mode result is read from, default: None (the default profile)
+    :type profile: str or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Returns a dict with ``parameters``, ``results``, ``seconds``, ``solves``, ``cache_hits`` and ``seeded``.
+
+.. data:: snapshot
+
+    Take the snapshot :data:`evaluate` starts from: the simulation as declared now (profiles, shapes, sections, ports and settings), without anything solved. Available in every session.
+
+    :param file_name: also write the snapshot to this ``.eph`` file, which another session can :data:`evaluate` from, default: None
+    :type file_name: str or None
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Returns the file's path when ``file_name`` is given.

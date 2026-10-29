@@ -1,0 +1,111 @@
+
+EMode Guide
+===========
+
+Run the :ref:`EMode Login <PythonEModeLogin>` GUI or the ``emode login`` command to locally save your EMode account credentials.
+
+.. grid:: 2
+    :gutter: 4
+    :padding: 2
+    :margin: auto
+
+    .. grid-item-card:: EMode\ :sup:`2D`\  Functions
+        :shadow: md
+        :columns: 6
+
+        * `File Management <emodeguide/file-management.html>`_
+        * `Setup <emodeguide/setup.html>`_
+        * `Solver Analysis <emodeguide/solver-analysis.html>`_
+
+    .. grid-item-card:: EMode\ :sup:`3D`\  Functions
+        :shadow: md
+        :columns: 6
+
+        * `EME <emodeguide/eme.html>`_
+        * `Multi-Physics <emodeguide/fem.html>`_
+
+.. toctree::
+    :maxdepth: 0
+    :caption: EMode2D Functions
+    :hidden:
+
+    emodeguide/file-management
+    emodeguide/setup
+    emodeguide/solver-analysis
+
+.. toctree::
+    :maxdepth: 0
+    :caption: EMode3D Functions
+    :hidden:
+
+    emodeguide/eme
+    emodeguide/fem
+
+.. toctree::
+   :caption: Glossaries
+   :maxdepth: 1
+   :hidden:
+
+   emodeguide/variables
+   emodeguide/materials
+
+.. toctree::
+    :maxdepth: 0
+    :caption: Installation
+    :hidden:
+
+    installation/release-notes
+    installation/troubleshooting
+
+--------
+
+Features
+--------
+
+.. hlist::
+   :columns: 3
+
+   * Finite difference method
+   * Scattering loss
+   * Bend modes
+   * Symmetries
+   * Perfectly matched layers
+   * Sub-pixel averaging
+   * General anisotropy
+   * Magnetic materials
+   * Non-uniform meshing
+   * Eigenmode expansion (EME)
+   * Multi-physics (thermal, electrostatic)
+   * Second-order nonlinear optics
+
+Finite difference method
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The finite difference method (FDM) is used to solve the waveguide eigenmodes. The electric and magnetics fields are solved in a Yee grid, and they are subsequently interpolated to common grid points. Features are added to support subpixel averaging, bend modes, anisotropic materials, non-uniform meshing, and mode symmetries.
+
+    Z. Zhu and T. G. Brown, ''Full-vectorial finite-difference analysis of microstructured optical fibers,'' Opt. Express **10**, 853 (2002).
+
+Boundary conditions
+^^^^^^^^^^^^^^^^^^^
+
+Symmetric or anti-symmetric boundary conditions can be applied to the south and west sides of the simulation window with the setting parameter ``boundary_condition``. By explicitly setting the symmetry with an 'S' (symmetric) or 'A' (anti-symmetric), the refractive index profile is forced to be symmetric in the specified vertical or horizontal direction. Another option is to set the boundary condition to 'TE' or 'TM' and the solver will decide if vertical, horizontal, or both symmetries exist in the specified refractive index profile. These options will choose the appropriate 'S' or 'A' boundaries to solve the fundamental TE or TM mode with the maximum available symmetry.
+
+Meshing
+^^^^^^^
+
+Shapes define the refractive index profile of the waveguide and a meshing algorithm using contour-path effective permittivities is implemented. On the Yee grid, the permittivity and permeability arrays are unique for each x, y, and z direction. The plot of the refractive index shows the exact shapes that are defined, and the actual permittivity and permeability arrays are available using the ``get`` method. Calculated fields correspond to the center points of the meshed grid (``x`` and ``y``).
+
+    A. Mohammadi, H. Nadgaran, and M. Agio, ''Contour-path effective permittivities for the two-dimensional finite-difference time-domain method,'' Opt. Express **13**, 10367 (2005).
+
+
+Non-uniform mesh
+""""""""""""""""
+
+A non-uniform mesh can be specified to increase the grid spacing in the perimeter area of the simulation window. This is helpful to reduce the simulation time when using a fine grid mesh. The primary simulation window is defined by the ``window_width``, ``window_height``, ``x_resolution``, and ``y_resolution`` parameters. To add a non-uniform grid, the parameters ``expansion_size`` and ``expansion_resolution`` must be defined. Expanded regions taper the resolution from the primary window to a maximum value of the ``expansion_resolution``. However, the tapering is terminated if the ``expansion_size`` is reached before the resolution has reached the ``expansion_resolution`` value. Unique values for the ``expansion_size`` can be defined for each edge of the simulation window. The user must investigate convergence of the effective index and loss values by varying the window size, expanded area size, and grid resolutions.
+
+Citing EMode
+^^^^^^^^^^^^
+
+If you use EMode for design or analysis in a publication, please use the following citation.
+
+    EMode [Software] from EMode Photonix. Available at `emodephotonix.com <https://www.emodephotonix.com>`_.

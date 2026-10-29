@@ -79,33 +79,33 @@ Highlighted features: angle etch, mask etch, expand window with lower resolution
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 1.0 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
     Solving modes completed in 4.1 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
-        TE-0  1.767903  98.8 %          0.000              82.2 %
+        TE-0  1.767456  98.8 %          0.000              82.2 %
  
-    Meshing completed in 1.0 sec
-    Solving modes completed in 3.9 sec
+    Meshing completed in 0.1 sec
+    Solving modes completed in 3.8 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)    core confinement
     --------  --------  ------  -------------  ------------------
-        TE-0  1.789642  99.1 %          0.000              83.4 %
+        TE-0  1.789302  99.1 %          0.000              83.4 %
  
-    Exited EMode
-    Power overlap: 99.837 %
+    Power overlap: 99.867 %
 
     Refractive index of LN: [2.13057033 2.20881269 2.20881269]
     O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
     Notes: x-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
 
     Wavelength range: 500 nm to 4000 nm
+    Exited EMode
 
 
 Figures:

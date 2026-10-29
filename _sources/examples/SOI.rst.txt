@@ -50,9 +50,9 @@ The simplest EMode simulation example.
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 0.6 sec
-    Solving modes completed in 1.5 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
+    Solving modes completed in 1.4 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  

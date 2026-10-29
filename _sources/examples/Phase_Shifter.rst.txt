@@ -23,6 +23,9 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
         w_el, h_el = 4000, 300  # [nm] Au electrodes
         gap = 2500  # [nm] gap from the ridge edge to the nearest electrode edge
         V = 10.0  # [V] applied between the two electrodes
+        ## FEM mesh sizes [nm] for the electrostatic solve. Halving all three moves
+        ## V_pi * L by about 0.1 %, so the result is mesh converged.
+        fem_film, fem_clad, fem_electrode = 40, 300, 100
 
         opt_width = w_core + 2 * 2000  # [nm] optical window: wide enough for the mode
         es_width = w_core + 2 * gap + 2 * w_el + 2000  # [nm] electrostatic window: spans both electrodes
@@ -44,7 +47,7 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
         ## x-cut LNOI ridge: the optic axis (z, extraordinary) lies along sim-x.
         ln_x_cut = emc.MaterialSpec(material='LN_MgO', theta=np.pi / 2)
 
-        em.shape(name='BOX', material='SiO2', height=h_box, fem_resolution=300)
+        em.shape(name='BOX', material='SiO2', height=h_box, fem_resolution=fem_clad)
         em.shape(
             name='LN',
             material=ln_x_cut,
@@ -52,9 +55,9 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
             height=h_film,
             mask=w_core,
             etch_depth=h_ridge,
-            fem_resolution=40,
+            fem_resolution=fem_film,
         )
-        em.shape(name='tclad', material='SiO2', height=h_tclad, fem_resolution=300)
+        em.shape(name='tclad', material='SiO2', height=h_tclad, fem_resolution=fem_clad)
 
         ## Au electrodes beside the ridge, out of the optical mesh (heat_only), at +-V/2.
         y_el = h_box + h_film + h_el / 2
@@ -66,7 +69,7 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
             height=h_el,
             position=(-x_el, y_el),
             voltage=V / 2,
-            fem_resolution=100,
+            fem_resolution=fem_electrode,
             heat_only=True,
         )
         em.shape(
@@ -76,7 +79,7 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
             height=h_el,
             position=(x_el, y_el),
             voltage=-V / 2,
-            fem_resolution=100,
+            fem_resolution=fem_electrode,
             heat_only=True,
         )
 
@@ -150,29 +153,29 @@ Highlighted features: ``heat_only`` electrodes, ``voltage``, ``electrostatic()``
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 1.1 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
     Solving modes completed in 1.6 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  1.844836  99.6 %          0.000
+        TE-0  1.844807  99.6 %          0.000
  
     Solving electrostatic completed in 0.2 sec
-    Meshing completed in 1.1 sec
-    Solving modes completed in 5.0 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 5.8 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  1.844692  99.6 %          0.000
+        TE-0  1.844676  99.6 %         -0.000
  
+    Effective index shift at 10 V: -1.31e-04
+    V_pi * L: 5.91 V*cm
     Exited EMode
-    Effective index shift at 10 V: -1.44e-04
-    V_pi * L: 5.39 V*cm
 
 
 Figures:

@@ -196,35 +196,35 @@ Highlighted features: ``poling_period`` for quasi-phase matching, x-cut lithium 
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 1.7 sec
-    Solving modes completed in 1.5 sec
-    Meshing completed in 1.7 sec
-    Solving modes completed in 1.6 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
+    Solving modes completed in 1.4 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.7 sec
+    pump: mode 0, n_eff 1.92258, TE 99.7 %
+    second harmonic: mode 1, n_eff 2.09797, TE 99.9 %
+    pump scattering loss: 0.0416 dB/cm
+    second harmonic scattering loss: 0.1007 dB/cm
 
     Wavelength: 775.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TM-0  2.135012   0.2 %          0.000
-        TE-1  2.098004  99.9 %          0.000
-        TE-2  2.021610  67.0 %          0.000
-        TM-3  2.013287  33.1 %          0.000
+        TM-0  2.134989   0.2 %          0.000
+        TE-1  2.097967  99.9 %          0.000
+        TE-2  2.021341  66.2 %          0.000
+        TM-3  2.013223  33.9 %          0.000
  
+    poling period: 4.4189 um
 
     Solving S-matrices...
-    Solving section: ppln_section... completed in 0.3 sec
-     completed in 0.3 sec
-    Scanning ppln_section over 1546-1554 nm... completed in 5 min 22.5 sec
-    Exited EMode
-    pump: mode 0, n_eff 1.92271, TE 99.7 %
-    second harmonic: mode 1, n_eff 2.09800, TE 99.9 %
-    pump scattering loss: 0.0420 dB/cm
-    second harmonic scattering loss: 0.1046 dB/cm
-    poling period: 4.4212 um
-    conversion at 1 mW over 5 mm: 0.944178 %
-    normalized efficiency: 3776.7 %/W/cm^2
+    Solving section: ppln_section... completed in 0.4 sec
+     completed in 0.4 sec
+    conversion at 1 mW over 5 mm: 0.945700 %
+    normalized efficiency: 3782.8 %/W/cm^2
+    Scanning ppln_section over 1546-1554 nm... completed in 3 min 34.3 sec
     tuning curve: 5 solves for 81 wavelengths
+    Exited EMode
 
 
 Figures:

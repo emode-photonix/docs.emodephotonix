@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Release Notes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=e2a723ec"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'installation/release-notes';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/installation/release-notes.html" />
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="Material Database" href="../emodeguide/materials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.6" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/file-management.html">File management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/setup.html">Simulation setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/solver-analysis.html">Solver and analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/eme.html">EME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/fem.html">Multi-Physics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/variables.html">Variable Descriptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../emodeguide/materials.html">Material Database</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="release-notes">
+<h1>Release Notes</h1>
+<p><strong>1.0.6</strong></p>
+<ul class="simple">
+<li><p>Changed</p>
+<ul>
+<li><p>On Apple silicon, the sparse direct solver is rslab 1.1.2 (from 1.1.0).</p></li>
+<li><p>The Intel Mac installer continues, although the 1.0.5 notes announced 1.0.5 as its last release.</p></li>
+<li><p>Improved EME junctions between mode-solved cross-sections: they conserve power and converge as modes are added, especially at large mode numbers, and across the mode solvers and their meshes. Results can move slightly from 1.0.5.</p></li>
+<li><p>A taper or GDS section now starts refinement from slices placed where its cross-section changes (<code class="docutils literal notranslate"><span class="pre">EME_settings(initial_slices='auto')</span></code>, the new default), read from its rasterized refractive index: none along a straight run, evenly along a linear taper, densely inside a short fast feature, and at every corner of a GDS outline. Refinement still runs afterward and decides the final slicing, so results change only within its tolerance, and it takes fewer rounds. <code class="docutils literal notranslate"><span class="pre">EME_settings(initial_slices='single')</span></code> restores the one-slice start of earlier versions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EME()</span></code> and <code class="docutils literal notranslate"><span class="pre">plot()</span></code> use less memory.</p></li>
+</ul>
+</li>
+<li><p>New</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot(normalization='section')</span></code> scales each section of a ‘z-x’ or ‘z-y’ panel (a straight, a taper, a free-space gap) by its own peak, so a section that carries little of the launched field, such as the free-space gap after an angled facet, is still visible. The ‘Norm’ selector in the plot window offers it too. Brightness is then not comparable across sections.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot(view='layout')</span></code>, the new default, draws the ‘z-x’ panel as the chip layout: every section where its connections place it, a bend as an arc and the sections after it turned with it, the field following the guide, both axes in um. <code class="docutils literal notranslate"><span class="pre">view='simulation'</span></code> is the unrolled display of earlier versions, and the ‘Physical space’ checkbox switches between them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check_layout()</span></code> reports overlapping sections, a section whose outline crosses itself, how far each loop of connected sections misses closing, and sections no connection reaches. <code class="docutils literal notranslate"><span class="pre">EME()</span></code> runs it first and refuses an overlap or a loop that misses by more than <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code> before solving anything, and warns about a self-intersecting outline.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sweep(key='wavelength',</span> <span class="pre">values=...,</span> <span class="pre">result='S_matrix',</span> <span class="pre">method='interpolated')</span></code> sweeps a circuit’s S-matrix over hundreds of wavelengths for the cost of a few: the circuit is refined once, each cross-section is solved at <code class="docutils literal notranslate"><span class="pre">num_nodes</span></code> wavelengths (default 8), and the S-matrix at every requested wavelength is rebuilt from propagation constants and junctions interpolated between them. <code class="docutils literal notranslate"><span class="pre">sweep_data</span></code> reports the node count and the interpolation residual at a held-out node, with a warning above <code class="docutils literal notranslate"><span class="pre">interpolation_tolerance</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bend_section(name,</span> <span class="pre">profile,</span> <span class="pre">radius,</span> <span class="pre">sweep_angle,</span> <span class="pre">method)</span></code> declares a circular bend (<code class="docutils literal notranslate"><span class="pre">sweep_angle</span></code> in radians, positive toward +x), solved with the bend in cylindrical coordinates (<code class="docutils literal notranslate"><span class="pre">method='cylindrical'</span></code>, the default) or by transformation optics (<code class="docutils literal notranslate"><span class="pre">method='TO'</span></code>). Sections declared after it continue from its end. An anisotropic crystal turns with the guide: a bend in x-cut lithium niobate is sliced along its heading, and a section placed after a turn sees the crystal turned. A bend of an isotropic material is one mode solve. <code class="docutils literal notranslate"><span class="pre">copy_section</span></code> raises when a copy’s placement would show the crystal differently from its source, rather than reusing the wrong S-matrix.</p></li>
+<li><p>Monitors: <code class="docutils literal notranslate"><span class="pre">monitor(name,</span> <span class="pre">w,</span> <span class="pre">y,</span> <span class="pre">angle,</span> <span class="pre">length,</span> <span class="pre">resolution)</span></code> declares a plane inside the chain (output only, not a port), <code class="docutils literal notranslate"><span class="pre">monitor_field(name)</span></code> returns the solved field on it for 1 W launched with the power through it, and <code class="docutils literal notranslate"><span class="pre">monitor_coupling(name,</span> <span class="pre">mode_field_diameter,</span> <span class="pre">angle)</span></code> its coupling to a tilted Gaussian beam such as a fiber mode, the figure a grating coupler is designed for. By reciprocity the same number is the coupling from the fiber into the waveguide. <code class="docutils literal notranslate"><span class="pre">sweep(result='monitor_coupling',</span> <span class="pre">monitor=,</span> <span class="pre">beam=)</span></code> sweeps the beam’s angle, size or position without solving again, or any other key with a solve at each value, and <code class="docutils literal notranslate"><span class="pre">plot()</span></code> draws each monitor’s plane on the ‘z-y’ panel. The website has a new example, ‘EME: Grating Coupler’.</p></li>
+<li><p>A new website example, ‘Bend Mode Solvers’: the SiN bend of ‘Bending: SiN’ solved by the FDM with <code class="docutils literal notranslate"><span class="pre">bend_method='cylindrical'</span></code> and <code class="docutils literal notranslate"><span class="pre">'TO'</span></code> on four grids and by the FEM on six fixed meshes, with each solve’s effective index, its error against the finest FEM mesh, its bend loss and its runtime, and plots of the effective-index and bend-loss errors against runtime.</p></li>
+<li><p>The ‘Bending: SiN’ example uses the window and PMLs of ‘Bend Mode Solvers’: PMLs on the bend’s outer, top and bottom walls (1 µm, <code class="docutils literal notranslate"><span class="pre">pml_kappa_max=1</span></code>), 2 µm of cladding and 1.5 µm of trench, and a <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code> just above the guided mode.</p></li>
+<li><p>A new website example, ‘EME: TFLN Ring Resonator’: a racetrack ring in x-cut thin-film lithium niobate, closed with <code class="docutils literal notranslate"><span class="pre">connect_ports</span></code>, its coupler’s bus and ring arms windowed ports, the through-port spectrum over several free spectral ranges from <code class="docutils literal notranslate"><span class="pre">sweep(method='interpolated')</span></code>, with the free spectral range, extinction and loaded quality factor of each resonance, and the field built up around the ring on resonance, drawn on the chip.</p></li>
+<li><p>Pulsed nonlinear propagation through an EME chain (EMode3D). <code class="docutils literal notranslate"><span class="pre">settings(excitation=PulsedSource(...))</span></code> declares a femtosecond pulse, <code class="docutils literal notranslate"><span class="pre">straight_section(nonlinear=PulsedProcess(...))</span></code> or <code class="docutils literal notranslate"><span class="pre">taper_section(...)</span></code> a section’s nonlinearity and poling (<code class="docutils literal notranslate"><span class="pre">Poling</span></code>: a period, a period varying along the section, or explicit domain walls), and <code class="docutils literal notranslate"><span class="pre">EME()</span></code> refines the chain, solves each slice at a set of sample wavelengths and propagates the pulse through every slice and junction. <code class="docutils literal notranslate"><span class="pre">get('pulse_response')</span></code> returns the spectrum of every tracked mode along the chain, with <code class="docutils literal notranslate"><span class="pre">band_energy()</span></code> and <code class="docutils literal notranslate"><span class="pre">band_power()</span></code> for the energy and average power in a wavelength band. <code class="docutils literal notranslate"><span class="pre">pulse_propagate(poling=...)</span></code> reruns the propagation with another poling without solving any mode again. <code class="docutils literal notranslate"><span class="pre">gds_section(nonlinear=PulsedProcess(...))</span></code> declares a pulse’s nonlinearity on a GDS section too. The website has a new example, ‘Nonlinear-EME: Supercontinuum’, and the EME guide a section on pulsed propagation. Each section’s chi(2), Kerr (chi(3)), Raman and two-photon absorption come from its materials: <code class="docutils literal notranslate"><span class="pre">PulsedProcess(chi3=True)</span></code> takes chi(3) from every material’s <code class="docutils literal notranslate"><span class="pre">n2</span></code> and raises naming a material that has none, the Raman response is that of the material holding most of the Kerr overlap, and two-photon absorption (on by default where a material has a coefficient, <code class="docutils literal notranslate"><span class="pre">tpa=False</span></code> to turn it off) acts only on photon pairs above the bandgap. The run warns when the pulse will drift far enough to wrap around the time window, when energy reached the window’s edges, and when the band leaves a material’s index model, and it refuses a band where an index model has no finite value (silicon’s fit has a pole at 1135 nm).</p></li>
+<li><p>Nonlinear material data for the pulsed solver: <code class="docutils literal notranslate"><span class="pre">n2</span></code> for SiO2, SiN, LN and LN_MgO, the Raman response of fused silica (Blow and Wood) and lithium niobate (its four A1(TO) lines, Bache and Schiek), two-photon absorption coefficients for Si, AlGaAs, LN and LN_MgO, and bandgaps for those and for SiO2, SiN and GaAs, each with its reference in <code class="docutils literal notranslate"><span class="pre">property_refs</span></code>. A user material takes the same through <code class="docutils literal notranslate"><span class="pre">MaterialProperties(n2=,</span> <span class="pre">raman=,</span> <span class="pre">tpa=,</span> <span class="pre">bandgap=)</span></code>, with <code class="docutils literal notranslate"><span class="pre">raman=(fraction,</span> <span class="pre">[(weight,</span> <span class="pre">position,</span> <span class="pre">half_width),</span> <span class="pre">...])</span></code> in cm^-1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">settings(bend_method='TO')</span></code> solves a bend by transformation optics: the straight cross-section is solved with its material transformed by the bend’s conformal map, instead of adding the bend factor 1 + x / R to the solver (<code class="docutils literal notranslate"><span class="pre">bend_method='cylindrical'</span></code>, the default). It works with the FDM and the FEM, in 2D and 3D sessions alike (the transformed tensor of an isotropic material is diagonal), and agrees with the cylindrical method to about 6e-4 in the effective index and 5 % in bend loss at R = 10 um. With a PML, set <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code> just above the guided mode: a TO bend’s spectrum starts with PML modes. <code class="docutils literal notranslate"><span class="pre">report()</span></code> names the method next to the solver.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p>With <code class="docutils literal notranslate"><span class="pre">EMODE_NONINTERACTIVE=1</span></code>, a <code class="docutils literal notranslate"><span class="pre">plot()</span></code> could hang. It no longer shows a window in that mode.</p></li>
+<li><p>On Apple silicon, a circuit with large free-space ports could run out of memory. The sparse solver now solves the port modes in small blocks.</p></li>
+<li><p>Under a PML, a lossy absorber mode could come out as mode 0, ahead of the guided mode. Guided modes now come first, and <code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code> is more reliable.</p></li>
+<li><p>In a lossy medium, some lossy modes grew along the guide instead of decaying, so an EME chain could amplify. Every mode of a passive structure now decays.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sweep(key='wavelength',</span> <span class="pre">solve_type='EME')</span></code> never returned its data.</p></li>
+<li><p>A function whose first argument is not <code class="docutils literal notranslate"><span class="pre">key</span></code>, such as <code class="docutils literal notranslate"><span class="pre">monitor_field('plane')</span></code>, failed when that argument was given positionally.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">monitor_field()</span></code> and <code class="docutils literal notranslate"><span class="pre">monitor_coupling()</span></code> failed on a chain built with <code class="docutils literal notranslate"><span class="pre">copy_section</span></code>, such as a grating.</p></li>
+<li><p>A wavelength scan with the FEM solved each wavelength on a different mesh, which added about 1e-5 of noise to the effective index. Wavelength scans now share one mesh (the new setting <code class="docutils literal notranslate"><span class="pre">fem_mesh_wavelength</span></code> chooses its wavelength).</p></li>
+<li><p>A mirrored section (<code class="docutils literal notranslate"><span class="pre">copy_section(mirror=True)</span></code>) and a bend toward -x were laid out in the wrong place.</p></li>
+<li><p>The ‘z-x’ outline left out shapes given by a <code class="docutils literal notranslate"><span class="pre">width</span></code> rather than a <code class="docutils literal notranslate"><span class="pre">mask</span></code>.</p></li>
+<li><p>A symmetry wall in x, including the one <code class="docutils literal notranslate"><span class="pre">boundary_condition='TE'</span></code> or <code class="docutils literal notranslate"><span class="pre">'TM'</span></code> adds, folded a bend about x, which a bend does not allow. A bend now keeps only the vertical fold, and an explicit x wall is replaced by <code class="docutils literal notranslate"><span class="pre">'0'</span></code> with a warning.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code> of a circuit with a loop (a ring closed with <code class="docutils literal notranslate"><span class="pre">connect_ports</span></code>) failed. It now draws the ring’s layout, cross-sections and field. <code class="docutils literal notranslate"><span class="pre">EME()</span></code> of a ring with no open port no longer fails.</p></li>
+<li><p>Windowed ports (<code class="docutils literal notranslate"><span class="pre">Port(window=...)</span></code>): several windows on one side of a section now conserve power and are reciprocal, connected or not, each window keeps only the modes its content guides, and each is placed on its own window in the layout. Results with windowed ports move slightly.</p></li>
+<li><p>A section after a bend could meet it off-center when anything upstream was offset. Sections now meet centered along any path.</p></li>
+<li><p>A refined taper or GDS section with interface roughness and <code class="docutils literal notranslate"><span class="pre">EME_settings(apply_scattering=True)</span></code> raised an error.</p></li>
+</ul>
+</li>
+<li><p>Faster</p>
+<ul>
+<li><p>Refinement bisects a slice at an already-solved cross-section near its midpoint when there is one (<code class="docutils literal notranslate"><span class="pre">EME_settings(snap_window=0.25)</span></code>, a fraction of the slice, 0 to disable), so a taper or GDS section that passes through widths another one solved reuses those solves.</p></li>
+<li><p>Refinement reuses a solved cross-section wherever the geometry repeats it: the mirror-image half of a taper declared as two sections, or a GDS cell that tapers up and back down. Interpolated and cut geometry is rounded to about 1e-6 nm, so the two halves no longer differ in the last bits and miss the cache (one slice in six re-solved on a mirrored taper).</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>1.0.5: October 2, 2026</strong></p>
+<ul class="simple">
+<li><p>New</p>
+<ul>
+<li><p>On Apple silicon, EMode’s sparse direct solver is now rslab, a supernodal LU and complex-symmetric LDL<sup>T</sup> solver compiled into EMode. Mode solves return the same effective indices as with Intel MKL PARDISO. A mode solve with a PML is about 2.5 to 4.5 times faster (measured on an Apple silicon Mac against the previous release under Rosetta), and a solve without one takes the same time.</p></li>
+<li><p>EMode runs natively on Apple silicon Macs, without Rosetta. There are now two Mac installers, <code class="docutils literal notranslate"><span class="pre">EMode-&lt;version&gt;-Mac.pkg</span></code> for Apple silicon and <code class="docutils literal notranslate"><span class="pre">EMode-&lt;version&gt;-Mac-x86.pkg</span></code> for Intel Macs. The Intel installer keeps MKL PARDISO. This is the last release with an Intel installer, and earlier versions stay available for download.</p></li>
+<li><p>New <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> options, per profile: <code class="docutils literal notranslate"><span class="pre">solver_threads</span></code> caps the number of threads the sparse solver uses (0, the default, lets it choose, up to every core), and <code class="docutils literal notranslate"><span class="pre">sparse_solver</span></code> picks the solver (<code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rslab'</span></code> or <code class="docutils literal notranslate"><span class="pre">'pardiso'</span></code>). The Linux, Windows and Intel Mac installers keep MKL PARDISO as their default, since it is still faster than rslab on x86 processors, and include rslab as <code class="docutils literal notranslate"><span class="pre">sparse_solver='rslab'</span></code>. The <code class="docutils literal notranslate"><span class="pre">EMODE_SOLVER_THREADS</span></code> environment variable limits the thread count for every profile that does not set its own, and the 16-thread cap on the MKL thread count is gone.</p></li>
+<li><p>The heat and electrostatic solves use the same solver.</p></li>
+<li><p>Every installer except the Intel Mac one now meshes FEM cross-sections with the same version of the <code class="docutils literal notranslate"><span class="pre">triangle</span></code> mesher, so heat and electrostatic results no longer differ slightly between platforms. On Linux and Windows the mesh changes a little: the <a class="reference internal" href="../examples/Phase_Shifter.html"><span class="doc">Phase Shifter</span></a> example’s V<sub>pi</sub>L moves from 5.39 to 5.10 V·cm.</p></li>
+<li><p>Full-vector finite-element mode solver, available with EMode<sup>3D</sup>. <a class="reference internal" href="../emodeguide/fem.html#FEM" title="FEM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FEM</span></code></a> solves a cross-section on a triangle mesh that follows every material interface, with second-order elements, and refines the mesh where the modes need it. Boundaries, PMLs, expansion regions, bends, lossy and anisotropic materials (including crystals tilted out of the cross-section with <code class="docutils literal notranslate"><span class="pre">theta</span></code>), and heater and electro-optic perturbations work as they do in the FDM, and FEM and FDM sections can meet at a junction. <code class="docutils literal notranslate"><span class="pre">plot(mesh_display=True)</span></code> draws the triangle mesh. See the new <a class="reference internal" href="../examples/FEM_SOI.html"><span class="doc">FEM: SOI</span></a> example.</p></li>
+<li><p>New <a class="reference internal" href="../emodeguide/solver-analysis.html#solve" title="solve"><code class="xref py py-data docutils literal notranslate"><span class="pre">solve</span></code></a> runs either mode solver. <code class="docutils literal notranslate"><span class="pre">solver_method='FDM'</span></code> or <code class="docutils literal notranslate"><span class="pre">'FEM'</span></code> is the same as calling <a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> or <a class="reference internal" href="../emodeguide/fem.html#FEM" title="FEM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FEM</span></code></a>, and <code class="docutils literal notranslate"><span class="pre">'default'</span></code> follows the new <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting.</p></li>
+<li><p>New <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> option <code class="docutils literal notranslate"><span class="pre">solver</span></code> picks the mode solver for <a class="reference internal" href="../emodeguide/solver-analysis.html#solve" title="solve"><code class="xref py py-data docutils literal notranslate"><span class="pre">solve</span></code></a>, <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> and <a class="reference internal" href="../emodeguide/solver-analysis.html#sweep" title="sweep"><code class="xref py py-data docutils literal notranslate"><span class="pre">sweep</span></code></a>. Its default, <code class="docutils literal notranslate"><span class="pre">'default'</span></code>, is the FDM in every session, so existing scripts solve as before. The FEM runs only when asked for, with <code class="docutils literal notranslate"><span class="pre">solver='FEM'</span></code>, <a class="reference internal" href="../emodeguide/fem.html#FEM" title="FEM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FEM</span></code></a> or <code class="docutils literal notranslate"><span class="pre">solve(solver_method='FEM')</span></code>. Calling <a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> or <a class="reference internal" href="../emodeguide/fem.html#FEM" title="FEM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FEM</span></code></a> sets <code class="docutils literal notranslate"><span class="pre">solver</span></code> to that method. The <code class="docutils literal notranslate"><span class="pre">fem_*</span></code> settings control the FEM mesh and its refinement.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a> names the mode solver on its wavelength line, for example <code class="docutils literal notranslate"><span class="pre">Wavelength:</span> <span class="pre">1550.0</span> <span class="pre">nm</span>&#160;&#160;&#160; <span class="pre">Solver:</span> <span class="pre">FEM</span></code>, and a saved CSV records it too.</p></li>
+<li><p>Biaxial crystals. <a class="reference internal" href="../emodeguide/materials.html#KTP" title="KTP"><code class="xref py py-data docutils literal notranslate"><span class="pre">KTP</span></code></a> and <a class="reference internal" href="../emodeguide/materials.html#LBO" title="LBO"><code class="xref py py-data docutils literal notranslate"><span class="pre">LBO</span></code></a> are in the material database, each with three principal indices, its <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> tensor and, for KTP, its electro-optic tensor. A third orientation angle, <code class="docutils literal notranslate"><span class="pre">psi</span></code> (in <a class="reference internal" href="../interface.html#MaterialSpec" title="MaterialSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialSpec</span></code></a> and <a class="reference internal" href="../emodeguide/setup.html#add_material" title="add_material"><code class="xref py py-data docutils literal notranslate"><span class="pre">add_material</span></code></a>), turns a crystal about its own z axis before <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>, so a biaxial crystal can take any orientation. Omitted, <code class="docutils literal notranslate"><span class="pre">psi</span></code> is 0 and existing simulations are unchanged. See <a class="reference internal" href="../interface.html#MaterialSpec" title="MaterialSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialSpec</span></code></a> for the convention.</p></li>
+<li><p>New <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> option <code class="docutils literal notranslate"><span class="pre">include_scattering</span></code>: with <code class="docutils literal notranslate"><span class="pre">include_scattering=True</span></code>, every solve of the profile (by <a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a>, <a class="reference internal" href="../emodeguide/fem.html#FEM" title="FEM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FEM</span></code></a>, <a class="reference internal" href="../emodeguide/solver-analysis.html#solve" title="solve"><code class="xref py py-data docutils literal notranslate"><span class="pre">solve</span></code></a>, <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> or <a class="reference internal" href="../emodeguide/solver-analysis.html#sweep" title="sweep"><code class="xref py py-data docutils literal notranslate"><span class="pre">sweep</span></code></a>) also computes the interfacial scattering loss of each rough shape. <code class="docutils literal notranslate"><span class="pre">FDM(scattering=True)</span></code> still does this for a single solve.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nonlinear=False</span></code> on <a class="reference internal" href="../emodeguide/eme.html#straight_section" title="straight_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">straight_section</span></code></a> or <a class="reference internal" href="../emodeguide/eme.html#taper_section" title="taper_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">taper_section</span></code></a> removes a declared <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> process, so the section propagates linearly again.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p><strong>Material loss now attenuates.</strong> A lossy material (<code class="docutils literal notranslate"><span class="pre">loss=</span></code> in dB/m, or a database material with an extinction coefficient) amplified the mode in <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>: a 200 µm lossy strip transmitted 110% of its power. Lossy modes now have an effective index with a negative imaginary part, and <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> attenuates them by exactly the reported loss. <a class="reference internal" href="../emodeguide/solver-analysis.html#refractive_index" title="refractive_index"><code class="xref py py-data docutils literal notranslate"><span class="pre">refractive_index</span></code></a>, <a class="reference internal" href="../emodeguide/solver-analysis.html#permittivity" title="permittivity"><code class="xref py py-data docutils literal notranslate"><span class="pre">permittivity</span></code></a> and plots still show n + jk. Profiles solved by an earlier release keep their old sign until they are solved again.</p></li>
+<li><p><strong>Symmetric boundaries unfold correctly.</strong> A mode solved with an ‘S’ or ‘A’ boundary was unfolded onto the full window with the same sign for every field component, but some components are odd under the mirror. Junctions between a folded and an unfolded section, the <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> coupling of folded solves, plane-wave junctions and plots of unfolded fields were all affected. Each component now takes its physical mirror parity.</p></li>
+<li><p><strong>A windowed port on a symmetry-folded profile couples correctly.</strong> A port with <code class="docutils literal notranslate"><span class="pre">window=</span></code> on a profile solved with an ‘S’ or ‘A’ boundary left the mirrored half of its window at zero, so its junction was wrong wherever the window crossed the symmetry plane. Two ports folded the same way at different transverse offsets had the same problem.</p></li>
+<li><p>The <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> coupling of symmetry-folded solves (SHG, SFG, DFG, SPDC) used the pump’s symmetry for a signal folded differently from the pump. It now matches a full-window solve.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/eme.html#chi2_spectrum" title="chi2_spectrum"><code class="xref py py-data docutils literal notranslate"><span class="pre">chi2_spectrum</span></code></a> left the profiles it re-solved with no scattering data, so <code class="docutils literal notranslate"><span class="pre">get('scattering_loss')</span></code> and <a class="reference internal" href="../emodeguide/solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a> read zero after a scan. The re-solved profiles now keep their per-mode scattering loss.</p></li>
+<li><p><strong>An FDM solve asked for more modes than a structure guides returns its lossy modes.</strong> Past the guided and radiation modes, the solve returned modes with an effective index near 0, and at higher mode counts it failed with “array must not contain infs or NaNs”. The next modes are now the lossy ones, with an imaginary effective index, ordered from least to most decay. Guided modes are unchanged.</p></li>
+<li><p>The FDM solve returns the same modes on every run. Degenerate modes used to come back as a different mixture each time.</p></li>
+<li><p><strong>FDM ‘0’ walls are metal on all four sides.</strong> The bottom wall was a magnetic wall half a cell outside the window, and <code class="docutils literal notranslate"><span class="pre">field_to_solve='Ht'</span></code> returned modes the <code class="docutils literal notranslate"><span class="pre">'Et'</span></code> solve did not. Both now return a metal waveguide’s modes. Modes kept away from the walls by a cladding or a PML are unchanged. Modes that reach a wall move: the <a class="reference internal" href="../examples/EME_Taper.html"><span class="doc">EME: Taper</span></a> example’s printed indices change by up to 3e-4.</p></li>
+<li><p>A taper whose etch mask is offset from the waveguide center re-centered the mask on every interpolated slice, so the geometry jumped to the center mid-taper. A misspelled <a class="reference internal" href="../emodeguide/setup.html#shape" title="shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">shape</span></code></a> keyword now raises an error instead of being ignored.</p></li>
+<li><p>A <a class="reference internal" href="../emodeguide/setup.html#shape" title="shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">shape</span></code></a> stacked on a layer that came out empty, such as a fully etched layer, was placed half that layer’s height too high. It now sits directly on top of it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FDM(section=...,</span> <span class="pre">propagation_distance=...)</span></code> failed on a straight or bend section, or any section whose cross-section does not change along its length.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#group_index" title="group_index"><code class="xref py py-data docutils literal notranslate"><span class="pre">group_index</span></code></a> crashed on an FDM profile.</p></li>
+<li><p>A junction between two differently gridded sections (a confined port, a PML against a plain window, a different resolution or offset) resampled both modes onto a common grid smaller than either and shifted by half a cell. A confined port’s S-matrix was off by up to 6e-2. The common grid now covers both sections exactly.</p></li>
+<li><p><a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a> reads back every setting <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> accepts, including older aliases such as <code class="docutils literal notranslate"><span class="pre">radius</span></code>. Before, only <code class="docutils literal notranslate"><span class="pre">wavelength</span></code>, <code class="docutils literal notranslate"><span class="pre">background_material</span></code> and <code class="docutils literal notranslate"><span class="pre">BC</span></code> worked. <a class="reference internal" href="../emodeguide/file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a> lists every name <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a> can read and takes <code class="docutils literal notranslate"><span class="pre">profile=</span></code>.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#overlap" title="overlap"><code class="xref py py-data docutils literal notranslate"><span class="pre">overlap</span></code></a> stores its result on the profile named by <code class="docutils literal notranslate"><span class="pre">profile_b</span></code> instead of always on the default profile, and no longer fails when the default profile has several wavelengths. The new <code class="docutils literal notranslate"><span class="pre">get('overlaps')</span></code> keeps one record per pair of modes, so overlaps no longer overwrite each other.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#label_profile" title="label_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">label_profile</span></code></a> works on a multi-wavelength profile.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FDM(verbose=False)</span></code> still printed its progress. It is now quiet.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">mode_filter</span></code> and <code class="docutils literal notranslate"><span class="pre">fLanczos</span></code> arguments of <a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> had no effect. They now reach the solver, and a bad value raises an error.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">eme_scattering</span></code> option of <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> never had an effect. It is deprecated: it is still accepted, with a warning that it does nothing. Use <code class="docutils literal notranslate"><span class="pre">EME_settings(apply_scattering=True)</span></code> to apply scattering loss in <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">permeability</span></code> and <code class="docutils literal notranslate"><span class="pre">fill_permeability</span></code> arguments of <a class="reference internal" href="../emodeguide/setup.html#shape" title="shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">shape</span></code></a> raised an unclear error. The error now explains that a shape’s permeability comes from its material, as in <code class="docutils literal notranslate"><span class="pre">material=MaterialProperties(n=1.5,</span> <span class="pre">mu=2.0)</span></code>.</p></li>
+<li><p>A simulation name that is not a valid file name on every platform, such as <code class="docutils literal notranslate"><span class="pre">'run:1'</span></code>, is rejected by <a class="reference internal" href="../emodeguide/file-management.html#init" title="init"><code class="xref py py-data docutils literal notranslate"><span class="pre">init</span></code></a> and <a class="reference internal" href="../emodeguide/file-management.html#open" title="open"><code class="xref py py-data docutils literal notranslate"><span class="pre">open</span></code></a> with an error that names the problem, instead of producing a simulation file that cannot be written on Windows.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> failed on a multi-wavelength profile, from a wavelength list in <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> or from <a class="reference internal" href="../emodeguide/file-management.html#create_profile_set" title="create_profile_set"><code class="xref py py-data docutils literal notranslate"><span class="pre">create_profile_set</span></code></a>. Each wavelength is now solved at its own wavelength and <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a> returns the results keyed by wavelength. <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> on a wavelength list in <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> failed too.</p></li>
+<li><p>On a multi-wavelength profile, the results of <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>, <a class="reference internal" href="../emodeguide/solver-analysis.html#effective_area" title="effective_area"><code class="xref py py-data docutils literal notranslate"><span class="pre">effective_area</span></code></a>, <a class="reference internal" href="../emodeguide/solver-analysis.html#group_index" title="group_index"><code class="xref py py-data docutils literal notranslate"><span class="pre">group_index</span></code></a>, <a class="reference internal" href="../emodeguide/solver-analysis.html#orthogonality" title="orthogonality"><code class="xref py py-data docutils literal notranslate"><span class="pre">orthogonality</span></code></a>, <a class="reference internal" href="../emodeguide/solver-analysis.html#scattering" title="scattering"><code class="xref py py-data docutils literal notranslate"><span class="pre">scattering</span></code></a>, <a class="reference internal" href="../emodeguide/solver-analysis.html#confinement" title="confinement"><code class="xref py py-data docutils literal notranslate"><span class="pre">confinement</span></code></a> and <a class="reference internal" href="../emodeguide/solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a> could not be indexed by wavelength: <code class="docutils literal notranslate"><span class="pre">result[1550.0]</span></code> raised a KeyError. They are now a read-only dict keyed by wavelength, in which <code class="docutils literal notranslate"><span class="pre">result[1550]</span></code> and <code class="docutils literal notranslate"><span class="pre">result[1550.0]</span></code> are the same entry. <a class="reference internal" href="../emodeguide/solver-analysis.html#confinement" title="confinement"><code class="xref py py-data docutils literal notranslate"><span class="pre">confinement</span></code></a> returns its dictionary of confinement factors per shape directly, as documented, instead of inside a one-element list, so a script that used <code class="docutils literal notranslate"><span class="pre">confinement()[0]</span></code> should drop the <code class="docutils literal notranslate"><span class="pre">[0]</span></code>.</p></li>
+<li><p>A material given by its permittivity, <code class="docutils literal notranslate"><span class="pre">MaterialSpec(material=MaterialProperties(eps=...))</span></code>, ignored its <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>, while its <code class="docutils literal notranslate"><span class="pre">d</span></code> tensor was rotated by them. Its permittivity now turns with it.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/setup.html#shape" title="shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">shape</span></code></a> with a single value for <code class="docutils literal notranslate"><span class="pre">roughness_rms</span></code> or <code class="docutils literal notranslate"><span class="pre">correlation_length</span></code> raised an error, although the documentation says a single value applies to all interfaces. It now does, and a list of any length other than two raises an error that names the argument.</p></li>
+<li><p>A lossy anisotropic material rotated off its principal axes (<code class="docutils literal notranslate"><span class="pre">loss</span></code> with <code class="docutils literal notranslate"><span class="pre">theta</span></code>, <code class="docutils literal notranslate"><span class="pre">phi</span></code> or <code class="docutils literal notranslate"><span class="pre">psi</span></code>) had its loss applied to every element of its index tensor, which made the loss depend on polarization. The loss is now applied to the diagonal only, as for the unrotated material.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/fem.html#heat" title="heat"><code class="xref py py-data docutils literal notranslate"><span class="pre">heat</span></code></a> followed by a mode solve failed with an IndexError when a rotated anisotropic material had a nonzero <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code>. The heated index of such a material is now its index tensor shifted by <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> times the temperature change.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#refractive_index" title="refractive_index"><code class="xref py py-data docutils literal notranslate"><span class="pre">refractive_index</span></code></a> with an array of wavelengths failed for a rotated anisotropic material, and for exactly three wavelengths returned a wrong result. It now returns one 3x3 tensor per wavelength.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>1.0.4: September 24, 2026</strong></p>
+<ul class="simple">
+<li><p>New</p>
+<ul>
+<li><p>Second-order nonlinear EME, available with EMode3D. A <a class="reference internal" href="../emodeguide/eme.html#straight_section" title="straight_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">straight_section</span></code></a> or <a class="reference internal" href="../emodeguide/eme.html#taper_section" title="taper_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">taper_section</span></code></a> takes <code class="docutils literal notranslate"><span class="pre">nonlinear=</span></code> with an <code class="docutils literal notranslate"><span class="pre">SHGProcess</span></code>, <code class="docutils literal notranslate"><span class="pre">SFGProcess</span></code>, or <code class="docutils literal notranslate"><span class="pre">DFGProcess</span></code> naming the process wavelengths. Quasi-phase matching is declared with <code class="docutils literal notranslate"><span class="pre">poling_period</span></code> (plus <code class="docutils literal notranslate"><span class="pre">duty_cycle</span></code> and <code class="docutils literal notranslate"><span class="pre">qpm_order</span></code>) on the process, or built by hand from alternating <code class="docutils literal notranslate"><span class="pre">inverted=True</span></code> sections, the two routes agree.</p></li>
+<li><p>A CW pump is declared with <code class="docutils literal notranslate"><span class="pre">settings(excitation=Source(port,</span> <span class="pre">wavelength,</span> <span class="pre">mode,</span> <span class="pre">power,</span> <span class="pre">phase))</span></code>. <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> still returns the small-signal S-matrix, and now also solves the power-dependent response, available as a <code class="docutils literal notranslate"><span class="pre">CircuitResponse</span></code> from <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>, outgoing and incoming amplitudes at every port, radiated power per wavelength, and convergence. <code class="docutils literal notranslate"><span class="pre">get('sources')</span></code> returns the declared excitation.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/eme.html#chi2_spectrum" title="chi2_spectrum"><code class="xref py py-data docutils literal notranslate"><span class="pre">chi2_spectrum</span></code></a> returns a nonlinear conversion spectrum (signal out over pump in, at every wavelength asked for) from a handful of mode solves. A <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> spectrum oscillates too fast with the phase mismatch to interpolate, but what the coupled-mode equations consume (the coupling and the propagation constants) varies smoothly, so the modes are solved only where the mode list is still moving and the response is then evaluated point by point from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included. Quasi-phase-matched sections are included: the grating enters as a wavevector shift and a Fourier coefficient, neither of which depends on wavelength, so a poled section keeps its exact grating while its phase mismatch moves with the interpolated propagation constants.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sweep(key='wavelength',</span> <span class="pre">values=...,</span> <span class="pre">adaptive=True)</span></code> does the same for an ordinary sweep. <code class="docutils literal notranslate"><span class="pre">values</span></code> keeps its meaning (the wavelengths you want results at) and <code class="docutils literal notranslate"><span class="pre">adaptive</span></code> changes only where the solver runs: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength adds solves until the mode list stops moving by more than <code class="docutils literal notranslate"><span class="pre">tolerance</span></code>. Any stretch it could not resolve is reported in <code class="docutils literal notranslate"><span class="pre">unconverged</span></code> instead of raising.</p></li>
+<li><p>Free-space excitation: <a class="reference internal" href="../emodeguide/eme.html#free_space_field" title="free_space_field"><code class="xref py py-data docutils literal notranslate"><span class="pre">free_space_field</span></code></a> declares a Gaussian beam launched into a port. The beam is projected onto that port’s modes and drives the field plot through <code class="docutils literal notranslate"><span class="pre">plot(excitation=name)</span></code> or the plot window’s Mode menu. <a class="reference internal" href="../emodeguide/eme.html#free_space_field_diagnostics" title="free_space_field_diagnostics"><code class="xref py py-data docutils literal notranslate"><span class="pre">free_space_field_diagnostics</span></code></a> returns the fraction of the beam’s power the port’s modes capture, and the solver warns when it is below 90%. <code class="docutils literal notranslate"><span class="pre">tilt</span></code> is the angle inside the medium the beam travels through.</p></li>
+<li><p>Angled facet ports: <a class="reference internal" href="../interface.html#make_angled_facet_port" title="make_angled_facet_port"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a> tilts a port’s cross-section about a hinge line, so a facet’s reflection back into the guided mode falls off with tilt as it does physically (see <a class="reference internal" href="../interface.html#ports"><span class="std std-ref">Ports</span></a>). A facet cannot sit on a <a class="reference internal" href="../emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a> or on a profile with a PML. <code class="docutils literal notranslate"><span class="pre">sweep(key='section,</span> <span class="pre">NAME,</span> <span class="pre">facet_angle')</span></code> sweeps that tilt.</p></li>
+<li><p>The solver warns at a facet junction when the waveguide’s <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> is too small to hold the deflected reflection and R + T under-runs.</p></li>
+<li><p>Junctions whose two sides carry different numbers of modes (every junction between a waveguide section and a <a class="reference internal" href="../emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>) now solve the mode-matching equations for the reflected and transmitted amplitudes jointly instead of eliminating the reflected ones first. The two closures coincide when the counts match, so taper and GDS staircases are unchanged. At a waveguide-to-free-space junction the reflection into the fundamental moves by 10-15% (down), the answer no longer depends on the order the two sections were declared, and declaring an angled facet at zero tilt no longer changes it.</p></li>
+<li><p>Per-junction settings: a <a class="reference internal" href="../emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> entry accepts a third element, <code class="docutils literal notranslate"><span class="pre">JunctionOverride(junction_normalization=...)</span></code>, applying to that junction alone.</p></li>
+<li><p>Field plots: the color scale is normalized to the excitation plane’s field family, with a ‘Norm’ selector (vector or component), the log scale spans -60 dB to 0, an ‘abs sum’ cross-axis reduction.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot(profile=...)</span></code> renders a stored profile on a simulation that has EME sections declared. Previously the plotter always followed the sections.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/file-management.html#get_fields" title="get_fields"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_fields</span></code></a> with no <code class="docutils literal notranslate"><span class="pre">key</span></code> returns all six E and H components.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#material_explorer" title="material_explorer"><code class="xref py py-data docutils literal notranslate"><span class="pre">material_explorer</span></code></a> with <code class="docutils literal notranslate"><span class="pre">file_name=</span></code> saves the figure without opening a window, like <a class="reference internal" href="../emodeguide/solver-analysis.html#plot" title="plot"><code class="xref py py-data docutils literal notranslate"><span class="pre">plot</span></code></a>.</p></li>
+<li><p>Setting <code class="docutils literal notranslate"><span class="pre">EMODE_NONINTERACTIVE=1</span></code> makes every <a class="reference internal" href="../emodeguide/solver-analysis.html#plot" title="plot"><code class="xref py py-data docutils literal notranslate"><span class="pre">plot</span></code></a> build its figure and return instead of blocking on the window. <code class="docutils literal notranslate"><span class="pre">EMODE_EMAIL</span></code> and <code class="docutils literal notranslate"><span class="pre">EMODE_PASSWORD</span></code> log in without the login window, for unattended runs.</p></li>
+<li><p>EMode prints a notice when it checks out a license and a newer release is available. It turns itself on once a release’s installers are downloadable.</p></li>
+<li><p>The default MKL thread count is capped at 16 (an explicit <code class="docutils literal notranslate"><span class="pre">MKL_NUM_THREADS</span></code> overrides this setting).</p></li>
+<li><p>Second-order nonlinear coefficients (<code class="docutils literal notranslate"><span class="pre">d</span></code>) added for GaP, AlN, and InGaP, and for the new materials GaN, LiTaO3, and ZnSe, each with a citation, the BBO, GaAs, AlGaAs, LN, and LN_MgO entries are corrected and cited. <a class="reference internal" href="../emodeguide/solver-analysis.html#d_matrix" title="d_matrix"><code class="xref py py-data docutils literal notranslate"><span class="pre">d_matrix</span></code></a> with <code class="docutils literal notranslate"><span class="pre">reference=True</span></code> returns the citation. <code class="docutils literal notranslate"><span class="pre">get('&lt;material&gt;')</span></code> now includes <code class="docutils literal notranslate"><span class="pre">property_refs</span></code>, the source of every non-optical and nonlinear value.</p></li>
+<li><p>Electro-optic (Pockels) coefficients <code class="docutils literal notranslate"><span class="pre">r</span></code> for LN, LN_MgO, GaAs, InP, AlN, and GaN. <a class="reference internal" href="../emodeguide/fem.html#electrostatic" title="electrostatic"><code class="xref py py-data docutils literal notranslate"><span class="pre">electrostatic</span></code></a> derives the DC field from the solved potential, and <a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> then solves the biased waveguide through the r tensor (<code class="docutils literal notranslate"><span class="pre">include_static</span></code>), so a phase shifter’s V<sub>pi</sub>L comes straight out of <a class="reference internal" href="../emodeguide/solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a>.</p></li>
+<li><p>Thermal and electrical properties (<code class="docutils literal notranslate"><span class="pre">thermal_conductivity</span></code>, <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code>, <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code>, and <code class="docutils literal notranslate"><span class="pre">resistivity</span></code> for metals) filled in for every database material, plus the heater and electrode metals Au, Al, Cu, Ti, W, Cr, TiN, and NiCr with their optical constants at 1550 nm. The <a class="reference internal" href="../emodeguide/materials.html"><span class="doc">Material Database</span></a> page tabulates every material’s non-optical properties, <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> and electro-optic coefficients, and their sources.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a> and <a class="reference internal" href="../emodeguide/solver-analysis.html#plot" title="plot"><code class="xref py py-data docutils literal notranslate"><span class="pre">plot</span></code></a> mark modes that live in the PML: the report gains a <code class="docutils literal notranslate"><span class="pre">PML</span></code> column and the plot’s mode menu reads <code class="docutils literal notranslate"><span class="pre">3,</span> <span class="pre">TE,</span> <span class="pre">PML</span></code>. The designation is available as <code class="docutils literal notranslate"><span class="pre">PML_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">window_confinement</span></code>.</p></li>
+<li><p>New setting <code class="docutils literal notranslate"><span class="pre">pml_seed_bool</span></code>: a PML simulation is first solved without its PML, and the eigensolver is then seeded with that fundamental mode, so the guided mode lands at index 0 without a hand-tuned <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code>.</p></li>
+<li><p>New website examples: <a class="reference internal" href="../examples/EME_SHG.html"><span class="doc">Nonlinear-EME: SHG</span></a> (GaAs-on-insulator second-harmonic generation, straight and tapered, with both devices’ conversion-efficiency spectra), <a class="reference internal" href="../examples/EME_PPLN.html"><span class="doc">Nonlinear-EME: PPLN</span></a> (a periodically poled thin-film lithium niobate waveguide doubling a telecom TE pump, with propagation loss from sidewall and surface roughness), <a class="reference internal" href="../examples/EME_Angled_Facet.html"><span class="doc">EME: Angled Facet</span></a> (a lensed-fiber Gaussian into an angled-facet taper, swept over facet tilt), <a class="reference internal" href="../examples/Heater.html"><span class="doc">Heater</span></a> (a Pt heater above an SOI waveguide, with the power for a <span class="math notranslate nohighlight">\(\pi\)</span> phase shift), and <a class="reference internal" href="../examples/Phase_Shifter.html"><span class="doc">Phase Shifter</span></a> (Au electrodes beside an x-cut LNOI waveguide, with V<sub>pi</sub>L).</p></li>
+<li><p>The <a class="reference internal" href="../emodeguide/variables.html"><span class="doc">Variable Descriptions</span></a> page now explains how the simulation file is organized (top-level keys vs. the <code class="docutils literal notranslate"><span class="pre">profiles</span></code> dictionary, default and named profiles, multi-wavelength profile sets) and groups variables by where they live. <a class="reference internal" href="../emodeguide/file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a> is documented.</p></li>
+<li><p>New website examples: <a class="reference internal" href="../examples/Adaptive_Scan.html"><span class="doc">Adaptive Scan</span></a> (<code class="docutils literal notranslate"><span class="pre">sweep(adaptive=True)</span></code>, a fine wavelength spectrum from a sparse set of solves) and <a class="reference internal" href="../examples/EME_DFG.html"><span class="doc">Nonlinear-EME: DFG</span></a>, difference-frequency generation in periodically poled lithium niobate, with two simultaneous <code class="docutils literal notranslate"><span class="pre">Source</span></code> excitations and a three-wavelength profile set.</p></li>
+<li><p>A sweep or a <a class="reference internal" href="../emodeguide/eme.html#chi2_spectrum" title="chi2_spectrum"><code class="xref py py-data docutils literal notranslate"><span class="pre">chi2_spectrum</span></code></a> no longer prints the mesh and eigensolve of every wavelength it solves. One line for the scan replaces one pair per solve.</p></li>
+<li><p>A <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section warns when its mode basis still contains PML modes: their large imaginary propagation constants make the coupled-mode solve stiff, and the warning names <code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code>, which drops them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get('response').power_vs_z(wavelength)</span></code> returns the forward power against position along a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section, from one solve. The coupled-amplitude ODE already integrates along z and used to discard the result, so a pump or second-harmonic power curve cost one full <a class="reference internal" href="../emodeguide/eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> per length. The forward amplitudes are now recorded after the driven solve converges and returned with the response, stitched across the slices of a refined taper so the curve reads as one. <code class="docutils literal notranslate"><span class="pre">amplitude_vs_z</span></code> gives the per-mode complex amplitudes behind it. Sampling is controlled by <code class="docutils literal notranslate"><span class="pre">z_samples</span></code> on the process (default 100 points per slice, 0 to switch it off).</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#plot" title="plot"><code class="xref py py-data docutils literal notranslate"><span class="pre">plot</span></code></a> with <code class="docutils literal notranslate"><span class="pre">plane='z-x'</span></code> on a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section draws the driven field. It uses the declared <code class="docutils literal notranslate"><span class="pre">excitation</span></code> rather than a unit mode, since conversion depends on pump power, and renders each slice from the amplitudes recorded along it, so the generated wavelength builds along the guide instead of stepping at slice boundaries. <code class="docutils literal notranslate"><span class="pre">wavelength=</span></code> picks which wavelength to show. Without a declared excitation the field shown is the small-signal response and the solver says so.</p></li>
+<li><p>The coupled-amplitude ODE’s default tolerances are <code class="docutils literal notranslate"><span class="pre">solver_rtol=1e-6</span></code> and <code class="docutils literal notranslate"><span class="pre">solver_atol=1e-9</span></code>, with <code class="docutils literal notranslate"><span class="pre">RK45</span></code> as the default method. Pass <code class="docutils literal notranslate"><span class="pre">solver_rtol</span></code>, <code class="docutils literal notranslate"><span class="pre">solver_atol</span></code> or <code class="docutils literal notranslate"><span class="pre">solver_method</span></code> on the process to override any of them. The explicit Runge-Kutta methods (<code class="docutils literal notranslate"><span class="pre">RK45</span></code>, <code class="docutils literal notranslate"><span class="pre">RK23</span></code>, <code class="docutils literal notranslate"><span class="pre">DOP853</span></code>) are the usable choices. The coupled amplitudes are complex, and SciPy’s implicit solvers (<code class="docutils literal notranslate"><span class="pre">LSODA</span></code>, <code class="docutils literal notranslate"><span class="pre">Radau</span></code>, <code class="docutils literal notranslate"><span class="pre">BDF</span></code>) reject a complex initial condition.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#scattering" title="scattering"><code class="xref py py-data docutils literal notranslate"><span class="pre">scattering</span></code></a> corrupted the profile it had just reported on, so every later <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a> on that simulation failed. The same path also wrote into a material object returned by <code class="docutils literal notranslate"><span class="pre">get('&lt;material&gt;')</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get('scattering_loss')</span></code> (and <code class="docutils literal notranslate"><span class="pre">sweep(result='scattering_loss')</span></code>) returned the per-shape metadata dictionary instead of the loss, and raised an error when more than one shape carried roughness.</p></li>
+<li><p>In an EMode2D session every internal error was reported as “only available with EMode3D”. An unexpected internal error now names only the function that was called.</p></li>
+<li><p>A saved simulation could not always be reopened: port references came back as plain tuples, section declarations reloaded as dictionaries, and some stored types were unknown to the reader unless that session happened to have imported them first.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sweep(result=['mode_order'])</span></code> raised an error, and an unsupported section key failed an assertion instead of naming the key.</p></li>
+<li><p>A saved simulation reopened only if the reading session happened to have already imported the module defining each stored type. Otherwise it failed with a bare <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> naming an internal class. Every tagged type is now imported before the file is read, and an unknown tag raises a proper error.</p></li>
+<li><p>A <a class="reference internal" href="../emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a> with an offset window is drawn where its field is.</p></li>
+<li><p>The z panel of a field plot is normalized to the excitation plane, not the global maximum.</p></li>
+<li><p>A forbidden section name raised an opaque “unexpected exception” instead of the intended error, and a bad value in <a class="reference internal" href="../emodeguide/eme.html#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a> or a section’s <code class="docutils literal notranslate"><span class="pre">settings=</span></code> did the same. <a class="reference internal" href="../emodeguide/file-management.html#create_profile_set" title="create_profile_set"><code class="xref py py-data docutils literal notranslate"><span class="pre">create_profile_set</span></code></a> raised an error on first use.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/setup.html#reset" title="reset"><code class="xref py py-data docutils literal notranslate"><span class="pre">reset</span></code></a> accepted any <code class="docutils literal notranslate"><span class="pre">kind</span></code> and silently did nothing for a misspelled one. It now raises an error. <code class="docutils literal notranslate"><span class="pre">reset('shapes')</span></code> also clears the stale mesh and mode data, so the next <a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> solves the new geometry instead of the old one.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/setup.html#import_database" title="import_database"><code class="xref py py-data docutils literal notranslate"><span class="pre">import_database</span></code></a> failed on a citation containing <code class="docutils literal notranslate"><span class="pre">=</span></code>, rejected integer <code class="docutils literal notranslate"><span class="pre">wavelength_range</span></code> entries, and defaulted the wavelength range to 200-2000 um instead of 0.2-2.0 um.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=...)</span></code> returned the default profile’s value for every per-profile variable regardless of <code class="docutils literal notranslate"><span class="pre">profile</span></code>. A multi-wavelength profile now returns a dict keyed by wavelength.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#refractive_index" title="refractive_index"><code class="xref py py-data docutils literal notranslate"><span class="pre">refractive_index</span></code></a> on an unknown material raised a raw error. <a class="reference internal" href="../emodeguide/solver-analysis.html#permeability" title="permeability"><code class="xref py py-data docutils literal notranslate"><span class="pre">permeability</span></code></a> returned a nested list for database materials and crashed on numeric input. <a class="reference internal" href="../emodeguide/file-management.html#create_profile_set" title="create_profile_set"><code class="xref py py-data docutils literal notranslate"><span class="pre">create_profile_set</span></code></a> split a bare string into characters and rejected its own documented default set name. <a class="reference internal" href="../emodeguide/file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a> crashed before any <a class="reference internal" href="../emodeguide/solver-analysis.html#scattering" title="scattering"><code class="xref py py-data docutils literal notranslate"><span class="pre">scattering</span></code></a>/<a class="reference internal" href="../emodeguide/solver-analysis.html#confinement" title="confinement"><code class="xref py py-data docutils literal notranslate"><span class="pre">confinement</span></code></a> call.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a> returned a dictionary that paired column headers with mode rows and ignored its <code class="docutils literal notranslate"><span class="pre">profile</span></code> argument. It now returns one list per column for the requested profile.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">emode</span></code> command line no longer prints a redundant “Opening the EMode Login window…” message.</p></li>
+<li><p>An exception inside <a class="reference internal" href="../emodeguide/solver-analysis.html#sweep" title="sweep"><code class="xref py py-data docutils literal notranslate"><span class="pre">sweep</span></code></a> left its output-suppression flag set, silencing every later operation in that session.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#scattering" title="scattering"><code class="xref py py-data docutils literal notranslate"><span class="pre">scattering</span></code></a> (and any <code class="docutils literal notranslate"><span class="pre">FDM(scattering=True)</span></code>) failed with “‘FDM’ failed with an unexpected internal error” on a profile solved with <code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code>. Dropping the absorber’s modes leaves the basis shorter than <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> asked for, but the per-mode loop still ran over the requested count and indexed past the end of the field arrays. A mode explicitly requested beyond the solved basis now raises an error naming <code class="docutils literal notranslate"><span class="pre">mode_list</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>1.0.3: August 18, 2026</strong></p>
+<ul class="simple">
+<li><p>New</p>
+<ul>
+<li><p>Added the setting <code class="docutils literal notranslate"><span class="pre">pml_thickness</span></code>, which specifies the PML by physical thickness in nm instead of by a layer count. It is [north, south, east, west] like every other four-sided setting, and 0 on a side falls back to <code class="docutils literal notranslate"><span class="pre">num_pml_layers</span></code> there, so the two can be mixed per side. A layer count measures grid cells, so the absorber shrinks as the mesh is refined. <code class="docutils literal notranslate"><span class="pre">pml_thickness</span></code> holds it fixed, which is what a resolution convergence sweep needs. See <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p>A simulation with a PML could not be reopened: <a class="reference internal" href="../emodeguide/file-management.html#open" title="open"><code class="xref py py-data docutils literal notranslate"><span class="pre">open</span></code></a> failed before any plot or solve ran, and the <code class="docutils literal notranslate"><span class="pre">.eph</span></code> file was already wrong when it was written.</p></li>
+<li><p>A boundary condition that pins the field at the wall left phantom modes in the mode list: one grid column wide, with exactly zero loss, sorted in among the physical modes. They are removed from the eigenvalue problem now, and genuine modes appear in the slots they were occupying.</p></li>
+<li><p>The PML now delivers the thickness its profile specifies. The grid gave the absorber smoothed cell widths, so a default 10-layer PML measured 492.8 nm against a design value of 500.0 nm, and the outermost (most absorbing) layer absorbed 14% less than intended. Reported radiation loss shifts by a few percent in simulations with a PML.</p></li>
+<li><p>The cached-solution key discarded the PML coordinate stretch, so two profiles differing only in their PML could share a junction S-matrix.</p></li>
+<li><p>Lowering <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> with <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> after a solve produced a mode list that EME could not assemble.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expansion_size</span></code> validation checked every direction against the north expansion instead of its own, so a valid single-direction expansion could be rejected and a bad resolution could escape the check.</p></li>
+<li><p><a class="reference internal" href="../emodeguide/solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> called without a <code class="docutils literal notranslate"><span class="pre">profile</span></code> argument no longer also writes a junk profile named ‘None’ alongside the default one.</p></li>
+<li><p>A junction between a section with a symmetric or antisymmetric boundary condition and either a <a class="reference internal" href="../emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a> or a differently reduced neighbor now integrates every overlap over the same domain.</p></li>
+<li><p>A windowed port lost its normalization when its basis passed through a transform, giving a 13% error in the self-overlap on a symmetry-folded port.</p></li>
+<li><p>A port with a composed <code class="docutils literal notranslate"><span class="pre">basis_map</span></code> raised an error instead of producing a cache key.</p></li>
+<li><p>Overlap products are recomputed after the field data changes instead of being served from a stale cache.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>1.0.2: August 5, 2026</strong></p>
+<ul class="simple">
+<li><p>New</p>
+<ul>
+<li><p>Free space sections using plane-wave decomposition, declared with <a class="reference internal" href="../emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>. Junctions with neighboring waveguide sections are computed analytically instead of by a mode solve.</p></li>
+<li><p>Generalized port definitions and connections, including branching: a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument on every section function, <a class="reference internal" href="../emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> for wiring named ports explicitly, and the <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> and <a class="reference internal" href="../interface.html#Bounds" title="Bounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bounds</span></code></a> classes in emodeconnection (see <a class="reference internal" href="../interface.html#ports"><span class="std std-ref">Ports</span></a>). A connection also positions its two sections relative to each other, replacing the now legacy per-section <code class="docutils literal notranslate"><span class="pre">offset</span></code>.</p></li>
+<li><p>A port can expose a sub-window of a wider cross-section, and when it is not connected to anything its mode is solved on that window alone, isolating a single waveguide of a multi-waveguide cross-section instead of the coupled supermode.</p></li>
+<li><p>The PML profile parameters are now user-tunable in <a class="reference internal" href="../emodeguide/setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>: <code class="docutils literal notranslate"><span class="pre">pml_order</span></code>, <code class="docutils literal notranslate"><span class="pre">pml_reflection</span></code>, <code class="docutils literal notranslate"><span class="pre">pml_kappa_max</span></code>, and <code class="docutils literal notranslate"><span class="pre">pml_alpha_max</span></code>, with defaults unchanged.</p></li>
+<li><p>The port selector in the field plot lists the simulation’s port names.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code> had no effect at all. It now removes the artificial modes of the PML regions from the mode list.</p></li>
+<li><p>The innermost PML layer was transparent, so a PML of N layers had only N-1 absorbing layers, and the PML parameters were missing from the cached-solution key, so two profiles differing only in their PML could share a solution.</p></li>
+<li><p>Shape geometry is now resolved in absolute coordinates, independent of the simulation window.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scattering()</span></code> raised an error when <code class="docutils literal notranslate"><span class="pre">shapes</span></code> or <code class="docutils literal notranslate"><span class="pre">mode_list</span></code> was given as a list.</p></li>
+<li><p>In emodeconnection, a single-element list argument was collapsed to the bare element before being sent to EMode, affecting every list-valued argument.</p></li>
+<li><p>In EME plots, section outlines disagreed with the field for every section after the first in a chain with transverse offsets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code> crashed when previewing a profile or taper section after <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, when given a <code class="docutils literal notranslate"><span class="pre">slice_position</span></code>, and for a slice containing only background material.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">emode</span></code> command line no longer requires Tk/Tcl for <code class="docutils literal notranslate"><span class="pre">--help</span></code>, <code class="docutils literal notranslate"><span class="pre">--version</span></code>, and <code class="docutils literal notranslate"><span class="pre">login</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>1.0.1: July 18, 2026</strong></p>
+<ul class="simple">
+<li><p>New</p>
+<ul>
+<li><p>Added a section outline view in EME plots, available before running the EME solve.</p></li>
+<li><p>EME slice view uses ‘sum’ rather than ‘mean’ by default, and ‘mean’ is still an option.</p></li>
+<li><p>Added functionality to clear sessions from the EModeLogin GUI.</p></li>
+<li><p>Added a CLI replica of the EModeLogin GUI, accessed by running <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span></code> from the command line.</p></li>
+<li><p>Added an alternative basic interface for entering credentials with <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span> <span class="pre">--write</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">clear</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">EMode()</span></code> accepts two new options: ‘mine’ and ‘others’, for clearing sessions by user.</p></li>
+</ul>
+</li>
+<li><p>Fixed</p>
+<ul>
+<li><p>Offset section display x-y view.</p></li>
+<li><p>Settings issues for plots, including window and mesh display for EME.</p></li>
+<li><p>In emodeconnection, the <code class="docutils literal notranslate"><span class="pre">save</span></code> parameter no longer shadows the <code class="docutils literal notranslate"><span class="pre">save()</span></code> function in EMode.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">effective_area()</span></code>, <code class="docutils literal notranslate"><span class="pre">group_index()</span></code>, <code class="docutils literal notranslate"><span class="pre">orthogonality()</span></code>, <code class="docutils literal notranslate"><span class="pre">scattering()</span></code>, and <code class="docutils literal notranslate"><span class="pre">confinement()</span></code> now return the value directly for single-wavelength profiles. A dict keyed by wavelength is returned only for multi-wavelength profiles.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_fields()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_grid()</span></code> return <code class="docutils literal notranslate"><span class="pre">FieldSet</span></code>/<code class="docutils literal notranslate"><span class="pre">GridSet</span></code> objects for multi-wavelength profiles, preserving numeric wavelength keys.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>1.0.0: July 8, 2026</strong></p>
+<ul class="simple">
+<li><p>Major internal architectural changes to enable the pending release of nonlinear EME functions and complex circuit solutions.</p></li>
+<li><p>EME API changed such that each section type is defined with a unique function.</p></li>
+<li><p>Improved PMLs for stability, especially with radiation modes.</p></li>
+<li><p>Fixed a bug with the command line installer for Windows. Now <code class="docutils literal notranslate"><span class="pre">emode</span></code> is added to path automatically.</p></li>
+<li><p>Plot now shows bidirectional field data by default, controlled by the setting “Forward only”.</p></li>
+<li><p>Plot now blends fields with interpolation by default, controlled by the setting “Blend slices”.</p></li>
+</ul>
+<p><strong>0.2.6: April 27, 2026</strong></p>
+<ul class="simple">
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function to deliver <code class="docutils literal notranslate"><span class="pre">mode_order</span></code> and <code class="docutils literal notranslate"><span class="pre">scattering_loss</span></code> in <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">mode_order()</span></code> as a user accesible function.</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, <code class="docutils literal notranslate"><span class="pre">orthogonality()</span></code>, and <code class="docutils literal notranslate"><span class="pre">overlap()</span></code> to use <code class="docutils literal notranslate"><span class="pre">profile</span></code> instead of <code class="docutils literal notranslate"><span class="pre">label</span></code> nomenclature.</p></li>
+</ul>
+<p><strong>0.2.5: March 25, 2026</strong></p>
+<ul class="simple">
+<li><p>Updated license manager connection to use a standard REST API (https).</p></li>
+<li><p>Users now have the ability to clear existing EMode sessions in case a simulation crash locks up a license. By default, stale licenses will be cleared every 9 minutes (24 hours with roaming enabled). Users can clear non-roaming stale sessions. See the <a class="reference internal" href="../interface.html#python-interface"><span class="std std-ref">Python Interface</span></a> page for details.</p></li>
+</ul>
+<p><strong>0.2.4: February 10, 2026</strong></p>
+<ul class="simple">
+<li><p>Boundary condition implementations have been updated. This may impact (anti-)symmetric boundary mode lists.</p></li>
+<li><p>Improved EME junction algorithm for robustness.</p></li>
+<li><p>Implemented speed improvements, leading to a 60% speedup in our taper example.</p></li>
+<li><p>Added an input to the <code class="docutils literal notranslate"><span class="pre">settings()</span></code> function called <code class="docutils literal notranslate"><span class="pre">frequency</span></code> as an alternative way to set the simulation wavelength. Internally, the <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> is calculated from the <code class="docutils literal notranslate"><span class="pre">frequency</span></code> parameter as <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> = c/<code class="docutils literal notranslate"><span class="pre">frequency</span></code>.</p></li>
+<li><p>Improved error handling when keywords are used incorrectly.</p></li>
+<li><p>Fixed a bug with scattering loss for films smaller than the mesh size.</p></li>
+<li><p>Added functionality to automatically clear all mode data at each call to <code class="docutils literal notranslate"><span class="pre">mesh()</span></code> and <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>.</p></li>
+<li><p>Added support for layers with zero thickness.</p></li>
+<li><p>Fixed a bug with conformal layers that extend outside the simulation window.</p></li>
+<li><p>Improved PML parameters for better accuracy and stability.</p></li>
+</ul>
+<p><strong>0.2.3: October 24, 2025</strong></p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">effective_area()</span></code> function now returns the effective area values. The effective area is in units of um^2.</p></li>
+<li><p>The shape vertices are now available to the user in the form of Well-Known Binary (WKB). The Shapely package in Python is required to decode this representation of the vertices into a Shapely geometry.</p></li>
+<li><p>Shape names are now automatically generated if not specified.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function, scattering losses are now available in the ‘result’ parameter. Use ‘scattering_loss’ to get a sum of all the shapes, or specify any of the scattering loss metadata keys to get them for each shape.</p></li>
+<li><p>Mode tracking has been added to the <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> function. Specify ‘mode_order’ in the ‘results’ parameter to get a list of the mode orders relative to the first solution.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Field</span></code> dimensions are reduced when only one field is requested, consistent with EMode prior to v0.2.2.</p></li>
+</ul>
+<p><strong>0.2.2: October 14, 2025</strong></p>
+<ul class="simple">
+<li><p>Hotfix on the previous version to remedy a few bugs.</p></li>
+<li><p>Using the <code class="docutils literal notranslate"><span class="pre">get()</span></code> function to extract ‘x’ and ‘y’ now returns the full-window variables.</p></li>
+<li><p>Using the <code class="docutils literal notranslate"><span class="pre">get()</span></code> function to extract a single field variable returns all modes for that field.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">get_fields()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_grid()</span></code> functions to extract <cite>Field</cite> and <cite>Grid</cite> class information (see documentation updates) from a simulation (using <code class="docutils literal notranslate"><span class="pre">get()</span></code> for this is now deprecated).</p></li>
+<li><p>Fixed a bug when <code class="docutils literal notranslate"><span class="pre">shape()</span></code> is called after meshing.</p></li>
+</ul>
+<p><strong>0.2.1: October 8, 2025</strong></p>
+<ul class="simple">
+<li><p>Updated the general anisotropic solver to support bend waveguides and all types of settings like symmetric boundaries, expansion, and PMLs, available with EMode3D.</p></li>
+<li><p>Added an input parameter to <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> called <code class="docutils literal notranslate"><span class="pre">mode_filter</span></code>. By default, this is set to ‘forward’, but it can also be set to ‘backward’ or ‘none’. This will filter the mode list to select only forward or backward propagating modes (or don’t filter) for the anisotropic mode solver.</p></li>
+<li><p>Improved EME stability and accuracy.</p></li>
+<li><p>Added a new parameter to <code class="docutils literal notranslate"><span class="pre">settings</span></code> called <code class="docutils literal notranslate"><span class="pre">eme_scattering</span></code>, which specifies whether or not to automatically calculate all scattering losses within the EME calculation, defaults to False.</p></li>
+<li><p>Fixed a bug in the MATLAB connection.</p></li>
+<li><p>To use MATLAB on macOS, users must install .NET (<a class="reference external" href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0">https://dotnet.microsoft.com/en-us/download/dotnet/9.0</a>). Installation instructions have been updated to include this detail.</p></li>
+<li><p>Added support for directly saving EME plots with <code class="docutils literal notranslate"><span class="pre">plot()</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_S_matrix()</span></code>.</p></li>
+<li><p>Fixed bug with conformal layers defined over multi-masked layers.</p></li>
+<li><p>Fixed bug with the <code class="docutils literal notranslate"><span class="pre">reset()</span></code> function for resetting shapes.</p></li>
+<li><p>Removed input parameter <code class="docutils literal notranslate"><span class="pre">label</span></code> from <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> because it has not been implement yet.</p></li>
+<li><p>Updated the <code class="docutils literal notranslate"><span class="pre">confinement()</span></code> function, which now includes the background shape and returns a dictionary of the confinement factors for each mode.</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">orthogonality()</span></code> so that it returns the orthogonality value.</p></li>
+<li><p>For taper and gds section types, the default <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code> is now ‘auto’, which uses 1/8th of the wavelength.</p></li>
+<li><p>Default <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> is now 0.02.</p></li>
+<li><p>Added option <code class="docutils literal notranslate"><span class="pre">lossless</span></code> to taper and gds section types. Defaults to False.</p></li>
+<li><p>Added the following parameters to the <code class="docutils literal notranslate"><span class="pre">add_material()</span></code> function: thermal_conductivity, resistivity, dn_dT, eps_r_dc, phi, and theta. See the documentation for details.</p></li>
+<li><p>Added the following parametrs to the <code class="docutils literal notranslate"><span class="pre">shape()</span></code> function: fem_resolution, current, voltage, and heat_only. See the documentation for details.</p></li>
+<li><p>Added a parameter <code class="docutils literal notranslate"><span class="pre">taper_algorithm</span></code> for the taper and gds section types. This is intended to be used for slowly varying structures that are known to be adiabatic.</p></li>
+</ul>
+<p><strong>0.2.0: June 27, 2025</strong></p>
+<ul class="simple">
+<li><p>Added an explicit restriction on the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter so that it cannot be set to be smaller than the machine precision. The default for <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 1e-12.</p></li>
+<li><p>Removed a bug in EME for symmetric section simulations.</p></li>
+<li><p>Optimized and improved the underlying EME algorithm, improving simulation accuracy.</p></li>
+<li><p>Added beta support for macOS and Linux.</p></li>
+<li><p>Improved the subpixel averaging algorithm.</p></li>
+<li><p>Added general anisotropic solver for straight waveguides, available with EMode3D.</p></li>
+<li><p>The shape() function input <code class="docutils literal notranslate"><span class="pre">refractive_index</span></code> has been changed to <code class="docutils literal notranslate"><span class="pre">material</span></code>. Similarly, the <code class="docutils literal notranslate"><span class="pre">fill_refractive_index</span></code> has been changed to <code class="docutils literal notranslate"><span class="pre">fill_material</span></code>.</p></li>
+<li><p>All scattering loss results are now stored under the <code class="docutils literal notranslate"><span class="pre">meta_data</span></code> dictionary of the shape.</p></li>
+<li><p>Added a progress bar for meshing and solving.</p></li>
+<li><p>Added the ability to return material properties from database materials using <code class="docutils literal notranslate"><span class="pre">get(&quot;material_name&quot;)</span></code>.</p></li>
+<li><p>Added two special types available to the user for defining materials and material properties: <code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code> and <code class="docutils literal notranslate"><span class="pre">MaterialProperties</span></code>.</p></li>
+<li><p>The crystal orientation of a material can now be rotated relative to the simulation window axis by defining a <code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code> and specifying rotation parameters <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p></li>
+<li><p>Changes to biaxial materials: extraordinary index is always aligned with the z-axis (ordinary is aligned with the x and y axes). Rotations can be performed to orient a crystal to the simulation axes as desired. Affected materials: BBO, LN_z –&gt; LN, LN_MgO_z –&gt; LN_MgO, TiO2_rutile.</p></li>
+<li><p>When EMode encounters errors, emodeconnection.py (1.0.11) will now raise an exception instead of just printing an error message.</p></li>
+</ul>
+<p><strong>0.1.2: March 16, 2025</strong></p>
+<ul class="simple">
+<li><p>Fixed a bug where <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> was reset after modes are automatically removed from the pml regions.</p></li>
+<li><p>Fixed a bug with the <code class="docutils literal notranslate"><span class="pre">label()</span></code> function when using the <code class="docutils literal notranslate"><span class="pre">fill_refractive_index</span></code> parameter.</p></li>
+<li><p>Fixed a bug in the <code class="docutils literal notranslate"><span class="pre">plot()</span></code> function when <code class="docutils literal notranslate"><span class="pre">fill_refractive_index</span></code> was set on conformal layers.</p></li>
+<li><p>Fixed a bug with EModeLogin when displaying error messages.</p></li>
+<li><p>Updated the EModeLogin GUI layout.</p></li>
+<li><p>For both the Python and the MATLAB interfaces, a static function called <code class="docutils literal notranslate"><span class="pre">EModeLogin()</span></code> was added, which replaces the previous EModeLogin executable for running the EMode Login GUI. New instructions are added to the website for running the EMode Login GUI.</p></li>
+</ul>
+<p><strong>0.1.1: May 7, 2024</strong></p>
+<ul class="simple">
+<li><p>Fixed a bug with the MATLAB connection.</p></li>
+<li><p>Fixed a bug with the <code class="docutils literal notranslate"><span class="pre">shape()</span></code> argument <code class="docutils literal notranslate"><span class="pre">position</span></code>.</p></li>
+<li><p>Fixed a bug with the <code class="docutils literal notranslate"><span class="pre">scattering()</span></code> calculate that was overestimating the scattering loss.</p></li>
+</ul>
+<p><strong>0.1.0: April 24, 2024</strong></p>
+<ul class="simple">
+<li><p>The EME module has been added, including <code class="docutils literal notranslate"><span class="pre">section()</span></code>, <code class="docutils literal notranslate"><span class="pre">EME()</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot_S_matrix()</span></code>. These are only available with an active EMode<sup>3D</sup> license.</p></li>
+<li><p>EME solver is limited to only use field_to_solve of ‘Et’.</p></li>
+<li><p>EME length sweeps are solved in the reverse order.</p></li>
+<li><p>Changed the parameter <code class="docutils literal notranslate"><span class="pre">length_nm</span></code> to <code class="docutils literal notranslate"><span class="pre">length</span></code> for all EME sections and functions.</p></li>
+<li><p>EME sections automatically re-solved after a shape change and label reset.</p></li>
+<li><p>Materials added to the material database: InGaAs, InGaP, InP, InSb, PMMA, SU8, TiO2_rutile, HfO2, H2O, GGG, GaSb, GaP, BBO, and InSb.</p></li>
+<li><p>Material explorer: fixed bug saving certain filetypes, fixed bug with logo placement in saved files, and added gridlines.</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">material_explorer()</span></code> plot display and saving resolution.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">add_material()</span></code> function now accepts citation and wavelength_range as an inputs.</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">add_material()</span></code> so that is accepts a list of three equations for defining anisotropic materials with dispersion.</p></li>
+<li><p>New function <code class="docutils literal notranslate"><span class="pre">import_database()</span></code> added, which supports the import of a custom database text file.</p></li>
+<li><p>The west boundary condition has been re-defined to reflect the Ex (a)symmetry, so it matches the south boundary condition.</p></li>
+<li><p>The default y-position has been changed from -1 to ‘auto’.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">plot()</span></code> function, scaling is added to the cursor data-value for field plotting.</p></li>
+<li><p>Fixed a plot error following a call to <code class="docutils literal notranslate"><span class="pre">group_index()</span></code>.</p></li>
+<li><p>Fixed a bug when iteratively updating a shape setting.</p></li>
+<li><p>MATLAB connection now outputs text to the MATLAB command window.</p></li>
+<li><p>Updated the scattering loss tool to make the calculation more consistent.</p></li>
+<li><p>Fixed bugs with saving and opening EMode simulation files with MATLAB.</p></li>
+<li><p>Added the new parameter <code class="docutils literal notranslate"><span class="pre">propagation_resolution</span></code> to the <code class="docutils literal notranslate"><span class="pre">settings()</span></code> function.</p></li>
+</ul>
+<p><strong>0.0.7-b5: December 12, 2023</strong></p>
+<ul class="simple">
+<li><p>Fixed bugs with conformal layers.</p></li>
+<li><p>Added arbitrary number of masks for each shape.</p></li>
+<li><p>Added input parameters to shape: <code class="docutils literal notranslate"><span class="pre">mask_offset</span></code> and <code class="docutils literal notranslate"><span class="pre">tone</span></code>. Either <code class="docutils literal notranslate"><span class="pre">mask</span></code>, <code class="docutils literal notranslate"><span class="pre">mask_offset</span></code>, or both can be a list. The length of each parameter will be matched by padding with the last value. Settings from <code class="docutils literal notranslate"><span class="pre">tone</span></code> and <code class="docutils literal notranslate"><span class="pre">etch</span></code> are applied to all <code class="docutils literal notranslate"><span class="pre">mask</span></code>/<code class="docutils literal notranslate"><span class="pre">mask_offset</span></code> values.</p></li>
+<li><p>Added etch functionality to conformal layers.</p></li>
+<li><p>Fixed the bug the made incorrect mode list ordering.</p></li>
+<li><p>Added the function <code class="docutils literal notranslate"><span class="pre">orthogonality</span></code> to test the othogonality of the mode list. This is helpful to determine if the mode list is sufficiently accurate.</p></li>
+<li><p>Added the input parameter <code class="docutils literal notranslate"><span class="pre">label</span></code> to <code class="docutils literal notranslate"><span class="pre">get()</span></code>, so users can extract data from labeled datasets.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">label()</span></code> function now saves all settings and field data under in a Python dictionary or a MATLAB structure array called <code class="docutils literal notranslate"><span class="pre">dataset_LABEL</span></code>.</p></li>
+<li><p>Changed the default operation in <code class="docutils literal notranslate"><span class="pre">confinement()</span></code> to only include areas of a shape that define the refractive index, not including areas that are overlapped by other shapes with higher priority.</p></li>
+<li><p>Added a boolean option <code class="docutils literal notranslate"><span class="pre">ignore_priority</span></code> to <code class="docutils literal notranslate"><span class="pre">confinement()</span></code> that toggles ignoring overlapping shapes with higher priority.</p></li>
+<li><p>Added user-accessible variables <code class="docutils literal notranslate"><span class="pre">shape_materials</span></code>, <code class="docutils literal notranslate"><span class="pre">priority_indices</span></code>, and <code class="docutils literal notranslate"><span class="pre">shape_vertices</span></code>.</p></li>
+<li><p>Added support for iPython.</p></li>
+<li><p>Added functionality to use an existing material name to define a custom material. This will override the EMode database material during the session.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FDM()</span></code> now takes the input parameter <code class="docutils literal notranslate"><span class="pre">label</span></code> to automatically save the simulation result as a labaled dataset.</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">group_index()</span></code> so it will run without running <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> first.</p></li>
+<li><p>Added ‘min’ as an option for <code class="docutils literal notranslate"><span class="pre">slice_op</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">scattering()</span></code>.</p></li>
+<li><p>Shapes and associated properties are now saved as dictionaries. This also includes the scattering loss results.</p></li>
+<li><p>Interfacial roughness and correlation length values are now specified in the shape parameters: <code class="docutils literal notranslate"><span class="pre">correlation_length</span></code> (alias <code class="docutils literal notranslate"><span class="pre">Lc_nm</span></code>) and <code class="docutils literal notranslate"><span class="pre">roughness_rms</span></code> (alias <code class="docutils literal notranslate"><span class="pre">st_dev_nm</span></code>).</p></li>
+<li><p>Added the new function <code class="docutils literal notranslate"><span class="pre">reset()</span></code> to clear all shapes, reset settings, or both.</p></li>
+<li><p>Shape argument <code class="docutils literal notranslate"><span class="pre">position</span></code> now accepts a single float to specify only the x-position and automatically place the y-position of a planar layer on top of the previous layer.</p></li>
+<li><p>Added boundary conditions options ‘TE-h’, ‘TE-v’, ‘TM-h’, and ‘TM-v’ to specify only horizontal or vertical symmetry for TE or TM modes.</p></li>
+<li><p>Fixed bugs with MATLAB connection: default <code class="docutils literal notranslate"><span class="pre">file_type</span></code> is now ‘.mat’ for <code class="docutils literal notranslate"><span class="pre">close()</span></code>, and ‘.eph’ file is preserved after <code class="docutils literal notranslate"><span class="pre">save()</span></code>.</p></li>
+</ul>
+<p><strong>0.0.6-b4: March 13, 2023</strong></p>
+<ul class="simple">
+<li><p>Added an option to remove the legend from <code class="docutils literal notranslate"><span class="pre">plot</span></code>.</p></li>
+<li><p>Now planar layers do not add fill material by default, only if <code class="docutils literal notranslate"><span class="pre">fill_refractive_index</span></code> is defined.</p></li>
+<li><p>Updated meshing algorithm to fix bugs at shape interfaces.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot</span></code> now shows positive and negative field values on the colorbar.</p></li>
+<li><p>Fixed error when setting <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> units to ‘um’ in <code class="docutils literal notranslate"><span class="pre">add_material</span></code>.</p></li>
+<li><p>Added options to improve sidewall scattering accuracy. See details in the documentation for the <code class="docutils literal notranslate"><span class="pre">scattering</span></code> function.</p></li>
+</ul>
+<p><strong>0.0.5-b3: February 3, 2023</strong></p>
+<ul class="simple">
+<li><p>Scattering loss now works with angled sidewalls.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">scattering</span></code>, the default for <code class="docutils literal notranslate"><span class="pre">mode</span></code> is ‘all’.</p></li>
+<li><p>Added imaginary index capability to <code class="docutils literal notranslate"><span class="pre">add_material</span></code>.</p></li>
+<li><p>Bend mode solver updated so field patterns and loss are now more accurate.</p></li>
+<li><p>Switched from uniaxial pml to stretched-coordinate pml.</p></li>
+<li><p>User-defined materials now override EMode database materials.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot</span></code> now shows shapes with the same refractive index in a different color.</p></li>
+<li><p>Added capability to solve for the magnetic field instead of the electric field. See the <code class="docutils literal notranslate"><span class="pre">field_to_solve</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">settings</span></code>.</p></li>
+<li><p>Removed the field_calc option from <code class="docutils literal notranslate"><span class="pre">FDM</span></code>. Now the fields will always be available, but they will not be stored in memory. This reduces the memory usage by about 7x.</p></li>
+<li><p>Saved .eph files do not contain the raw field data by default. This can be controlled with the <code class="docutils literal notranslate"><span class="pre">save_all_fields</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">save</span></code> and <code class="docutils literal notranslate"><span class="pre">close</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">material_explorer</span></code> now shows user added materials.</p></li>
+</ul>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

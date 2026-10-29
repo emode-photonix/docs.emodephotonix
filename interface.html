@@ -32,7 +32,6 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
@@ -43,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/documentation_options.js?v=46dfa7f5"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,6 +51,14 @@
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'interface';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/interface.html" />
     <link rel="icon" href="_static/icon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -59,7 +66,7 @@
     <link rel="prev" title="Installation" href="installation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="1.0.7" />
   </head>
   
   
@@ -195,6 +202,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -291,6 +318,26 @@
     
     
       <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
         
           <div class="navbar-item">
 
@@ -430,7 +477,7 @@ to skip interactive prompts:</p>
 <p>The window refreshes the <em>Active Sessions</em> table every 30 seconds while it is the active window, and at once when it regains focus. The periodic refresh pauses after 15 minutes without a key press or click, and resumes on the next one. Click <em>Refresh</em> in the <em>Active Sessions</em> header row to fetch the table at any time.</p>
 <section id="command-line-login">
 <h3>Command-line login</h3>
-<p>Run <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span></code> from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid; credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option (the same options as the GUI dropdown), and asks whether to log out on this computer.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span></code> from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid. Credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option, and asks whether to log out on this computer. The clearing options are the GUI dropdown’s, plus a number: each session you can clear by itself is numbered in the active sessions table (roaming sessions are not), and typing its number clears only that session, on whichever computer it runs, as the GUI’s per-row clear button does.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>emode<span class="w"> </span>login
 </pre></div>
 </div>
@@ -459,7 +506,7 @@ to skip interactive prompts:</p>
 <li><p><strong>roaming</strong> (<em>bool</em>) – Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the <code class="docutils literal notranslate"><span class="pre">clear</span></code> parameter or the <a class="reference internal" href="#pythonemodelogin"><span class="std std-ref">EMode Login</span></a> session clearing to terminate ghost license check-outs. Default: False.</p></li>
 <li><p><strong>open_existing</strong> (<em>bool</em>) – Whether to open an existing file or to start a new simulation. Default: False.</p></li>
 <li><p><strong>new_name</strong> (<em>bool</em><em> or </em><em>str</em>) – New name of opened existing file so the original file does not get modified. If False the original name is used. The extension ‘.eph’ will be added to this name. Default: False.</p></li>
-<li><p><strong>priority</strong> (<em>str</em>) – Set the CPU process priority. ‘pH’: High; ‘pAN’: Above normal; ‘pN’: Normal; ‘pBN’: Below normal; ‘pI’: Idle. Default: ‘pN’ (Normal).</p></li>
+<li><p><strong>priority</strong> (<em>str</em>) – Set the CPU process priority. ‘pH’: High, ‘pAN’: Above normal, ‘pN’: Normal, ‘pBN’: Below normal, ‘pI’: Idle. Default: ‘pN’ (Normal).</p></li>
 <li><p><strong>emode_cmd</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location, or if multiple versions are installed in different locations.</p></li>
 <li><p><strong>force_open</strong> (<em>bool</em>) – If a simulation file with this name is already open elsewhere, open it anyway instead of auto-renaming. Default: False.</p></li>
 <li><p><strong>save</strong> (<em>bool</em>) – Whether to save the simulation file when the session ends. Set to False to run without writing to disk. Default: True.</p></li>
@@ -486,7 +533,7 @@ to skip interactive prompts:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>str</em>) – Name of the simulation file. The ‘.eph’ or ‘.mat’ extension is optional to include with the name. Default: ‘emode’.</p></li>
-<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>; if given, overrides it. Default: None.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>. If given, it overrides <code class="docutils literal notranslate"><span class="pre">sim</span></code>. Default: None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -507,7 +554,7 @@ to skip interactive prompts:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>variable</strong> (<em>str</em>) – Name of the variable to return from EMode.</p></li>
 <li><p><strong>sim</strong> (<em>str</em>) – Name of the simulation file. The ‘.eph’ or ‘.mat’ extension is optional to include with the name. Default: ‘emode’.</p></li>
-<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>; if given, overrides it. Default: None.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>. If given, it overrides <code class="docutils literal notranslate"><span class="pre">sim</span></code>. Default: None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -527,11 +574,11 @@ to skip interactive prompts:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>str</em>) – Name of the simulation file. The ‘.eph’ or ‘.mat’ extension is optional to include with the name. Default: ‘emode’.</p></li>
-<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>; if given, overrides it. Default: None.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>. If given, it overrides <code class="docutils literal notranslate"><span class="pre">sim</span></code>. Default: None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of the top-level variable names in the file. Per-profile results are nested under <code class="docutils literal notranslate"><span class="pre">profiles</span></code> and are read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=...)</span></code> or the typed accessors; see <a class="reference internal" href="emodeguide/variables.html"><span class="doc">Variable Descriptions</span></a>.</p>
+<dd class="field-even"><p>List of the top-level variable names in the file. Per-profile results are nested under <code class="docutils literal notranslate"><span class="pre">profiles</span></code> and are read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=...)</span></code> or the typed accessors. See <a class="reference internal" href="emodeguide/variables.html"><span class="doc">Variable Descriptions</span></a>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -668,7 +715,7 @@ defaults (typically 0).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="SMatrix">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SMatrix</span></span></dt>
-<dd><p>A dense, port-structured scattering matrix returned by EME results (e.g. from <code class="docutils literal notranslate"><span class="pre">EME()</span></code> or <code class="docutils literal notranslate"><span class="pre">get(key='S_matrix')</span></code>). Ports are indexed 0 to <code class="docutils literal notranslate"><span class="pre">num_ports</span> <span class="pre">-</span> <span class="pre">1</span></code>; port <em>i</em> spans a contiguous range of modes whose count is <code class="docutils literal notranslate"><span class="pre">port_sizes[i]</span></code>. When <code class="docutils literal notranslate"><span class="pre">port_names</span></code>/<code class="docutils literal notranslate"><span class="pre">wavelengths</span></code> are available, ports can also be addressed by name instead of by index.</p>
+<dd><p>A dense, port-structured scattering matrix returned by EME results (e.g. from <code class="docutils literal notranslate"><span class="pre">EME()</span></code> or <code class="docutils literal notranslate"><span class="pre">get(key='S_matrix')</span></code>). Ports are indexed 0 to <code class="docutils literal notranslate"><span class="pre">num_ports</span> <span class="pre">-</span> <span class="pre">1</span></code>. Port <em>i</em> spans a contiguous range of modes whose count is <code class="docutils literal notranslate"><span class="pre">port_sizes[i]</span></code>. When <code class="docutils literal notranslate"><span class="pre">port_names</span></code>/<code class="docutils literal notranslate"><span class="pre">wavelengths</span></code> are available, ports can also be addressed by name instead of by index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -676,10 +723,12 @@ defaults (typically 0).</p>
 <li><p><strong>data</strong> (<em>ndarray</em>) – the complex scattering matrix, with shape <code class="docutils literal notranslate"><span class="pre">(total_modes,</span> <span class="pre">total_modes)</span></code>.</p></li>
 <li><p><strong>port_names</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>] or </em><em>None</em>) – name of each port, parallel to <code class="docutils literal notranslate"><span class="pre">port_sizes</span></code>. Default: None.</p></li>
 <li><p><strong>wavelengths</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>...</em><em>] or </em><em>None</em>) – wavelength of each port, parallel to <code class="docutils literal notranslate"><span class="pre">port_sizes</span></code>. Default: None.</p></li>
+<li><p><strong>mode_power</strong> (<em>ndarray</em><em> or </em><em>None</em>) – real power each mode carries, one entry per row of <code class="docutils literal notranslate"><span class="pre">data</span></code>. A lossy mode carries little or no real power. Default: None (an S-matrix from an older solver).</p></li>
 </ul>
 </dd>
 </dl>
-<p><code class="docutils literal notranslate"><span class="pre">SMatrix</span></code> also provides convenience methods: <code class="docutils literal notranslate"><span class="pre">transmission(from_port,</span> <span class="pre">to_port)</span></code>, <code class="docutils literal notranslate"><span class="pre">reflection(port)</span></code>, <code class="docutils literal notranslate"><span class="pre">insertion_loss_dB(from_port,</span> <span class="pre">to_port,</span> <span class="pre">mode)</span></code>, <code class="docutils literal notranslate"><span class="pre">unitarity_error()</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot(kind)</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SMatrix</span></code> also provides convenience methods: <code class="docutils literal notranslate"><span class="pre">transmission(from_port,</span> <span class="pre">to_port)</span></code>, <code class="docutils literal notranslate"><span class="pre">reflection(port)</span></code>, <code class="docutils literal notranslate"><span class="pre">power(from_port,</span> <span class="pre">to_port)</span></code>, <code class="docutils literal notranslate"><span class="pre">insertion_loss_dB(from_port,</span> <span class="pre">to_port,</span> <span class="pre">mode)</span></code>, <code class="docutils literal notranslate"><span class="pre">unitarity_error(from_ports)</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot(kind)</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">unitarity_error</span></code> measures how far the S-matrix is from conserving power. Each mode that carries real power is scaled to unit power, and the result is <span class="math notranslate nohighlight">\(\|S'^\dagger S' - I\|_F / \sqrt{n}\)</span> over the <span class="math notranslate nohighlight">\(n\)</span> incident modes counted, so a lossless S-matrix reads 0 and a 10% gain on every mode reads 0.1, whatever the number of modes. Lossy modes carry no power and are not counted. Without <code class="docutils literal notranslate"><span class="pre">mode_power</span></code> every mode counts as carrying unit power, which holds for guided modes but not for a plane-wave (PWD) section. <code class="docutils literal notranslate"><span class="pre">from_ports</span></code> counts only the modes incident from those ports. Use it when one side’s basis cannot receive what the other side sends: at a facet into free space, the guided modes of the waveguide cannot hold the plane waves arriving from the free-space side, so the whole matrix loses power while the balance counted from the waveguide port holds.</p>
 </dd></dl>
 
 </section>
@@ -723,7 +772,7 @@ defaults (typically 0).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>radius</strong> (<em>float</em>) – Bend radius (signed; sign determines bend direction).</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Bend radius (signed, where the sign determines bend direction).</p></li>
 <li><p><strong>sweep_angle</strong> (<em>float</em>) – Subtended angle in radians (signed).</p></li>
 </ul>
 </dd>
@@ -794,7 +843,7 @@ defaults (typically 0).</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>side</strong> (<em>str</em>) – Which end of the section this port is declared on, either ‘left’ or ‘right’.</p></li>
-<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section’s cross-section relative to the port it connects to: <code class="docutils literal notranslate"><span class="pre">offset=(1300,</span> <span class="pre">0)</span></code> places this section’s content 1300 nm in +x from the connection’s shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler’s input port <code class="docutils literal notranslate"><span class="pre">offset</span></code> so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section <code class="docutils literal notranslate"><span class="pre">offset=</span></code> argument (see <a class="reference internal" href="emodeguide/eme.html"><span class="doc">EME</span></a>) is this same displacement applied to every port at once; setting both on one section raises an <a class="reference internal" href="#ArgumentError" title="ArgumentError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgumentError</span></code></a>.</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section’s cross-section relative to the port it connects to: <code class="docutils literal notranslate"><span class="pre">offset=(1300,</span> <span class="pre">0)</span></code> places this section’s content 1300 nm in +x from the connection’s shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler’s input port <code class="docutils literal notranslate"><span class="pre">offset</span></code> so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section <code class="docutils literal notranslate"><span class="pre">offset=</span></code> argument (see <a class="reference internal" href="emodeguide/eme.html"><span class="doc">EME</span></a>) is this same displacement applied to every port at once. Setting both on one section raises an <a class="reference internal" href="#ArgumentError" title="ArgumentError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgumentError</span></code></a>.</p></li>
 <li><p><strong>basis_transform</strong> (<em>AngledFacetMap</em><em> or </em><em>None</em>) – Declares an angled facet on this port. Build it with <a class="reference internal" href="#make_angled_facet_port" title="make_angled_facet_port"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a> rather than constructing one directly. Default: None (the port’s cross-section is normal to the propagation axis).</p></li>
 </ul>
 </dd>
@@ -821,13 +870,13 @@ defaults (typically 0).</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="make_angled_facet_port">
 <span class="sig-name descname"><span class="pre">make_angled_facet_port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polar_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degrees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Build a <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> whose cross-section is tilted about a hinge line, modelling an angled facet: the plane where this section meets its neighbour is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode’s acceptance cone; for a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument of the waveguide section that ends at the facet, and wire it with <a class="reference internal" href="emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> if it is not the section’s default left/right adjacency.</p>
+<dd><p>Build a <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> whose cross-section is tilted about a hinge line, modeling an angled facet: the plane where this section meets its neighbor is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode’s acceptance cone. For a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument of the waveguide section that ends at the facet, and wire it with <a class="reference internal" href="emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> if it is not the section’s default left/right adjacency.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – Port name, unique within its section.</p></li>
 <li><p><strong>side</strong> (<em>str</em>) – Which end of the section the facet is on, either ‘left’ or ‘right’.</p></li>
-<li><p><strong>pivot_angle</strong> (<em>float</em>) – Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless <code class="docutils literal notranslate"><span class="pre">degrees</span></code> is False. 0 is an untilted facet. The sign sets which way the transmitted beam deflects.</p></li>
+<li><p><strong>pivot_angle</strong> (<em>float</em>) – Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless <code class="docutils literal notranslate"><span class="pre">degrees</span></code> is False. 0 is an untilted facet. A positive tilt about a vertical hinge moves the facet further along the propagation axis on the +x side of the hinge, so its plane is <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">z_facet</span> <span class="pre">+</span> <span class="pre">tan(pivot_angle)</span> <span class="pre">(x</span> <span class="pre">-</span> <span class="pre">x_hinge)</span></code>. Light arriving along +z meets it at an angle of incidence equal to the tilt. The reflection leaves at twice the tilt from the backward axis, toward +x, and the transmitted beam leaves at <code class="docutils literal notranslate"><span class="pre">asin(n_eff</span> <span class="pre">sin(pivot_angle)</span> <span class="pre">/</span> <span class="pre">n_gap)</span></code> from the facet normal (Snell’s law with the mode’s effective index), on the +x side of it. A negative tilt mirrors all of this to -x. For a horizontal hinge (<code class="docutils literal notranslate"><span class="pre">polar_angle</span></code> +90) the same holds with -y in place of +x, and plot() draws the facet as a line on the z-x or z-y panel.</p></li>
 <li><p><strong>polar_angle</strong> (<em>float</em>) – Orientation of the hinge line in the transverse plane: 0 for a vertical hinge (the facet is tilted in the x–z plane), ±90 for a horizontal one. Only these axis-aligned values are accepted. Default: 0.</p></li>
 <li><p><strong>pivot_point</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – [nm] a point <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> the hinge line passes through, in the section’s own cross-section coordinates. Default: None (the horizontal centre of the cross-section, at its vertical middle).</p></li>
 <li><p><strong>degrees</strong> (<em>bool</em>) – Whether the angles are in degrees (True) or radians (False). Default: True.</p></li>
@@ -837,11 +886,12 @@ defaults (typically 0).</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Three things to know before using one.</p>
+<p>Four things to know before using one.</p>
 <ul class="simple">
-<li><p>A facet is taken by the junction kernel directly. The junction is solved with the facet’s forward and backward traces kept explicit; a facet at zero tilt gives the same answer as no facet.</p></li>
-<li><p>The facet belongs on the waveguide side of the junction. It cannot sit on a <a class="reference internal" href="emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>, whose basis is analytic, or on a profile that uses a PML; both are rejected when the EME chain is built.</p></li>
-<li><p>Size <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental’s reflected plus transmitted power under-runs and the solver warns; ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.</p></li>
+<li><p>A facet is taken by the junction kernel directly. The junction is solved with the facet’s forward and backward traces kept explicit. A facet at zero tilt gives the same answer as no facet.</p></li>
+<li><p>The facet belongs on the waveguide side of the junction. It cannot sit on a <a class="reference internal" href="emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>, whose basis is analytic, or on a profile that uses a PML. Both are rejected when the EME chain is built.</p></li>
+<li><p>Size <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental’s reflected plus transmitted power under-runs and the solver warns. Ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.</p></li>
+<li><p>The facet is a model for small to moderate tilts. The cross-section is solved flat and its trace is carried onto the tilted plane, which assumes the mode is unchanged by the tilt, an assumption that weakens as the tilt grows. Past the critical angle, where <code class="docutils literal notranslate"><span class="pre">n_eff</span> <span class="pre">sin(pivot_angle)</span></code> exceeds the gap’s index, no plane wave carries the light away and it is totally internally reflected, into the higher-order modes the waveguide section has to hold. Keep tilts well below the critical angle (for a mode of effective index 3.4 that is about 25° into oxide and 17° into air), and check that the reflected plus transmitted power stays near 1 as <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> grows.</p></li>
 </ul>
 </div>
 </dd></dl>
@@ -917,7 +967,7 @@ defaults (typically 0).</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>msg</strong> (<em>str</em>) – Explanation of the denial.</p></li>
-<li><p><strong>license_type</strong> (<em>LicenseType</em>) – Active or required licence class.</p></li>
+<li><p><strong>license_type</strong> (<em>LicenseType</em>) – Active or required license class.</p></li>
 </ul>
 </dd>
 </dl>
@@ -958,7 +1008,7 @@ defaults (typically 0).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="NotImplementedError">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotImplementedError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Feature is recognised but not yet implemented.</p>
+<dd><p>Feature is recognized but not yet implemented.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – Description of the missing capability.</p>

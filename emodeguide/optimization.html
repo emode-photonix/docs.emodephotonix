@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/optimization';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/emodeguide/optimization.html" />
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Variable Descriptions" href="variables.html" />
+    <link rel="prev" title="Multi-Physics" href="fem.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.7" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="file-management.html">File management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Simulation setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solver-analysis.html">Solver and analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem.html">Multi-Physics</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Optimization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation/release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="optimization">
+<h1>Optimization</h1>
+<p><a class="reference internal" href="#optimize" title="optimize"><code class="xref py py-data docutils literal notranslate"><span class="pre">optimize</span></code></a> finds the parameters of a simulation you have already set up that give the best value of a quantity you choose, within bounds and constraints (EMode<sup>3D</sup> only). The parameters are named with the keys of <a class="reference internal" href="solver-analysis.html#sweep" title="sweep"><code class="xref py py-data docutils literal notranslate"><span class="pre">sweep</span></code></a>: a setting (<code class="docutils literal notranslate"><span class="pre">'wavelength'</span></code>), one profile’s setting (<code class="docutils literal notranslate"><span class="pre">'setting,</span> <span class="pre">&lt;profile&gt;,</span> <span class="pre">&lt;name&gt;'</span></code>), a shape property (<code class="docutils literal notranslate"><span class="pre">'shape,</span> <span class="pre">&lt;name&gt;,</span> <span class="pre">&lt;property&gt;'</span></code>), a section property (<code class="docutils literal notranslate"><span class="pre">'section,</span> <span class="pre">&lt;name&gt;,</span> <span class="pre">&lt;property&gt;'</span></code>), or an argument of a <a class="reference internal" href="eme.html#monitor_coupling" title="monitor_coupling"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor_coupling</span></code></a> beam (<code class="docutils literal notranslate"><span class="pre">'beam,</span> <span class="pre">&lt;name&gt;'</span></code>).</p>
+<p>Every evaluation starts from the simulation as declared when <a class="reference internal" href="#optimize" title="optimize"><code class="xref py py-data docutils literal notranslate"><span class="pre">optimize</span></code></a> is called. It sets each parameter, solves what the objectives need (a mode solve for a mode quantity, <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> for an S-matrix or a monitor coupling) and records the result, so an evaluation depends only on its parameters, whatever ran before it. A cross-section that an earlier evaluation solved is not solved again: optimizing a section length solves the modes once, and optimizing a beam’s angle on a solved chain solves nothing. At the end, the simulation is left solved at the best point, so <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>, <a class="reference internal" href="solver-analysis.html#plot" title="plot"><code class="xref py py-data docutils literal notranslate"><span class="pre">plot</span></code></a> and <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> read it.</p>
+<p>The objectives and constraints are declared as data with the classes below, imported from <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">Objective</span><span class="p">,</span> <span class="n">Constraint</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;section, coupler, length&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mf">5e3</span><span class="p">,</span> <span class="mf">40e3</span><span class="p">),</span> <span class="n">x0</span><span class="o">=</span><span class="mf">15e3</span><span class="p">)],</span>
+    <span class="n">objective</span><span class="o">=</span><span class="n">Objective</span><span class="p">(</span><span class="s1">&#39;S_power&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;coupler.out_right&#39;</span><span class="p">,</span> <span class="n">into</span><span class="o">=</span><span class="s1">&#39;coupler.in_left&#39;</span><span class="p">),</span>
+    <span class="n">constraints</span><span class="o">=</span><span class="p">[</span><span class="n">Constraint</span><span class="p">(</span><span class="s1">&#39;section, coupler, length&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="mf">30e3</span><span class="p">)],</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">objective</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="optimize">
+<span class="sig-name descname"><span class="pre">optimize</span></span></dt>
+<dd><p>Find the parameters that give the best objective, within bounds and constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> – what to vary, a <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> or a list of them</p></li>
+<li><p><strong>objective</strong> – what to improve, an <code class="docutils literal notranslate"><span class="pre">Objective</span></code> or a list of them, whose weighted sum is improved</p></li>
+<li><p><strong>constraints</strong> – limits on a parameter or on an objective’s quantity, a <code class="docutils literal notranslate"><span class="pre">Constraint</span></code> or a list of them, default: None</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – ‘cobyqa’ (bounds and constraints, no derivatives), ‘nelder-mead’ or ‘powell’ (bounds, constraints by a penalty), ‘differential_evolution’ (a global search over finite bounds, constraints too), ‘l-bfgs-b’ (bounds, with a gradient) or ‘slsqp’ (bounds and constraints, with a gradient), default: ‘cobyqa’</p></li>
+<li><p><strong>gradient</strong> (<em>str</em><em> or </em><em>None</em>) – how ‘l-bfgs-b’ and ‘slsqp’ get a gradient: ‘finite_difference’ evaluates the point and one step in each parameter, default: None (the pulsed adjoint for a poling design with pulse objectives, finite differences otherwise)</p></li>
+<li><p><strong>max_evaluations</strong> (<em>int</em>) – the most evaluations to make, default: 100</p></li>
+<li><p><strong>max_time</strong> (<em>float</em><em> or </em><em>None</em>) – [s] the most time to run, default: None (no limit)</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – the convergence tolerance, relative to each parameter’s range, default: 1e-4</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – the random seed of ‘differential_evolution’, so a run can be repeated, default: 0</p></li>
+<li><p><strong>apply_best</strong> (<em>bool</em>) – leave the simulation solved at the best point, default: True</p></li>
+<li><p><strong>record</strong> (<em>str</em><em> or </em><em>None</em>) – a file to write each evaluation to as one line of JSON as it completes, so an interrupted run keeps its history, default: None</p></li>
+<li><p><strong>snapshot</strong> (<em>str</em><em> or </em><em>None</em>) – also write the starting point to this <code class="docutils literal notranslate"><span class="pre">.eph</span></code> file, which <a class="reference internal" href="#evaluate" title="evaluate"><code class="xref py py-data docutils literal notranslate"><span class="pre">evaluate</span></code></a> can evaluate from in another session, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns an <code class="docutils literal notranslate"><span class="pre">OptimizationResult</span></code>.</p>
+<p>A constraint on a parameter (<code class="docutils literal notranslate"><span class="pre">'&lt;='</span></code> or <code class="docutils literal notranslate"><span class="pre">'&gt;='</span></code>) narrows that parameter’s bounds, so it is met exactly. A constraint on an objective’s quantity is met to the method’s tolerance. Each method spends evaluations differently: ‘cobyqa’ needs a few evaluations per parameter per step, finite differences one more evaluation than there are parameters per gradient, and ‘differential_evolution’ fifteen per parameter per generation. The result of a mode solve reproduces to about 1e-9 on the same grid, so set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> above that for objectives read from a mode solve.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Parameter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A quantity to vary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – the parameter, as a <a class="reference internal" href="solver-analysis.html#sweep" title="sweep"><code class="xref py py-data docutils literal notranslate"><span class="pre">sweep</span></code></a> key, <code class="docutils literal notranslate"><span class="pre">'beam,</span> <span class="pre">&lt;name&gt;'</span></code> (one of ‘angle’, ‘mode_field_diameter’, ‘center’, ‘index’ and ‘polarization’), or <code class="docutils literal notranslate"><span class="pre">'poling,</span> <span class="pre">&lt;section&gt;,</span> <span class="pre">domain_lengths'</span></code>, the length [nm] of every domain of a section with a <code class="docutils literal notranslate"><span class="pre">PulsedProcess</span></code> (<code class="docutils literal notranslate"><span class="pre">'poling,</span> <span class="pre">&lt;section&gt;,</span> <span class="pre">domain_lengths[k]'</span></code> for domain k alone)</p></li>
+<li><p><strong>bounds</strong> – (min, max), either end None for no limit, default: None</p></li>
+<li><p><strong>x0</strong> (<em>float</em><em> or </em><em>None</em>) – the starting value, default: None (the value the simulation holds now, or for a beam argument the value in the objective’s <code class="docutils literal notranslate"><span class="pre">beam</span></code>)</p></li>
+<li><p><strong>step</strong> (<em>float</em><em> or </em><em>None</em>) – the finite-difference step as a fraction of the bounded range (or of the value when unbounded), default: None (1e-6)</p></li>
+<li><p><strong>shape</strong> (<em>tuple</em>) – the shape of a list of values, such as <code class="docutils literal notranslate"><span class="pre">(n,)</span></code>, for <code class="docutils literal notranslate"><span class="pre">'poling,</span> <span class="pre">&lt;section&gt;,</span> <span class="pre">domain_lengths'</span></code>, default: () (one value, or for the domain lengths the number of domains the section holds now)</p></li>
+</ul>
+</dd>
+</dl>
+<p>A shape’s <code class="docutils literal notranslate"><span class="pre">'position'</span></code> given one value moves the shape in x and keeps its height. <code class="docutils literal notranslate"><span class="pre">bounds</span></code> of a list of values is one <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max)</span></code> for every element, or a list of them, one per element.</p>
+</dd></dl>
+
+<p><strong>Poling design.</strong> Every domain of a poled section can be a free variable. <code class="docutils literal notranslate"><span class="pre">Parameter('poling,</span> <span class="pre">&lt;section&gt;,</span> <span class="pre">domain_lengths',</span> <span class="pre">bounds=(1500,</span> <span class="pre">6000))</span></code> varies the length of each domain within a fabrication minimum and maximum, starting from the section’s declared poling as domains (<code class="docutils literal notranslate"><span class="pre">Poling.to_domain_lengths</span></code>). <code class="docutils literal notranslate"><span class="pre">'poling,</span> <span class="pre">&lt;section&gt;,</span> <span class="pre">total_length'</span></code>, the sum of the domain lengths, can be constrained (<code class="docutils literal notranslate"><span class="pre">Constraint('poling,</span> <span class="pre">ppln,</span> <span class="pre">total_length',</span> <span class="pre">'&lt;=',</span> <span class="pre">5e6)</span></code>), which costs no evaluation. Each evaluation propagates the pulse through the chain the last <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> prepared, with new domain walls, and solves no mode. With ‘l-bfgs-b’ or ‘slsqp’ and <code class="docutils literal notranslate"><span class="pre">'band_energy'</span></code> or <code class="docutils literal notranslate"><span class="pre">'band_average'</span></code> objectives, the gradient with respect to every domain comes from one adjoint propagation, so one evaluation with its gradient costs one and a half to two and a half propagations, whatever the number of domains. With <code class="docutils literal notranslate"><span class="pre">gradient='finite_difference'</span></code> a gradient costs one propagation per domain, which suits tens of domains but not thousands.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Objective">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal='maximize'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A quantity to improve. <code class="docutils literal notranslate"><span class="pre">kind</span></code> and the arguments that select it:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'S_power'</span></code> and <code class="docutils literal notranslate"><span class="pre">'S_phase'</span></code>: <span class="math notranslate nohighlight">\(|S|^2\)</span> and the phase of one S-matrix element. <code class="docutils literal notranslate"><span class="pre">out</span></code> and <code class="docutils literal notranslate"><span class="pre">into</span></code> name the ports, by name (its mode 0), as <code class="docutils literal notranslate"><span class="pre">'&lt;port&gt;_&lt;mode&gt;'</span></code>, or as a mode index of the whole matrix, and <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> picks one wavelength of a multi-wavelength circuit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'monitor_coupling'</span></code>: <a class="reference internal" href="eme.html#monitor_coupling" title="monitor_coupling"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor_coupling</span></code></a> of the monitor <code class="docutils literal notranslate"><span class="pre">monitor</span></code> for the beam <code class="docutils literal notranslate"><span class="pre">beam</span></code>, a dict of that function’s arguments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'effective_index'</span></code>, <code class="docutils literal notranslate"><span class="pre">'group_index'</span></code> and <code class="docutils literal notranslate"><span class="pre">'loss'</span></code> (dB/m): of mode <code class="docutils literal notranslate"><span class="pre">mode</span></code> (default 0) of <code class="docutils literal notranslate"><span class="pre">profile</span></code> (default the default profile).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'band_energy'</span></code> (pJ) and <code class="docutils literal notranslate"><span class="pre">'band_average'</span></code> (average power, W): of a pulse after pulsed propagation, between the wavelengths <code class="docutils literal notranslate"><span class="pre">band</span> <span class="pre">=</span> <span class="pre">(min,</span> <span class="pre">max)</span></code> in nm, for tracked mode <code class="docutils literal notranslate"><span class="pre">mode</span></code> (default all of them).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'parameter'</span></code>: the value of the parameter <code class="docutils literal notranslate"><span class="pre">key</span></code> itself, to make a device as short or as narrow as its constraints allow.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>goal</strong> (<em>str</em>) – ‘maximize’, ‘minimize’, or ‘target’, which minimizes the squared distance to <code class="docutils literal notranslate"><span class="pre">target</span></code>, default: ‘maximize’</p></li>
+<li><p><strong>target</strong> (<em>float</em><em> or </em><em>None</em>) – the value to reach with <code class="docutils literal notranslate"><span class="pre">goal='target'</span></code>, default: None</p></li>
+<li><p><strong>weight</strong> (<em>float</em>) – the objective’s weight in a list of them, default: 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">value(results)</span></code> returns the objective’s quantity from an evaluation’s results.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Constraint">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Constraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>quantity</strong> (<em>str</em><em> or </em><a class="reference internal" href="#Objective" title="Objective"><em>Objective</em></a>) – a parameter key, or an <code class="docutils literal notranslate"><span class="pre">Objective</span></code> whose quantity is limited</p></li>
+<li><p><strong>op</strong> (<em>str</em>) – ‘&lt;=’, ‘&gt;=’ or ‘==’</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – the limit</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="OptimizationResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OptimizationResult</span></span></dt>
+<dd><p>What <a class="reference internal" href="#optimize" title="optimize"><code class="xref py py-data docutils literal notranslate"><span class="pre">optimize</span></code></a> returns. <code class="docutils literal notranslate"><span class="pre">parameters</span></code> is the best point by key and <code class="docutils literal notranslate"><span class="pre">x</span></code> the same as a list, <code class="docutils literal notranslate"><span class="pre">objective</span></code> and <code class="docutils literal notranslate"><span class="pre">constraints</span></code> its values, and <code class="docutils literal notranslate"><span class="pre">goal</span></code> says whether the objective was maximized or minimized. With several objectives that are not all maximized, <code class="docutils literal notranslate"><span class="pre">objective</span></code> is the minimized sum of each one’s value (minimized), negative value (maximized) or squared distance from its target, each times its weight. <code class="docutils literal notranslate"><span class="pre">status</span></code> is ‘converged’, ‘budget’ (<code class="docutils literal notranslate"><span class="pre">max_evaluations</span></code> ran out), ‘time’ (<code class="docutils literal notranslate"><span class="pre">max_time</span></code> ran out) or ‘failed’, and <code class="docutils literal notranslate"><span class="pre">message</span></code> says more. <code class="docutils literal notranslate"><span class="pre">history</span></code> lists every evaluation as an <code class="docutils literal notranslate"><span class="pre">Evaluation</span></code> with its <code class="docutils literal notranslate"><span class="pre">index</span></code>, <code class="docutils literal notranslate"><span class="pre">parameters</span></code>, <code class="docutils literal notranslate"><span class="pre">objective</span></code>, <code class="docutils literal notranslate"><span class="pre">constraints</span></code>, the <code class="docutils literal notranslate"><span class="pre">results</span></code> the objectives read, <code class="docutils literal notranslate"><span class="pre">seconds</span></code>, <code class="docutils literal notranslate"><span class="pre">solves</span></code> (the mode solves it made), <code class="docutils literal notranslate"><span class="pre">cache_hits</span></code> (the solves and junctions it reused) and <code class="docutils literal notranslate"><span class="pre">cached</span></code> (a point the run had already evaluated, which costs nothing). <code class="docutils literal notranslate"><span class="pre">best</span></code> is the best evaluation, <code class="docutils literal notranslate"><span class="pre">evaluations</span></code> the number actually solved and <code class="docutils literal notranslate"><span class="pre">seconds</span></code> the run’s time. <code class="docutils literal notranslate"><span class="pre">to_json()</span></code> gives the whole result as plain JSON-ready data.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span></dt>
+<dd><p>Evaluate the simulation at one point. It starts from the simulation’s snapshot (<a class="reference internal" href="#snapshot" title="snapshot"><code class="xref py py-data docutils literal notranslate"><span class="pre">snapshot</span></code></a>, or the simulation as it was at the first evaluation), sets every parameter, solves what the results need and returns a record. The same parameters give the same results whatever ran before. Available in every session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> (<em>dict</em>) – {key: value} for every parameter, with the keys of <a class="reference internal" href="#optimize" title="optimize"><code class="xref py py-data docutils literal notranslate"><span class="pre">optimize</span></code></a></p></li>
+<li><p><strong>results</strong> (<em>str</em><em> or </em><em>list</em>) – the quantities to return, any <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a> key, ‘S_matrix’ or ‘monitor_coupling’, default: ‘effective_index’</p></li>
+<li><p><strong>snapshot</strong> (<em>str</em><em> or </em><em>None</em>) – a snapshot file to evaluate from instead of this simulation’s snapshot, default: None</p></li>
+<li><p><strong>monitor</strong> (<em>str</em><em> or </em><em>None</em>) – the monitor of a ‘monitor_coupling’ result, default: None</p></li>
+<li><p><strong>beam</strong> (<em>dict</em><em> or </em><em>None</em>) – the arguments of <a class="reference internal" href="eme.html#monitor_coupling" title="monitor_coupling"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor_coupling</span></code></a> for a ‘monitor_coupling’ result, default: None</p></li>
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>None</em>) – the profile a mode result is read from, default: None (the default profile)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a dict with <code class="docutils literal notranslate"><span class="pre">parameters</span></code>, <code class="docutils literal notranslate"><span class="pre">results</span></code>, <code class="docutils literal notranslate"><span class="pre">seconds</span></code>, <code class="docutils literal notranslate"><span class="pre">solves</span></code>, <code class="docutils literal notranslate"><span class="pre">cache_hits</span></code> and <code class="docutils literal notranslate"><span class="pre">seeded</span></code>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="snapshot">
+<span class="sig-name descname"><span class="pre">snapshot</span></span></dt>
+<dd><p>Take the snapshot <a class="reference internal" href="#evaluate" title="evaluate"><code class="xref py py-data docutils literal notranslate"><span class="pre">evaluate</span></code></a> starts from: the simulation as declared now (profiles, shapes, sections, ports and settings), without anything solved. Available in every session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em><em> or </em><em>None</em>) – also write the snapshot to this <code class="docutils literal notranslate"><span class="pre">.eph</span></code> file, which another session can <a class="reference internal" href="#evaluate" title="evaluate"><code class="xref py py-data docutils literal notranslate"><span class="pre">evaluate</span></code></a> from, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns the file’s path when <code class="docutils literal notranslate"><span class="pre">file_name</span></code> is given.</p>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize"><code class="docutils literal notranslate"><span class="pre">optimize</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Objective"><code class="docutils literal notranslate"><span class="pre">Objective</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Constraint"><code class="docutils literal notranslate"><span class="pre">Constraint</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#OptimizationResult"><code class="docutils literal notranslate"><span class="pre">OptimizationResult</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#snapshot"><code class="docutils literal notranslate"><span class="pre">snapshot</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,518 @@
+.. _python-interface:
+
+Python Interface
+================
+
+To control EMode directly from a Python script, we supply a Python package called ``emodeconnection``. This has been tested with Python 3.10 or higher, including the Anaconda distribution, iPython terminals, and numerous IDEs.
+
+The source code can be viewed here: `emodeconnection <https://github.com/emode-photonix/emodeconnection>`_
+
+For more information about Python, see these links:
+
+.. hlist::
+   :columns: 3
+
+   - `Download Python <https://www.python.org/downloads/>`_
+   - `Python Documentation <https://docs.python.org/3/tutorial/>`_
+   - `Python Tutorial <https://www.pythontutorial.net/>`_
+
+.. _SetupPython:
+
+Setup
+-----
+
+Install the ``emodeconnection`` Python package from the command line.
+
+.. code-block::
+
+   pip install emodeconnection
+
+Update to the latest version with:
+
+.. code-block::
+
+   pip install -U emodeconnection
+
+Alternatively, the ``uv`` package manager may be used in place of ``pip``.
+
+.. _emode-install:
+
+Install EMode
+-------------
+
+The ``emode-install`` command-line tool is included with the ``emodeconnection``
+Python package. It handles downloading, installing, and updating EMode.
+After installing ``emodeconnection`` via pip, you can run the installer.
+You will be prompted to accept the
+`EMode EULA <https://emodephotonix.com/legal/eula.pdf>`_ and log in
+with your EMode account credentials. For additional complete options,
+run ``emode-install --help``.
+
+.. code-block:: bash
+
+    emode-install
+
+Additional options:
+
+.. code-block:: bash
+
+    emode-install                            # Install latest version
+    emode-install --help                     # Show all options
+    emode-install --list-versions            # Show available versions
+    emode-install --update                   # Update to the latest version
+    emode-install --update --version 1.0.5   # Switch to a specific version
+    emode-install --version 1.0.5            # Install a specific version
+    emode-install --install-dir /opt/bin     # Custom install directory
+    emode-install --uninstall                # Remove EMode
+    emode-install --uninstall --install-dir /opt/bin  # Remove from custom location
+
+For automated or headless installs, set these environment variables
+to skip interactive prompts:
+
++-------------------------+-------------------------------------------------+
+| Variable                | Description                                     |
++=========================+=================================================+
+| `EMODE_EULA_ACCEPTED=1` | Accept the EULA non-interactively (CI/headless) |
++-------------------------+-------------------------------------------------+
+| `EMODE_EMAIL`           | Pre-fill login email                            |
++-------------------------+-------------------------------------------------+
+| `EMODE_PASSWORD`        | Pre-fill password (use with caution)            |
++-------------------------+-------------------------------------------------+
+| `EMODE_INTERACTIVE=1`   | Use interactive installer GUI                   |
++-------------------------+-------------------------------------------------+
+| `UNINSTALL_EMODE=y`     | Accept the uninstallation non-interactively     |
++-------------------------+-------------------------------------------------+
+
+.. _PythonEModeLogin:
+
+EMode Login
+-----------
+
+Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions and active sessions. *Alternatively*, you can run ``emode`` from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.
+
+.. code-block::
+
+   import emodeconnection as emc
+   emc.EModeLogin()
+
+To clear active sessions, select an option from the dropdown in the *Active Sessions* header row and click *Clear*. This terminates the selected sessions without consuming a license seat and refreshes the session table. The options are 'none' (default), 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest' (the latest non-roaming session), and 'oldest' (the oldest non-roaming session).
+
+The window refreshes the *Active Sessions* table every 30 seconds while it is the active window, and at once when it regains focus. The periodic refresh pauses after 15 minutes without a key press or click, and resumes on the next one. Click *Refresh* in the *Active Sessions* header row to fetch the table at any time.
+
+Command-line login
+^^^^^^^^^^^^^^^^^^
+
+Run ``emode login`` from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid; credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option (the same options as the GUI dropdown), and asks whether to log out on this computer.
+
+.. code-block:: bash
+
+   emode login
+
+To enter credentials without contacting the license server, run ``emode login --write``. This prompts for your email and password and writes them directly, without validation or session display. Use this as a basic fallback interface when the license server is unreachable.
+
+
+The EMode class
+---------------
+
+.. class:: EMode(simulation_name = 'emode', license_type = 'default', clear = 'none', save_path = '.', verbose = False, roaming = False, open_existing = False, new_name = False, priority = 'pN', emode_cmd = None, force_open = False, save = True)
+
+    Opens the EMode software and initializes a local simulation file. The user's account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run ``emode login --write`` from the command line.
+
+    An existing file can be opened for further analysis by specifying the input argument ``open_existing = True``. This opened file can be copied to a new file name by specifying the input argument ``new_name = 'new_filename'``.
+
+    .. note::
+        All `EMode functions <emodeguide.html>`_ are accessible as methods of this class instance using keyword arguments for each function input parameter.
+
+    :param str simulation_name: Name of the simulation file. The extension '.eph' will be added to this name. Default: 'emode'.
+    :param str license_type: The requested license type, either '2d', '3d', or 'default'. When running with 'default' license type, a '3d' license will be initialized if it is available, otherwise a '2d' license will be initialized if it is available. The '2d' or '3d' options will only request that specific license type if it is available. Default: 'default'.
+    :param str clear: Indicate whether to clear existing EMode sessions from this computer. Accepts 'all' (all non-roaming sessions), 'mine' (only sessions launched by the current user), 'others' (sessions owned by the current user but launched by other shared users), 'latest'/'oldest' (the latest/oldest non-roaming session), and 'none'. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: 'none'.
+    :param save_path: Name of the path where the simulation file will be created and saved. Default: '.'.
+    :type save_path: str or ~pathlib.Path
+    :param bool verbose: Whether to run EMode in verbose mode for debugging. Default: False.
+    :param bool roaming: Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the ``clear`` parameter or the :ref:`EMode Login <PythonEModeLogin>` session clearing to terminate ghost license check-outs. Default: False.
+    :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
+    :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
+    :type new_name: bool or str
+    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN' (Normal).
+    :param list[str] emode_cmd: Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location, or if multiple versions are installed in different locations.
+    :param bool force_open: If a simulation file with this name is already open elsewhere, open it anyway instead of auto-renaming. Default: False.
+    :param bool save: Whether to save the simulation file when the session ends. Set to False to run without writing to disk. Default: True.
+
+
+Functions
+---------
+
+The ``emodeconnection`` package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.
+
+.. function:: EModeLogin()
+
+    Opens the EMode Login GUI to input your EMode Photonix account credentials, view active license subscriptions, and view or clear active sessions (see :ref:`EMode Login <PythonEModeLogin>`). Once logged in, click the exit button to close the GUI and save the login credentials.
+
+.. function:: open_file(sim = 'emode', simulation_name = None)
+
+    Opens an EMode simulation file with the extension '.eph' or '.mat' and returns a dictionary with the file contents.
+
+    :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
+    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
+    :return: Dictionary with all keys and data from the specified EMode simulation file.
+    :rtype: dict
+
+.. function:: get(variable, sim = 'emode', simulation_name = None)
+
+    Returns the contents of a specified variable from an EMode simulation file with the extension '.eph' or '.mat'.
+
+    :param str variable: Name of the variable to return from EMode.
+    :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
+    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
+    :return: Requested item from EMode.
+    :rtype: int, float, str, or array-like
+
+.. function:: inspect(sim = 'emode', simulation_name = None)
+    :no-index:
+
+    Get the names of all top-level variables from EMode simulation file with the extension '.eph' or '.mat'.
+
+    :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
+    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
+    :return: List of the top-level variable names in the file. Per-profile results are nested under ``profiles`` and are read with ``get(key, profile=...)`` or the typed accessors; see :doc:`Variable Descriptions <emodeguide/variables>`.
+    :rtype: list
+
+Constants
+---------
+
+The ``emodeconnection.constants`` module contains the following constants.
+
+.. py:attribute:: c
+
+   The speed of light in vacuum in m/s.
+
+.. py:attribute:: eps_0
+
+   The vacuum permittivity in F/m.
+
+.. py:attribute:: mu_0
+
+   The vacuum permeability in H/m.
+
+.. py:attribute:: eta
+
+   The impedance of free space in Ohms.
+
+.. py:attribute:: e
+
+   The elementary charge in C.
+
+.. py:attribute:: hbar
+
+   The reduced Planck constant in J·s.
+
+Types
+-----
+
+Four types are available as classes of the emodeconnection package to specify material properties, field data, and grid data.
+
+.. py:class:: MaterialProperties
+
+   A container for linear and non-linear electromagnetic material parameters. At least one of `n` or `eps` **must** be supplied in any valid instance.
+
+   :param n: Scalar or tensor refractive index. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.
+   :type n: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param eps: Relative permittivity tensor εᵣ. Accepts *None* (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.
+   :type eps: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param mu: Relative permeability tensor μᵣ. Same shape conventions as `eps`. Default: *None* (μᵣ = 1).
+   :type mu: ~typing.Optional[float | list[float] | list[list[float]]]
+
+   :param d: Second-order nonlinear susceptibility *d*. Expected shape is 3x6. Use *None* when the material is linear. Default: *None*.
+   :type d: ~typing.Optional[~DTensorType]
+
+----
+
+.. py:class:: MaterialSpec
+
+   A container that defines the adjustable properties of a material being used. All properties default to the materials
+   defaults (typically 0).
+
+   :param material: Either a *str* pointing to a material in the Material Database, or a MaterialProperties object. Required.
+   :type material: ~typing.Union[str, ~MaterialProperties]
+
+   :param theta: The angle of rotation around *y* for the material in radians. Default: 0.
+   :type theta: ~typing.Optional[float]
+
+   :param phi: The angle of rotation around *z* for the material in radians, applied *after* the theta rotation. Default: 0.
+   :type phi: ~typing.Optional[float]
+
+   :param psi: The angle of rotation around the crystal's own *z* axis in radians, applied *before* the theta rotation. Only a biaxial crystal (such as KTP or LBO) or a nonlinear tensor without symmetry about *z* needs it. Default: 0.
+   :type psi: ~typing.Optional[float]
+
+   The three angles are *z-y-z* Euler angles that turn the crystal, not the simulation axes (an active rotation). A material tensor :math:`T` given on the crystal axes, such as the permittivity, permeability, :math:`\chi^{(2)}` or electro-optic tensor, appears in the simulation frame as :math:`R T R^\mathsf{T}` (with one :math:`R` per index for a higher-rank tensor), where
+
+   .. math:: R = R_z(\phi) \, R_y(\theta) \, R_z(\psi)
+
+   and :math:`R_z`, :math:`R_y` are the usual right-handed rotation matrices about *z* and *y*. Read right to left, the crystal is turned by ``psi`` about its *z* axis first, then by ``theta`` about *y*, then by ``phi`` about *z*. Column *a* of :math:`R` is the direction crystal axis *a* points in the simulation frame, so the crystal *z* axis ends up along :math:`(\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta)`. The simulation's propagation direction *z* then lies along the crystal direction :math:`R^\mathsf{T} \hat{z}`. For example, ``theta=-pi/2, psi=-phi_pm`` points the propagation direction along :math:`(\cos\phi_\mathrm{pm}, \sin\phi_\mathrm{pm}, 0)` in the crystal's *xy* plane.
+
+   :param x: The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.
+   :type x: ~typing.Optional[float]
+
+   :param loss: The absorption loss of the material in dB/m.
+   :type loss: ~typing.Optional[float]
+
+----
+
+.. py:class:: Field
+
+   A container for field data.
+
+   :param field: An array of all of the fields, including all modes with shape [N_fields, N_modes, Nx, Ny].
+   :type field: array-like
+
+   :param field_names: A list of the field names, corresponding to the fields in the ``field`` array.
+   :type field_names: list[str]
+
+   :param num_modes: The number of modes.
+   :type num_modes: int
+
+   :param grid: A grid object associated with the fields.
+   :type grid: Grid
+
+----
+
+.. py:class:: Grid
+
+   A container that defines the simulation grid.
+
+   :param x: Array of the x grid center points of the mesh.
+   :type x: array-like
+
+   :param y: Array of the y grid center points of the mesh.
+   :type y: array-like
+
+   :param is_pml: Whether the grid includes a PML region.
+   :type is_pml: bool
+
+   :param is_expanded: Whether the grid includes an expansion region.
+   :type is_expanded: bool
+
+   :param is_bc: True if the boundary condition is '00', False for other boundary conditions.
+   :type is_bc: bool
+
+----
+
+.. py:class:: SMatrix
+
+   A dense, port-structured scattering matrix returned by EME results (e.g. from ``EME()`` or ``get(key='S_matrix')``). Ports are indexed 0 to ``num_ports - 1``; port *i* spans a contiguous range of modes whose count is ``port_sizes[i]``. When ``port_names``/``wavelengths`` are available, ports can also be addressed by name instead of by index.
+
+   :param port_sizes: number of modes in each port.
+   :type port_sizes: tuple[int, ...]
+
+   :param data: the complex scattering matrix, with shape ``(total_modes, total_modes)``.
+   :type data: ~numpy.ndarray
+
+   :param port_names: name of each port, parallel to ``port_sizes``. Default: None.
+   :type port_names: tuple[str, ...] or None
+
+   :param wavelengths: wavelength of each port, parallel to ``port_sizes``. Default: None.
+   :type wavelengths: tuple[float, ...] or None
+
+   ``SMatrix`` also provides convenience methods: ``transmission(from_port, to_port)``, ``reflection(port)``, ``insertion_loss_dB(from_port, to_port, mode)``, ``unitarity_error()``, and ``plot(kind)``.
+
+Geometry
+--------
+
+The ``emodeconnection.geometry`` module provides classes for defining waveguide centerline paths, used primarily for EME GDS sections.
+
+.. py:class:: Pose(w=0, z=0, x=0, y=0, azimuth=0)
+
+   Position and orientation of a curve's local frame within the section frame.
+
+   :param float w: Lateral offset.
+   :param float z: Axial position.
+   :param float x: x position.
+   :param float y: y position.
+   :param float azimuth: Orientation angle in radians.
+
+----
+
+.. py:class:: Line(length)
+
+   Straight segment along the local +z axis.
+
+   :param float length: Length of the segment (must be positive).
+
+----
+
+.. py:class:: Arc(radius, sweep_angle)
+
+   Circular arc segment.
+
+   :param float radius: Bend radius (signed; sign determines bend direction).
+   :param float sweep_angle: Subtended angle in radians (signed).
+
+----
+
+.. py:class:: BSpline(knots, coefficients, degree=3)
+
+   B-spline curve segment.
+
+   :param list knots: Knot vector. Must satisfy ``len(knots) == len(coefficients) + degree + 1``.
+   :param list coefficients: Control points as a list of ``[x, z]`` pairs.
+   :param int degree: Spline degree. Default: 3.
+
+----
+
+.. py:class:: Path(segments)
+
+   A composed waveguide centerline built from one or more curve segments.
+
+   :param tuple segments: Tuple of :py:class:`Line`, :py:class:`Arc`, or :py:class:`BSpline` objects. The total path length is the sum of all segment lengths.
+
+----
+
+.. py:data:: Curve
+
+   Type alias for ``Union[Line, Arc, BSpline]``.
+
+.. _ports:
+
+Ports
+-----
+
+The ``emodeconnection.port`` module provides classes for defining named ports on EME sections. Every EME section function accepts a ``ports`` argument (see :doc:`EME </emodeguide/eme>`) that replaces the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-``side`` basis: a supplied port replaces every existing port on that side, and multiple ports may share a side. Ports are addressed globally as ``"<section_name>.<port_name>"`` for explicit wiring with :data:`connect_ports`.
+
+**Connecting two ports pins their coordinate systems together.** The two ports' origins, which are the horizontal center and bottom edge of each port's cross-section, are made to coincide, so a section is positioned by the connection rather than by absolute coordinates. Because the origin is the *bottom* edge in y, two profiles of different heights stay aligned at their substrate rather than at their vertical centers. Use ``offset`` below to displace a section off that shared origin.
+
+.. py:class:: Port(name, side, window=None, offset=(0.0, 0.0), basis_transform=None)
+
+   A named port on a section.
+
+   A ``Port`` carries two offsets that mean different things: ``window.offset`` says *which part of this section's cross-section the port exposes*, while ``offset`` says *where this section sits* relative to what the port connects to. In short, ``window`` answers "which part of me?" and ``offset`` answers "where am I?". A window never moves a section, and an offset never crops one.
+
+   :param str name: Port name, unique within its section.
+   :param window: A rectangular sub-region of the port's full cross-section to isolate, positioned within *this section's own* cross-section. Must overlap the section's profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), or on a connected port that shares its side with other windows, the port's modes are solved on just this window instead of the section's full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section's entire cross-section).
+   :type window: Bounds or None
+
+   A windowed port behaves as follows.
+
+   * A window keeps only the modes its content guides, those whose effective index is above what the layer stacks at its edges guide. The rest are standing waves between the window's walls, which the section does not have, so they are dropped, and a windowed port can have fewer modes than ``num_modes``. At least one mode, the one of largest index, is always kept. A section's own ports, without a window, keep all their modes.
+   * Several windows on one side of a section (the bus and ring arms of a ring coupler, say) are matched to the section together, in one junction, and then read out as separate ports, so together they conserve power. A window connected to another section with :data:`connect_ports` takes part in the same junction and passes its light on to that section from there. A connection windowed on both of its ends keeps a junction of its own.
+   * With the FDM, each edge of a window is moved to the nearest cell edge of the section's own mesh (by at most half a cell), so the window and the section share their grid and the junction stays reciprocal.
+   * Each windowed port is placed in the layout on its own window, so a section connected to one window is laid out on that window.
+
+   :param str side: Which end of the section this port is declared on, either 'left' or 'right'.
+   :param offset: [nm] transverse displacement of this section's cross-section relative to the port it connects to: ``offset=(1300, 0)`` places this section's content 1300 nm in +x from the connection's shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler's input port ``offset`` so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section ``offset=`` argument (see :doc:`EME </emodeguide/eme>`) is this same displacement applied to every port at once; setting both on one section raises an :class:`ArgumentError`.
+   :type offset: tuple[float, float]
+   :param basis_transform: Declares an angled facet on this port. Build it with :func:`make_angled_facet_port` rather than constructing one directly. Default: None (the port's cross-section is normal to the propagation axis).
+   :type basis_transform: AngledFacetMap or None
+
+----
+
+.. py:class:: Bounds(window_width, window_height, offset=(0.0, 0.0))
+
+   A rectangular sub-window of a port's full cross-section, used as :class:`Port`'s ``window``.
+
+   :param float window_width: Width of the window, in the cross-section's x-direction.
+   :param float window_height: Height of the window, in the cross-section's y-direction.
+   :param offset: Position of the window within the port's full cross-section: the x-coordinate of the window's horizontal center, and the y-coordinate of the window's bottom edge. Note the asymmetry: the second entry is the window's **bottom**, not its center, matching the cross-section's own y-axis which starts at 0 at the bottom of the profile. A full-height window therefore wants ``y=0``, not ``-window_height/2``. The window must overlap the section's profile.
+   :type offset: tuple[float, float]
+
+----
+
+.. py:function:: make_angled_facet_port(name, side, pivot_angle, polar_angle=0.0, pivot_point=None, degrees=True, window=None)
+
+   Build a :class:`Port` whose cross-section is tilted about a hinge line, modelling an angled facet: the plane where this section meets its neighbour is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode's acceptance cone; for a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the ``ports`` argument of the waveguide section that ends at the facet, and wire it with :data:`connect_ports` if it is not the section's default left/right adjacency.
+
+   :param str name: Port name, unique within its section.
+   :param str side: Which end of the section the facet is on, either 'left' or 'right'.
+   :param float pivot_angle: Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless ``degrees`` is False. 0 is an untilted facet. The sign sets which way the transmitted beam deflects.
+   :param float polar_angle: Orientation of the hinge line in the transverse plane: 0 for a vertical hinge (the facet is tilted in the x–z plane), ±90 for a horizontal one. Only these axis-aligned values are accepted. Default: 0.
+   :param pivot_point: [nm] a point ``(x, y)`` the hinge line passes through, in the section's own cross-section coordinates. Default: None (the horizontal centre of the cross-section, at its vertical middle).
+   :type pivot_point: tuple[float, float] or None
+   :param bool degrees: Whether the angles are in degrees (True) or radians (False). Default: True.
+   :param window: As :class:`Port`'s ``window``. Default: None.
+   :type window: Bounds or None
+
+   .. note::
+      Three things to know before using one.
+
+      * A facet is taken by the junction kernel directly. The junction is solved with the facet's forward and backward traces kept explicit; a facet at zero tilt gives the same answer as no facet.
+      * The facet belongs on the waveguide side of the junction. It cannot sit on a :data:`pwd_section`, whose basis is analytic, or on a profile that uses a PML; both are rejected when the EME chain is built.
+      * Size ``num_modes`` on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental's reflected plus transmitted power under-runs and the solver warns; ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.
+
+Exceptions
+----------
+
+The ``emodeconnection.types`` module also contains the following exception classes. All errors in EMode are raised and passed back to the user as one of these errors.
+
+.. py:class:: EModeError(msg='', *args, **kwargs)
+
+   Base class for all EMode exceptions.
+
+   :param str msg: Human-readable explanation. Default: ''.
+
+----
+
+.. py:class:: ArgumentError(msg, function, argument)
+
+   Invalid value passed to *function*.
+
+   :param str msg: Human-readable explanation.
+   :param function: Function name, or None.
+   :type function: str or None
+   :param argument: Name of the offending argument, or None.
+   :type argument: str or None
+
+----
+
+.. py:class:: EPHKeyError(msg, filename, key)
+
+   Missing dataset or attribute *key* in the given EPH file.
+
+   :param str msg: Details of the failure.
+   :param str filename: Path to the EPH file.
+   :param str key: Absent key.
+
+----
+
+.. py:class:: FileError(msg, filename)
+
+   Generic file-system or I/O problem.
+
+   :param str msg: Description of the error.
+   :param str filename: File path involved.
+
+----
+
+.. py:class:: LicenseError(msg, license_type)
+
+   Operation not permitted under *license_type*.
+
+   :param str msg: Explanation of the denial.
+   :param LicenseType license_type: Active or required licence class.
+
+----
+
+.. py:class:: ShapeError(msg, shape_name)
+
+   Unexpected tensor or geometry shape.
+
+   :param str msg: Explanation of the mismatch.
+   :param str shape_name: Symbolic name of the offending shape.
+
+----
+
+.. py:class:: NameError(msg, type, name)
+
+   Forbidden *name* within the given *type* category.
+
+   :param str msg: Reason for the failure.
+   :param str type: Category being searched (e.g. ``"section"`` or ``"label"``).
+   :param str name: Forbidden identifier.
+
+----
+
+.. py:class:: NotImplementedError(msg)
+
+   Feature is recognised but not yet implemented.
+
+   :param str msg: Description of the missing capability.

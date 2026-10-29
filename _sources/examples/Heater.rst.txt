@@ -119,9 +119,9 @@ Highlighted features: ``heat_only`` shapes, ``fem_resolution``, ``current``, ``h
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.5 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
+    Solving modes completed in 3.4 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
@@ -129,22 +129,22 @@ Console output::
     --------  --------  ------  -------------
         TE-0  2.446865  98.3 %          0.000
  
-    Solving heat completed in 0.2 sec
-    Meshing completed in 0.8 sec
-    Solving modes completed in 2.6 sec
+    Solving heat completed in 0.3 sec
+    Maximum temperature: 347.9 K
+    Core temperature rise: 20.5 K
+    Meshing completed in 0.1 sec
+    Solving modes completed in 3.7 sec
 
     Wavelength: 1550.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.451263  98.4 %          0.000
+        TE-0  2.450970  98.4 %          0.000
  
-    Exited EMode
-    Maximum temperature: 347.9 K
-    Core temperature rise: 20.5 K
     Heater power: 75.0 mW/mm
-    Effective index shift: 4.40e-03
-    Power for a pi phase shift: 13.2 mW
+    Effective index shift: 4.10e-03
+    Power for a pi phase shift: 14.2 mW
+    Exited EMode
 
 
 Figures:

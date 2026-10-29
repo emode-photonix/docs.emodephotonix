@@ -1,0 +1,99 @@
+
+Bending: SiN
+------------
+
+Highlighted features: bend radius, PMLs, confinement factor, saving plots.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import emodeconnection as emc
+
+        ## Set simulation parameters
+        wavelength = 980 # [nm] wavelength
+        dx, dy = 10, 10 # [nm] resolution
+        w_core = 2000 # [nm] waveguide core width
+        w_trench = 1500 # [nm] waveguide side trench width
+        h_core = 200 # [nm] waveguide core height
+        h_clad = 2000 # [nm] waveguide top and bottom clad, above the PML
+        window_width = w_core + w_trench*2 # [nm]
+        window_height = h_core + h_clad*2 # [nm]
+        num_modes = 1 # [-] number of modes
+        boundary = 'TE' # boundary condition
+
+        bend_radius = 20e3 # [nm] bend radius
+        x_off = 500 # [nm] waveguide x-offset for applying the bend radius at the center of the waveguide core rather than the center of the window
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        ## Add custom material
+        equation = '(1 + 0.6961663/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2) + 0.8974794/(1 - (9.896161/x)^2))^0.5'
+        em.add_material(name = 'custom_SiO2',
+            refractive_index_equation = equation, wavelength_unit = 'um')
+
+        ## Settings: the bend radiates outward, so a PML on the outer (east) wall
+        ## absorbs it, and PMLs on the top and bottom walls absorb what spreads up and
+        ## down. With max_effective_index just above the guided mode, the mode solved
+        ## is the guided mode rather than a PML mode.
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = window_width, window_height = window_height,
+            num_modes = num_modes, background_material = 'custom_SiO2',
+            boundary_condition = boundary, bend_radius = bend_radius + x_off,
+            pml_NSEW_bool = [1,1,1,0], pml_thickness = [1000,1000,1000,0], pml_kappa_max = 1,
+            max_effective_index = 1.67)
+
+        ## Draw shapes
+        em.shape(name = 'core', material = 'SiN', width = w_core,
+                 height = h_core, position = [-x_off, window_height/2])
+
+        ## Launch FDM solver
+        em.FDM()
+
+        ## Display the effective indices, loss, and core confinement
+        em.confinement()
+        em.report()
+
+        ## Save the field and refractive index profiles plots
+        em.plot(component = 'Ex', file_name = 'field_plot', file_type = 'png')
+        em.plot(component = 'Index', file_name = 'index_plot', file_type = 'png')
+
+        ## Plot the field and refractive index profiles
+        em.plot()
+
+        ## Collect all variable names and close EMode
+        variables = em.inspect()
+        em.close()
+
+
+Console output::
+
+    EMode3D 1.0.6 - email
+    Meshing completed in 0.8 sec
+    Solving modes completed in 18.1 sec
+
+    Wavelength: 980.0 nm    Solver: FDM, cylindrical bend
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)    PML    background confinement    core confinement
+    --------  --------  ------  -------------  -----  ------------------------  ------------------
+        TE-0  1.665877  99.9 %          0.017                           39.3 %              60.7 %
+ 
+    Exited EMode
+
+
+Figures:
+
+.. figure:: Figures/SiN/field_plot.png
+    :width: 400
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/SiN/index_plot.png
+    :width: 400
+    :align: center
+    :figwidth: 500

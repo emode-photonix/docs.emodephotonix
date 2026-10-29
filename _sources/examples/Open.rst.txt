@@ -94,32 +94,32 @@ How to open an existing EMode simulation.
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 1.3 sec
-    Solving modes completed in 4.2 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.3 sec
+    Solving modes completed in 4.3 sec
 
     Wavelength: 1970.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TE-0  2.094190  99.8 %          0.000
+        TE-0  2.094094  99.8 %          0.000
  
     Exited EMode
-    EMode3D 1.0.6 - email
-    Meshing completed in 1.3 sec
-    Solving modes completed in 4.0 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.3 sec
+    Solving modes completed in 3.9 sec
 
     Wavelength: 985.0 nm    Solver: FDM
  
       Mode #     n_eff    TE %    Loss (dB/m)
     --------  --------  ------  -------------
-        TM-0  2.067847   1.2 %          0.000
-        TM-1  1.929029  15.3 %          0.000
+        TM-0  2.067824   1.2 %          0.000
+        TM-1  1.928331  14.8 %          0.000
  
     Exited EMode
-    EMode3D 1.0.6 - email
+    EMode3D 1.0.7 - email
     Exited EMode
-    EMode3D 1.0.6 - email
+    EMode3D 1.0.7 - email
     Exited EMode
 
 

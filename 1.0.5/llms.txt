@@ -1,0 +1,37 @@
+# EMode
+
+> EMode is a software product by EMode Photonix, offering a solution for photonics simulation and device design.
+
+## Docs
+
+- [EMode Documentation](https://docs.emodephotonix.com/index.html)
+- [Installation](https://docs.emodephotonix.com/installation.html)
+- [Python Interface](https://docs.emodephotonix.com/interface.html)
+- [EMode Guide](https://docs.emodephotonix.com/emodeguide.html)
+- [File management](https://docs.emodephotonix.com/emodeguide/file-management.html)
+- [EME](https://docs.emodephotonix.com/emodeguide/eme.html)
+- [Multi-Physics](https://docs.emodephotonix.com/emodeguide/fem.html)
+- [Material Database](https://docs.emodephotonix.com/emodeguide/materials.html)
+- [Simulation setup](https://docs.emodephotonix.com/emodeguide/setup.html)
+- [Solver and analysis](https://docs.emodephotonix.com/emodeguide/solver-analysis.html)
+- [Variable Descriptions](https://docs.emodephotonix.com/emodeguide/variables.html)
+- [Release Notes](https://docs.emodephotonix.com/installation/release-notes.html)
+- [Troubleshooting](https://docs.emodephotonix.com/installation/troubleshooting.html)
+- [Examples](https://docs.emodephotonix.com/examples.html)
+- [Basic: SOI](https://docs.emodephotonix.com/examples/SOI.html)
+- [Bending: SiN](https://docs.emodephotonix.com/examples/SiN.html)
+- [Angled: LNOI](https://docs.emodephotonix.com/examples/LNOI.html)
+- [Scattering loss: Laser](https://docs.emodephotonix.com/examples/Laser.html)
+- [Open a Simulation](https://docs.emodephotonix.com/examples/Open.html)
+- [Dispersion Sweep](https://docs.emodephotonix.com/examples/Dispersion.html)
+- [Adaptive Scan](https://docs.emodephotonix.com/examples/Adaptive_Scan.html)
+- [EME: Taper](https://docs.emodephotonix.com/examples/EME_Taper.html)
+- [EME: Sweep](https://docs.emodephotonix.com/examples/EME_Sweep.html)
+- [EME: GDS](https://docs.emodephotonix.com/examples/EME_GDS.html)
+- [EME: Angled Facet](https://docs.emodephotonix.com/examples/EME_Angled_Facet.html)
+- [Nonlinear-EME: SHG](https://docs.emodephotonix.com/examples/EME_SHG.html)
+- [Nonlinear-EME: PPLN](https://docs.emodephotonix.com/examples/EME_PPLN.html)
+- [Nonlinear-EME: DFG](https://docs.emodephotonix.com/examples/EME_DFG.html)
+- [FEM: SOI](https://docs.emodephotonix.com/examples/FEM_SOI.html)
+- [Multi-physics: Heater](https://docs.emodephotonix.com/examples/Heater.html)
+- [Multi-physics: Phase Shifter](https://docs.emodephotonix.com/examples/Phase_Shifter.html)

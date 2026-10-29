@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>EME: Y-Branch</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/EME_Y_Branch';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/examples/EME_Y_Branch.html" />
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="EME: TFLN Ring Resonator" href="EME_TFLN_Ring.html" />
+    <link rel="prev" title="EME: S-Bend" href="EME_SBend.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.7" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="SOI.html">Basic: SOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SiN.html">Bending: SiN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Bend_Solvers.html">Bend Mode Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Straight_Convergence.html">Straight Waveguide Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ring_Design.html">Ring Resonator Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fiber_SMF28.html">SMF-28 Fiber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LNOI.html">Angled: LNOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laser.html">Scattering loss: Laser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Open.html">Open a Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dispersion.html">Dispersion Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Adaptive_Scan.html">Adaptive Scan</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="EME_Taper.html">EME: Taper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Sweep.html">EME: Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_GDS.html">EME: GDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Angled_Facet.html">EME: Angled Facet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Grating_Coupler.html">EME: Grating Coupler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SBend.html">EME: S-Bend</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">EME: Y-Branch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_TFLN_Ring.html">EME: TFLN Ring Resonator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_MMI.html">EME: MMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Supercontinuum.html">Nonlinear-EME: Supercontinuum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Inverse_Design.html">Nonlinear-EME: PPLN Inverse Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SFG.html">Nonlinear-EME: SFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FEM_SOI.html">FEM: SOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="eme-y-branch">
+<h1>EME: Y-Branch</h1>
+<p>A Y-branch splits one guide into two. Here a 500 x 220 nm Si wire in SiO2 at 1550 nm splits into two 500 nm cores that separate over 15 um. The splitter is drawn as two halves of the input core that widen and move apart, so it is a <code class="docutils literal notranslate"><span class="pre">taper_section</span></code> between two profiles of two cores each. Each output guide is its own section, wired to a window over its core on the splitter’s end, so the circuit branches rather than running from one end to the other. A real tip cannot come to a point, so the two halves start 100 nm apart, about the smallest gap a lithography process resolves.</p>
+<p>Highlighted features: a <code class="docutils literal notranslate"><span class="pre">Port</span></code> with a <code class="docutils literal notranslate"><span class="pre">window</span></code> on each core of a taper’s end, <code class="docutils literal notranslate"><span class="pre">connect_ports</span></code> to wire a branching circuit, and <code class="docutils literal notranslate"><span class="pre">plot(view='layout')</span></code>, which reconstructs the field arm by arm, draws each arm where the layout places it, and marks the ports with thick lines.</p>
+<p>The light splits evenly between the two outputs, by symmetry. Most of the loss comes from the blunt tip: the input mode meets an abrupt gap where its field is strongest, which scatters and reflects part of the light, so a finite tip costs a few tenths of a dB that an ideal sharp tip would not. A narrower gap lowers the loss, which is why fabricated Y-branches push the tip to the limit of the process. The abrupt step also scatters into many modes, so the splitter keeps more modes than a smooth taper would need.</p>
+<p>The splitter is a staircase of cross-sections, and its slicing decides how much it reflects. The tip, where the mode changes fastest, is sliced finely. Elsewhere the steps are kept shorter than half a wavelength in the guide, since steps of equal length a little longer than that form a grating whose reflections add up. Solving the splitter on its own, with every mode kept, checks that the slicing is fine enough.</p>
+<p>The window has metal walls and <code class="docutils literal notranslate"><span class="pre">boundary_condition='00'</span></code>. The structure is symmetric about x = 0, but a pair of masks is not yet recognized as symmetric, so a fold is not applied to it.</p>
+<p><em>This code example is licensed under the</em> <a class="reference external" href="../_static/LICENSE.html">BSD 3-Clause License</a>.</p>
+<div class="tabs docutils container" data-tabgroup="">
+<ul class="tabbar">
+<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
+Python</li></ul><div class="tab codetab selected" data-id="0">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Port</span><span class="p">,</span> <span class="n">Bounds</span>
+
+<span class="c1">## A Si wire Y-branch: one 500 nm guide splits into two that separate to</span>
+<span class="c1">## 2.5 um apart over 15 um, and each continues as its own output guide. The</span>
+<span class="c1">## splitter is a taper between two profiles of two cores, and each output</span>
+<span class="c1">## guide is wired to its own window on the splitter&#39;s end.</span>
+
+<span class="c1">## Set simulation parameters</span>
+<span class="n">wavelength</span> <span class="o">=</span> <span class="mi">1550</span>  <span class="c1"># [nm] wavelength</span>
+<span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span>  <span class="c1"># [nm] resolution</span>
+<span class="n">w_core</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># [nm] waveguide core width</span>
+<span class="n">h_core</span> <span class="o">=</span> <span class="mi">220</span>  <span class="c1"># [nm] waveguide core height</span>
+<span class="n">h_clad</span> <span class="o">=</span> <span class="mi">1090</span>  <span class="c1"># [nm] cladding below and above the core</span>
+<span class="n">d_arm</span> <span class="o">=</span> <span class="mi">1250</span>  <span class="c1"># [nm] each output guide&#39;s distance from the axis</span>
+<span class="n">tip_gap</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># [nm] the gap between the two halves at the tip, the smallest a lithography resolves</span>
+<span class="n">window_width</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">d_arm</span>  <span class="c1"># [nm] the splitter&#39;s window, two output windows wide</span>
+<span class="n">window_height</span> <span class="o">=</span> <span class="n">h_core</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">h_clad</span>  <span class="c1"># [nm]</span>
+<span class="n">num_modes</span> <span class="o">=</span> <span class="mi">24</span>  <span class="c1"># [-] number of modes in the splitter</span>
+
+<span class="n">tip_length</span> <span class="o">=</span> <span class="mi">1500</span>  <span class="c1"># [nm] where the two halves are closest</span>
+<span class="n">split_length</span> <span class="o">=</span> <span class="mi">15000</span>  <span class="c1"># [nm] the whole splitter, tip included</span>
+<span class="n">arm_length</span> <span class="o">=</span> <span class="mi">3000</span>  <span class="c1"># [nm]</span>
+<span class="n">num_arm_modes</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># [-] number of modes in each output guide</span>
+
+<span class="c1">## A real tip cannot come to a point, so the two halves start tip_gap apart.</span>
+<span class="c1">## At the tip the two halves have just come apart, and the mode changes faster</span>
+<span class="c1">## than anywhere else, so the tip gets its own, more finely sliced, section. The</span>
+<span class="c1">## two sections of the splitter are each sliced into steps shorter than half a</span>
+<span class="c1">## wavelength in the guide, so the steps cannot reflect in phase.</span>
+<span class="n">tip_settings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;schedule_change_per_slice&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;schedule_max_slices&#39;</span><span class="p">:</span> <span class="mi">320</span><span class="p">}</span>
+<span class="n">split_settings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;schedule_change_per_slice&#39;</span><span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span> <span class="s1">&#39;schedule_max_slices&#39;</span><span class="p">:</span> <span class="mi">320</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">halves</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Width and center of each of the two cores, a distance z along the splitter.</span>
+
+<span class="sd">    At the tip the two halves fill the input guide&#39;s width but for a gap of</span>
+<span class="sd">    tip_gap between them, and they widen and move apart linearly from there.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">z</span> <span class="o">/</span> <span class="n">split_length</span>
+    <span class="n">w0</span><span class="p">,</span> <span class="n">c0</span> <span class="o">=</span> <span class="p">(</span><span class="n">w_core</span> <span class="o">-</span> <span class="n">tip_gap</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">w_core</span> <span class="o">+</span> <span class="n">tip_gap</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span>
+    <span class="k">return</span> <span class="n">w0</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_core</span> <span class="o">-</span> <span class="n">w0</span><span class="p">),</span> <span class="n">c0</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">d_arm</span> <span class="o">-</span> <span class="n">c0</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open a session with the input guide and the splitter&#39;s three cross-sections.&quot;&quot;&quot;</span>
+    <span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">(</span><span class="n">emode_cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">simulation_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
+        <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">x_resolution</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y_resolution</span><span class="o">=</span><span class="n">dy</span><span class="p">,</span>
+        <span class="n">window_width</span><span class="o">=</span><span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span><span class="o">=</span><span class="n">window_height</span><span class="p">,</span>
+        <span class="n">num_modes</span><span class="o">=</span><span class="n">num_modes</span><span class="p">,</span> <span class="n">boundary_condition</span><span class="o">=</span><span class="s1">&#39;00&#39;</span><span class="p">,</span> <span class="n">background_material</span><span class="o">=</span><span class="s1">&#39;SiO2&#39;</span><span class="p">)</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;BOX&#39;</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="s1">&#39;SiO2&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">h_clad</span><span class="p">)</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">h_core</span><span class="p">,</span> <span class="n">etch_depth</span><span class="o">=</span><span class="n">h_core</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">w_core</span><span class="p">)</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">label_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">)</span>
+
+    <span class="c1">## At z = 0 the input guide meets the blunt tip: two halves tip_gap apart</span>
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;y_start&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y_tip&#39;</span><span class="p">,</span> <span class="n">tip_length</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y_end&#39;</span><span class="p">,</span> <span class="n">split_length</span><span class="p">)):</span>
+        <span class="n">width</span><span class="p">,</span> <span class="n">center</span> <span class="o">=</span> <span class="n">halves</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="p">[</span><span class="n">width</span><span class="p">,</span> <span class="n">width</span><span class="p">],</span> <span class="n">mask_offset</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">center</span><span class="p">,</span> <span class="n">center</span><span class="p">])</span>
+        <span class="n">em</span><span class="o">.</span><span class="n">label_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="n">em</span><span class="o">.</span><span class="n">straight_section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">taper_section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;tip&#39;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;y_start&#39;</span><span class="p">,</span> <span class="n">profile_end</span><span class="o">=</span><span class="s1">&#39;y_tip&#39;</span><span class="p">,</span>
+                     <span class="n">length</span><span class="o">=</span><span class="n">tip_length</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">tip_settings</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">em</span>
+
+
+<span class="c1">## Part 1: the splitter on its own, ending on the full window. Every mode of the</span>
+<span class="c1">## window is kept, so the power that leaves through its two ports is the check</span>
+<span class="c1">## that the splitter is resolved.</span>
+<span class="n">em</span> <span class="o">=</span> <span class="n">start</span><span class="p">(</span><span class="s1">&#39;y_splitter&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">taper_section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;split&#39;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;y_tip&#39;</span><span class="p">,</span> <span class="n">profile_end</span><span class="o">=</span><span class="s1">&#39;y_end&#39;</span><span class="p">,</span>
+                 <span class="n">length</span><span class="o">=</span><span class="n">split_length</span> <span class="o">-</span> <span class="n">tip_length</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">split_settings</span><span class="p">)</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">EME</span><span class="p">()</span>
+<span class="n">splitter_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+<span class="n">launched</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">block</span><span class="p">([</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">],</span> <span class="s1">&#39;left&#39;</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">splitter_balance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">mode_power</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">launched</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">S</span><span class="o">.</span><span class="n">mode_power</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">splitter_T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1">## Part 2: the Y-branch. A window over each core on the splitter&#39;s end is its</span>
+<span class="c1">## own port, and each output guide is connected to one of them.</span>
+<span class="n">em</span> <span class="o">=</span> <span class="n">start</span><span class="p">(</span><span class="s1">&#39;y_branch&#39;</span><span class="p">)</span>
+<span class="n">window</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Bounds</span><span class="p">(</span><span class="n">window_width</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">d_arm</span><span class="p">,</span> <span class="n">window_height</span><span class="o">=</span><span class="n">window_height</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+<span class="n">em</span><span class="o">.</span><span class="n">taper_section</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;split&#39;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;y_tip&#39;</span><span class="p">,</span> <span class="n">profile_end</span><span class="o">=</span><span class="s1">&#39;y_end&#39;</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="n">split_length</span> <span class="o">-</span> <span class="n">tip_length</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">split_settings</span><span class="p">,</span>
+    <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="n">Port</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;arm_1&#39;</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">(</span><span class="n">d_arm</span><span class="p">)),</span>
+           <span class="n">Port</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;arm_2&#39;</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">(</span><span class="o">-</span><span class="n">d_arm</span><span class="p">))])</span>
+
+<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">window_width</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">d_arm</span><span class="p">,</span> <span class="n">num_modes</span><span class="o">=</span><span class="n">num_arm_modes</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">w_core</span><span class="p">,</span> <span class="n">mask_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">label_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;arm&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">straight_section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;arm_1&#39;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">arm_length</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">straight_section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;arm_2&#39;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">arm_length</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">connect_ports</span><span class="p">(</span><span class="n">pairs</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;input.right&#39;</span><span class="p">,</span> <span class="s1">&#39;tip.left&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;tip.right&#39;</span><span class="p">,</span> <span class="s1">&#39;split.left&#39;</span><span class="p">),</span>
+                        <span class="p">(</span><span class="s1">&#39;split.arm_1&#39;</span><span class="p">,</span> <span class="s1">&#39;arm_1.left&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;split.arm_2&#39;</span><span class="p">,</span> <span class="s1">&#39;arm_2.left&#39;</span><span class="p">)])</span>
+
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">EME</span><span class="p">()</span>
+<span class="n">branch_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+
+<span class="c1">## Transmission into the fundamental mode of each output guide, the reflection</span>
+<span class="c1">## into every mode of the input, and the power that leaves through every port</span>
+<span class="n">T_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="s1">&#39;arm_1.right&#39;</span><span class="p">,</span> <span class="s1">&#39;input.left&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">T_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="s1">&#39;arm_2.right&#39;</span><span class="p">,</span> <span class="s1">&#39;input.left&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="c1">## mode_power holds the power each mode carries, in the order of the rows of S</span>
+<span class="n">column</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">port_slices</span><span class="p">[</span><span class="n">S</span><span class="o">.</span><span class="n">port_index</span><span class="p">(</span><span class="s1">&#39;input.left&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">start</span>
+<span class="n">launched</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">S</span><span class="o">.</span><span class="n">mode_power</span> <span class="o">/</span> <span class="n">S</span><span class="o">.</span><span class="n">mode_power</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+<span class="n">power_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">launched</span><span class="p">)</span>
+<span class="n">reflection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">launched</span><span class="p">[</span><span class="n">S</span><span class="o">.</span><span class="n">port_slices</span><span class="p">[</span><span class="n">S</span><span class="o">.</span><span class="n">port_index</span><span class="p">(</span><span class="s1">&#39;input.left&#39;</span><span class="p">)]])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">splitter alone: T into the even mode </span><span class="si">{</span><span class="n">splitter_T</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">, &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;power out </span><span class="si">{</span><span class="n">splitter_balance</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">splitter_time</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> s&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Y-branch: </span><span class="si">{</span><span class="n">branch_time</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> s&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output 1: </span><span class="si">{</span><span class="n">T_1</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output 2: </span><span class="si">{</span><span class="n">T_2</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;split ratio (1/total): </span><span class="si">{</span><span class="n">T_1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">T_1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">T_2</span><span class="p">)</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;excess loss: </span><span class="si">{</span><span class="o">-</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">T_1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">T_2</span><span class="p">)</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> dB&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;reflection: </span><span class="si">{</span><span class="n">reflection</span><span class="si">:</span><span class="s1">.1e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;power out of every port: </span><span class="si">{</span><span class="n">power_out</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1">## The field, drawn where the layout places each section, with the ports</span>
+<span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="n">plot_function</span><span class="o">=</span><span class="s1">&#39;abs&#39;</span><span class="p">,</span> <span class="n">plane</span><span class="o">=</span><span class="s1">&#39;z-x&#39;</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="s1">&#39;layout&#39;</span><span class="p">,</span>
+        <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;y_branch_field&#39;</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div><p>Console output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.7</span> <span class="o">-</span> <span class="n">email</span>
+
+<span class="n">Solving</span> <span class="n">S</span><span class="o">-</span><span class="n">matrices</span><span class="o">...</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="nb">input</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">tip</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">11.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">split</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">26.7</span> <span class="n">sec</span>
+ <span class="n">completed</span> <span class="ow">in</span> <span class="mf">40.0</span> <span class="n">sec</span>
+<span class="n">Exited</span> <span class="n">EMode</span>
+<span class="n">EMode3D</span> <span class="mf">1.0.7</span> <span class="o">-</span> <span class="n">email</span>
+
+<span class="n">Solving</span> <span class="n">S</span><span class="o">-</span><span class="n">matrices</span><span class="o">...</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="nb">input</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">tip</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">11.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">split</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">26.8</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">arm_1</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">section</span><span class="p">:</span> <span class="n">arm_2</span><span class="o">...</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+ <span class="n">completed</span> <span class="ow">in</span> <span class="mf">40.0</span> <span class="n">sec</span>
+
+<span class="n">splitter</span> <span class="n">alone</span><span class="p">:</span> <span class="n">T</span> <span class="n">into</span> <span class="n">the</span> <span class="n">even</span> <span class="n">mode</span> <span class="mf">0.86127</span><span class="p">,</span> <span class="n">power</span> <span class="n">out</span> <span class="mf">0.99972</span><span class="p">,</span> <span class="mf">40.6</span> <span class="n">s</span>
+<span class="n">Y</span><span class="o">-</span><span class="n">branch</span><span class="p">:</span> <span class="mf">41.1</span> <span class="n">s</span>
+<span class="n">output</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.43063</span>
+<span class="n">output</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.43063</span>
+<span class="n">split</span> <span class="n">ratio</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">total</span><span class="p">):</span> <span class="mf">0.50000</span>
+<span class="n">excess</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">0.6486</span> <span class="n">dB</span>
+<span class="n">reflection</span><span class="p">:</span> <span class="mf">3.9e-02</span>
+<span class="n">power</span> <span class="n">out</span> <span class="n">of</span> <span class="n">every</span> <span class="n">port</span><span class="p">:</span> <span class="mf">0.90284</span>
+<span class="n">Exited</span> <span class="n">EMode</span>
+</pre></div>
+</div>
+<p>Figures:</p>
+<figure class="align-center" style="width: 500px">
+<img alt="../_images/y_branch_field.png" src="../_images/y_branch_field.png" style="width: 500px;" />
+</figure>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

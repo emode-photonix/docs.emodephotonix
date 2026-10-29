@@ -1,0 +1,85 @@
+Installation
+============
+
+1. Get an EMode License
+-----------------------
+
+- `Create an EMode account <https://emodephotonix.com/register/>`_, and verify your account via the confirmation email.
+- Purchase a subscription license through the `EMode store <https://emodephotonix.com/get-emode/>`_. This is required, even for a free EMode\ :sup:`2D`\  license.
+
+2. Set Up the Python Interface
+------------------------------
+
+Follow the :ref:`Python Interface <python-interface>` instructions to install Python and the ``emodeconnection`` package.
+
+3. Download and Install EMode
+-----------------------------
+
+**System requirements:** **Windows** 10+, **Linux** Ubuntu 22.04+ (x86-64), **macOS** 13 Ventura+
+
+There are two installation methods:
+
+.. tab-set::
+
+    .. tab-item:: emode-install
+
+        The ``emode-install`` command-line tool is included with the ``emodeconnection``
+        Python package. It handles downloading, installing, and updating EMode.
+        After installing ``emodeconnection`` via pip, you can run the installer.
+        You will be prompted to accept the
+        `EMode EULA <https://emodephotonix.com/legal/eula.pdf>`_ and log in
+        with your EMode account credentials. For additional options, see the
+        :ref:`EMode Install <emode-install>` instructions or run ``emode-install --help``.
+
+        .. code-block:: bash
+
+            emode-install
+
+    .. tab-item:: Manual install
+
+        #. Log in to your `EMode account <https://emodephotonix.com/my-account/>`_.
+        #. Select your operating system and version from the dropdown menus.
+        #. Accept the EMode End User License Agreement.
+        #. Click ``Download EMode`` to download the file for your platform.
+
+        **Windows**
+
+        Unzip the downloaded ``.zip`` file and double-click the installer
+        (``.exe``). Follow the on-screen prompts to complete installation.
+        EMode will be added to your PATH automatically.
+
+        **macOS**
+
+        Download the installer for your Mac: **Apple silicon** (M-series
+        processors, ``EMode-<version>-Mac.pkg``) or **Intel**
+        (``EMode-<version>-Mac-x86.pkg``). To check, open the Apple menu and
+        choose About This Mac: the Chip line reads Apple M... on Apple silicon,
+        and the Processor line names an Intel CPU on an Intel Mac. The Apple
+        silicon build runs natively and is faster.
+
+        Double-click the downloaded ``.pkg`` file and follow the installer
+        prompts. Administrator access may be required. EMode will be installed
+        to ``/usr/local/bin/emode``.
+
+        **Linux**
+
+        Unzip the downloaded ``.zip`` file and run the ``install.sh`` script:
+
+        .. code-block:: bash
+
+            unzip EMode-VERSION-Linux.zip
+            sh install.sh
+
+4. Run an EMode Example Script
+------------------------------
+
+- Run the `Basic: SOI <examples/SOI.html>`_ example in Python to verify your installation.
+- A login window will open when EMode is first initialized. To subsequently access this window, see :ref:`EMode Login <PythonEModeLogin>`.
+
+If you have any issues, please contact our `support team <https://emodephotonix.com/contact/>`_.
+
+.. hlist::
+   :columns: 2
+
+   * `Release notes <installation/release-notes.html>`_
+   * `Troubleshooting <installation/troubleshooting.html>`_

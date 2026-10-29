@@ -2,6 +2,147 @@
 Release Notes
 ^^^^^^^^^^^^^
 
+**1.0.7**
+
+* New
+
+  * :data:`optimize` finds the parameters of a simulation you have already set up that give the best value of a quantity you choose, within bounds and constraints, available with EMode\ :sup:`3D`. The parameters are named with the keys of :data:`sweep`: a setting, one profile's setting (``'setting, <profile>, <name>'``), a shape property (``'shape, <name>, <property>'``), a section property (``'section, <name>, <property>'``) or an argument of a :data:`monitor_coupling` beam (``'beam, <name>'``). The ``Parameter``, ``Objective`` and ``Constraint`` classes of emodeconnection declare them as data. An objective is an S-matrix element's power or phase, a monitor coupling, a mode's effective index, group index or loss, a pulse's energy or average power in a wavelength band, or a parameter itself, and a list of objectives is their weighted sum. The methods are 'cobyqa' (the default), 'nelder-mead', 'powell', 'differential_evolution', 'l-bfgs-b' and 'slsqp', the last two with finite-difference gradients. Every evaluation starts from the simulation as declared, so its result depends only on its parameters. A cross-section an earlier evaluation solved is not solved again, so optimizing a section length solves the modes once. ``record=`` writes each evaluation to a file as it completes, and the simulation is left solved at the best point. An EMode\ :sup:`2D` session that calls it gets a ``LicenseError``. See :doc:`Optimization </emodeguide/optimization>`.
+  * Poling design with every domain free. ``Parameter('poling, <section>, domain_lengths', bounds=(min, max))`` makes the length of each domain of a poled section a variable of :data:`optimize`, within a fabrication minimum and maximum, and ``'poling, <section>, total_length'`` can be constrained. With 'l-bfgs-b' or 'slsqp' and a ``'band_energy'`` or ``'band_average'`` objective, the gradient with respect to every domain comes from one adjoint propagation, so an evaluation with its gradient costs one and a half to two and a half propagations, whatever the number of domains. :class:`Poling` has a new form, ``Poling(domain_lengths=[...])``. The website has a new example, 'Nonlinear-EME: PPLN Inverse Design', which optimizes the poling of the 'Nonlinear-EME: Supercontinuum' device for the 750 nm band with every domain length free.
+  * :data:`evaluate` evaluates a simulation at one point. It restores the simulation's snapshot, sets every parameter, solves what the requested results need and returns a record, so the same parameters give the same results whatever ran before. :data:`snapshot` takes that snapshot, and with ``file_name`` also writes it as an ``.eph`` file that another session can evaluate from. Both are available in every license tier.
+  * :data:`converge` finds the resolution, window, PML thickness or number of modes a result needs (``setting='resolution'``, ``'window'``, ``'pml'``, ``'modes'``, or ``'all'`` for each in turn), for one mode's effective index, group index, loss or orthogonality (``target``). It steps the setting, follows the mode by its overlap rather than its place in the mode list, and stops once the estimated error is within ``tolerance`` on two consecutive steps, or reports why it could not (``'oscillating'``, ``'lost mode'`` or ``'budget'``, for example). It prints one row per solve and returns a ``ConvergenceResult``. The profile's settings change only with ``apply=True``. It works with the FDM and the FEM and is available in every license tier. See :data:`converge` and the new example 'Straight Waveguide Convergence'.
+  * :data:`sweep` takes several keys at once: with ``key`` and ``values`` as lists it sweeps every combination. A key can name one profile's setting, ``'setting, <profile>, <name>'``.
+  * Measured pulses. ``PulsedSource(shape='measured', measurement=PulseMeasurement(...))`` launches a measured spectrum or temporal trace, with or without a retrieved phase (FROG or SPIDER). The samples are fitted first ('smooth', 'sech' or 'gaussian'), and a fit whose quality is below ``min_fit_quality`` (default 0.99) is refused with an error that gives the quality reached. ``background`` subtracts a constant pedestal before the fit, and ``get('pulse_response').measured_fit`` reports the fit. See :class:`PulseMeasurement`.
+  * Pulsed propagation follows the tracked modes through an avoided crossing inside the band, adding the crossing partner on its own, carries modes that are guided over only part of the band, and follows the second-harmonic modes a :math:`\chi^{(2)}` section phase-matches. A pulse response reports ``window_gap``, the empty stretch of the periodic time window, and warns when the pulse wraps onto itself.
+  * Pulsed propagation searches for the second-harmonic modes an unpoled :math:`\chi^{(2)}` section phase-matches wherever the pump has light as it broadens, not only where the launched pulse has light. When a match lies outside the launched spectrum, a quick run of the pump alone finds where the pump reaches first, which adds its time to :data:`EME`. ``PulsedProcess(modal_search=)`` chooses the search: ``'broadened'`` (the default), ``'launch'`` (the launched spectrum only) or a ``(min, max)`` band of fundamental wavelengths in nm. ``max_harmonic_modes`` (default 3) caps the second-harmonic modes tracked, and ``harmonic_coupling`` (default 0.1) is the weakest coupling tracked, relative to the strongest. ``get('pulse_response').rank_report`` gives, for each slice, the number of field patterns used, the number ``pattern_threshold`` asks for and the share of each tracked mode's field the patterns leave out. The solver warns when ``max_rank`` leaves out more than 1 % of a tracked mode's field.
+  * Free-space beams (:data:`free_space_field`). ``waist_position`` places the beam's waist along its path, so the launched beam carries the wavefront curvature and Gouy phase of that distance. ``waist`` and ``waist_position`` take ``(x, y)`` pairs for elliptical and astigmatic beams. ``modes``, with ``powers`` and ``phases``, launches a combination of the port's own modes instead of a beam.
+  * ``SMatrix.mode_power`` holds the power each port mode carries, and ``unitarity_error()``, ``power()`` and ``insertion_loss_dB()`` weigh by it, so they read power at a port whose modes carry unequal power, such as a plane-wave section. ``unitarity_error(from_ports=)`` counts only the modes of the ports named.
+  * New website examples: 'Straight Waveguide Convergence' (the SiN guide of 'Bend Mode Solvers' without the bend, solved by the FDM and the FEM, with the effective and group index errors against run time), 'EME: MMI' (a 1x2 and a 2x2 MMI, the 2x2's width and length set by :data:`optimize`), 'EME: S-Bend', 'EME: Y-Branch', 'Nonlinear-EME: SFG', 'Ring Resonator Design' and 'SMF-28 Fiber'. The examples page shows a card with a thumbnail for every example.
+  * The layout view (``plot(view='layout')``) draws the Index and Shapes panels on the chip, from each shape's placed outline. The 'z-y' panel offers Index and Shapes too. A branching circuit, such as an MZI or a Y-branch, draws each arm's field on its own arm. EME ports are drawn as lines over their windows, and an angled facet is drawn at its tilt.
+  * With ``EMODE_HEADLESS=1``, :data:`material_explorer` and :data:`plot_S_matrix` return a ``PlotImage``, as :data:`plot` does, instead of opening a window.
+  * ``EMode(quiet=True)`` hides the solver's printed output. Warnings and errors still reach stderr.
+  * ``get('n_eff')`` reads the effective index. :data:`permittivity` and :data:`permeability` take a :class:`MaterialSpec` and every other material form :data:`refractive_index` takes. A member of a multi-wavelength profile is named ``'<profile>.<wavelength>'``, as in ``get('effective_index', profile='tfln.1550')``, and an ambiguous name raises an error that names the candidates.
+  * ``dn_dT`` and ``eps_r_dc`` can be given per axis for an anisotropic material, so :data:`heat` shifts each axis by its own ``dn_dT``.
+  * When every EMode\ :sup:`3D` seat is in use and a session falls back to EMode\ :sup:`2D`, it warns once: "Every EMode3D seat is in use, so this session runs as EMode2D." ``emode login`` on the command line can clear one numbered session, as the login window can.
+  * Every installer includes ``THIRD-PARTY-NOTICES.html``, which lists the third-party components it contains and their licenses.
+  * emodeconnection 1.1.24 carries the client side of this release: the optimizer's and :data:`converge`'s types, ``Confinement``, measured pulses, poling by domain lengths, the second-harmonic options and ``RankReport``, ``SMatrix.mode_power`` and quiet mode.
+
+* Changed
+
+  * The FDM's subpixel averaging follows each interface: the field component normal to it sees the harmonic mean of the materials' permittivities, the tangential ones the arithmetic mean, and a gap or strip thinner than a cell is averaged as a layer. A material face between grid lines no longer gives a first-order error, so effective indices move toward their converged values. A 500 x 220 nm silicon strip's TM mode at 1550 nm on a 25 nm grid moves from 1.8174 to 1.7760, against 1.7735 converged. Structures whose faces sit on grid lines give the same results as before.
+  * ``FDM()``, ``FEM()`` and :data:`solve` on a multi-wavelength profile return a ``WavelengthDict`` with every wavelength's result, keyed by wavelength, where they returned only the last wavelength's. A single wavelength still returns a plain dict.
+  * Enabling a PML no longer shifts the cell centers of an expansion region. Expansion regions are now built from their cell edges, so results on grids with an expansion region change slightly (by 5e-7 in the 'Angled: LNOI' example's effective index, from this change alone).
+  * :data:`confinement` indexes modes by integer on the client, as the server does: ``confinement()['core'][0]`` is the fundamental mode's confinement factor in ``core``. It returns a ``Confinement``, a read-only mapping. :data:`get_shape`'s ``metadata['confinement']`` is keyed by integer too. A client older than emodeconnection 1.1.24 still reads string keys.
+  * A window that is not a whole even number of cells is grown to the next even count, with a warning, instead of being trimmed without one, in the FEM too. The cells are added at the top, so y = 0 stays a grid line, or evenly above and below when the solve folds y, so the fold's wall is a grid line. ``get('window_width')`` and ``get('window_height')`` read the meshed size.
+  * Symmetry folds are decided from the whole cross-section: a symmetric pair of masks folds, a shape of the background's material no longer prevents a fold, and an EME chain folds only where every section agrees. A fold's wall must lie on a grid line: where it cannot, a fold that 'TE' or 'TM' implies is dropped, and an explicit 'S' or 'A' warns. A heat or electrostatic change that breaks the mirror symmetry unfolds the solve, with a warning.
+  * The cylindrical bend's FDM operator is reciprocal: a bend's modes are orthogonal under the solver's reciprocity product to 6e-14 (3e-3 before), and a bend toward +x and the same bend toward -x give one effective index. Bend effective indices move by up to about 8e-5, the first-order error removed, which halved with the cell size.
+  * EME of a crystal turned in the plane, such as an x-cut lithium niobate bend, conserves power and is reciprocal. Lossy modes keep their exact backward partners, and the junction is solved for the turned crystal's mirrored orientation, which is turned the other way. An x-cut half ring keeps 0.999992 of its power at the default settings, where it lost about 1.6 %. The 'EME: TFLN Ring Resonator' example's spectrum now shows a second mode family beside the fundamental's resonances.
+  * An angled facet's field is rotated onto the facet plane with the right sign. A 30 degree facet now matches the Fresnel coefficients (R\ :sub:`s` 0.0827, 0.0195 before), and every angled-facet result moves. The 'EME: Angled Facet' example is regenerated.
+  * ``alpha`` keeps its sign, and a solve warns when a mode of a passive structure gains power under a PML. The apparent gain is the window's truncation error and falls as the PML and window converge.
+  * The heat solve takes the background material's thermal conductivity, where it used a fixed 1e-9.
+  * Only the first automatically stacked shape, the substrate, extends down past the bottom of the window. A shape given an explicit y ``position`` never does, even when its bottom is at y = 0.
+  * The section keys ``etch_depth`` and ``sidewall_angle`` are no longer :data:`sweep` keys. A sweep over them raises an error.
+  * An unknown keyword argument raises an error that names it and the valid ones, before the function runs.
+  * emodeconnection 1.1.24 sends only the settings of an argument that differ from their defaults, so it works with EMode 1.0.6. An option new in 1.0.7, used with an older EMode, is refused before anything is sent, with an error that names the option. When a client sends a setting or a type EMode does not know, EMode ignores the setting with a warning, or answers with an error and keeps the session, where it stopped before.
+  * Every installer, the Intel Mac one included, meshes FEM cross-sections with ``triangle`` 20250106.
+  * Examples whose numbers moved, each regenerated: 'Multi-physics: Phase Shifter' (V\ :sub:`pi`\ L 5.91 V·cm, 5.39 on the 1.0.6 page, from the electrostatic and electro-optic fixes below), 'Multi-physics: Heater' (the power for a pi phase shift is 14.2 mW, 13.2 on the 1.0.6 page, from the heat fixes below), 'Nonlinear-EME: SHG' (its pump moves to 1971.958 nm to stay phase-matched on its 10 nm grid under the new averaging, straight conversion 18.53 %, 17.72 % in 1.0.6), 'Bend Mode Solvers' (the 'TE' fold is back, and the two FDM bend methods give the same effective index on every grid) and 'Nonlinear-EME: Supercontinuum' (the pulse follows TE0's TM partner and a :math:`\chi^{(2)}` harmonic).
+
+* Fixed
+
+  * With ``bend_method='TO'``, the FDM's bend loss was wrong: the 'Bend Mode Solvers' bend read 0.0003 dB/m or less against the cylindrical method's 0.0174, and about 27 % high with PMLs on the side walls only. The PML saw an almost unbent guide. The two methods now agree to about 1 %, and the loss no longer changes with the PML thickness.
+  * With ``bend_method='TO'``, a symmetry fold changed the modes (the 'Bend Mode Solvers' bend read 1.677891 with 'TE' and 1.665974 unfolded at 20 nm), and on an off-center SiN bend the TO and cylindrical methods differed by 1e-3 at 40 nm. The shapes and the bend were sampled a quarter of a cell off. Folded and unfolded solves now agree to 1e-5, and the two methods to 1.5e-5 at 10 nm. The page's earlier finding that TO converges faster was this error cancelling the discretization error at 25 nm.
+  * A mode plot of a bend solved with ``bend_method='TO'`` ran one PML thickness past the grid. Its axes and PML hatch now match the cylindrical method's, and both methods draw the PML only with ``window_display=True``.
+  * :data:`group_index` compared mode k of the solve with mode k of the solve at the shifted wavelength, so a PML mode that moved in the list gave nonsense, such as about -150 on a bend with ``bend_method='TO'``. It now pairs modes by overlap and seeds the shifted solve. A mode it cannot pair reads NaN, with a warning.
+  * The FDM's permittivity was rounded to single precision, which put up to 1e-3 of noise into :data:`group_index`. The FEM's :data:`group_index` remeshed the shifted solve, which could put 6e-4 of error into it.
+  * With a PML on a leaky substrate, the FDM could sort the guided mode behind PML modes, so a one-mode solve returned an absorber mode. Modes confined to the window now come first, and a solve that returns only PML modes asks for more.
+  * With a PML, a guided mode whose effective index carried a small spurious gain could come back on the backward branch, with a negative effective index.
+  * The FEM ignored ``pml_thickness``, ``num_pml_layers`` and ``pml_kappa_max``. It now honors all three, as the FDM does.
+  * A south symmetry fold with a PML on only one of the north and south walls crashed the FDM. A PML on a folded wall is now dropped with a warning naming the wall, and the kept wall's PML is mirrored.
+  * In an anisotropic solve with a PML, the off-diagonal terms dropped the PML's phase, so a 10-layer PML read a turned bend's loss 4 % low.
+  * A lossy crystal turned in the plane was solved as a gain medium, and one of its modes grew along the guide.
+  * An earlier solve could change which lossy modes a later anisotropic solve returned, so the results depended on the order of the solves.
+  * The TE fraction of a hybrid mode could exceed 1. It is now a power fraction.
+  * A symmetric pair of masks never folded, an ellipse was not quite symmetric so a round core never folded, and a :data:`settings` change on a meshed profile reset its boundary condition to '00', which silently unfolded a 'TE' solve.
+  * A symmetry fold on a window with an odd number of cells put the mirror wall in the middle of a cell, which mirrored that cell and widened the core.
+  * A folded mode on an 'S' or 'A' wall was weighted as a full cell at the wall, so a junction between folded sections could create up to 2.4 % power.
+  * Cell-centered fields at a window's high wall were left at zero, so the two walls differed by up to 8e-3 of the peak field.
+  * :data:`heat` gave fill cells beside an etched core the dn/dT of a ``heat_only`` substrate, 21 times too large. The heat change and the electro-optic change now take each permittivity component at its own grid point, the electro-optic change takes each material's own static field at a material wall, and a fold checks the heat or electrostatic change against its mirror image.
+  * The electrostatic solve summed its bilinear form into one number over the whole mesh, so it ignored ``eps_r_dc``, and it left each electrode's outline free, so V\ :sub:`pi`\ L followed the electrode's mesh size. The Phase Shifter example is now converged with its mesh.
+  * :data:`settings` with ``wavelength=`` did not reach labeled profiles, so :data:`EME` re-solved sections at their old wavelength, and :data:`sweep` set a setting on the default profile only. A wavelength :data:`sweep` of an EME chain now moves the labeled profiles the chain is built on, a sweep of another setting of such a chain warns naming the profiles that keep their own value, and :data:`EME` warns when a chain's profiles are at another wavelength than the default profile.
+  * A taper's equal slices could act as a grating and reflect in phase, which refinement could not see (a Y-branch splitter's taper reflected 2.5e-2, against 2.05e-4 converged). A slice over which the cross-section changes is now cut under a fraction of half the guided wavelength (the section setting ``slice_phase_limit``) where that reflection matters, and a long, slow taper keeps about ``schedule_max_slices`` slices.
+  * A taper's sidewall scattering loss dropped to zero on slices whose cross-section had already been solved, and changed with the slice count.
+  * Pulsed propagation now applies sidewall scattering loss on sections with ``EME_settings(apply_scattering=True)``, each tracked mode at its own rate, and a smooth cross-section with ``apply_scattering=True`` no longer makes a pulsed :data:`EME` raise.
+  * ``Poling(inverted_first=True)`` never reached the pulsed solver.
+  * A ``PulsedSource`` on a port other than the first was launched into the first, and a second ``PulsedProcess`` with different modes was ignored. Both now raise an error naming the argument.
+  * The 'Nonlinear-EME: Supercontinuum' example under-resolved an avoided crossing between 800 and 1100 nm. Its pulse now follows the crossing.
+  * The continuous-wave :math:`\chi^{(2)}` solve's fixed absolute tolerance swamped a weak generated field, so a 1 µW pump's conversion read far too high. The tolerance now follows the fields (``solver_atol=None``, the new default), and strong pumps solve as before.
+  * The :math:`\chi^{(2)}` coupling cache ignored a shape's scattering values, so two sections that differed only in roughness gave the same conversion.
+  * A junction of a crystal turned in the plane was not reciprocal or passive with lossy modes (a TFLN ring's bend junction amplified, largest singular value 2.40), an x-cut bend's refinement did not finish with more than 4 modes, and an FEM-sliced x-cut bend appeared to lose 1.2 % of its power in pi/8.
+  * ``mode_power`` and the junctions used different products at a slot-like port (up to 2 % apart), and a tilted facet's trace dropped its staggered-grid fields. Both now use the product the junctions conserve.
+  * A facet's power budget weighted the reflection with the forward trace's power instead of the backward trace's.
+  * A confined port window's crop dropped a row or column of the parent's cells, so an off-lattice window read up to 1.2e-3 low.
+  * The interpolated wavelength sweep zeroed modes it could not track even at the center wavelength, held a lost mode's junction entries (which could gain power), divided by zero on a chain with windowed ports (on lossy modes with no real index), and over-warned on resonators. Its S-matrices now carry ``mode_power``.
+  * ``SMatrix.unitarity_error`` was meaningless for plane-wave sections. It now measures power conservation in each mode's own power frame.
+  * On Linux, Windows and the Intel Mac, a re-solved port window whose cut wall lay in uniform cladding failed with a misleading "uniform refractive index profile" error. The solver shift is now moved off the eigenvalue and the matrix refactored.
+  * ``FDM(scattering=True)`` on a multi-wavelength profile raised "profile has not been solved yet". :data:`mesh` and :data:`label_profile` raised on an unsolved multi-wavelength profile.
+  * ``settings(res=...)`` raised instead of setting both resolutions.
+  * ``reset(profile=)`` acted on the default profile only, and ``clear_field_data(profile=)`` ignored its profile and raised on a file holding a multi-wavelength profile.
+  * ``save(save_all_fields=True)`` saved no fields. A file saved with it now reopens with its fields, without solving.
+  * :data:`shape` rejected per-edge lists of ``roughness_rms`` and ``correlation_length``.
+  * In the plot window, choosing a profile other than the default from the menu left the data menu unchanged, so a solved profile's field components were not offered.
+  * Saving a plot from the toolbar as an unsupported file type failed with an internal error instead of showing a message.
+  * An Outline panel of the layout view drew an empty colorbar.
+  * :data:`material_explorer` and :data:`plot_S_matrix` changed later :data:`plot` figures through matplotlib's global settings.
+  * :data:`plot` dropped a port label when its window ended outside the panel, logged a warning about "port None" for a chain with a bend, and in the simulation view drew a bend's outline curved, with the sections after it off the panel.
+  * A license manager outage while a session was running could crash its license check-in or open the login window.
+  * When no license was available, the client reported "EMode failed to launch".
+  * A run with ``EMODE_HEADLESS=1`` opened the login window when EMode was not logged in, or after an upgrade, when the stored login was from the earlier version, and a solver started from a script could stop without a message. It now reports that EMode is not logged in and how to log in: run ``emode login``, or set ``EMODE_EMAIL`` and ``EMODE_PASSWORD`` and run ``emode login --write``.
+
+* Faster
+
+  * Meshing is 6 to 22 times faster.
+  * Junction overlaps are one matrix product over all the modes instead of one integral per pair of modes. At 200 modes they take 0.17 s instead of 14.5 s.
+  * Sampling an FEM field at points is about 1000 times faster, so FEM field plots and junctions between FEM sections no longer stall. An FEM EME taper builds about 20 % faster.
+  * :data:`EME` decides each section's fold from its geometry before solving, so a chain whose sections differ in their folds is solved once.
+  * The pulsed Kerr, Raman and two-photon absorption terms need 4.5 to 6.6 times less memory, and the full Raman response is 3.2 times faster. The 'Nonlinear-EME: Supercontinuum' example's :data:`EME` takes 115 s instead of 300 s.
+  * An x-cut bend's refinement with 8 modes takes under a minute, where it did not finish in 10 minutes.
+
+* Known issues
+
+  * A bare 'wavelength' key moves a labeled EME chain in sweep() but not in evaluate(), a multi-key sweep or optimize()
+  * A LicenseError with no license type names EMode2D
+  * A shape filling a y-periodic window is averaged with the background at the window's edge
+  * A user material with a scalar eps fails to mesh
+  * A zero-length taper section switches off scattering loss for the whole EME chain
+  * Al2O3 is stored isotropic though sapphire is uniaxial
+  * An angled facet cannot sit on a profile with a PML
+  * Bend and transformed sections: subpixel average stays arithmetic for the normal component
+  * Better condition the confined-waveguide to PWD overlap inverse
+  * EM_open on a missing file: UnboundLocalError, and an empty file left behind
+  * EME sweep warm start reuses a previous chain whose settings or profiles have changed
+  * EME taper slices apply their left cross-section's scattering loss, a first-order slicing error
+  * EME_settings() does not accept schedule_* keys
+  * emode-install: verify the installer's SHA-256 before installing
+  * Exact backward partners for a lossy turned crystal: a second shift-invert solve at -sigma
+  * FDM at 50 nm underestimates an x-cut bend's mode conversion fourfold
+  * FDM subpixel average stays arithmetic in cells that mix a full-tensor anisotropic material
+  * FEM solve runs out of memory when a window edge lies on a core edge
+  * Interpolated sweep's residual warns on the MMI from a near-cutoff lossy mode while its outputs agree to 2e-4
+  * KTP and LBO data: missing tensors and vendor-only values
+  * mode_filter='backward' cannot return backward modes
+  * PARDISO rejects an FEM solve with PMLs as a 'completely uniform refractive index profile'
+  * Per-axis dn_dT and eps_r_dc data for the uniaxial crystals
+  * Pulsed nonlinear operator below R^4: empirical cubature for Kerr, TPA and Raman
+  * Pulsed solver: free-carrier absorption and dispersion
+  * PWD sections sample their window at a fixed 10 nm, whatever the profile's resolution
+  * Replace nominal bandgaps (SiO2, SiN) and the estimated AlGaAs TPA
+  * Scattering loss does not converge with the sampling grid
+  * Silicon has no n2, and its TPA coefficient is used unchanged near the band edge
+  * Square junction creates power when the bases hold PML (lossy) modes
+  * Taper refinement never converges when the basis holds window (box) modes
+  * The default PML is marginal for a guided mode's evanescent tail
+  * Turned crystal with lossy modes: a junction is passive on its lossless channels only to 3e-6
+  * Update AlGaAs model
+
 **1.0.6**
 
 * Changed
@@ -104,7 +245,7 @@ Release Notes
   * Second-order nonlinear EME, available with EMode3D. A :data:`straight_section` or :data:`taper_section` takes ``nonlinear=`` with an ``SHGProcess``, ``SFGProcess``, or ``DFGProcess`` naming the process wavelengths. Quasi-phase matching is declared with ``poling_period`` (plus ``duty_cycle`` and ``qpm_order``) on the process, or built by hand from alternating ``inverted=True`` sections, the two routes agree.
   * A CW pump is declared with ``settings(excitation=Source(port, wavelength, mode, power, phase))``. :data:`EME` still returns the small-signal S-matrix, and now also solves the power-dependent response, available as a ``CircuitResponse`` from ``get('response')``, outgoing and incoming amplitudes at every port, radiated power per wavelength, and convergence. ``get('sources')`` returns the declared excitation.
   * :data:`chi2_spectrum` returns a nonlinear conversion spectrum (signal out over pump in, at every wavelength asked for) from a handful of mode solves. A :math:`\chi^{(2)}` spectrum oscillates too fast with the phase mismatch to interpolate, but what the coupled-mode equations consume (the coupling and the propagation constants) varies smoothly, so the modes are solved only where the mode list is still moving and the response is then evaluated point by point from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included. Quasi-phase-matched sections are included: the grating enters as a wavevector shift and a Fourier coefficient, neither of which depends on wavelength, so a poled section keeps its exact grating while its phase mismatch moves with the interpolated propagation constants.
-  * ``sweep(key='wavelength', values=..., adaptive=True)`` does the same for an ordinary sweep. ``values`` keeps its meaning (the wavelengths you want results at) and ``adaptive`` changes only where the solver runs: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength adds solves until the mode list stops moving by more than ``tolerance``. Any stretch it could not resolve is reported in ``unconverged`` instead of raising.
+  * ``sweep(key='wavelength', values=..., adaptive=True)`` does the same for an ordinary sweep. ``values`` keeps its meaning (the wavelengths you want results at) and ``adaptive`` changes only where the solver runs: modes are matched between neighboring solves through a phase-corrected overlap, and a bisection in wavelength adds solves until the mode list stops moving by more than ``tolerance``. Any stretch it could not resolve is reported in ``unconverged`` instead of raising.
   * Free-space excitation: :data:`free_space_field` declares a Gaussian beam launched into a port. The beam is projected onto that port's modes and drives the field plot through ``plot(excitation=name)`` or the plot window's Mode menu. :data:`free_space_field_diagnostics` returns the fraction of the beam's power the port's modes capture, and the solver warns when it is below 90%. ``tilt`` is the angle inside the medium the beam travels through.
   * Angled facet ports: :func:`make_angled_facet_port` tilts a port's cross-section about a hinge line, so a facet's reflection back into the guided mode falls off with tilt as it does physically (see :ref:`ports`). A facet cannot sit on a :data:`pwd_section` or on a profile with a PML. ``sweep(key='section, NAME, facet_angle')`` sweeps that tilt.
   * The solver warns at a facet junction when the waveguide's ``num_modes`` is too small to hold the deflected reflection and R + T under-runs.

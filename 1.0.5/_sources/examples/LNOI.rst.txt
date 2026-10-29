@@ -1,0 +1,126 @@
+
+Angled: LNOI
+------------
+
+Highlighted features: angle etch, mask etch, expand window with lower resolution, overlap integral.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import emodeconnection as emc
+        import numpy as np
+
+        ## Set simulation parameters
+        wavelength = 1550 # [nm] wavelength
+        dx, dy = 10, 10 # [nm] resolution
+        w_core = 1000 # [nm] waveguide core width
+        w_trench = 1000 # [nm] waveguide side trench width
+        h_core = 500 # [nm] waveguide core height
+        h_clad = 1000 # [nm] waveguide top and bottom clad
+        window_width = w_core + w_trench*2 # [nm]
+        window_height = h_core + h_clad*2 # [nm]
+        num_modes = 1 # [-] number of modes
+        boundary = '0S' # boundary condition
+
+        ## Connect and initialize EMode
+        em = emc.EMode()
+
+        ## View material database
+        em.material_explorer()
+
+        ## Settings
+        em.settings(
+            wavelength = wavelength, x_resolution = dx, y_resolution = dy,
+            window_width = window_width, window_height = window_height,
+            num_modes = num_modes, background_material = 'Air',
+            boundary_condition = boundary,
+            expansion_resolution = 20, expansion_size = 1500)
+
+        ## Draw shapes
+        ln_mgo = emc.MaterialSpec(material = 'LN_MgO', theta = np.pi/2)
+
+        em.shape(name = 'BOX', material = 'SiO2', height = h_clad)
+        em.shape(name = 'core', material = ln_mgo, height = h_core,
+            etch_depth = h_core*3/4, mask = w_core, sidewall_angle = 15)
+
+        ## Solve the first mode
+        em.FDM()
+        em.confinement(shape_list = 'core')
+        em.report()
+        em.label_profile(name = '0') # save the data from the first mode
+
+        ## Solve the second mode
+        em.shape(name = 'core', mask = w_core + 100)
+        em.FDM()
+        em.confinement(shape_list = 'core')
+        em.report()
+
+        ## Calculate the overlap integral
+        overlap = em.overlap(profile_a = '0', mode_a = 0, mode_b = 0)
+        print('Power overlap: %0.3f %%' % (overlap*100))
+
+        ## Plot the field and refractive index profiles
+        em.plot(window_display = True)
+
+        ## Get the refractive index of the core
+        res = em.refractive_index(material = ln_mgo,
+            wavelength = wavelength, reference = True)
+        n_LN, ref = res
+        print('\nRefractive index of LN:', n_LN)
+        print(ref)
+
+        ## Close EMode
+        em.close()
+
+
+Console output::
+
+    EMode3D 1.0.5 - email
+    Meshing completed in 0.6 sec
+    Solving modes completed in 3.7 sec
+
+    Wavelength: 1550.0 nm    Solver: FDM
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)    core confinement
+    --------  --------  ------  -------------  ------------------
+        TE-0  1.767903  98.8 %          0.000              82.2 %
+ 
+    Meshing completed in 0.6 sec
+    Solving modes completed in 3.5 sec
+
+    Wavelength: 1550.0 nm    Solver: FDM
+ 
+      Mode #     n_eff    TE %    Loss (dB/m)    core confinement
+    --------  --------  ------  -------------  ------------------
+        TE-0  1.789642  99.1 %          0.000              83.4 %
+ 
+    Exited EMode
+    Power overlap: 99.836 %
+
+    Refractive index of LN: [2.13057033 2.20881269 2.20881269]
+    O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
+    Notes: x-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction.
+
+    Wavelength range: 500 nm to 4000 nm
+
+
+Figures:
+
+.. figure:: Figures/LNOI/EM_materials.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/LNOI/0Ex_LN.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/LNOI/index_LN.png
+    :width: 400
+    :align: center
+    :figwidth: 500

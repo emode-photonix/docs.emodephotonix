@@ -1,0 +1,42 @@
+html[data-theme="light"] {
+    --pst-color-primary: rgb(54, 52, 163);
+    --pst-color-secondary: rgb(173, 68, 171);
+    --pst-color-inline-code: rgb(255, 58, 95);
+    --pst-color-warning: rgb(255, 212, 38);
+    --pst-color-info: rgb(54, 52, 163);
+    --pst-color-danger: rgb(255, 58, 95);
+    --pst-color-target: rgb(255, 212, 38);
+}
+
+.icon-list table.hlist {
+    width: 95%;
+    table-layout: fixed;
+}
+
+.icon-list table.hlist td {
+    padding: 0 0.75em;
+    vertical-align: top;
+}
+
+.icon-list ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.icon-list ul li {
+    margin-bottom: 0.75em;
+}
+
+.icon-list ul li:last-child {
+    margin-bottom: 0;
+}
+
+html[data-theme="dark"] {
+    --pst-color-primary: rgb(255, 255, 255);
+    --pst-color-secondary: rgb(173, 68, 171);
+    --pst-color-inline-code: rgb(255, 58, 95);
+    --pst-color-warning: rgb(255, 212, 38);
+    --pst-color-info: rgb(54, 52, 163);
+    --pst-color-danger: rgb(255, 58, 95);
+    --pst-color-target: rgb(54, 52, 163);
+}

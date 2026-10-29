@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SMF-28 Fiber</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/Fiber_SMF28';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/examples/Fiber_SMF28.html" />
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Angled: LNOI" href="LNOI.html" />
+    <link rel="prev" title="Ring Resonator Design" href="Ring_Design.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.7" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="SOI.html">Basic: SOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SiN.html">Bending: SiN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Bend_Solvers.html">Bend Mode Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Straight_Convergence.html">Straight Waveguide Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ring_Design.html">Ring Resonator Design</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">SMF-28 Fiber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LNOI.html">Angled: LNOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laser.html">Scattering loss: Laser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Open.html">Open a Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dispersion.html">Dispersion Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Adaptive_Scan.html">Adaptive Scan</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="EME_Taper.html">EME: Taper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Sweep.html">EME: Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_GDS.html">EME: GDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Angled_Facet.html">EME: Angled Facet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Grating_Coupler.html">EME: Grating Coupler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SBend.html">EME: S-Bend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Y_Branch.html">EME: Y-Branch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_TFLN_Ring.html">EME: TFLN Ring Resonator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_MMI.html">EME: MMI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Supercontinuum.html">Nonlinear-EME: Supercontinuum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Inverse_Design.html">Nonlinear-EME: PPLN Inverse Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SFG.html">Nonlinear-EME: SFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FEM_SOI.html">FEM: SOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="smf-28-fiber">
+<h1>SMF-28 Fiber</h1>
+<p>A step-index model of Corning SMF-28 single-mode fiber: the fundamental (LP01) mode’s effective
+index and group index at 1310 and 1550 nm, solved with the FDM and the FEM and compared with the
+closed-form Bessel-function solutions, its mode field diameter, and whether the second mode (LP11)
+is guided at 1260 nm, the datasheet’s cable cutoff.</p>
+<p>A step-index fiber is one of the few waveguides with a known closed-form solution, so this is a good
+example for comparing the accuracy of EMode’s solvers with a theoretical approach. For this exact
+problem the Bessel-function approach is the more accurate and the faster one, since it solves a
+single equation rather than a whole cross-section. The FDM and the FEM are for the general case:
+geometries and refractive index profiles that have no closed-form solution, such as graded or
+noncircular cores, several cores, anisotropic or lossy materials, and bends.</p>
+<p>The cladding is fused silica, with Malitson’s Sellmeier equation, and the core is the same material
+raised slightly in index, both declared with <code class="docutils literal notranslate"><span class="pre">add_material</span></code>. The ‘TE’ boundary condition folds the
+window by both of the core’s mirror planes, so a quarter of it is solved.</p>
+<p>The FDM and the FEM agree with each other and with the exact vector (HE11) Bessel solution to within
+a part in a million, and their group indices, which include the silica’s material dispersion, match
+the Bessel solution and the datasheet. The textbook scalar (LP01) solution of a weakly guiding fiber
+sits slightly above the vector one. What remains between the solvers and the vector solution comes
+from the round core being drawn as a 128-sided polygon, not from the solvers. The FEM needs
+EMode<sup>3D</sup>.</p>
+<p>The mode field diameter (the datasheet’s Petermann II definition) is inside the datasheet’s range at
+1550 nm and just under it at 1310 nm. The closed-form step-index field gives the same diameters, so
+the difference is the model’s: the real fiber’s core is not a perfect step.</p>
+<p>LP11 is still guided at 1260 nm in a straight fiber of this model. The datasheet’s cutoff is a cable
+cutoff, measured on cabled fiber with loops, where bending strips out an LP11 that is so close to
+its own cutoff. A straight mode solve does not model that loss.</p>
+<p><em>This code example is licensed under the</em> <a class="reference external" href="../_static/LICENSE.html">BSD 3-Clause License</a>.</p>
+<div class="tabs docutils container" data-tabgroup="">
+<ul class="tabbar">
+<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
+Python</li></ul><div class="tab codetab selected" data-id="0">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">brentq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span> <span class="n">j0</span><span class="p">,</span> <span class="n">j1</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">k1</span>
+
+<span class="c1">## Set simulation parameters: a step-index model of Corning SMF-28</span>
+<span class="n">wavelengths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1310</span><span class="p">,</span> <span class="mi">1550</span><span class="p">]</span>  <span class="c1"># [nm]</span>
+<span class="n">cutoff_wavelength</span> <span class="o">=</span> <span class="mi">1260</span>  <span class="c1"># [nm] the datasheet&#39;s cable cutoff, at most</span>
+<span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span>  <span class="c1"># [nm] resolution</span>
+<span class="n">core_radius</span> <span class="o">=</span> <span class="mf">4.1e3</span>  <span class="c1"># [nm]</span>
+<span class="n">delta_n</span> <span class="o">=</span> <span class="mf">0.0053</span>  <span class="c1"># [-] core index above the cladding (delta of about 0.36 %)</span>
+<span class="n">window</span> <span class="o">=</span> <span class="mf">40e3</span>  <span class="c1"># [nm] window width and height</span>
+
+<span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">(</span><span class="n">emode_cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">simulation_name</span><span class="o">=</span><span class="s1">&#39;fiber_smf28&#39;</span><span class="p">)</span>
+
+<span class="c1">## The cladding is fused silica (Malitson&#39;s Sellmeier equation, built in as</span>
+<span class="c1">## &#39;SiO2&#39;), and the core is the same equation raised by delta_n</span>
+<span class="n">malitson</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;(1 + 0.6961663/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2)&#39;</span>
+            <span class="s1">&#39; + 0.8974794/(1 - (9.896161/x)^2))^0.5&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">add_material</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;SiO2_clad&#39;</span><span class="p">,</span> <span class="n">refractive_index_equation</span><span class="o">=</span><span class="n">malitson</span><span class="p">,</span> <span class="n">wavelength_unit</span><span class="o">=</span><span class="s1">&#39;um&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">add_material</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;SiO2_core&#39;</span><span class="p">,</span> <span class="n">refractive_index_equation</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">malitson</span><span class="si">}</span><span class="s1"> + </span><span class="si">{</span><span class="n">delta_n</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="n">wavelength_unit</span><span class="o">=</span><span class="s1">&#39;um&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">n_silica</span><span class="p">(</span><span class="n">wavelength</span><span class="p">):</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="p">(</span><span class="n">wavelength</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.6961663</span><span class="o">*</span><span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="mf">0.0684043</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.4079426</span><span class="o">*</span><span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="mf">0.1162414</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                   <span class="o">+</span> <span class="mf">0.8974794</span><span class="o">*</span><span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="mf">9.896161</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+
+<span class="c1">## The &#39;TE&#39; boundary condition folds the round core by both mirror planes, so</span>
+<span class="c1">## a quarter of the window is solved</span>
+<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelengths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_resolution</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y_resolution</span><span class="o">=</span><span class="n">dy</span><span class="p">,</span>
+    <span class="n">window_width</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">window_height</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">num_modes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">boundary_condition</span><span class="o">=</span><span class="s1">&#39;TE&#39;</span><span class="p">,</span> <span class="n">background_material</span><span class="o">=</span><span class="s1">&#39;SiO2_clad&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="s1">&#39;SiO2_core&#39;</span><span class="p">,</span> <span class="n">shape_type</span><span class="o">=</span><span class="s1">&#39;ellipse&#39;</span><span class="p">,</span>
+         <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">core_radius</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">core_radius</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">window</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">bessel_n_eff</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The closed-form LP01 (scalar) or HE11 (vector) index of the round step-index core.&quot;&quot;&quot;</span>
+    <span class="n">n_clad</span> <span class="o">=</span> <span class="n">n_silica</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+    <span class="n">n_core</span> <span class="o">=</span> <span class="n">n_clad</span> <span class="o">+</span> <span class="n">delta_n</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">wavelength</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">core_radius</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_core</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n_clad</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_clad</span><span class="o">/</span><span class="n">n_core</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">mismatch</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">V</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">u</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">vector</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">*</span><span class="n">j1</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">/</span><span class="n">j0</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">-</span> <span class="n">w</span><span class="o">*</span><span class="n">k1</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">/</span><span class="n">k0</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="p">(</span><span class="n">j0</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">-</span> <span class="n">j1</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">/</span><span class="n">u</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">j1</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>  <span class="c1"># J1&#39;(u) / (u J1(u))</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">k0</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">-</span> <span class="n">k1</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">/</span><span class="n">w</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">k1</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>  <span class="c1"># K1&#39;(w) / (w K1(w))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="n">K</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="n">r</span><span class="o">*</span><span class="n">K</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">r</span><span class="o">/</span><span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">brentq</span><span class="p">(</span><span class="n">mismatch</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="mf">2.404825</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_core</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">u</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">core_radius</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">bessel_group_index</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The same forward difference group_index() takes, at 1.0001 times the wavelength.&quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">bessel_n_eff</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">-</span> <span class="p">(</span><span class="n">bessel_n_eff</span><span class="p">(</span><span class="mf">1.0001</span><span class="o">*</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="mf">1e-4</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mode_field_diameter</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Petermann II: 2 sqrt(2 integral(E^2) / integral(|grad E|^2)), from Ex.&quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;Ex&#39;</span><span class="p">)</span>
+    <span class="n">Ex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">field</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># [x, y], unfolded to the full window</span>
+    <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Ex</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Ex</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">gy</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">solver</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;n_eff and group index of LP01, from em.FDM() or em.FEM().&quot;&quot;&quot;</span>
+    <span class="n">solver</span><span class="p">()</span>
+    <span class="n">n_eff</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;effective_index&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="c1">## group_index() solves again at a wavelength 1e-4 longer, so it includes</span>
+    <span class="c1">## the silica&#39;s material dispersion as well as the guide&#39;s</span>
+    <span class="n">n_g</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">group_index</span><span class="p">())[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">n_g</span>
+
+
+<span class="c1">## Solve LP01 with the FDM and with the FEM (EMode3D) at each wavelength. The</span>
+<span class="c1">## mode field diameter and the field plot come from the FDM.</span>
+<span class="n">rows</span><span class="p">,</span> <span class="n">mfds</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">wavelength</span> <span class="ow">in</span> <span class="n">wavelengths</span><span class="p">:</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">vector</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;Bessel, scalar LP01&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Bessel, vector HE11&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">label</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">bessel_n_eff</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">vector</span><span class="p">),</span>
+                     <span class="n">bessel_group_index</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">vector</span><span class="p">)))</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;FDM&#39;</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="o">*</span><span class="n">solve</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">)))</span>
+    <span class="n">mfds</span><span class="p">[</span><span class="n">wavelength</span><span class="p">]</span> <span class="o">=</span> <span class="n">mode_field_diameter</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">wavelength</span> <span class="o">==</span> <span class="mi">1550</span><span class="p">:</span>
+        <span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="n">aspect_ratio</span><span class="o">=</span><span class="s1">&#39;real&#39;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;fiber_LP01_Ex&#39;</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;FEM&#39;</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="o">*</span><span class="n">solve</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">FEM</span><span class="p">)))</span>
+
+<span class="c1">## LP11 at the cable cutoff wavelength: its Ex is odd about the vertical</span>
+<span class="c1">## mirror plane, so the &#39;SA&#39; walls hold it and not LP01</span>
+<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="n">cutoff_wavelength</span><span class="p">,</span> <span class="n">boundary_condition</span><span class="o">=</span><span class="s1">&#39;SA&#39;</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">FDM</span><span class="p">()</span>
+<span class="n">n_lp11</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;effective_index&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">n_clad</span> <span class="o">=</span> <span class="n">n_silica</span><span class="p">(</span><span class="n">cutoff_wavelength</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">v_number</span><span class="p">(</span><span class="n">wavelength</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n_silica</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">core_radius</span><span class="o">/</span><span class="n">wavelength</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">n</span> <span class="o">+</span> <span class="n">delta_n</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="c1">## The step-index model&#39;s LP11 cutoff, where V = 2.405 (the first zero of J0)</span>
+<span class="n">lp11_cutoff</span> <span class="o">=</span> <span class="n">cutoff_wavelength</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">lp11_cutoff</span> <span class="o">*=</span> <span class="n">v_number</span><span class="p">(</span><span class="n">lp11_cutoff</span><span class="p">)</span><span class="o">/</span><span class="mf">2.405</span>
+
+<span class="n">datasheet_group_index</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1310</span><span class="p">:</span> <span class="mf">1.4676</span><span class="p">,</span> <span class="mi">1550</span><span class="p">:</span> <span class="mf">1.4682</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{</span><span class="s2">&quot;LP01&quot;</span><span class="si">:</span><span class="s1">22s</span><span class="si">}{</span><span class="s2">&quot;wavelength&quot;</span><span class="si">:</span><span class="s1">&gt;12s</span><span class="si">}{</span><span class="s2">&quot;n_eff&quot;</span><span class="si">:</span><span class="s1">&gt;14s</span><span class="si">}{</span><span class="s2">&quot;group index&quot;</span><span class="si">:</span><span class="s1">&gt;14s</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">n_g</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s1">22s</span><span class="si">}{</span><span class="n">wavelength</span><span class="si">:</span><span class="s1">&gt;9d</span><span class="si">}</span><span class="s1"> nm</span><span class="si">{</span><span class="n">n_eff</span><span class="si">:</span><span class="s1">&gt;14.9f</span><span class="si">}{</span><span class="n">n_g</span><span class="si">:</span><span class="s1">&gt;14.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">wavelength</span> <span class="ow">in</span> <span class="n">wavelengths</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="s2">&quot;datasheet&quot;</span><span class="si">:</span><span class="s1">22s</span><span class="si">}{</span><span class="n">wavelength</span><span class="si">:</span><span class="s1">&gt;9d</span><span class="si">}</span><span class="s1"> nm</span><span class="si">{</span><span class="s2">&quot;-&quot;</span><span class="si">:</span><span class="s1">&gt;14s</span><span class="si">}{</span><span class="n">datasheet_group_index</span><span class="p">[</span><span class="n">wavelength</span><span class="p">]</span><span class="si">:</span><span class="s1">&gt;14.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">wavelength</span> <span class="ow">in</span> <span class="n">wavelengths</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LP01 MFD at </span><span class="si">{</span><span class="n">wavelength</span><span class="si">}</span><span class="s1"> nm: </span><span class="si">{</span><span class="n">mfds</span><span class="p">[</span><span class="n">wavelength</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> um&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cladding index at </span><span class="si">{</span><span class="n">cutoff_wavelength</span><span class="si">}</span><span class="s1"> nm: </span><span class="si">{</span><span class="n">n_clad</span><span class="si">:</span><span class="s1">.7f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LP11 n_eff at </span><span class="si">{</span><span class="n">cutoff_wavelength</span><span class="si">}</span><span class="s1"> nm: </span><span class="si">{</span><span class="n">n_lp11</span><span class="si">:</span><span class="s1">.7f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LP11 guided at </span><span class="si">{</span><span class="n">cutoff_wavelength</span><span class="si">}</span><span class="s1"> nm: </span><span class="si">{</span><span class="s2">&quot;yes&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n_lp11</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">n_clad</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;no&quot;</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;V number at </span><span class="si">{</span><span class="n">cutoff_wavelength</span><span class="si">}</span><span class="s1"> nm: </span><span class="si">{</span><span class="n">v_number</span><span class="p">(</span><span class="n">cutoff_wavelength</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LP11 cutoff of the step-index model (V = 2.405): </span><span class="si">{</span><span class="n">lp11_cutoff</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1"> nm&#39;</span><span class="p">)</span>
+
+<span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div><p>Console output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.7</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.1</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">8.7</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.1</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.0</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">6.0</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.1</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.0</span> <span class="n">sec</span>
+
+<span class="n">LP01</span>                    <span class="n">wavelength</span>         <span class="n">n_eff</span>   <span class="n">group</span> <span class="n">index</span>
+<span class="n">Bessel</span><span class="p">,</span> <span class="n">scalar</span> <span class="n">LP01</span>        <span class="mi">1310</span> <span class="n">nm</span>   <span class="mf">1.449664402</span>      <span class="mf">1.467628</span>
+<span class="n">Bessel</span><span class="p">,</span> <span class="n">vector</span> <span class="n">HE11</span>        <span class="mi">1310</span> <span class="n">nm</span>   <span class="mf">1.449660103</span>      <span class="mf">1.467630</span>
+<span class="n">FDM</span>                        <span class="mi">1310</span> <span class="n">nm</span>   <span class="mf">1.449659457</span>      <span class="mf">1.467630</span>
+<span class="n">FEM</span>                        <span class="mi">1310</span> <span class="n">nm</span>   <span class="mf">1.449659476</span>      <span class="mf">1.467630</span>
+<span class="n">Bessel</span><span class="p">,</span> <span class="n">scalar</span> <span class="n">LP01</span>        <span class="mi">1550</span> <span class="n">nm</span>   <span class="mf">1.446329779</span>      <span class="mf">1.468334</span>
+<span class="n">Bessel</span><span class="p">,</span> <span class="n">vector</span> <span class="n">HE11</span>        <span class="mi">1550</span> <span class="n">nm</span>   <span class="mf">1.446324467</span>      <span class="mf">1.468334</span>
+<span class="n">FDM</span>                        <span class="mi">1550</span> <span class="n">nm</span>   <span class="mf">1.446323766</span>      <span class="mf">1.468334</span>
+<span class="n">FEM</span>                        <span class="mi">1550</span> <span class="n">nm</span>   <span class="mf">1.446323781</span>      <span class="mf">1.468334</span>
+<span class="n">datasheet</span>                  <span class="mi">1310</span> <span class="n">nm</span>             <span class="o">-</span>        <span class="mf">1.4676</span>
+<span class="n">datasheet</span>                  <span class="mi">1550</span> <span class="n">nm</span>             <span class="o">-</span>        <span class="mf">1.4682</span>
+
+<span class="n">LP01</span> <span class="n">MFD</span> <span class="n">at</span> <span class="mi">1310</span> <span class="n">nm</span><span class="p">:</span> <span class="mf">8.79</span> <span class="n">um</span>
+<span class="n">LP01</span> <span class="n">MFD</span> <span class="n">at</span> <span class="mi">1550</span> <span class="n">nm</span><span class="p">:</span> <span class="mf">9.95</span> <span class="n">um</span>
+<span class="n">cladding</span> <span class="n">index</span> <span class="n">at</span> <span class="mi">1260</span> <span class="n">nm</span><span class="p">:</span> <span class="mf">1.4473700</span>
+<span class="n">LP11</span> <span class="n">n_eff</span> <span class="n">at</span> <span class="mi">1260</span> <span class="n">nm</span><span class="p">:</span> <span class="mf">1.4475323</span>
+<span class="n">LP11</span> <span class="n">guided</span> <span class="n">at</span> <span class="mi">1260</span> <span class="n">nm</span><span class="p">:</span> <span class="n">yes</span>
+<span class="n">V</span> <span class="n">number</span> <span class="n">at</span> <span class="mi">1260</span> <span class="n">nm</span><span class="p">:</span> <span class="mf">2.535</span>
+<span class="n">LP11</span> <span class="n">cutoff</span> <span class="n">of</span> <span class="n">the</span> <span class="n">step</span><span class="o">-</span><span class="n">index</span> <span class="n">model</span> <span class="p">(</span><span class="n">V</span> <span class="o">=</span> <span class="mf">2.405</span><span class="p">):</span> <span class="mi">1328</span> <span class="n">nm</span>
+<span class="n">Exited</span> <span class="n">EMode</span>
+</pre></div>
+</div>
+<p>Figures:</p>
+<figure class="align-center" style="width: 500px">
+<img alt="../_images/fiber_LP01_Ex.png" src="../_images/fiber_LP01_Ex.png" style="width: 500px;" />
+</figure>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

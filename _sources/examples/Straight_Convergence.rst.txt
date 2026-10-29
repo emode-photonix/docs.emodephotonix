@@ -1,0 +1,203 @@
+Straight Waveguide Convergence
+------------------------------
+
+The SiN guide of :doc:`Bend Mode Solvers <Bend_Solvers>` (2000 x 200 nm SiN in SiO2 at 980 nm), straight
+and with no PML, solved by the FDM and the FEM to show how fast each converges and what a converged
+answer costs. The FDM is solved on a series of grids, over the full window and folded by
+``boundary_condition='TE'``, and the FEM on the fixed meshes of the bend example
+(``fem_max_refinements=0``). Each solve's effective index and group index are compared against the
+finest FEM mesh.
+
+The field has decayed to almost nothing at the walls, so the only error left is the mesh's. The same
+guide with a bend and a PML is in :doc:`Bend Mode Solvers <Bend_Solvers>`, and the two pages compare
+directly.
+
+The FDM converges at second order: halving the grid spacing cuts the error by four. Its group index
+converges at the same order with a larger error, so it needs a finer grid than the effective index.
+Folding the window gives the same answer several times faster.
+
+The FEM is the better method for accuracy per second, but it requires EMode3D. Even its fastest
+solve is closer to the converged effective index than the FDM's finest grid, and every FEM mesh gives
+an accurate group index. A Richardson extrapolation of the folded FDM results independently confirms
+the FEM reference.
+
+*This code example is licensed under the* `BSD 3-Clause License <../_static/LICENSE.html>`_.
+
+.. tabs::
+
+    .. code-tab:: python
+        :caption: Python
+
+        import sys
+        import time
+        import numpy as np
+        import emodeconnection as emc
+        from matplotlib import pyplot as plt
+
+        ## Set simulation parameters: the SiN guide of the 'Bend Mode Solvers' example, straight
+        wavelength = 980  # [nm] wavelength
+        w_core = 2000  # [nm] waveguide core width
+        w_trench = 2500  # [nm] cladding beside the core
+        h_core = 200  # [nm] waveguide core height
+        h_clad = 2000  # [nm] cladding above and below the core
+        window_width = w_core + w_trench*2  # [nm]
+        window_height = h_core + h_clad*2  # [nm]
+
+        ## The FDM grids all put the core's edges on grid lines (each divides 100 nm),
+        ## and the FEM meshes are fixed (no refinement), from coarse to fine.
+        resolutions = [50, 25, 20, 10]  # [nm] full window
+        fold_resolutions = [50, 25, 20, 10, 5]  # [nm] window folded by the 'TE' boundary condition
+        fem_meshes = [(1, 100), (1, 50), (2, 50), (3, 50), (4, 50), (6, 50)]  # FEM (points per wavelength, core mesh [nm])
+
+        em = emc.EMode(emode_cmd=sys.argv[1:], simulation_name='straight_convergence')
+
+
+        ## Define common settings and the waveguide core, with no PML: the field has
+        ## decayed to about 1e-6 of its peak at the window's walls
+        em.settings(
+            wavelength=wavelength, window_width=window_width, window_height=window_height,
+            num_modes=1, boundary_condition='00', background_material='SiO2',
+            fem_max_refinements=0, fem_min_angle=33)
+        em.shape(name='core', material='SiN', width=w_core, height=h_core,
+                 position=[0, window_height/2], fem_resolution=50)
+
+
+        def solve(solver, boundary_condition='00', resolution=20, points=4, core_mesh=50):
+            em.settings(solver=solver, boundary_condition=boundary_condition,
+                        x_resolution=resolution, y_resolution=resolution,
+                        fem_points_per_wavelength=points)
+            em.shape(name='core', fem_resolution=core_mesh)
+            start = time.time()
+            em.solve()
+            elapsed = time.time() - start
+            n_eff = float(np.real(np.asarray(em.get('effective_index'))[0]))
+            ## group_index() solves again at a slightly longer wavelength
+            n_g = float(np.real(np.asarray(em.group_index())[0]))
+            return n_eff, n_g, elapsed
+
+
+        ## Run the FDM on the full window, then folded by the guide's two mirror planes
+        rows = []
+        for boundary_condition, grids in (('00', resolutions), ('TE', fold_resolutions)):
+            for resolution in grids:
+                n_eff, n_g, elapsed = solve('FDM', boundary_condition, resolution=resolution)
+                rows.append(('FDM', boundary_condition, f'{resolution} nm', n_eff, n_g, elapsed))
+
+        ## Run the FEM on the fixed meshes
+        for points, core_mesh in fem_meshes:
+            n_eff, n_g, elapsed = solve('FEM', points=points, core_mesh=core_mesh)
+            rows.append(('FEM', '00', f'{points}/wl, {core_mesh} nm', n_eff, n_g, elapsed))
+
+        ## Plot the guided mode of the finest FEM mesh
+        em.plot(component='Ex', file_name='straight_FEM', file_type='png')
+
+        ## The reference is the finest FEM mesh, cross-checked against the Richardson
+        ## extrapolation of the folded FDM's 10 and 5 nm results (second order: error ~ h^2)
+        reference, ng_reference = rows[-1][3], rows[-1][4]
+        fdm_10, fdm_5 = [r for r in rows if r[1] == 'TE'][-2:]
+        richardson = fdm_5[3] + (fdm_5[3] - fdm_10[3])/3
+        ng_richardson = fdm_5[4] + (fdm_5[4] - fdm_10[4])/3
+
+        ## Print each solve's errors against the reference
+        print(f'\n{"solver":7s}{"walls":6s}{"mesh":>13s}{"n_eff":>11s}{"error":>10s}{"n_g":>10s}{"error":>10s}{"time (s)":>10s}')
+        for solver, walls, mesh, n_eff, n_g, elapsed in rows:
+            print(f'{solver:7s}{walls:6s}{mesh:>13s}{n_eff:>11.6f}{n_eff - reference:>10.1e}{n_g:>10.5f}{n_g - ng_reference:>10.1e}{elapsed:>10.1f}')
+
+        print()
+        print(f'{"reference n_eff, FEM 6/wl, 50 nm:":36s}{reference:.7f}')
+        print(f'{"Richardson n_eff, FDM 10 and 5 nm:":36s}{richardson:.7f}')
+        print(f'{"difference:":36s}{richardson - reference:.1e}')
+        print(f'{"reference n_g, FEM 6/wl, 50 nm:":36s}{ng_reference:.6f}')
+        print(f'{"Richardson n_g, FDM 10 and 5 nm:":36s}{ng_richardson:.6f}')
+        print(f'{"difference:":36s}{ng_richardson - ng_reference:.1e}')
+
+        ## Plot the effective index and group index errors against solve time
+        fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+        for solver, walls, marker, label in (('FDM', '00', 'o', 'FDM'), ('FDM', 'TE', 's', "FDM, 'TE' fold"), ('FEM', '00', '^', 'FEM')):
+            picked = [r for r in rows[:-1] if r[:2] == (solver, walls)]
+            times = [r[5] for r in picked]
+            axes[0].loglog(times, [abs(r[3] - reference) for r in picked], marker=marker, label=label)
+            axes[1].loglog(times, [abs(r[4] - ng_reference) for r in picked], marker=marker, label=label)
+        axes[0].set_ylabel('|n_eff error|')
+        axes[1].set_ylabel('|n_g error|')
+        for ax in axes:
+            ax.set_xlabel('solve time (s)')
+            ax.grid(True, which='both', alpha=0.3)
+        axes[0].legend()
+        fig.tight_layout()
+        fig.savefig('straight_convergence.png', dpi=300)
+
+        em.close()
+
+
+Console output::
+
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.4 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.6 sec
+    Meshing completed in 0.1 sec
+    Solving modes completed in 2.6 sec
+    Meshing completed in 0.2 sec
+    Solving modes completed in 11.4 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.3 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.4 sec
+    Meshing completed in 0.1 sec
+    Solving modes completed in 2.0 sec
+    Meshing completed in 1.2 sec
+    Solving modes completed in 9.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.5 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.7 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.5 sec
+    Meshing completed in 0.1 sec
+    Solving modes completed in 3.3 sec
+
+    solver walls          mesh      n_eff     error       n_g     error  time (s)
+    FDM    00            50 nm   1.684334  -3.1e-03   1.98882  -9.1e-03       0.4
+    FDM    00            25 nm   1.686675  -7.8e-04   1.99561  -2.3e-03       1.7
+    FDM    00            20 nm   1.686956  -5.0e-04   1.99643  -1.5e-03       2.8
+    FDM    00            10 nm   1.687330  -1.2e-04   1.99753  -3.5e-04      12.0
+    FDM    TE            50 nm   1.684334  -3.1e-03   1.98882  -9.1e-03       0.1
+    FDM    TE            25 nm   1.686675  -7.8e-04   1.99561  -2.3e-03       0.3
+    FDM    TE            20 nm   1.686956  -5.0e-04   1.99643  -1.5e-03       0.5
+    FDM    TE            10 nm   1.687330  -1.2e-04   1.99753  -3.5e-04       2.1
+    FDM    TE             5 nm   1.687424  -3.0e-05   1.99780  -7.8e-05      11.4
+    FEM    00     1/wl, 100 nm   1.687431  -2.3e-05   1.99778  -9.8e-05       1.0
+    FEM    00      1/wl, 50 nm   1.687445  -8.7e-06   1.99787  -8.6e-06       1.3
+    FEM    00      2/wl, 50 nm   1.687446  -8.1e-06   1.99787  -1.2e-05       1.5
+    FEM    00      3/wl, 50 nm   1.687449  -4.8e-06   1.99787  -1.2e-05       2.0
+    FEM    00      4/wl, 50 nm   1.687452  -2.2e-06   1.99787  -6.4e-06       2.6
+    FEM    00      6/wl, 50 nm   1.687454   0.0e+00   1.99788   0.0e+00       4.8
+
+    reference n_eff, FEM 6/wl, 50 nm:   1.6874538
+    Richardson n_eff, FDM 10 and 5 nm:  1.6874548
+    difference:                         1.0e-06
+    reference n_g, FEM 6/wl, 50 nm:     1.997880
+    Richardson n_g, FDM 10 and 5 nm:    1.997894
+    difference:                         1.4e-05
+    Exited EMode
+
+
+Figures:
+
+.. figure:: Figures/Straight_Convergence/straight_convergence.png
+    :width: 500
+    :align: center
+    :figwidth: 500
+
+.. figure:: Figures/Straight_Convergence/straight_FEM.png
+    :width: 400
+    :align: center
+    :figwidth: 400

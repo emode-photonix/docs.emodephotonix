@@ -1,0 +1,969 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>EME</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=e2a723ec"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/eme';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/emodeguide/eme.html" />
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multi-Physics" href="fem.html" />
+    <link rel="prev" title="Solver and analysis" href="solver-analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.6" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="file-management.html">File management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Simulation setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solver-analysis.html">Solver and analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">EME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem.html">Multi-Physics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation/release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="eme">
+<h1>EME</h1>
+<p>Every section function below accepts a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> to wire named ports explicitly instead, including into branching topologies. See <a class="reference internal" href="../interface.html#ports"><span class="std std-ref">Ports</span></a> for the port model, the <code class="docutils literal notranslate"><span class="pre">Port</span></code> and <code class="docutils literal notranslate"><span class="pre">Bounds</span></code> classes, and <a class="reference internal" href="../interface.html#make_angled_facet_port" title="make_angled_facet_port"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a> for declaring an angled facet on a port.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="EME_settings">
+<span class="sig-name descname"><span class="pre">EME_settings</span></span></dt>
+<dd><p>Declare global EME defaults that are inherited by sections created afterward. Each parameter left unspecified leaves the corresponding stored default unchanged. A section’s own <code class="docutils literal notranslate"><span class="pre">settings</span></code> argument at creation still overrides these globals. Sections created before this call are not affected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>apply_scattering</strong> (<em>bool</em><em> or </em><em>list</em><em>[</em><em>float</em><em>]</em>) – whether interfacial scattering loss is automatically applied to the S-matrix, either for every wavelength (True), no wavelengths (False), or only the listed wavelengths, default: False</p></li>
+<li><p><strong>beta_interpolation</strong> (<em>str</em>) – either ‘uniform’ or ‘linear’ to specify how the propagation constant is interpolated between z-slices of a taper/gds section, default: ‘uniform’</p></li>
+<li><p><strong>junction_normalization</strong> (<em>bool</em><em> or </em><em>str</em><em> or </em><em>dict</em>) – controls how junction S-matrices are power-normalized; either a single bool/’gain’ value applied to both junction kinds, or a dict with ‘inter_section’ and ‘intra_section’ keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or ‘gain’ (clip singular values at 1 while keeping the raw lossy mode-matching), default: ‘gain’ for inter-section junctions and True for intra-section junctions. It applies to junctions with a plane-wave side (<a class="reference internal" href="#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>) or an angled facet. A junction between two mode-solved cross-sections conserves power by construction and is not normalized.</p></li>
+<li><p><strong>overlap_variation</strong> (<em>float</em>) – threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01</p></li>
+<li><p><strong>minimum_z_step</strong> (<em>float</em>) – [nm] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1</p></li>
+<li><p><strong>snap_window</strong> (<em>float</em>) – the fraction of a slice’s length around its midpoint within which the automatic z-slicing bisects at a cross-section already solved elsewhere (for the same settings, mesh and wavelength) instead of at the midpoint, which saves a mode solve wherever two tapers or GDS sections share widths. 0 always bisects at the midpoint, default: 0.25</p></li>
+<li><p><strong>initial_slices</strong> (<em>str</em>) – how a taper or GDS section is sliced before the automatic z-slicing bisection refines it, either ‘auto’ (boundaries placed where the cross-section changes, from its rasterized refractive index: none along a straight run, evenly along a linear taper, densely inside a short fast feature, and at every corner of a GDS outline) or ‘single’ (one slice, the behavior before EMode 1.0.6). Refinement still runs afterward and decides the final slicing, so the choice moves results only within its tolerance and changes how many rounds it takes. A <code class="docutils literal notranslate"><span class="pre">warm_start</span></code> in <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> takes its slices from the previous solve instead, default: ‘auto’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>A section’s own <code class="docutils literal notranslate"><span class="pre">settings</span></code> dictionary accepts the keys above (except <code class="docutils literal notranslate"><span class="pre">simulation_name</span></code>), and four more that tune the ‘auto’ initial slicing. They are rarely needed, and <code class="docutils literal notranslate"><span class="pre">EME_settings</span></code> does not take them.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">schedule_samples</span></code>: the number of positions along the section at which the refractive index is rasterized (no mode solve) to find where it changes, at least 2, default: 128</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schedule_change_per_slice</span></code>: the relative change in the rasterized index that one initial slice spans, so a smaller value starts with more slices, default: 0.05</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schedule_max_slices</span></code>: the largest number of initial slices, default: 64</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schedule_coarsen</span></code>: how many times coarser than the profile’s mesh the index is rasterized, at least 1, default: 4</p></li>
+</ul>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">taper_section(...,</span> <span class="pre">settings={'schedule_change_per_slice':</span> <span class="pre">0.02})</span></code>. Initial slice boundaries closer together than <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code> are merged.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="straight_section">
+<span class="sig-name descname"><span class="pre">straight_section</span></span></dt>
+<dd><p>Define a uniform-cross-section waveguide section for the EME solver. Sections are placed sequentially in the z-direction in the order they are declared (or updated, if <code class="docutils literal notranslate"><span class="pre">name</span></code> already exists).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that defines the section’s cross-section</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
+<li><p><strong>offset</strong> (<em>float</em><em> or </em><em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section relative to whatever its ports connect to; if only a single value is given it is assumed to be the x-offset, default: (0, 0). <strong>Legacy</strong>: this is the same displacement as <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s own <code class="docutils literal notranslate"><span class="pre">offset</span></code> applied to every port of the section at once, and setting both on one section raises an error. Prefer declaring <code class="docutils literal notranslate"><span class="pre">offset</span></code> on the specific port that sits off-axis.</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>nonlinear</strong> (<em>SHGProcess</em><em> or </em><em>SFGProcess</em><em> or </em><em>DFGProcess</em><em> or </em><a class="reference internal" href="#PulsedProcess" title="PulsedProcess"><em>PulsedProcess</em></a><em> or </em><em>False</em><em> or </em><em>None</em>) – declare a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> process on this section (EMode<sup>3D</sup> only), one of <code class="docutils literal notranslate"><span class="pre">SHGProcess(pump_wavelength=...)</span></code>, <code class="docutils literal notranslate"><span class="pre">SFGProcess(pump_wavelength_1=...,</span> <span class="pre">pump_wavelength_2=...)</span></code> or <code class="docutils literal notranslate"><span class="pre">DFGProcess(pump_wavelength=...,</span> <span class="pre">signal_wavelength=...)</span></code> from <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>. You name the process’s <em>input</em> wavelength(s); the remaining one follows from energy conservation and is matched against the section’s own profile wavelengths. Quasi-phase matching is declared on the process with <code class="docutils literal notranslate"><span class="pre">poling_period</span></code> [nm], plus <code class="docutils literal notranslate"><span class="pre">duty_cycle</span></code> (default: 0.5) and <code class="docutils literal notranslate"><span class="pre">qpm_order</span></code> (default: 1); <code class="docutils literal notranslate"><span class="pre">inverted=True</span></code> instead flips the local <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting <code class="docutils literal notranslate"><span class="pre">nonlinear</span></code> (or passing <code class="docutils literal notranslate"><span class="pre">None</span></code>) when updating an existing section leaves the declared process in place, passing a new one replaces it, and <code class="docutils literal notranslate"><span class="pre">nonlinear=False</span></code> removes it, so the section propagates linearly again. A pump must also be declared, see <code class="docutils literal notranslate"><span class="pre">excitation</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>, and the power-dependent result is read back with <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>. The process also carries <code class="docutils literal notranslate"><span class="pre">z_samples</span></code> (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as <code class="docutils literal notranslate"><span class="pre">get('response').power_vs_z(wavelength)</span></code>, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse’s nonlinearity is declared instead with a <code class="docutils literal notranslate"><span class="pre">PulsedProcess</span></code>, see <a class="reference internal" href="#pulsed-propagation"><span class="std std-ref">pulsed nonlinear propagation</span></a>. Default: None</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, merged onto the current global EME settings (or onto the section’s existing settings, when updating), e.g. <code class="docutils literal notranslate"><span class="pre">settings={'overlap_variation':</span> <span class="pre">0.005}</span></code>, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pwd_section">
+<span class="sig-name descname"><span class="pre">pwd_section</span></span></dt>
+<dd><p>Define a free space section, in which the field is expanded in plane waves (a plane-wave decomposition, PWD) over a uniform material, rather than in the guided modes of a cross-section. This is intended for gaps, facets, and free space propagation between waveguide sections; the junctions between a free space section and its neighbors are computed analytically instead of from a mode solve.</p>
+<p>The basis is the set of plane-wave harmonics of the section window, with transverse wavevectors <code class="docutils literal notranslate"><span class="pre">kx</span> <span class="pre">=</span> <span class="pre">2*pi*m/window_width</span></code> and <code class="docutils literal notranslate"><span class="pre">ky</span> <span class="pre">=</span> <span class="pre">2*pi*n/window_height</span></code>, each harmonic carrying both a TE and a TM polarization. At least one of <code class="docutils literal notranslate"><span class="pre">max_order</span></code>, <code class="docutils literal notranslate"><span class="pre">max_kt</span></code>, or <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> is required to truncate the basis; when more than one is given, they are applied in the order <code class="docutils literal notranslate"><span class="pre">max_order</span></code>, <code class="docutils literal notranslate"><span class="pre">max_kt</span></code>, <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
+<li><p><strong>material</strong> (<em>str</em><em> or </em><em>~MaterialProperties</em><em> or </em><em>~MaterialSpec</em>) – the material filling the section, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object; must be isotropic, default: “Vacuum”</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that supplies the default window and the wavelength(s) of the section, default: ‘_default’</p></li>
+<li><p><strong>window</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – [nm] the (width, height) of the plane-wave window, which overrides the window of <code class="docutils literal notranslate"><span class="pre">profile</span></code>, default: None (use the <code class="docutils literal notranslate"><span class="pre">window_width</span></code> and <code class="docutils literal notranslate"><span class="pre">window_height</span></code> of <code class="docutils literal notranslate"><span class="pre">profile</span></code>)</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of the window’s origin, which is its horizontal center and bottom edge, default: (0, 0)</p></li>
+<li><p><strong>max_order</strong> (<em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>] or </em><em>None</em>) – the largest harmonic order to keep in the x- and y-directions, so that <code class="docutils literal notranslate"><span class="pre">|m|</span> <span class="pre">&lt;=</span> <span class="pre">max_order[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">|n|</span> <span class="pre">&lt;=</span> <span class="pre">max_order[1]</span></code>, default: None</p></li>
+<li><p><strong>max_kt</strong> (<em>float</em>) – [1/nm] the largest transverse wavevector magnitude to keep, default: None</p></li>
+<li><p><strong>num_modes</strong> (<em>int</em>) – the largest number of modes to keep, counting both polarizations of each harmonic, and applied after <code class="docutils literal notranslate"><span class="pre">max_order</span></code> and <code class="docutils literal notranslate"><span class="pre">max_kt</span></code>; the basis always keeps a harmonic together with its opposite-direction pair, so the resulting count can land slightly below the requested value, default: None</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="taper_section">
+<span class="sig-name descname"><span class="pre">taper_section</span></span></dt>
+<dd><p>Define a section that linearly interpolates its cross-section between two profiles for the EME solver, automatically slicing the z-direction to track the mode evolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that defines the section beginning</p></li>
+<li><p><strong>profile_end</strong> (<em>str</em>) – name of the profile that defines the section ending</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>nonlinear</strong> (<em>SHGProcess</em><em> or </em><em>SFGProcess</em><em> or </em><em>DFGProcess</em><em> or </em><a class="reference internal" href="#PulsedProcess" title="PulsedProcess"><em>PulsedProcess</em></a><em> or </em><em>False</em><em> or </em><em>None</em>) – declare a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> process on this section (EMode<sup>3D</sup> only), one of <code class="docutils literal notranslate"><span class="pre">SHGProcess(pump_wavelength=...)</span></code>, <code class="docutils literal notranslate"><span class="pre">SFGProcess(pump_wavelength_1=...,</span> <span class="pre">pump_wavelength_2=...)</span></code> or <code class="docutils literal notranslate"><span class="pre">DFGProcess(pump_wavelength=...,</span> <span class="pre">signal_wavelength=...)</span></code> from <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>. You name the process’s <em>input</em> wavelength(s); the remaining one follows from energy conservation and is matched against the section’s own profile wavelengths. Quasi-phase matching is declared on the process with <code class="docutils literal notranslate"><span class="pre">poling_period</span></code> [nm], plus <code class="docutils literal notranslate"><span class="pre">duty_cycle</span></code> (default: 0.5) and <code class="docutils literal notranslate"><span class="pre">qpm_order</span></code> (default: 1); <code class="docutils literal notranslate"><span class="pre">inverted=True</span></code> instead flips the local <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting <code class="docutils literal notranslate"><span class="pre">nonlinear</span></code> (or passing <code class="docutils literal notranslate"><span class="pre">None</span></code>) when updating an existing section leaves the declared process in place, passing a new one replaces it, and <code class="docutils literal notranslate"><span class="pre">nonlinear=False</span></code> removes it, so the section propagates linearly again. A pump must also be declared, see <code class="docutils literal notranslate"><span class="pre">excitation</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>, and the power-dependent result is read back with <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>. The process also carries <code class="docutils literal notranslate"><span class="pre">z_samples</span></code> (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as <code class="docutils literal notranslate"><span class="pre">get('response').power_vs_z(wavelength)</span></code>, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse’s nonlinearity is declared instead with a <code class="docutils literal notranslate"><span class="pre">PulsedProcess</span></code>, see <a class="reference internal" href="#pulsed-propagation"><span class="std std-ref">pulsed nonlinear propagation</span></a>. Default: None</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a> (notably <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> and <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code>, which control the automatic z-slicing), default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="bend_section">
+<span class="sig-name descname"><span class="pre">bend_section</span></span></dt>
+<dd><p>Define a circular bend for the EME solver: the cross-section of <code class="docutils literal notranslate"><span class="pre">profile</span></code> swept along an arc. The bend is placed in the layout like any other section, and sections declared after it continue from its end, turned by <code class="docutils literal notranslate"><span class="pre">sweep_angle</span></code>.</p>
+<p>An anisotropic crystal is fixed in the chip, so the guide sees it turn along the bend. When a material is anisotropic in the plane of the chip (x-cut lithium niobate, for example), the bend is sliced along its heading and refined like a taper, and every section placed after a turn sees the crystal turned with it. A bend of an isotropic material, or of a crystal whose optic axis is vertical (z-cut thin film), is a single slice and a single mode solve. A <a class="reference internal" href="#copy_section" title="copy_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">copy_section</span></code></a> reuses its source’s S-matrix, so it raises an error when its own placement would show the crystal differently, and asks for the copy to be declared as its own section.</p>
+<p>A bend has no mirror symmetry about x, so an x symmetry wall in the profile’s <code class="docutils literal notranslate"><span class="pre">boundary_condition</span></code> (such as ‘0S’ or ‘SA’) is replaced by ‘0’ with a warning, and ‘TE’, ‘TM’, ‘TE-h’ and ‘TM-h’ keep only the vertical fold. Updating an existing bend changes only the arguments given.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that defines the cross-section</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – [nm] the bend radius, measured to the origin of the profile’s x axis, must be positive, required for a new bend</p></li>
+<li><p><strong>sweep_angle</strong> (<em>float</em>) – [rad] the angle the bend turns through, positive toward +x and negative toward -x, not zero, required for a new bend</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – how each slice is solved, either ‘cylindrical’ (the bend in cylindrical coordinates, as <code class="docutils literal notranslate"><span class="pre">bend_radius</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>) or ‘TO’ (transformation optics, see <code class="docutils literal notranslate"><span class="pre">bend_method</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>), default: ‘cylindrical’</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a> (notably <code class="docutils literal notranslate"><span class="pre">overlap_variation</span></code> and <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code>, which control the automatic z-slicing), default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="gds_section">
+<span class="sig-name descname"><span class="pre">gds_section</span></span></dt>
+<dd><p>Define a section whose cross-section varies along z according to a mask imported from a GDS file, for more complex geometries defined with third-party layout tools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile that defines the section’s cross-section outside of the GDS mask</p></li>
+<li><p><strong>gds_path</strong> (<em>str</em>) – path to the GDS file used to mask the section</p></li>
+<li><p><strong>layer_map</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – mapping of profile shape names to GDS layer numbers, used to determine which shapes in <code class="docutils literal notranslate"><span class="pre">profile</span></code> are masked by which GDS layer</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – [nm] the length of the section, default: derived from the GDS bounding box</p></li>
+<li><p><strong>cell_index</strong> (<em>int</em><em> or </em><em>str</em>) – the cell index (or name) in the specified GDS file, default: 0</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – unit scale factor applied to the GDS coordinates (e.g. use 1000 if the GDS file is drawn in microns but the simulation is in nanometers), default: 1</p></li>
+<li><p><strong>port_poses</strong> (<em>dict</em>) – explicit port positions/orientations at the section boundaries, default: derived from the GDS bounding box (left port at w=0, right port at w=length)</p></li>
+<li><p><strong>heal</strong> (<em>bool</em>) – whether to heal small gaps/self-intersections in the imported GDS polygons before meshing, default: True</p></li>
+<li><p><strong>grow</strong> (<em>float</em>) – amount to grow imported GDS polygons by, to close small gaps, default: 1e-3</p></li>
+<li><p><strong>nonlinear</strong> (<a class="reference internal" href="#PulsedProcess" title="PulsedProcess"><em>PulsedProcess</em></a><em> or </em><em>False</em><em> or </em><em>None</em>) – declare a pulse’s nonlinearity on this section as a <code class="docutils literal notranslate"><span class="pre">PulsedProcess</span></code> (see <a class="reference internal" href="#pulsed-propagation"><span class="std std-ref">pulsed nonlinear propagation</span></a>), <code class="docutils literal notranslate"><span class="pre">False</span></code> to remove one. The CW <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> processes are not available on a GDS section. Default: None</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – replace the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once sections are declared, call <code class="docutils literal notranslate"><span class="pre">plot()</span></code> with <code class="docutils literal notranslate"><span class="pre">plane='z-x'</span></code> or <code class="docutils literal notranslate"><span class="pre">plane='z-y'</span></code> to preview a geometry-only ‘Outline’ of the section layout before running <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>.</p>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="copy_section">
+<span class="sig-name descname"><span class="pre">copy_section</span></span></dt>
+<dd><p>Place a second instance of an already-declared section in the chain, reusing its already-computed S-matrix instead of re-solving it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – section name, default: an auto-generated number</p></li>
+<li><p><strong>section_name</strong> (<em>str</em>) – name of the existing section to copy</p></li>
+<li><p><strong>mirror</strong> (<em>bool</em>) – whether to reverse the placement along the propagation direction (swapping the left/right ports), default: False</p></li>
+<li><p><strong>port_swap</strong> (<em>dict</em>) – explicit port-name mapping to use instead of the automatically computed left/right swap when <code class="docutils literal notranslate"><span class="pre">mirror</span></code> is True, default: None</p></li>
+<li><p><strong>ports</strong> (<em>list</em><em>[</em><a class="reference internal" href="../interface.html#Port" title="Port"><em>Port</em></a><em>] or </em><em>None</em>) – relabel/window this copy’s own left/right boundary, with the same semantics as any other section’s <code class="docutils literal notranslate"><span class="pre">ports</span></code>, independent of <code class="docutils literal notranslate"><span class="pre">port_swap</span></code> and of the source section’s own ports. See <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>, default: None (keep existing/default ports)</p></li>
+<li><p><strong>settings</strong> (<em>dict</em><em> or </em><em>None</em>) – per-section overrides of the <a class="reference internal" href="#EME_settings" title="EME_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME_settings</span></code></a>, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="connect_ports">
+<span class="sig-name descname"><span class="pre">connect_ports</span></span></dt>
+<dd><p>Override the default left/right adjacency wiring between named ports declared with the <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument of any section function.</p>
+<p>Connecting two ports also <strong>pins their coordinate systems together</strong>: the two ports’ origins (the horizontal centre and bottom edge of each cross-section) are made to coincide, so the connection is what positions one section relative to the other. Use <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">offset</span></code> to displace a section off that shared origin, and its <code class="docutils literal notranslate"><span class="pre">window</span></code> to choose which part of a wider cross-section the port exposes. The first section you declare defines the global frame that plots are drawn in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pairs</strong> (<em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>] or </em><em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>, </em><a class="reference internal" href="#JunctionOverride" title="JunctionOverride"><em>JunctionOverride</em></a><em>]</em><em>]</em>) – a list of <code class="docutils literal notranslate"><span class="pre">('&lt;section_name&gt;.&lt;port_name&gt;',</span> <span class="pre">'&lt;section_name&gt;.&lt;port_name&gt;')</span></code> pairs to connect, e.g. <code class="docutils literal notranslate"><span class="pre">[('a.right',</span> <span class="pre">'b.left'),</span> <span class="pre">('c.right',</span> <span class="pre">'d.left')]</span></code>. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> build time. An entry may carry an optional <strong>third</strong> element, a <a class="reference internal" href="#JunctionOverride" title="JunctionOverride"><code class="xref py py-class docutils literal notranslate"><span class="pre">JunctionOverride</span></code></a>, configuring the junction that connection forms, e.g. <code class="docutils literal notranslate"><span class="pre">[('a.right',</span> <span class="pre">'b.left',</span> <span class="pre">JunctionOverride(junction_normalization=False))]</span></code>.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="JunctionOverride">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JunctionOverride</span></span></dt>
+<dd><p>Settings for a single junction, passed as the optional third element of a <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> entry. Every parameter left unspecified inherits the value the junction’s sections resolved, so setting one does not disturb the others.</p>
+<p>These settings belong to the <em>connection</em> rather than to either port because each one describes the interface between the two sections – which algebra joins their mode sets, how the resulting scattering matrix is normalized – and not one side of it.</p>
+<p>Only an explicitly connected junction can carry these. A junction formed by the default left/right adjacency has nowhere to declare them, so name that pair in <a class="reference internal" href="#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> to configure it, which supersedes the adjacency. The internal junctions of a taper or GDS section’s automatic z-slicing are controlled by that section’s <code class="docutils literal notranslate"><span class="pre">settings</span></code> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>junction_normalization</strong> (<em>bool</em><em> or </em><em>str</em><em> or </em><em>None</em>) – how this junction’s scattering matrix is power-normalized – True (full SVD unitarization), False (raw, unnormalized), or ‘gain’ (clip singular values at 1 while keeping the raw lossy mode-matching), for a junction with a plane-wave side or an angled facet, default: None (inherit)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="EME">
+<span class="sig-name descname"><span class="pre">EME</span></span></dt>
+<dd><p>Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME). Before solving anything it checks the layout (see <a class="reference internal" href="#check_layout" title="check_layout"><code class="xref py py-data docutils literal notranslate"><span class="pre">check_layout</span></code></a>) and raises an error when two sections overlap or a loop of connected sections misses closing (its two ports more than <code class="docutils literal notranslate"><span class="pre">minimum_z_step</span></code> apart, or more than 1e-6 rad from facing each other), and warns when a section’s outline crosses itself or a section is reached by no connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>warm_start</strong> (<em>bool</em>) – whether to seed each taper/gds section’s automatic z-slice refinement from the previously solved chain (when available), instead of re-refining from scratch, default: False</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="check_layout">
+<span class="sig-name descname"><span class="pre">check_layout</span></span></dt>
+<dd><p>Check the layout of the declared sections without solving. Every section is placed where its connections put it and drawn top down from its shapes that do not span the window. Returns a <code class="docutils literal notranslate"><span class="pre">LayoutReport</span></code> with <code class="docutils literal notranslate"><span class="pre">overlaps</span></code> (pairs of sections whose outlines overlap, as <code class="docutils literal notranslate"><span class="pre">(section,</span> <span class="pre">section,</span> <span class="pre">area)</span></code> with the area in nm<sup>2</sup>, where sections that only share a port edge do not overlap), <code class="docutils literal notranslate"><span class="pre">self_intersecting</span></code> (sections whose own outline crosses itself, such as a bend swept past a full turn), <code class="docutils literal notranslate"><span class="pre">closures</span></code> (for each connection that closes a loop, how far apart its two ports are in nm and how far from facing each other in radians), and <code class="docutils literal notranslate"><span class="pre">unplaced</span></code> (sections no connection reaches, which are placed after the section declared before them). <code class="docutils literal notranslate"><span class="pre">max_closure()</span></code> returns the largest closure distance and angle, or zeros without a loop. <code class="docutils literal notranslate"><span class="pre">plot(view='layout')</span></code> draws the same layout. <code class="docutils literal notranslate"><span class="pre">LayoutReport</span></code> is defined in <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chi2_spectrum">
+<span class="sig-name descname"><span class="pre">chi2_spectrum</span></span></dt>
+<dd><p>Conversion spectrum of a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section, solved sparsely in wavelength (EMode<sup>3D</sup> only). Returns the signal power out over the pump power in at every wavelength in <code class="docutils literal notranslate"><span class="pre">values</span></code>.</p>
+<p>A nonlinear spectrum oscillates with the phase mismatch, so it cannot be interpolated – at any useful resolution it has to be evaluated point by point. What <em>can</em> be interpolated is what the coupled-mode equations consume: the coupling and the propagation constants, which vary smoothly with wavelength. So the modes are solved at a handful of wavelengths chosen by how fast the mode list is actually moving, and the response is then evaluated at every requested wavelength from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included.</p>
+<p>Quasi-phase matching is included: the grating enters as a wavevector shift and a Fourier coefficient built from <code class="docutils literal notranslate"><span class="pre">poling_period</span></code>, <code class="docutils literal notranslate"><span class="pre">duty_cycle</span></code> and <code class="docutils literal notranslate"><span class="pre">qpm_order</span></code>, none of which depend on wavelength, so a poled section keeps its exact grating while its phase mismatch moves with the interpolated propagation constants.</p>
+<p>Requires a chain with a declared <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section (see <code class="docutils literal notranslate"><span class="pre">nonlinear</span></code> on <a class="reference internal" href="#straight_section" title="straight_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">straight_section</span></code></a>/<a class="reference internal" href="#taper_section" title="taper_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">taper_section</span></code></a>) and a declared pump (<code class="docutils literal notranslate"><span class="pre">excitation</span></code> in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>list</em><em> or </em><em>array</em>) – pump wavelengths [nm] to report at; the signal wavelength follows the declared process</p></li>
+<li><p><strong>section</strong> (<em>str</em>) – which nonlinear section to scan, default: the only one declared</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – the largest mode-list change tolerated between adjacent solves, default: 1e-3</p></li>
+<li><p><strong>minimum_step</strong> (<em>float</em>) – [nm] the smallest wavelength gap the sampler will bisect into, default: the output spacing, since resolving finer than you asked to see cannot change the reported curve</p></li>
+<li><p><strong>initial_points</strong> (<em>int</em>) – solves to place before any bisection, default: 5</p></li>
+<li><p><strong>power</strong> (<em>float</em>) – [W] pump power, default: the declared excitation’s</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a dictionary with <code class="docutils literal notranslate"><span class="pre">values</span></code>, <code class="docutils literal notranslate"><span class="pre">conversion</span></code> (signal out over pump in), <code class="docutils literal notranslate"><span class="pre">solved_wavelengths</span></code> (where the solver actually ran), and <code class="docutils literal notranslate"><span class="pre">unconverged</span></code> – the intervals, if any, the sampler could not resolve to <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> before reaching <code class="docutils literal notranslate"><span class="pre">minimum_step</span></code>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="free_space_field">
+<span class="sig-name descname"><span class="pre">free_space_field</span></span></dt>
+<dd><p>Declare, or update, a free-space field: a Gaussian beam launched into a port of the chain. This is an <em>excitation</em>, not a section. It does not appear in the scattering matrix or in the layout.</p>
+<p>After <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>, <code class="docutils literal notranslate"><span class="pre">plot(excitation=name)</span></code> (or the plot window’s Mode menu, <code class="docutils literal notranslate"><span class="pre">'&lt;name&gt;</span> <span class="pre">(free</span> <span class="pre">space)'</span></code>) renders the field the beam launches, projected onto the target port’s modes with the same pairing the junctions use. Re-declaring an existing <code class="docutils literal notranslate"><span class="pre">name</span></code> updates only the arguments you give.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – free-space field name, default: the next number</p></li>
+<li><p><strong>port</strong> (<em>str</em>) – the external port the beam enters, either a bare side <code class="docutils literal notranslate"><span class="pre">'left'</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">'right'</span></code>, or a qualified <code class="docutils literal notranslate"><span class="pre">'&lt;section&gt;.&lt;port&gt;'</span></code> name. The beam travels inbound from that port.</p></li>
+<li><p><strong>waist</strong> (<em>float</em>) – [nm] the 1/e field radius <span class="math notranslate nohighlight">\(w\)</span> in <span class="math notranslate nohighlight">\(\exp(-r^2/w^2)\)</span>, required when declaring a new field</p></li>
+<li><p><strong>center</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] beam center <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> in the port’s cross-section coordinates, default: (0, 0)</p></li>
+<li><p><strong>tilt</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [degrees] <code class="docutils literal notranslate"><span class="pre">(theta_x,</span> <span class="pre">theta_y)</span></code>, where a positive <code class="docutils literal notranslate"><span class="pre">theta_x</span></code> steers the beam toward +x. This is the angle <strong>inside the medium the beam travels through</strong>, default: (0, 0)</p></li>
+<li><p><strong>component</strong> (<em>str</em>) – the one transverse E component the beam carries, <code class="docutils literal notranslate"><span class="pre">'Ex'</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">'Ey'</span></code></p></li>
+<li><p><strong>amplitude</strong> (<em>float</em>) – peak field value, default: 1</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm], default: None (each port’s own wavelength)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="free_space_field_diagnostics">
+<span class="sig-name descname"><span class="pre">free_space_field_diagnostics</span></span></dt>
+<dd><p>How much of a declared free-space field’s power the target port’s modal basis actually captures, after <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> has solved the chain. The solver already warns when this falls below 90%. This returns it as a value a script can check or plot instead of parsing a log line.</p>
+<p>A low captured fraction means the port’s modes cannot represent the beam. Raise that section’s <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>, or widen its window, before trusting a coupling number computed from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – the free-space field to diagnose</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm] which of a multi-wavelength chain’s ports to diagnose, default: None (the lowest wavelength present)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a <code class="docutils literal notranslate"><span class="pre">FreeSpaceProjection</span></code> with <code class="docutils literal notranslate"><span class="pre">captured_fraction</span></code>, its complement <code class="docutils literal notranslate"><span class="pre">dropped_fraction</span></code>, the resolved <code class="docutils literal notranslate"><span class="pre">port</span></code> and <code class="docutils literal notranslate"><span class="pre">wavelength</span></code>, and the launch basis’s <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="plot_S_matrix">
+<span class="sig-name descname"><span class="pre">plot_S_matrix</span></span></dt>
+<dd><p>Colormap plot of the transmission or reflection component of the EME scattering matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>int</em><em> or </em><em>str</em>) – input field (first number of the scattering matrix identifier), default: 0</p></li>
+<li><p><strong>output</strong> (<em>int</em><em> or </em><em>str</em>) – output field (second number of the scattering matrix identifier), default: 1</p></li>
+<li><p><strong>plot_function</strong> (<em>str</em><em> or </em><em>None</em>) – specify the function to apply to the plot data (‘abs^2’, ‘angle’, ‘real’, ‘imag’), default: ‘abs^2’</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None</p></li>
+<li><p><strong>file_type</strong> (<em>str</em>) – file type for saving a plot, ‘pdf’ or ‘png’, default: ‘’ (no extension is added to <code class="docutils literal notranslate"><span class="pre">file_name</span></code> unless a file type is given)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="monitors">
+<span id="id1"></span><h2>Monitors</h2>
+<p>A monitor is a plane inside the chain on which the solved field is sampled after <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>. It is output only: it is not a port, does not enter the scattering matrix and does not change the solve, so monitors can be added, moved or removed without solving again. The plane runs across the full window in x and is tilted about x, so it can sample the light a grating coupler radiates upward. <a class="reference internal" href="#monitor_field" title="monitor_field"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor_field</span></code></a> returns the field on it, and <a class="reference internal" href="#monitor_coupling" title="monitor_coupling"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor_coupling</span></code></a> its coupling to a tilted Gaussian beam, such as the mode of a fiber above a grating. <code class="docutils literal notranslate"><span class="pre">plot()</span></code> draws each monitor’s plane on the ‘z-y’ panel, and <code class="docutils literal notranslate"><span class="pre">sweep(result='monitor_coupling')</span></code> sweeps the coupling (see <a class="reference internal" href="solver-analysis.html#sweep" title="sweep"><code class="xref py py-data docutils literal notranslate"><span class="pre">sweep</span></code></a>). The ‘EME: Grating Coupler’ example uses all three.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="monitor">
+<span class="sig-name descname"><span class="pre">monitor</span></span></dt>
+<dd><p>Declare a monitor. Declaring the same name again replaces it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – the monitor’s name</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – [nm] the position along the chain, from its left port, that the plane passes through</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – [nm] the height that the plane passes through at <code class="docutils literal notranslate"><span class="pre">w</span></code>. An untilted plane must lie inside the window, between 0 and <code class="docutils literal notranslate"><span class="pre">window_height</span></code></p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – [degrees] the tilt of the plane about x from horizontal, strictly between -90 and 90, where a positive angle tips the far end of the plane up, default: 0</p></li>
+<li><p><strong>length</strong> (<em>float</em><em> or </em><em>None</em>) – [nm] the extent along the plane, centered on (<code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>), default: None (as far as the chain and the window allow)</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em> or </em><em>None</em>) – [nm] the sampling step along the plane, default: None (the window’s <code class="docutils literal notranslate"><span class="pre">x_resolution</span></code>)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="monitor_field">
+<span class="sig-name descname"><span class="pre">monitor_field</span></span></dt>
+<dd><p>The field on a monitor’s plane after <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>, for 1 W launched in one mode of one port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – the monitor’s name</p></li>
+<li><p><strong>port</strong> (<em>str</em>) – the external port the chain is excited from, default: ‘left’</p></li>
+<li><p><strong>mode</strong> (<em>int</em>) – the launched mode, default: 0</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em><em> or </em><em>None</em>) – [nm] which of a multi-wavelength chain’s wavelengths to use, the nearest one present, default: None (the chain’s first)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a <code class="docutils literal notranslate"><span class="pre">PlaneField</span></code> with <code class="docutils literal notranslate"><span class="pre">fields</span></code>, a dictionary of the six components (‘Ex’, ‘Ey’, ‘Ez’, ‘Hx’, ‘Hy’, ‘Hz’) on the plane, each a complex array of shape (len(x), len(s)), where <code class="docutils literal notranslate"><span class="pre">x</span></code> [nm] runs across the plane and <code class="docutils literal notranslate"><span class="pre">s</span></code> [nm] along it, at chain positions <code class="docutils literal notranslate"><span class="pre">w</span></code> and heights <code class="docutils literal notranslate"><span class="pre">y</span></code> [nm]. <code class="docutils literal notranslate"><span class="pre">Sn</span></code> is the time-averaged Poynting flux through the plane (positive along its upward normal), <code class="docutils literal notranslate"><span class="pre">power_through_plane</span></code> [W] its integral, and <code class="docutils literal notranslate"><span class="pre">power_in</span></code> the 1 W launched, so <code class="docutils literal notranslate"><span class="pre">power_through_plane</span></code> is also the fraction of the launched power that crosses the plane.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="monitor_coupling">
+<span class="sig-name descname"><span class="pre">monitor_coupling</span></span></dt>
+<dd><p>The coupling between a launched waveguide mode and a Gaussian beam through a monitor’s plane, after <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>. It is the fraction of the launched power crossing the plane times the normalized overlap of the field’s <code class="docutils literal notranslate"><span class="pre">polarization</span></code> component with the beam. By reciprocity the same number is the coupling from the beam into the launched mode, which is the figure a grating coupler is designed for. Only the overlap is computed, so trying other beams costs no solve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – the monitor’s name</p></li>
+<li><p><strong>mode_field_diameter</strong> (<em>float</em>) – [nm] the beam’s mode field diameter, for example 10.4e3 for SMF-28 at 1550 nm</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – [degrees] the beam’s angle from the plane’s normal, positive toward +s (along the chain), default: 0</p></li>
+<li><p><strong>center</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – [nm] the beam’s center (x, s) on the plane, default: None (centered on the plane)</p></li>
+<li><p><strong>index</strong> (<em>float</em><em> or </em><em>None</em>) – the refractive index of the medium the beam travels in, default: None (the profile’s background material)</p></li>
+<li><p><strong>polarization</strong> (<em>str</em>) – the field component the beam couples to, ‘x’, ‘y’, or ‘s’ (along the plane), default: ‘x’</p></li>
+<li><p><strong>port</strong> (<em>str</em>) – the launching port, default: ‘left’</p></li>
+<li><p><strong>mode</strong> (<em>int</em>) – the launched mode, default: 0</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em><em> or </em><em>None</em>) – [nm] which of a multi-wavelength chain’s wavelengths to use, default: None (the chain’s first)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a <code class="docutils literal notranslate"><span class="pre">BeamCoupling</span></code> with <code class="docutils literal notranslate"><span class="pre">coupling</span></code>, its two factors <code class="docutils literal notranslate"><span class="pre">power_fraction</span></code> and <code class="docutils literal notranslate"><span class="pre">overlap</span></code>, and the beam it was computed for (<code class="docutils literal notranslate"><span class="pre">mode_field_diameter</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">angle</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code>, <code class="docutils literal notranslate"><span class="pre">polarization</span></code>) at <code class="docutils literal notranslate"><span class="pre">wavelength</span></code>.</p>
+</dd></dl>
+
+</section>
+<section id="pulsed-nonlinear-propagation">
+<span id="pulsed-propagation"></span><h2>Pulsed nonlinear propagation</h2>
+<p>A femtosecond pulse is declared as the excitation, <code class="docutils literal notranslate"><span class="pre">settings(excitation=PulsedSource(...))</span></code>, and a section’s nonlinearity with <code class="docutils literal notranslate"><span class="pre">nonlinear=PulsedProcess(...)</span></code> on <a class="reference internal" href="#straight_section" title="straight_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">straight_section</span></code></a>, <a class="reference internal" href="#taper_section" title="taper_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">taper_section</span></code></a> or <a class="reference internal" href="#gds_section" title="gds_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">gds_section</span></code></a> (EMode<sup>3D</sup> only). <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> refines the chain at the pulse’s center wavelength, solves each distinct cross-section at <code class="docutils literal notranslate"><span class="pre">dispersion_samples</span></code> wavelengths across the pulse’s band, and propagates the pulse forward through every slice and junction with <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span>, Kerr (<span class="math notranslate nohighlight">\(\chi^{(3)}\)</span>), Raman and two-photon absorption. Reflections and power scattered into modes that are not tracked are discarded and reported, with a warning where that is not safe. The classes below are imported from <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>.</p>
+<p>The nonlinear coefficients come from the materials: <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> from the material’s <span class="math notranslate nohighlight">\(d\)</span> tensor, <span class="math notranslate nohighlight">\(\chi^{(3)}\)</span> from its nonlinear index <span class="math notranslate nohighlight">\(n_2\)</span> as <span class="math notranslate nohighlight">\(\chi^{(3)} = \tfrac{4}{3}\varepsilon_0 c n^2 n_2\)</span>, the Raman response from the material that holds most of the Kerr overlap, and two-photon absorption from its coefficient <span class="math notranslate nohighlight">\(\beta_\mathrm{TPA}\)</span>, active only for photon pairs above the material’s bandgap. In the material database, <code class="docutils literal notranslate"><span class="pre">SiO2</span></code>, <code class="docutils literal notranslate"><span class="pre">SiN</span></code>, <code class="docutils literal notranslate"><span class="pre">LN</span></code> and <code class="docutils literal notranslate"><span class="pre">LN_MgO</span></code> carry <span class="math notranslate nohighlight">\(n_2\)</span>, <code class="docutils literal notranslate"><span class="pre">SiO2</span></code> (Blow and Wood) and <code class="docutils literal notranslate"><span class="pre">LN</span></code>/<code class="docutils literal notranslate"><span class="pre">LN_MgO</span></code> (four A<sub>1</sub>(TO) lines, Bache and Schiek) a Raman response, and <code class="docutils literal notranslate"><span class="pre">Si</span></code>, <code class="docutils literal notranslate"><span class="pre">AlGaAs</span></code>, <code class="docutils literal notranslate"><span class="pre">LN</span></code> and <code class="docutils literal notranslate"><span class="pre">LN_MgO</span></code> a two-photon coefficient, each with its reference. A material of your own takes the same through <code class="docutils literal notranslate"><span class="pre">MaterialProperties(n=...,</span> <span class="pre">n2=...,</span> <span class="pre">raman=(fraction,</span> <span class="pre">[(weight,</span> <span class="pre">position,</span> <span class="pre">half_width),</span> <span class="pre">...]),</span> <span class="pre">tpa=...,</span> <span class="pre">bandgap=...)</span></code>, with <span class="math notranslate nohighlight">\(n_2\)</span> in m<sup>2</sup>/W, the Raman line positions and half widths in cm<sup>-1</sup>, <span class="math notranslate nohighlight">\(\beta_\mathrm{TPA}\)</span> in m/W and the bandgap in eV. <code class="docutils literal notranslate"><span class="pre">PulsedProcess(chi3=True)</span></code> raises an error naming a material that has no <span class="math notranslate nohighlight">\(n_2\)</span> (silicon, for one).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PulsedSource">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PulsedSource</span></span></dt>
+<dd><p>A pulse launched into one port of the circuit, for <code class="docutils literal notranslate"><span class="pre">settings(excitation=...)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center_wavelength</strong> (<em>float</em>) – [nm] the carrier wavelength, inside <code class="docutils literal notranslate"><span class="pre">wavelength_range</span></code></p></li>
+<li><p><strong>duration</strong> (<em>float</em>) – [fs] the intensity FWHM, required except for <code class="docutils literal notranslate"><span class="pre">shape='cw'</span></code></p></li>
+<li><p><strong>energy</strong> (<em>float</em>) – [pJ] the pulse energy, give exactly one of <code class="docutils literal notranslate"><span class="pre">energy</span></code> and <code class="docutils literal notranslate"><span class="pre">peak_power</span></code></p></li>
+<li><p><strong>peak_power</strong> (<em>float</em>) – [W] the peak power</p></li>
+<li><p><strong>port</strong> (<em>str</em>) – the launch port, default: ‘left’</p></li>
+<li><p><strong>mode</strong> (<em>int</em><em> or </em><em>dict</em>) – the tracked mode that carries the pulse, or a dictionary <code class="docutils literal notranslate"><span class="pre">{mode:</span> <span class="pre">amplitude}</span></code> of complex amplitudes that splits it between tracked modes (normalized, so only their ratios matter), default: 0</p></li>
+<li><p><strong>shape</strong> (<em>str</em>) – ‘sech’, ‘gaussian’, or ‘cw’ (a continuous wave of <code class="docutils literal notranslate"><span class="pre">peak_power</span></code> at <code class="docutils literal notranslate"><span class="pre">center_wavelength</span></code>, with no <code class="docutils literal notranslate"><span class="pre">duration</span></code> or <code class="docutils literal notranslate"><span class="pre">energy</span></code>), default: ‘sech’</p></li>
+<li><p><strong>chirp</strong> (<em>float</em>) – the chirp <span class="math notranslate nohighlight">\(C\)</span> of <span class="math notranslate nohighlight">\(\exp(j C t^2 / 2 T_0^2)\)</span>, where a positive value raises the instantaneous frequency across the pulse, default: 0</p></li>
+<li><p><strong>repetition_rate</strong> (<em>float</em>) – [Hz] for average powers, default: None</p></li>
+<li><p><strong>wavelength_range</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] the span of the frequency grid, default: (450, 3500)</p></li>
+<li><p><strong>num_points</strong> (<em>int</em>) – frequency points, even and at least 16, which with <code class="docutils literal notranslate"><span class="pre">wavelength_range</span></code> set the time window (the number of points over the frequency span, 28 ps at the defaults), default: 16384</p></li>
+<li><p><strong>alias</strong> (<em>int</em>) – oversampling of the real-field products, 1, 2 or 3 (2 suffices for <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span>, 3 for <span class="math notranslate nohighlight">\(\chi^{(3)}\)</span>), default: 2</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PulsedProcess">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PulsedProcess</span></span></dt>
+<dd><p>The nonlinear optics of one section for a pulsed simulation, for a section’s <code class="docutils literal notranslate"><span class="pre">nonlinear=</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chi2</strong> (<em>bool</em>) – include <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span>, default: True</p></li>
+<li><p><strong>chi3</strong> (<em>bool</em>) – include the Kerr effect, default: True</p></li>
+<li><p><strong>raman</strong> (<em>bool</em>) – include the delayed Raman part of the Kerr response, default: True</p></li>
+<li><p><strong>raman_mode</strong> (<em>str</em>) – ‘dominant’ (the response of the strongest field pattern, fast) or ‘full’, default: ‘dominant’</p></li>
+<li><p><strong>tpa</strong> (<em>bool</em><em> or </em><em>None</em>) – two-photon absorption on (True), off (False), or on wherever a material has a coefficient (None), default: None</p></li>
+<li><p><strong>modes</strong> (<em>list</em><em>[</em><em>int</em><em>] or </em><em>None</em>) – the tracked mode indices at the center wavelength, default: None (the source’s mode or modes)</p></li>
+<li><p><strong>poling</strong> (<a class="reference internal" href="#Poling" title="Poling"><em>Poling</em></a><em> or </em><em>None</em>) – the section’s domain pattern, default: None (unpoled)</p></li>
+<li><p><strong>dispersion_samples</strong> (<em>int</em>) – wavelengths at which each cross-section is solved, Chebyshev nodes over the source’s <code class="docutils literal notranslate"><span class="pre">wavelength_range</span></code>, at least 4, default: 24</p></li>
+<li><p><strong>pattern_threshold</strong> (<em>float</em>) – singular value, relative to the first, below which field patterns are dropped, in [0, 1), default: 1e-3</p></li>
+<li><p><strong>max_rank</strong> (<em>int</em>) – the largest number of field patterns, default: 12</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Poling">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Poling</span></span></dt>
+<dd><p>The domain pattern of a poled section. Give exactly one of <code class="docutils literal notranslate"><span class="pre">period</span></code>, <code class="docutils literal notranslate"><span class="pre">z_knots</span></code> with <code class="docutils literal notranslate"><span class="pre">periods</span></code>, and <code class="docutils literal notranslate"><span class="pre">domain_walls</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>period</strong> (<em>float</em>) – [nm] a constant poling period</p></li>
+<li><p><strong>z_knots</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – [nm] positions along the section at which <code class="docutils literal notranslate"><span class="pre">periods</span></code> are given, interpolated between them (a chirp), at least 2</p></li>
+<li><p><strong>periods</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – [nm] the local period at each knot</p></li>
+<li><p><strong>domain_walls</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – [nm] explicit domain wall positions along the section, strictly increasing</p></li>
+<li><p><strong>duty_cycle</strong> (<em>float</em>) – the fraction of each period in the first domain, default: 0.5</p></li>
+<li><p><strong>interpolation</strong> (<em>str</em>) – ‘linear’ or ‘spline’ between the knots, default: ‘linear’</p></li>
+<li><p><strong>inverted_first</strong> (<em>bool</em>) – start with an inverted domain, default: False</p></li>
+<li><p><strong>jitter_rms</strong> (<em>float</em>) – [nm] rms of a Gaussian random displacement of every wall, for fabrication tolerance studies, default: 0</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – the seed of the jitter, default: None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PulseResponse">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PulseResponse</span></span></dt>
+<dd><p>Returned by <code class="docutils literal notranslate"><span class="pre">get('pulse_response')</span></code> after <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> or <a class="reference internal" href="#pulse_propagate" title="pulse_propagate"><code class="xref py py-data docutils literal notranslate"><span class="pre">pulse_propagate</span></code></a>. <code class="docutils literal notranslate"><span class="pre">spectrum</span></code> is (records, modes, points), the root-energy spectrum of every tracked mode in <span class="math notranslate nohighlight">\(\sqrt{\mathrm{J/Hz}}\)</span> on <code class="docutils literal notranslate"><span class="pre">frequency</span></code> [Hz], with <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> [nm] the same axis, <code class="docutils literal notranslate"><span class="pre">z</span></code> [nm] the record positions and <code class="docutils literal notranslate"><span class="pre">energy</span></code> [pJ] per record and mode. <code class="docutils literal notranslate"><span class="pre">junction_loss</span></code> is, per junction, the fraction of the arriving energy that left the tracked modes there, and <code class="docutils literal notranslate"><span class="pre">rank_per_slice</span></code> and <code class="docutils literal notranslate"><span class="pre">samples_per_slice</span></code> report the field patterns and mode solves of each slice. <code class="docutils literal notranslate"><span class="pre">edge_energy</span></code> is, per record, the fraction of the energy in the outer 5 % of the time window, <code class="docutils literal notranslate"><span class="pre">domain_walls</span></code> [nm] the positions along the chain of the domain walls the run used (jitter included), and <code class="docutils literal notranslate"><span class="pre">steps</span></code> and <code class="docutils literal notranslate"><span class="pre">rejected_steps</span></code> count the propagation steps.</p>
+<p><code class="docutils literal notranslate"><span class="pre">band_energy(wavelength_min,</span> <span class="pre">wavelength_max,</span> <span class="pre">z=None,</span> <span class="pre">mode=None)</span></code> returns the energy [pJ] in a band at the record nearest <code class="docutils literal notranslate"><span class="pre">z</span></code> (default: the output), summed over the tracked modes unless <code class="docutils literal notranslate"><span class="pre">mode</span></code> is given. <code class="docutils literal notranslate"><span class="pre">band_power(...)</span></code> returns the average power [W] of a pulse train, with <code class="docutils literal notranslate"><span class="pre">repetition_rate</span></code> taken from the source unless given. <code class="docutils literal notranslate"><span class="pre">psd(z,</span> <span class="pre">mode)</span></code> returns the spectral density in dB relative to 1 pJ/nm, <code class="docutils literal notranslate"><span class="pre">envelope(z,</span> <span class="pre">mode)</span></code> the time [fs] and complex envelope [<span class="math notranslate nohighlight">\(\sqrt{\mathrm{W}}\)</span>], and <code class="docutils literal notranslate"><span class="pre">energy_outside_window()</span></code> the largest fraction of the energy found in the outer 5 % of the time window. Above about 1e-3 the pulse is wrapping around the window, and <code class="docutils literal notranslate"><span class="pre">num_points</span></code> should grow.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pulse_propagate">
+<span class="sig-name descname"><span class="pre">pulse_propagate</span></span></dt>
+<dd><p>Propagate the pulse again through the chain the last <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> prepared, without any mode solve (EMode<sup>3D</sup> only). Use it to try another poling, for example a chirp or fabrication jitter on the domain walls, at the cost of the propagation alone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poling</strong> (<a class="reference internal" href="#Poling" title="Poling"><em>Poling</em></a><em> or </em><em>dict</em><em> or </em><em>None</em>) – a new domain pattern for every section with a <code class="docutils literal notranslate"><span class="pre">PulsedProcess</span></code> (a single <code class="docutils literal notranslate"><span class="pre">Poling</span></code>), or for the named sections (a dictionary of section name to <code class="docutils literal notranslate"><span class="pre">Poling</span></code>), default: None (keep the declared poling)</p></li>
+<li><p><strong>records</strong> (<em>int</em>) – number of evenly spaced positions along the chain at which the spectrum is recorded, default: 100</p></li>
+<li><p><strong>local_error</strong> (<em>float</em>) – relative error allowed per propagation step, default: 1e-6</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<p>The prepared chain lives for the session. After <code class="docutils literal notranslate"><span class="pre">open()</span></code> of a saved file, run <a class="reference internal" href="#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> again first. The result is read back with <code class="docutils literal notranslate"><span class="pre">get('pulse_response')</span></code>.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#EME_settings"><code class="docutils literal notranslate"><span class="pre">EME_settings</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#straight_section"><code class="docutils literal notranslate"><span class="pre">straight_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pwd_section"><code class="docutils literal notranslate"><span class="pre">pwd_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taper_section"><code class="docutils literal notranslate"><span class="pre">taper_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bend_section"><code class="docutils literal notranslate"><span class="pre">bend_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gds_section"><code class="docutils literal notranslate"><span class="pre">gds_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#copy_section"><code class="docutils literal notranslate"><span class="pre">copy_section</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connect_ports"><code class="docutils literal notranslate"><span class="pre">connect_ports</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#JunctionOverride"><code class="docutils literal notranslate"><span class="pre">JunctionOverride</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#EME"><code class="docutils literal notranslate"><span class="pre">EME</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check_layout"><code class="docutils literal notranslate"><span class="pre">check_layout</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chi2_spectrum"><code class="docutils literal notranslate"><span class="pre">chi2_spectrum</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#free_space_field"><code class="docutils literal notranslate"><span class="pre">free_space_field</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#free_space_field_diagnostics"><code class="docutils literal notranslate"><span class="pre">free_space_field_diagnostics</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot_S_matrix"><code class="docutils literal notranslate"><span class="pre">plot_S_matrix</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitors">Monitors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitor"><code class="docutils literal notranslate"><span class="pre">monitor</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitor_field"><code class="docutils literal notranslate"><span class="pre">monitor_field</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitor_coupling"><code class="docutils literal notranslate"><span class="pre">monitor_coupling</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulsed-nonlinear-propagation">Pulsed nonlinear propagation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PulsedSource"><code class="docutils literal notranslate"><span class="pre">PulsedSource</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PulsedProcess"><code class="docutils literal notranslate"><span class="pre">PulsedProcess</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Poling"><code class="docutils literal notranslate"><span class="pre">Poling</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PulseResponse"><code class="docutils literal notranslate"><span class="pre">PulseResponse</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pulse_propagate"><code class="docutils literal notranslate"><span class="pre">pulse_propagate</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

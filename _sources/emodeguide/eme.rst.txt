@@ -2,7 +2,7 @@
 EME
 ---
 
-Every section function below accepts a ``ports`` argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared; use :data:`connect_ports` to wire named ports explicitly instead, including into branching topologies. See :ref:`ports` for the port model, the ``Port`` and ``Bounds`` classes, and :func:`make_angled_facet_port` for declaring an angled facet on a port.
+Every section function below accepts a ``ports`` argument, which names, windows, or displaces the ports on either end of the section, in place of its default left and right ports. Sections are otherwise connected in the order they are declared. Use :data:`connect_ports` to wire named ports explicitly instead, including into branching topologies. See :ref:`ports` for the port model, the ``Port`` and ``Bounds`` classes, and :func:`make_angled_facet_port` for declaring an angled facet on a port.
 
 .. data:: EME_settings
 
@@ -11,7 +11,7 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param apply_scattering: whether interfacial scattering loss is automatically applied to the S-matrix, either for every wavelength (True), no wavelengths (False), or only the listed wavelengths, default: False
     :type apply_scattering: bool or list[float]
     :param str beta_interpolation: either 'uniform' or 'linear' to specify how the propagation constant is interpolated between z-slices of a taper/gds section, default: 'uniform'
-    :param junction_normalization: controls how junction S-matrices are power-normalized; either a single bool/'gain' value applied to both junction kinds, or a dict with 'inter_section' and 'intra_section' keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: 'gain' for inter-section junctions and True for intra-section junctions. It applies to junctions with a plane-wave side (:data:`pwd_section`) or an angled facet. A junction between two mode-solved cross-sections conserves power by construction and is not normalized.
+    :param junction_normalization: controls how junction S-matrices are power-normalized. It takes either a single bool/'gain' value applied to both junction kinds, or a dict with 'inter_section' and 'intra_section' keys, each accepting True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), default: 'gain' for inter-section junctions and True for intra-section junctions. It applies to junctions with a plane-wave side (:data:`pwd_section`) or an angled facet. A junction between two mode-solved cross-sections conserves power by construction and is not normalized.
     :type junction_normalization: bool or str or dict
     :param float overlap_variation: threshold of mode-list overlap between z-slices used by the automatic z-slicing bisection for taper/gds sections, default: 0.01
     :param float minimum_z_step: [nm] the minimum allowed z-step for the automatic z-slicing bisection, default: 0.1
@@ -19,12 +19,13 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param str initial_slices: how a taper or GDS section is sliced before the automatic z-slicing bisection refines it, either 'auto' (boundaries placed where the cross-section changes, from its rasterized refractive index: none along a straight run, evenly along a linear taper, densely inside a short fast feature, and at every corner of a GDS outline) or 'single' (one slice, the behavior before EMode 1.0.6). Refinement still runs afterward and decides the final slicing, so the choice moves results only within its tolerance and changes how many rounds it takes. A ``warm_start`` in :data:`EME` takes its slices from the previous solve instead, default: 'auto'
     :param str simulation_name: simulation name, default: 'emode'
 
-    A section's own ``settings`` dictionary accepts the keys above (except ``simulation_name``), and four more that tune the 'auto' initial slicing. They are rarely needed, and ``EME_settings`` does not take them.
+    A section's own ``settings`` dictionary accepts the keys above (except ``simulation_name``), and five more that tune the slicing. They are rarely needed, and ``EME_settings`` does not take them.
 
     * ``schedule_samples``: the number of positions along the section at which the refractive index is rasterized (no mode solve) to find where it changes, at least 2, default: 128
     * ``schedule_change_per_slice``: the relative change in the rasterized index that one initial slice spans, so a smaller value starts with more slices, default: 0.05
     * ``schedule_max_slices``: the largest number of initial slices, default: 64
     * ``schedule_coarsen``: how many times coarser than the profile's mesh the index is rasterized, at least 1, default: 4
+    * ``slice_phase_limit``: a slice over which the cross-section changes is kept shorter than ``slice_phase_limit * wavelength / (2 n_max)``, where ``n_max`` is the largest effective index of its modes. Equal slices longer than about ``wavelength / (2 n_max)`` act as a grating and reflect in phase, which refinement cannot see. The initial slices are cut evenly under this limit, up to ``schedule_max_slices``. Refinement then estimates how much power each guided mode loses to the steps' in-phase reflections and conversions, and cuts a slice under the limit only where that power is significant, so a long, slow taper keeps about ``schedule_max_slices`` slices. Between 0 and 1, or None to turn it off, default: 0.8
 
     For example, ``taper_section(..., settings={'schedule_change_per_slice': 0.02})``. Initial slice boundaries closer together than ``minimum_z_step`` are merged.
 
@@ -35,11 +36,11 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param str name: section name, default: an auto-generated number
     :param str profile: name of the profile that defines the section's cross-section
     :param float length: [nm] the length of the section
-    :param offset: [nm] transverse displacement of this section relative to whatever its ports connect to; if only a single value is given it is assumed to be the x-offset, default: (0, 0). **Legacy**: this is the same displacement as :class:`Port`'s own ``offset`` applied to every port of the section at once, and setting both on one section raises an error. Prefer declaring ``offset`` on the specific port that sits off-axis.
+    :param offset: [nm] transverse displacement of this section relative to whatever its ports connect to. A single value is taken as the x-offset, default: (0, 0). **Legacy**: this is the same displacement as :class:`Port`'s own ``offset`` applied to every port of the section at once, and setting both on one section raises an error. Prefer declaring ``offset`` on the specific port that sits off-axis.
     :type offset: float or tuple[float, float]
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
-    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse's nonlinearity is declared instead with a ``PulsedProcess``, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s), and the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1). Setting ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse's nonlinearity is declared instead with a ``PulsedProcess``, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
     :type nonlinear: SHGProcess or SFGProcess or DFGProcess or PulsedProcess or False or None
     :param settings: per-section overrides of the :data:`EME_settings`, merged onto the current global EME settings (or onto the section's existing settings, when updating), e.g. ``settings={'overlap_variation': 0.005}``, default: None
     :type settings: dict or None
@@ -47,13 +48,13 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
 .. data:: pwd_section
 
-    Define a free space section, in which the field is expanded in plane waves (a plane-wave decomposition, PWD) over a uniform material, rather than in the guided modes of a cross-section. This is intended for gaps, facets, and free space propagation between waveguide sections; the junctions between a free space section and its neighbors are computed analytically instead of from a mode solve.
+    Define a free space section, in which the field is expanded in plane waves (a plane-wave decomposition, PWD) over a uniform material, rather than in the guided modes of a cross-section. This is intended for gaps, facets, and free space propagation between waveguide sections. The junctions between a free space section and its neighbors are computed analytically instead of from a mode solve.
 
-    The basis is the set of plane-wave harmonics of the section window, with transverse wavevectors ``kx = 2*pi*m/window_width`` and ``ky = 2*pi*n/window_height``, each harmonic carrying both a TE and a TM polarization. At least one of ``max_order``, ``max_kt``, or ``num_modes`` is required to truncate the basis; when more than one is given, they are applied in the order ``max_order``, ``max_kt``, ``num_modes``.
+    The basis is the set of plane-wave harmonics of the section window, with transverse wavevectors ``kx = 2*pi*m/window_width`` and ``ky = 2*pi*n/window_height``, each harmonic carrying both a TE and a TM polarization. At least one of ``max_order``, ``max_kt``, or ``num_modes`` is required to truncate the basis. When more than one is given, they are applied in the order ``max_order``, ``max_kt``, ``num_modes``.
 
     :param str name: section name, default: an auto-generated number
     :param float length: [nm] the length of the section
-    :param material: the material filling the section, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object; must be isotropic, default: "Vacuum"
+    :param material: the material filling the section, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object. It must be isotropic, default: "Vacuum"
     :type material: str or ~MaterialProperties or ~MaterialSpec
     :param str profile: name of the profile that supplies the default window and the wavelength(s) of the section, default: '_default'
     :param window: [nm] the (width, height) of the plane-wave window, which overrides the window of ``profile``, default: None (use the ``window_width`` and ``window_height`` of ``profile``)
@@ -63,12 +64,18 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param max_order: the largest harmonic order to keep in the x- and y-directions, so that ``|m| <= max_order[0]`` and ``|n| <= max_order[1]``, default: None
     :type max_order: tuple[int, int] or None
     :param float max_kt: [1/nm] the largest transverse wavevector magnitude to keep, default: None
-    :param int num_modes: the largest number of modes to keep, counting both polarizations of each harmonic, and applied after ``max_order`` and ``max_kt``; the basis always keeps a harmonic together with its opposite-direction pair, so the resulting count can land slightly below the requested value, default: None
+    :param int num_modes: the largest number of modes to keep, counting both polarizations of each harmonic, and applied after ``max_order`` and ``max_kt``. The basis always keeps a harmonic together with its opposite-direction pair, so the resulting count can land slightly below the requested value. Default: None
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
     :param settings: per-section overrides of the :data:`EME_settings`, default: None
     :type settings: dict or None
     :param str simulation_name: simulation name, default: 'emode'
+
+    .. note::
+       A junction with a free space section matches the two continuity conditions (for E and for H) against the modes of the side the light arrives from. When the other side has fewer modes, the junction cannot represent every incident field, and some incident modes leave it with almost none of their power: they are dropped by the truncated basis, not attenuated by any physics. EMode warns when an incident mode keeps less than 1 % of its power, naming the dropped modes and the reflected plus transmitted power over all of the incident modes. Raise the mode count on the side with fewer modes, ``num_modes`` of the waveguide section or ``max_order``, ``max_kt`` or ``num_modes`` of the free space section.
+
+    .. note::
+       The reflection of a confined mode at a facet into free space is not the modal Fresnel value ``((n_eff - n) / (n_eff + n))^2``. That formula gives the free space the admittance of a single plane wave at normal incidence. A mode confined to a fraction of a wavelength is a spread of plane waves, and those at an angle see a different admittance: smaller for the field component normal to their plane of incidence, larger for the one in it. A quasi-TE mode therefore reflects more than its modal Fresnel value and a quasi-TM mode less, more so the tighter the confinement. A 2640 x 816 nm Si guide meeting SiO2 reflects 0.216 of its quasi-TE fundamental, 1.35 times its modal Fresnel value of 0.160, and an independent solve with an empty section in place of the free space agrees within 1.4 %. Give the waveguide section periodic walls (``boundary_condition='PP'``) and the free space section the same window, so that both describe the same far side. Walls on a section that stands in for free space raise the reflection when they are close to the guide (by 35 % with walls 1 µm from that guide's core).
 
 .. data:: taper_section
 
@@ -80,7 +87,7 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param float length: [nm] the length of the section
     :param ports: replace the section's default ``[Port('left', None, 'left'), Port('right', None, 'right')]`` on a per-side basis, where a supplied port replaces every existing port on the same side, and multiple ports may share a side. See :class:`Port`, default: None (keep existing/default ports)
     :type ports: list[Port] or None
-    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s); the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1); ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse's nonlinearity is declared instead with a ``PulsedProcess``, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
+    :param nonlinear: declare a :math:`\chi^{(2)}` process on this section (EMode\ :sup:`3D`\  only), one of ``SHGProcess(pump_wavelength=...)``, ``SFGProcess(pump_wavelength_1=..., pump_wavelength_2=...)`` or ``DFGProcess(pump_wavelength=..., signal_wavelength=...)`` from ``emodeconnection``. You name the process's *input* wavelength(s), and the remaining one follows from energy conservation and is matched against the section's own profile wavelengths. Quasi-phase matching is declared on the process with ``poling_period`` [nm], plus ``duty_cycle`` (default: 0.5) and ``qpm_order`` (default: 1). Setting ``inverted=True`` instead flips the local :math:`\chi^{(2)}` sign for this section alone, the building block for poling assembled by hand from alternating sections. The two routes agree. Omitting ``nonlinear`` (or passing ``None``) when updating an existing section leaves the declared process in place, passing a new one replaces it, and ``nonlinear=False`` removes it, so the section propagates linearly again. A pump must also be declared, see ``excitation`` in :data:`settings`, and the power-dependent result is read back with ``get('response')``. The process also carries ``z_samples`` (default: 100), the number of points at which the forward amplitudes are recorded along each slice of this section once the driven solve converges. Those reach the caller as ``get('response').power_vs_z(wavelength)``, which returns the pump or signal power against position from a single solve rather than one solve per length. Set it to 0 to skip the sampling. A pulse's nonlinearity is declared instead with a ``PulsedProcess``, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
     :type nonlinear: SHGProcess or SFGProcess or DFGProcess or PulsedProcess or False or None
     :param settings: per-section overrides of the :data:`EME_settings` (notably ``overlap_variation`` and ``minimum_z_step``, which control the automatic z-slicing), default: None
     :type settings: dict or None
@@ -92,7 +99,7 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
     An anisotropic crystal is fixed in the chip, so the guide sees it turn along the bend. When a material is anisotropic in the plane of the chip (x-cut lithium niobate, for example), the bend is sliced along its heading and refined like a taper, and every section placed after a turn sees the crystal turned with it. A bend of an isotropic material, or of a crystal whose optic axis is vertical (z-cut thin film), is a single slice and a single mode solve. A :data:`copy_section` reuses its source's S-matrix, so it raises an error when its own placement would show the crystal differently, and asks for the copy to be declared as its own section.
 
-    A bend has no mirror symmetry about x, so an x symmetry wall in the profile's ``boundary_condition`` (such as '0S' or 'SA') is replaced by '0' with a warning, and 'TE', 'TM', 'TE-h' and 'TM-h' keep only the vertical fold. Updating an existing bend changes only the arguments given.
+    A bend has no mirror symmetry about x, so an x symmetry wall in the profile's ``boundary_condition`` (such as '0S' or 'SA') is replaced by '0' with a warning, and 'TE' and 'TM' keep only the vertical fold. In a circuit that also has straight sections, the x fold then applies to none of them (see :data:`EME`). Updating an existing bend changes only the arguments given.
 
     :param str name: section name, default: an auto-generated number
     :param str profile: name of the profile that defines the cross-section
@@ -133,38 +140,6 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 .. note::
     Once sections are declared, call ``plot()`` with ``plane='z-x'`` or ``plane='z-y'`` to preview a geometry-only 'Outline' of the section layout before running :data:`EME`.
 
-..
-    .. data:: TO_section
-
-        Define a section whose geometry is generated analytically via a transformation-optics (TO) coordinate transform, rather than from a fixed cross-section or an imported GDS mask. This is a beta feature.
-
-        :param str name: section name
-        :param str transform: either 'coupler' (a two-waveguide directional coupler) or 'parameterized_curve' (a single waveguide with arbitrary bending)
-        :param str profile: name of the profile that defines the waveguide cross-section
-        :param waveguides: the :class:`~emodeconnection.geometry.Path` centerline(s) of the waveguide(s); 'coupler' requires exactly 2, 'parameterized_curve' requires exactly 1
-        :type waveguides: list
-        :param float length: [nm] the length of the section
-        :param poses: the :class:`~emodeconnection.geometry.Pose` of each waveguide's local frame within the section frame; required (length 2) for 'coupler', ignored for 'parameterized_curve'
-        :type poses: list
-        :param float width: the lateral extent of the transform region; required for 'coupler', ignored for 'parameterized_curve'
-        :param float virtual_gap: extra lateral padding used internally by the coupler transform to avoid a coordinate singularity; required for 'coupler', ignored for 'parameterized_curve'
-        :param center_path: an optional additional :class:`~emodeconnection.geometry.Path` defining the coupler's central symmetry curve; only used for 'coupler', default: None
-        :param int theta_grid_points: number of grid points used to sample the transform's angular coordinate; only used for 'parameterized_curve', default: 2001
-        :param settings: per-section overrides of the :data:`EME_settings`, default: None
-        :type settings: dict or None
-        :param str simulation_name: simulation name, default: 'emode'
-
-        .. note::
-            Once created, a ``TO_section`` can only be updated through ``TO_section`` itself; its geometry cannot be reshaped through :data:`straight_section`/:data:`taper_section`/:data:`gds_section`.
-
-    .. data:: to_gds
-
-        Export a previously declared 'coupler' :data:`TO_section` to a GDS file, for fabrication preview and to inspect the geometry that the EME solver will build.
-
-        :param str name: name of the ``TO_section`` (transform 'coupler') to export
-        :param str path: file path to write the GDS library to
-        :param str simulation_name: simulation name, default: 'emode'
-
 .. data:: copy_section
 
     Place a second instance of an already-declared section in the chain, reusing its already-computed S-matrix instead of re-solving it.
@@ -184,7 +159,7 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
     Override the default left/right adjacency wiring between named ports declared with the ``ports`` argument of any section function.
 
-    Connecting two ports also **pins their coordinate systems together**: the two ports' origins (the horizontal centre and bottom edge of each cross-section) are made to coincide, so the connection is what positions one section relative to the other. Use :class:`Port`'s ``offset`` to displace a section off that shared origin, and its ``window`` to choose which part of a wider cross-section the port exposes. The first section you declare defines the global frame that plots are drawn in.
+    Connecting two ports also **pins their coordinate systems together**: the two ports' origins (the horizontal center and bottom edge of each cross-section) are made to coincide, so the connection is what positions one section relative to the other. Use :class:`Port`'s ``offset`` to displace a section off that shared origin, and its ``window`` to choose which part of a wider cross-section the port exposes. The first section you declare defines the global frame that plots are drawn in.
 
     :param pairs: a list of ``('<section_name>.<port_name>', '<section_name>.<port_name>')`` pairs to connect, e.g. ``[('a.right', 'b.left'), ('c.right', 'd.left')]``. A port can only have one connection, so declaring a new connection for a port that already had one supersedes it. Names are resolved against the actual declared sections/ports at :data:`EME` build time. An entry may carry an optional **third** element, a :class:`JunctionOverride`, configuring the junction that connection forms, e.g. ``[('a.right', 'b.left', JunctionOverride(junction_normalization=False))]``.
     :type pairs: list[tuple[str, str]] or list[tuple[str, str, JunctionOverride]]
@@ -194,16 +169,18 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
     Settings for a single junction, passed as the optional third element of a :data:`connect_ports` entry. Every parameter left unspecified inherits the value the junction's sections resolved, so setting one does not disturb the others.
 
-    These settings belong to the *connection* rather than to either port because each one describes the interface between the two sections -- which algebra joins their mode sets, how the resulting scattering matrix is normalized -- and not one side of it.
+    These settings belong to the *connection* rather than to either port because each one describes the interface between the two sections, not one side of it: which algebra joins their mode sets and how the resulting scattering matrix is normalized.
 
     Only an explicitly connected junction can carry these. A junction formed by the default left/right adjacency has nowhere to declare them, so name that pair in :data:`connect_ports` to configure it, which supersedes the adjacency. The internal junctions of a taper or GDS section's automatic z-slicing are controlled by that section's ``settings`` instead.
 
-    :param junction_normalization: how this junction's scattering matrix is power-normalized -- True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), for a junction with a plane-wave side or an angled facet, default: None (inherit)
+    :param junction_normalization: how this junction's scattering matrix is power-normalized, one of True (full SVD unitarization), False (raw, unnormalized), or 'gain' (clip singular values at 1 while keeping the raw lossy mode-matching), for a junction with a plane-wave side or an angled facet, default: None (inherit)
     :type junction_normalization: bool or str or None
 
 .. data:: EME
 
     Calculate the complete scattering matrix of all defined sections using the eigenmode expansion method (EME). Before solving anything it checks the layout (see :data:`check_layout`) and raises an error when two sections overlap or a loop of connected sections misses closing (its two ports more than ``minimum_z_step`` apart, or more than 1e-6 rad from facing each other), and warns when a section's outline crosses itself or a section is reached by no connection.
+
+    A ``boundary_condition`` of 'TE', 'TM', 'TE-h', 'TE-v', 'TM-h' or 'TM-v' folds a cross-section only about a middle it is mirror symmetric about (see :data:`settings`). In a circuit, a fold applies only when every section is symmetric about it, because a folded section has no modes of the other parity, and where it meets an unfolded section the power those modes would carry is lost. When some sections fold about a middle and others cannot, ``EME()`` warns and solves the circuit again with that fold taken out of every section. Set a boundary condition without it (for example 'TE-v' instead of 'TE' for a circuit with offset or bent guides) to solve once.
 
     :param bool warm_start: whether to seed each taper/gds section's automatic z-slice refinement from the previously solved chain (when available), instead of re-refining from scratch, default: False
     :param str simulation_name: simulation name, default: 'emode'
@@ -218,13 +195,13 @@ Every section function below accepts a ``ports`` argument, which names, windows,
 
     Conversion spectrum of a :math:`\chi^{(2)}` section, solved sparsely in wavelength (EMode\ :sup:`3D`\  only). Returns the signal power out over the pump power in at every wavelength in ``values``.
 
-    A nonlinear spectrum oscillates with the phase mismatch, so it cannot be interpolated -- at any useful resolution it has to be evaluated point by point. What *can* be interpolated is what the coupled-mode equations consume: the coupling and the propagation constants, which vary smoothly with wavelength. So the modes are solved at a handful of wavelengths chosen by how fast the mode list is actually moving, and the response is then evaluated at every requested wavelength from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included.
+    A nonlinear spectrum oscillates with the phase mismatch, so it cannot be interpolated. At any useful resolution it has to be evaluated point by point. What *can* be interpolated is what the coupled-mode equations consume: the coupling and the propagation constants, which vary smoothly with wavelength. So the modes are solved at a handful of wavelengths chosen by how fast the mode list is actually moving, and the response is then evaluated at every requested wavelength from interpolated coupling. Against a directly solved 13-point spectrum across a phase-matching peak, five solves reproduce every point to four decimals, sidelobes included.
 
     Quasi-phase matching is included: the grating enters as a wavevector shift and a Fourier coefficient built from ``poling_period``, ``duty_cycle`` and ``qpm_order``, none of which depend on wavelength, so a poled section keeps its exact grating while its phase mismatch moves with the interpolated propagation constants.
 
     Requires a chain with a declared :math:`\chi^{(2)}` section (see ``nonlinear`` on :data:`straight_section`/:data:`taper_section`) and a declared pump (``excitation`` in :data:`settings`).
 
-    :param values: pump wavelengths [nm] to report at; the signal wavelength follows the declared process
+    :param values: pump wavelengths [nm] to report at (the signal wavelength follows from the declared process)
     :type values: list or array
     :param str section: which nonlinear section to scan, default: the only one declared
     :param float tolerance: the largest mode-list change tolerated between adjacent solves, default: 1e-3
@@ -233,24 +210,34 @@ Every section function below accepts a ``ports`` argument, which names, windows,
     :param float power: [W] pump power, default: the declared excitation's
     :param str simulation_name: simulation name, default: 'emode'
 
-    Returns a dictionary with ``values``, ``conversion`` (signal out over pump in), ``solved_wavelengths`` (where the solver actually ran), and ``unconverged`` -- the intervals, if any, the sampler could not resolve to ``tolerance`` before reaching ``minimum_step``.
+    Returns a dictionary with ``values``, ``conversion`` (signal out over pump in), ``solved_wavelengths`` (where the solver actually ran), and ``unconverged`` (the intervals, if any, that the sampler could not resolve to ``tolerance`` before reaching ``minimum_step``).
 
 .. data:: free_space_field
 
-    Declare, or update, a free-space field: a Gaussian beam launched into a port of the chain. This is an *excitation*, not a section. It does not appear in the scattering matrix or in the layout.
+    Declare, or update, a free-space field: a Gaussian beam, or a combination of the port's own modes, launched into a port of the chain. This is an *excitation*, not a section. It does not appear in the scattering matrix or in the layout.
 
     After :data:`EME`, ``plot(excitation=name)`` (or the plot window's Mode menu, ``'<name> (free space)'``) renders the field the beam launches, projected onto the target port's modes with the same pairing the junctions use. Re-declaring an existing ``name`` updates only the arguments you give.
 
     :param str name: free-space field name, default: the next number
     :param str port: the external port the beam enters, either a bare side ``'left'`` (default) or ``'right'``, or a qualified ``'<section>.<port>'`` name. The beam travels inbound from that port.
-    :param float waist: [nm] the 1/e field radius :math:`w` in :math:`\exp(-r^2/w^2)`, required when declaring a new field
+    :param waist: [nm] the 1/e field radius :math:`w_0` in :math:`\exp(-r^2/w_0^2)` at the beam's waist, required when declaring a new Gaussian beam. A pair ``(w_x, w_y)`` declares an elliptical beam, :math:`\exp(-x^2/w_x^2 - y^2/w_y^2)` at its waist
+    :type waist: float or tuple[float, float]
     :param center: [nm] beam center ``(x, y)`` in the port's cross-section coordinates, default: (0, 0)
     :type center: tuple[float, float]
     :param tilt: [degrees] ``(theta_x, theta_y)``, where a positive ``theta_x`` steers the beam toward +x. This is the angle **inside the medium the beam travels through**, default: (0, 0)
     :type tilt: tuple[float, float]
     :param str component: the one transverse E component the beam carries, ``'Ex'`` (default) or ``'Ey'``
-    :param float amplitude: peak field value, default: 1
+    :param float amplitude: peak field value at the waist, default: 1
     :param float wavelength: [nm], default: None (each port's own wavelength)
+    :param waist_position: [nm] the distance from the port to the beam's waist, along the direction the beam travels. A positive value focuses the beam inside the chain, a negative one puts the waist behind the port (a diverging beam). The launched beam carries the wavefront curvature and Gouy phase of that distance, with the Rayleigh range :math:`z_R = \pi n w_0^2/\lambda` of the port's background index :math:`n`. A pair ``(z_x, z_y)`` puts the waist along x and along y at different distances (an astigmatic beam). With a pair in ``waist`` or ``waist_position``, each axis has its own Rayleigh range, wavefront curvature and half of the Gouy phase, and the beam's power does not depend on either distance. Default: 0 (the waist on the port)
+    :type waist_position: float or tuple[float, float]
+    :param float phase: [radians] global phase of the launched field, default: 0
+    :param modes: launch a combination of the target port's own modes instead of a beam: their indices. Giving a beam's ``name`` a list of ``modes`` (or a mode combination's ``name`` a ``waist``) replaces it with the other kind
+    :type modes: list[int]
+    :param powers: one power per entry of ``modes``, default: 1 each. Each mode is launched with the amplitude :math:`\sqrt{P}\,e^{j\phi}`, as a ``Source`` is
+    :type powers: list[float]
+    :param phases: [radians] one phase per entry of ``modes``, default: 0 each
+    :type phases: list[float]
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: free_space_field_diagnostics
@@ -347,19 +334,42 @@ The nonlinear coefficients come from the materials: :math:`\chi^{(2)}` from the 
     A pulse launched into one port of the circuit, for ``settings(excitation=...)``.
 
     :param float center_wavelength: [nm] the carrier wavelength, inside ``wavelength_range``
-    :param float duration: [fs] the intensity FWHM, required except for ``shape='cw'``
-    :param float energy: [pJ] the pulse energy, give exactly one of ``energy`` and ``peak_power``
+    :param float duration: [fs] the intensity FWHM, required except for ``shape='cw'`` and ``shape='measured'``
+    :param float energy: [pJ] the pulse energy, give exactly one of ``energy`` and ``peak_power`` (a measured pulse is scaled to either, as an analytic one is)
     :param float peak_power: [W] the peak power
     :param str port: the launch port, default: 'left'
     :param mode: the tracked mode that carries the pulse, or a dictionary ``{mode: amplitude}`` of complex amplitudes that splits it between tracked modes (normalized, so only their ratios matter), default: 0
     :type mode: int or dict
-    :param str shape: 'sech', 'gaussian', or 'cw' (a continuous wave of ``peak_power`` at ``center_wavelength``, with no ``duration`` or ``energy``), default: 'sech'
+    :param str shape: 'sech', 'gaussian', 'cw' (a continuous wave of ``peak_power`` at ``center_wavelength``, with no ``duration`` or ``energy``), or 'measured' (the pulse of ``measurement``, with no ``duration`` or ``chirp``), default: 'sech'
     :param float chirp: the chirp :math:`C` of :math:`\exp(j C t^2 / 2 T_0^2)`, where a positive value raises the instantaneous frequency across the pulse, default: 0
+    :param measurement: a measured pulse for ``shape='measured'``, see :class:`PulseMeasurement`. A measured spectrum is launched at its own wavelengths, and ``center_wavelength`` stays the wavelength at which the circuit is refined. A measured temporal trace is centered on ``center_wavelength``. Default: None
+    :type measurement: PulseMeasurement or None
     :param float repetition_rate: [Hz] for average powers, default: None
     :param wavelength_range: [nm] the span of the frequency grid, default: (450, 3500)
     :type wavelength_range: tuple[float, float]
     :param int num_points: frequency points, even and at least 16, which with ``wavelength_range`` set the time window (the number of points over the frequency span, 28 ps at the defaults), default: 16384
     :param int alias: oversampling of the real-field products, 1, 2 or 3 (2 suffices for :math:`\chi^{(2)}`, 3 for :math:`\chi^{(3)}`), default: 2
+
+.. class:: PulseMeasurement
+
+    A measured pulse, for ``PulsedSource(shape='measured', measurement=...)``: a sampled spectrum (as from a spectrometer, often with a phase retrieved by FROG or SPIDER) or a sampled temporal trace. Give exactly one of ``wavelength`` and ``time``.
+
+    The samples are never launched as they are. :data:`settings` fits them first, so noise and sparse sampling do not reach the propagation, and refuses the source with an error when the fit is not good enough. The fit's quality is 1 minus its normalized residual: the :math:`R^2` of the intensity, less the intensity-weighted mean of :math:`1 - \cos` of the phase error when a phase is given. Below ``min_fit_quality`` the error states the quality reached, the model and where the residual is largest, so you can choose another model, clean the data, or lower ``min_fit_quality`` knowingly. The accepted pulse is resampled onto the frequency grid, centered in the time window and scaled to the source's ``energy`` or ``peak_power``. The fit is reported on the result as ``get('pulse_response').measured_fit``, with its ``model``, ``quality``, ``fwhm`` [fs], ``center_wavelength`` [nm], ``gdd`` [fs\ :sup:`2`], ``tod`` [fs\ :sup:`3`], ``chirp`` (for 'sech' and 'gaussian'), ``transform_limited``, ``energy_outside`` (the fraction of the energy cut by the window), ``residual_peak`` and ``background`` (the constant background subtracted, as a fraction of the samples' peak).
+
+    Data that stops while the pulse is still bright (above 5 % of its peak), or whose pulse lies mostly outside the source's ``wavelength_range``, is refused. A spectrometer's dark counts or stray light put a constant background under the whole trace, which reads as a pulse that never reaches zero: give ``background`` to subtract it before the fit and this check. Data that reaches past ``wavelength_range`` (or past the time window) is cut with a smooth window, with a warning giving the fraction of the energy outside.
+
+    :param wavelength: [nm] the wavelengths of a measured spectrum
+    :type wavelength: list[float] or numpy array or None
+    :param time: [fs] the times of a measured temporal trace
+    :type time: list[float] or numpy array or None
+    :param intensity: the intensity at each sample, on any scale. A spectrum's intensity is per unit wavelength, as a spectrometer records it.
+    :type intensity: list[float] or numpy array
+    :param phase: [rad] the retrieved spectral or temporal phase at each sample, in the convention of FROG and SPIDER retrievals: the group delay is :math:`d\varphi/d\omega`, so a positive quadratic spectral phase is a positive group delay dispersion, and the instantaneous angular frequency is :math:`\omega_0 - d\varphi/dt`. Without a phase the pulse is taken as transform limited, with a warning. Default: None
+    :type phase: list[float] or numpy array or None
+    :param str fit: the model fitted to the samples: 'smooth' (a smoothing spline of the intensity, with a polynomial phase of order 2 to 4 chosen by the fit, or a smoothing spline of the phase weighted by the intensity when no polynomial reaches ``min_fit_quality``, as for a pulse shaper's output or a pulse broadened by self-phase modulation), 'sech' or 'gaussian' (the analytic shapes of :class:`PulsedSource`, fitted for width, center and chirp), default: 'smooth'
+    :param float min_fit_quality: the lowest fit quality accepted, in [0, 1], default: 0.99
+    :param background: a constant background subtracted from ``intensity`` before the fit, on the same scale as ``intensity`` (per unit wavelength for a spectrum), at least 0 and below the samples' peak. 'auto' takes it as the mean of the outer 5 % of the samples at each end, and refuses the measurement when those ends slope or sit at different levels (by more than 1 % of the peak, or four times their noise), since they are then the pulse's wings rather than a background. None subtracts nothing. Default: None
+    :type background: float or 'auto' or None
 
 .. class:: PulsedProcess
 
@@ -381,7 +391,7 @@ The nonlinear coefficients come from the materials: :math:`\chi^{(2)}` from the 
 
 .. class:: Poling
 
-    The domain pattern of a poled section. Give exactly one of ``period``, ``z_knots`` with ``periods``, and ``domain_walls``.
+    The domain pattern of a poled section. Give exactly one of ``period``, ``z_knots`` with ``periods``, ``domain_walls``, and ``domain_lengths``.
 
     :param float period: [nm] a constant poling period
     :param z_knots: [nm] positions along the section at which ``periods`` are given, interpolated between them (a chirp), at least 2
@@ -390,17 +400,21 @@ The nonlinear coefficients come from the materials: :math:`\chi^{(2)}` from the 
     :type periods: list[float]
     :param domain_walls: [nm] explicit domain wall positions along the section, strictly increasing
     :type domain_walls: list[float]
+    :param domain_lengths: [nm] the length of every domain in order, each > 0, the signs alternating from the first. The walls are the running sum: a wall at or past the end of the section is dropped, and when the domains end before the section does, the sign flips once more and the last domain runs to the end. This is the form :data:`optimize` varies, every domain on its own
+    :type domain_lengths: list[float]
     :param float duty_cycle: the fraction of each period in the first domain, default: 0.5
     :param str interpolation: 'linear' or 'spline' between the knots, default: 'linear'
     :param bool inverted_first: start with an inverted domain, default: False
     :param float jitter_rms: [nm] rms of a Gaussian random displacement of every wall, for fabrication tolerance studies, default: 0
     :param int seed: the seed of the jitter, default: None
 
+    ``walls(section_length)`` returns the domain walls [nm] of any form over a section of that length, and ``to_domain_lengths(section_length)`` the length of every domain, which sum to the section length, so a design can start from a fixed or chirped poling.
+
 .. class:: PulseResponse
 
-    Returned by ``get('pulse_response')`` after :data:`EME` or :data:`pulse_propagate`. ``spectrum`` is (records, modes, points), the root-energy spectrum of every tracked mode in :math:`\sqrt{\mathrm{J/Hz}}` on ``frequency`` [Hz], with ``wavelength`` [nm] the same axis, ``z`` [nm] the record positions and ``energy`` [pJ] per record and mode. ``junction_loss`` is, per junction, the fraction of the arriving energy that left the tracked modes there, and ``rank_per_slice`` and ``samples_per_slice`` report the field patterns and mode solves of each slice. ``edge_energy`` is, per record, the fraction of the energy in the outer 5 % of the time window, ``domain_walls`` [nm] the positions along the chain of the domain walls the run used (jitter included), and ``steps`` and ``rejected_steps`` count the propagation steps.
+    Returned by ``get('pulse_response')`` after :data:`EME` or :data:`pulse_propagate`. ``spectrum`` is (records, modes, points), the root-energy spectrum of every tracked mode in :math:`\sqrt{\mathrm{J/Hz}}` on ``frequency`` [Hz], with ``wavelength`` [nm] the same axis, ``z`` [nm] the record positions and ``energy`` [pJ] per record and mode. ``junction_loss`` is, per junction, the fraction of the arriving energy that left the tracked modes there, and ``rank_per_slice`` and ``samples_per_slice`` report the field patterns and mode solves of each slice. ``window_gap`` is, per record, the longest stretch of the time window (as a fraction of it) that holds almost none of the energy of all the tracked modes together. The window is periodic, so below about 0.05 the pulse's leading and trailing parts have met around it and wrapped onto each other, and ``num_points`` should grow (the solver warns). It does not depend on the comoving frame. ``edge_energy`` is, per record, the fraction of the energy in the outer 5 % of the time window around the comoving frame (the first tracked mode's group delay), which says where the pulse sits relative to that frame, not whether it wraps. ``domain_walls`` [nm] the positions along the chain of the domain walls the run used (jitter included), and ``steps`` and ``rejected_steps`` count the propagation steps. For a measured source, ``measured_fit`` is the fit that was launched (see :class:`PulseMeasurement`), and None otherwise.
 
-    ``band_energy(wavelength_min, wavelength_max, z=None, mode=None)`` returns the energy [pJ] in a band at the record nearest ``z`` (default: the output), summed over the tracked modes unless ``mode`` is given. ``band_power(...)`` returns the average power [W] of a pulse train, with ``repetition_rate`` taken from the source unless given. ``psd(z, mode)`` returns the spectral density in dB relative to 1 pJ/nm, ``envelope(z, mode)`` the time [fs] and complex envelope [:math:`\sqrt{\mathrm{W}}`], and ``energy_outside_window()`` the largest fraction of the energy found in the outer 5 % of the time window. Above about 1e-3 the pulse is wrapping around the window, and ``num_points`` should grow.
+    ``band_energy(wavelength_min, wavelength_max, z=None, mode=None)`` returns the energy [pJ] in a band at the record nearest ``z`` (default: the output), summed over the tracked modes unless ``mode`` is given. ``band_power(...)`` returns the average power [W] of a pulse train, with ``repetition_rate`` taken from the source unless given. ``psd(z, mode)`` returns the spectral density in dB relative to 1 pJ/nm, ``envelope(z, mode)`` the time [fs] and complex envelope [:math:`\sqrt{\mathrm{W}}`], ``smallest_window_gap()`` the smallest ``window_gap`` at any record (None for a response saved before it was reported), and ``energy_outside_window()`` the largest ``edge_energy``.
 
 .. data:: pulse_propagate
 

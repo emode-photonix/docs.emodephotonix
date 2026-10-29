@@ -1,0 +1,772 @@
+
+Material Database
+-----------------
+
+Descriptions of all materials available in built-in material database. This information is also accessible from ``refractive_index`` and ``material_explorer``. Unless specified otherwise, all materials have :math:`\mu = 1.0`. Each equation for the refractive index assumes that the wavelength :math:`\lambda` has units of :math:`\mu\mathrm{m}`.
+
+.. data:: Air
+    
+    .. math:: n = \left(1 + \frac{5.79211 \times 10^{-2}}{238.019 - \lambda^{-2}} + \frac{1.67917 \times 10^{-3}}{57.3620 - \lambda^{-2}}\right)
+    
+    Wavelength range: 200 nm to 2000 nm
+    
+        | P. E. Ciddor, "Refractive index of air: new equations for the visible and near infrared," Appl. Opt. 35, 1566 (1996).
+
+.. data:: Al
+
+    .. math:: n = 1.5355 + 15.331i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Al2O3
+    
+    .. math:: n = \left( 1 + \frac{1.43135}{1 - (7.26631 \times 10^{-2}/ \lambda)^2} + \frac{0.650547}{1 - (0.119324/ \lambda)^2} + \frac{5.34140}{1 - (18.0283/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 200 nm to 5000 nm
+    
+        | (1) I. H. Malitson and M. J. Dodge, "Refractive Index and Birefringence of Synthetic Sapphire," J. Opt. Soc. Am. 62, 1405 (1972).
+        | (2) M. J. Dodge, "Refractive Index" in Handbook of Laser Science and Technology, Volume IV, Optical Materials: Part 2, CRC Press, Boca Raton, 1986, p. 30.
+
+.. data:: AlGaAs
+    
+    .. math::
+        
+        \mathrm{Al}_x &\mathrm{Ga}_{1-x}\mathrm{As} \\\ \\
+        E_0 &= 3.65 + 0.871 x + 0.179 x^2 \\
+        E_\mathrm{d} &= 36.1 - 2.45 x \\
+        E_\Gamma &= 1.424 + 1.266 x + 0.26 x^2 \\
+        E_\mathrm{f} &= (2 E_0^2 - E_\Gamma^2)^{0.5} \\
+        \eta &= \pi E_\mathrm{d}/(2 E_0^3 (E_0^2 - E_\Gamma^2)) \\
+        M_1 &= \frac{\eta}{2 \pi} (E_\mathrm{f}^4 - E_\Gamma^4) \\
+        M_3 &= \frac{\eta}{\pi} (E_\mathrm{f}^2 - E_\Gamma^2) \\
+        E &= h c/ \lambda ,\\
+        &\mathrm{where}\:h\:\mathrm{is\:Planck's\:constant\:and}\:c\:\mathrm{is\:the\:speed\:of\:light\:in\:vacuum.} \\
+        \chi &= M_1 + M_3 E^2 + \frac{\eta}{\pi} E^4 \mathrm{ln}((E_\mathrm{f}^2 - E^2)/(2 E_\Gamma - E^2)) \\
+        n &= (\chi + 1)^{0.5} \\
+        
+    
+    Wavelength range: 689 nm to 1033 nm
+    
+        | M. A. Afromowitz, "Refractive index of Ga_{1-x}Al_{x}As," Solid State Commun. 15, 59 (1974).
+        | Notes: requires Al fraction input (x between 0 and 1), which defaults to x=1: "AlGaAs, x".
+
+.. data:: AlN
+    
+    .. math:: n = \left(1 + \frac{2.80729}{1 - \left(0.147012/\lambda\right)^2} + \frac{0.231236}{1 - \left(1.58561 \times 10^{-4}/\lambda\right)^2} + \frac{1.56250 \times 10^{-2}}{1 - \left(1139.06/\lambda\right)^2}\right)^{0.5}
+    
+    Wavelength range: 210 nm to 1690 nm
+    
+        | (1) L. Y. Beliaev, E. Shkondin, A. V. Lavrinenko, and O. Takayama, "Thickness-dependent optical properties of aluminum nitride films for mid-infrared wavelengths," J. Vac. Sci. Technol. A 39, 043408 (2021).
+        | (2)  L. Y. Beliaev, E. Shkondin, A. V. Lavrinenko, and O. Takayama, "Erratum: Thickness-dependent optical properties of aluminum nitride films for mid-infrared wavelengths," J. Vac. Sci. Technol. A 40, 027001 (2022).
+
+.. data:: Au
+
+    .. math:: n = 0.5747 + 9.664i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: BBO
+    
+    .. math::
+        
+        n_\mathrm{o} &= \left( 1 + \frac{0.90291}{1 - 3.926 \times 10^{-3} / \lambda^2} + \frac{0.83155}{1 - 1.8786 \times 10^{-2}/ \lambda^2}  + \frac{0.76536}{1 - 60.01/ \lambda^2} \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 1 + \frac{1.151075}{1 - 7.142 \times 10^{-3} / \lambda^2} + \frac{0.21803}{1 - 2.259 \times 10^{-2}/ \lambda^2}  + \frac{0.656}{1 - 263/ \lambda^2} \right)^{0.5}
+    
+    Wavelength range: 188 nm to 6220 nm
+    
+        | (1) G. Tamošauskas, G. Beresnevičius, D. Gadonas, and A. Dubietis, "Transmittance and phase matching of BBO crystal in the 3−5 μm range and its application for the characterization of mid-infrared laser pulses," Opt. Mater. Express 8, 1410 (2018).
+        | (2) G. Tamošauskas, "β-barium borate (BBO) absorption in the 0.188-6.22 μm range," arXiv:2111.01212 [physics.optics] (2021).
+        | Notes: The n_e is the z-direction and n_o is the x- and y-direction.
+
+.. data:: Cr
+
+    .. math:: n = 4.2722 + 4.925i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Cu
+
+    .. math:: n = 0.4697 + 10.453i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: GaAs
+    
+    .. math:: n = \left( 1 + 4.37251 + \frac{5.46674}{1 - (0.443131/ \lambda)^2} + \frac{2.42996 \times 10^{-2}}{1 - (0.874645/ \lambda)^2}  + \frac{1.95752}{1 - (36.9166/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 970 nm to 17000 nm
+    
+        | T. Skauli, P. S. Kuo, K. L. Vodopyanov, T. J. Pinguet, O. Levi, L. A. Eyres, J. S. Harris, M. M. Fejer, B. Gerard, L. Becouarn, and E. Lallier, "Improved dispersion relations for GaAs and applications to nonlinear optics," J. Appl. Phys., 94, 6447 (2003).
+        | Notes: 22 deg C
+
+.. data:: GaN
+
+    .. math::
+
+        n_\mathrm{o} &= \left( 1 + \frac{0.298 \lambda^2}{\lambda^2 - 0.3420^2} + \frac{3.909 \lambda^2}{\lambda^2 - 0.1446^2} \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 1 + \frac{0.0117 \lambda^2}{\lambda^2 - 0.4225^2} + \frac{4.437 \lambda^2}{\lambda^2 - 0.1770^2} \right)^{0.5}
+
+    Wavelength range: 458 nm to 1550 nm
+
+        | S. Pezzagna, J. Brault, M. Leroux, J. Massies, and M. de Micheli, "Refractive indices and elasto-optic coefficients of GaN studied by optical waveguiding," J. Appl. Phys. 103, 123112 (2008).
+        | Notes: wurtzite GaN, c-axis on z (n_e).
+
+.. data:: GaP
+    
+    See citation for refractive index equation.
+    
+    Wavelength range: 207 nm to 12400 nm
+    
+        | S. Adachi, "Optical dispersion relations for GaP, GaAs, GaSb, InP, InAs, InSb, AlxGa1−xAs, and In1−xGaxAsyP1−y," J. Appl. Phys. 66, 6030 (1989).
+
+.. data:: GaSb
+    
+    See citation for refractive index equation.
+    
+    Wavelength range: 207 nm to 12400 nm
+    
+        | A. B. Djurišić, E. H. Li, D. Rakić, and M. L. Majewski, "Modeling the optical properties of AlSb, GaSb, and InSb," Appl Phys A 70, 29 (2000).
+
+.. data:: Ge
+    
+    .. math:: n = \left( 1 + \frac{0.488633}{1 - (1.39396/ \lambda)^2} + \frac{14.5143}{1 - (0.162643/ \lambda)^2}  + \frac{9.12240 \times 10^{-3}}{1 - (752.190/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 2000 nm to 14000 nm
+    
+        | J. H. Burnett, S. G. Kaplan, E. Stover, and A. Phenis, "Refractive index measurements of Ge," Proc. SPIE 9974, 99740X (2016).
+
+.. data:: GGG
+    
+    .. math:: n = \left( 1 + \frac{1.7727\lambda^2}{\lambda^2 - 0.1567^2} + \frac{0.9767\lambda^2}{\lambda^2 - 0.01375^2} + \frac{4.9668\lambda^2}{\lambda^2 - 22.715^2} \right)^{0.5}
+    
+    Wavelength range: 360 nm to 6000 nm
+    
+        | D. L. Wood and K. Nassau, "Optical properties of gadolinium gallium garnet," Appl. Opt. 29, 3704 (1990).
+
+.. data:: H2O
+    
+    .. math:: n = \left(1 + \frac{0.760520}{1 - \left(8.59042 \times 10^{-2}/\lambda\right)^2} + \frac{3.99325 \times 10^{-2}}{1 - \left(2.83879/\lambda\right)^2} + \frac{1.56214 \times 10^{-2}}{1 - \left(2.83887/\lambda\right)^2}\right)^{0.5}
+    
+    Wavelength range: 200 nm to 2400 nm
+    
+        | G. M. Hale and M. R. Querry, "Optical constants of water in the 200-nm to 200-µm wavelength region," Appl. Opt. 12, 555 (1973).
+
+.. data:: HfO2
+    
+    .. math:: n = \left(1.875 + \frac{6.28 \times 10^{-3}}{ \lambda^{2}} + \frac{5.80 \times 10^{-4}}{ \lambda^{4}}\right)
+    
+    Wavelength range: 200 nm to 2000 nm
+    
+        | M. F. Al-Kuhaili, "Optical properties of hafnium oxide thin films and their application in energy-efficient windows," Opt. Mat. 27, 383 (2004).
+
+.. data:: InAs
+    
+    See citation for refractive index equation.
+    
+    Wavelength range: 207 nm to 12400 nm
+    
+        | S. Adachi, "Optical dispersion relations for GaP, GaAs, GaSb, InP, InAs, InSb, AlxGa1−xAs, and In1−xGaxAsyP1−y," J. Appl. Phys. 66, 6030 (1989).
+
+.. data:: InGaAs
+    
+    .. math::
+        
+        &\mathrm{In}_x\mathrm{Ga}_{1-x}\mathrm{As} \\\ \\
+        &E_\mathrm{g,GaAs} = 1.424 \\
+        &E_\mathrm{g,InGaAs} = E_\mathrm{g,GaAs} - 1.501 x + 0.436 x^2 \\\ \\
+        &n = \left( 1 + 4.37251 + \frac{5.46674}{1 - \left( \frac{E_\mathrm{g,GaAs}}{E_\mathrm{g,InGaAs}}\frac{0.443131}{\lambda} \right)^2} + \frac{0.0242996}{1 - \left( \frac{E_\mathrm{g,GaAs}}{E_\mathrm{g,InGaAs}}\frac{0.874645}{\lambda} \right)^2} + \frac{1.95752}{1 - \left( \frac{36.9166}{\lambda} \right)^2} \right)^{0.5} \\
+    
+    Wavelength range: 970 nm to 17000 nm
+    
+        | Index calculated by shifting the bandgap relative to the refractive index of GaAs. The bandgap of InGaAs is reference from:
+        | R. E. Nahory, M. A. Pollack, W. D. Johnston Jr., R. L. Barns, "Band gap versus composition and demonstration of Vegard’s law for In1−xGaxAsyP1−y lattice matched to InP," Appl. Phys. Lett. 33, 659 (1978).
+        | Notes: requires In fraction input (x between 0 and 1), which defaults to x=0: "InGaAs, x".
+
+.. data:: InGaP
+    
+    .. math:: n = \left(6.74340 + \frac{2.61641}{1 - \left(0.498744/\lambda\right)^2} + \frac{6.07490 \times 10^{-3}}{1 - \left(0.685707/\lambda\right)^2} + \frac{0.489381}{1 - \left(224.998/\lambda\right)^2}\right)^{0.5}
+    
+    Wavelength range: 700 nm to 1550 nm
+    
+        | M. Schubert, V. Gottschalch, C. M. Herzinger, H. Yao, P. G. Snyder, and J. A. Woollam, "Optical constants of GaxIn1−xP lattice matched to GaAs," J. Appl. Phys. 77, 3416 (1995)
+
+.. data:: InP
+    
+    .. math:: n = \left(1 + 6.255 + \frac{2.316}{{1 - \left(0.6263/\lambda\right)^2}} + \frac{2.765}{{1 - \left(32.935/\lambda\right)^2}}\right)^{0.5}
+
+    Wavelength range: 680 nm to 4449 nm
+    
+        | G. D. Pettit and W. J. Turner, "Refractive Index of InP," J. Appl. Phys. 36, 2081 (1965).
+
+.. data:: InSb
+    
+    See citation for refractive index equation.
+    
+    Wavelength range: 207 nm to 12400 nm
+    
+        | S. Adachi, "Optical dispersion relations for GaP, GaAs, GaSb, InP, InAs, InSb, AlxGa1−xAs, and In1−xGaxAsyP1−y," J. Appl. Phys. 66, 6030 (1989).
+
+.. data:: KTP
+
+    .. math::
+
+        n_x &= \left( 3.29100 + \frac{0.04140}{\lambda^2 - 0.03978} + \frac{9.35522}{\lambda^2 - 31.45571} \right)^{0.5} \\
+        n_y &= \left( 3.45018 + \frac{0.04341}{\lambda^2 - 0.04597} + \frac{16.98825}{\lambda^2 - 39.43799} \right)^{0.5} \\
+        n_z &= \left( 4.59423 + \frac{0.06206}{\lambda^2 - 0.04763} + \frac{110.80672}{\lambda^2 - 86.12171} \right)^{0.5}
+
+    Wavelength range: 430 nm to 3540 nm
+
+        | K. Kato and E. Takaoka, "Sellmeier and thermo-optic dispersion formulas for KTP," Appl. Opt. 41, 5040 (2002).
+        | Notes: flux-grown KTiOPO4 at 20 C. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, b and c axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
+
+.. data:: LBO
+
+    .. math::
+
+        n_x &= \left( 2.4542 + \frac{0.01125}{\lambda^2 - 0.01135} - 0.01388 \lambda^2 \right)^{0.5} \\
+        n_y &= \left( 2.5390 + \frac{0.01277}{\lambda^2 - 0.01189} - 0.01849 \lambda^2 + 4.3025 \times 10^{-5} \lambda^4 - 2.9131 \times 10^{-5} \lambda^6 \right)^{0.5} \\
+        n_z &= \left( 2.5865 + \frac{0.0131}{\lambda^2 - 0.01223} - 0.01862 \lambda^2 + 4.5778 \times 10^{-5} \lambda^4 - 3.2526 \times 10^{-5} \lambda^6 \right)^{0.5}
+
+    Wavelength range: 200 nm to 2600 nm
+
+        | K. Kato, "Temperature-tuned 90° phase-matching properties of LiB3O5," IEEE J. Quantum Electron. 30, 2950 (1994).
+        | Notes: LiB3O5 at room temperature. Biaxial (point group mm2) with n_x < n_y < n_z. The x, y and z axes are the crystallographic a, c and b axes. Orient it with ``phi``, ``theta`` and ``psi`` (see :class:`MaterialSpec`).
+
+.. data:: LiTaO3
+
+    .. math::
+
+        n_\mathrm{o} &= \left( 4.51224 + \frac{0.0847522}{\lambda^2 - 0.19876^2} - 0.0239046 \lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 4.52999 + \frac{0.0844313}{\lambda^2 - 0.20344^2} - 0.0237909 \lambda^2 \right)^{0.5}
+
+    Wavelength range: 400 nm to 4000 nm
+
+        | K. S. Abedin and H. Ito, "Temperature-dependent dispersion relation of ferroelectric lithium tantalate," J. Appl. Phys. 80, 6561 (1996).
+        | Notes: congruent LiTaO3 at room temperature; n_e is the z-direction.
+
+.. data:: LN
+    
+    .. math::
+        
+        n_\mathrm{o} &= \left( 1 + \frac{2.6734}{1 - (0.01764/ \lambda)^2} + \frac{1.2290}{1 - (0.05914/ \lambda)^2}  + \frac{12.614}{1 - (474.6/ \lambda)^2} \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 1 + \frac{2.9804}{1 - (0.02047/ \lambda)^2} + \frac{0.5981}{1 - (0.0666/ \lambda)^2}  + \frac{8.9543}{1 - (416.08/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 400 nm to 5000 nm
+    
+        | D. E. Zelmon, D. L. Small, and D. Jundt, "Infrared corrected Sellmeier coefficients for congruently grown lithium niobate and 5 mol. % magnesium oxide-doped lithium niobate," J. Opt. Soc. Am. B 14, 3319 (1997).
+        | Notes: z-cut lithium niobate. The n_e is the z-direction and n_o is the x- and y-direction.
+
+.. data:: LN_MgO
+    
+    .. math::
+        
+        n_\mathrm{o} &= \left( 5.653 + \frac{0.1185}{\lambda^2 - 0.2091^2} + \frac{89.61}{\lambda^2 - 10.85^2} - 0.0197 \lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left( 5.756 + \frac{0.0983}{\lambda^2 - 0.2020^2} + \frac{189.32}{\lambda^2 - 12.52^2} - 0.0132 \lambda^2 \right)^{0.5}
+    
+    Wavelength range: 500 nm to 4000 nm
+    
+        | O. Gayer, Z. Sacks, E. Galun, and A. Arie, "Temperature and wavelength dependent refractive index equations for MgO-doped congruent and stoichiometric LiNbO3," Appl. Phys.B 91, 343 (2008).
+        | Notes: z-cut congruent lithium niobate, 5 % MgO-doped. Temperature is 24.5 C. The n_e is the z-direction and n_o is the x- and y-direction. A second dispersion model is available via a ``reference`` keyword, either 'Gayer 2008' (default, shown above) or 'Zelmon 1997', which uses different Sellmeier coefficients, a 400 nm to 5000 nm wavelength range, and a different axis convention.
+
+.. data:: NiCr
+
+    .. math:: n = 3.4418 + 6.754i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | Notes: no published optical constants for NiCr (nichrome); Ni from A. D. Rakic et al., Appl. Opt. 37, 5271 (1998) used as a proxy. Heater/electrode use only; constant near 1550 nm only.
+
+.. data:: PMMA_495
+    
+    .. math:: n = \left(1.491 + \frac{3.427 \times 10^{-3}}{\lambda^{2}} + \frac{1.819 \times 10^{-4}}{\lambda^{4}}\right)
+    
+    Wavelength range: 200 nm to 1100 nm
+    
+        | `Microchem PMMA Data Sheet, (2019). <https://kayakuam.com/wp-content/uploads/2019/09/PMMA_Data_Sheet.pdf>`_
+
+.. data:: PMMA_950
+    
+    .. math:: n = \left(1.488 + \frac{2.898 \times 10^{-3}}{\lambda^{2}} + \frac{1.579 \times 10^{-4}}{\lambda^{4}}\right)
+    
+    Wavelength range: 200 nm to 1100 nm
+    
+        | `Microchem PMMA Data Sheet, (2019). <https://kayakuam.com/wp-content/uploads/2019/09/PMMA_Data_Sheet.pdf>`_
+
+.. data:: Pt
+
+    .. math:: n = 5.3531 + 7.053i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: Si
+    
+    .. math:: n = \left( 1 + \frac{10.6684}{1 - (0.301516/ \lambda)^2} + \frac{3.04347 \times 10^{-3}}{1 - (1.13475/ \lambda)^2} + \frac{1.54133}{1 - (1104/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 1357 nm to 11040 nm
+    
+        | B. Tatian, "Fitting refractive-index data with the Sellmeier dispersion formula," Appl. Opt. 23, 4477 (1984).
+        | Notes: 26 deg C
+
+.. data:: SiN
+    
+    .. math:: n = \left( 1 + \frac{3.0249}{1 - (0.135341/ \lambda)^2} + \frac{40314}{1 - (1239.84/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 310 nm to 5504 nm
+    
+        | K. Luke, Y. Okawachi, M. R. E. Lamont, A. L. Gaeta, and M. Lipson, "Broadband mid-infrared frequency comb generation in a Si3N4 microresonator," Opt. Lett. 40, 4823 (2015).
+
+.. data:: SiO2
+    
+    .. math:: n = \left( 1 + \frac{0.696166}{1 - (6.84043 \times 10^{-2}/ \lambda)^2} + \frac{0.407943}{1 - (0.116241/ \lambda)^2} + \frac{0.897479}{1 - (9.89616/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 210 nm to 6700 nm
+    
+        | (1) I. H. Malitson, "Interspecimen comparison of the refractive index of fused silica," J. Opt. Soc. Am. 55, 1205 (1965).
+        | (2) C. Z. Tan, "Determination of refractive index of silica glass for infrared wavelengths by IR spectroscopy," J. Non-Cryst. Solids 223, 158 (1998).
+
+.. data:: SU8_2000
+    
+    .. math:: n = \left(1.566 + \frac{7.96 \times 10^{-3}}{\lambda^{2}} +  \frac{1.4 \times 10^{-4}}{\lambda^{4}}\right)
+    
+    Wavelength range: 200 nm to 1100 nm
+    
+        | `Microchem SU-8 2000 Data Sheet (uncured), (2020). <https://kayakuam.com/wp-content/uploads/2020/08/KAM-SU-8-2000-2000.5-2015-Datasheet-8.13.20-final.pdf>`_
+
+.. data:: SU8_3000
+    
+    .. math:: n = \left(1.5525 + \frac{6.29 \times 10^{-3}}{\lambda^{2}} + \frac{4.0 \times 10^{-4}}{\lambda^{4}}\right)
+    
+    Wavelength range: 320 nm to 1700 nm
+    
+        | `Microchem SU-8 3000 Data Sheet (uncured), (2020). <https://kayakuam.com/wp-content/uploads/2020/07/KAM-SU-8-3000-Datasheet-7.10-final.pdf>`_
+
+.. data:: Ta2O5
+    
+    .. math:: n = \left(1 + \frac{0.033 \lambda^2}{\lambda^2 - 0.368^2} + \frac{3.212 \lambda^2}{\lambda^2 - 0.1639^2} + \frac{3.747 \lambda^2}{\lambda^2 - 14.5^2} \right)^{0.5}
+    
+    Wavelength range: 500 nm to 5000 nm
+    
+        | J. A. Black, R. Streater, K. F. Lamee, D. R. Carlson, Su-Peng Yu, and S. B. Papp, "Group-velocity-dispersion engineering of tantala integrated photonics," Opt. Lett. 46, 817 (2021).
+
+.. data:: Ti
+
+    .. math:: n = 3.8245 + 4.417i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: TiN
+
+    .. math:: n = 3.230 + 5.259i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | E. Shkondin et al., Opt. Mater. Express 7, 4171 (2017).
+        | Notes: 105 nm sputtered TiN at 1550 nm; strongly process-dependent, constant near 1550 nm only.
+
+.. data:: TiO2
+    
+    .. math:: n = \left( 5.913 + \frac{0.2441}{1 - (0.0803/ \lambda)^2} \right)^{0.5}
+    
+    Wavelength range: 430 nm to 1530 nm
+    
+        | J. R. Devore, "Refractive indices of rutile and sphalerite," J. Opt. Soc. Am. 41, 416 (1951).
+        | Notes: crystalline n(o), thin films (sputtered, evaporated, or by atomic layer deposition) generally have a lower refractive index and it varies significantly depending on the exact deposition technique.
+
+.. data:: TiO2_rutile
+    
+    .. math::
+        
+        n_\mathrm{o} &= \left(3.2089 + \frac{3.4000 \times 10^{-5}}{1.2270 \times 10^{-5} - \lambda^{-2}} - 3.2545\times 10^{-8}\lambda^2 \right)^{0.5} \\
+        n_\mathrm{e} &= \left(2.9713 + \frac{5.1891 \times 10^{-5}}{1.2280 \times 10^{-5} - \lambda^{-2}} - 4.2950 \times 10^{-8}\lambda^2 \right)^{0.5}
+    
+    Wavelength range: 500 nm to 4449 nm
+
+        | A. Borne, P. Segonds, B. Boulanger, C. Félix, and J. Debray, "Refractive indices, phase-matching directions and third order nonlinear coefficients of rutile TiO2 from third harmonic generation," Opt. Mater. Express 2, 1797 (2012).
+        | Notes: The n_e is the z-direction and n_o is the x- and y-direction. Equation takes wavelength in nanometers.
+
+.. data:: Vacuum
+    
+    .. math::
+        
+        n = 1.0
+    
+    Wavelength range: 0.0001 nm to 100000 nm
+
+.. data:: W
+
+    .. math:: n = 2.3733 + 4.815i
+
+    Wavelength range: 1000 nm to 2000 nm
+
+        | A. D. Rakic, A. B. Djurisic, J. M. Elazar, and M. L. Majewski, "Optical properties of metallic films for vertical-cavity optoelectronic devices," Appl. Opt. 37, 5271 (1998).
+        | Notes: Lorentz-Drude model evaluated at 1550 nm; constant near 1550 nm only.
+
+.. data:: ZnSe
+
+    .. math::
+
+        n = \left( 1 + \frac{4.45813734 \lambda^2}{\lambda^2 - 0.200859853^2} + \frac{0.467216334 \lambda^2}{\lambda^2 - 0.391371166^2} + \frac{2.89566290 \lambda^2}{\lambda^2 - 47.1362108^2} \right)^{0.5}
+
+    Wavelength range: 540 nm to 18200 nm
+
+        | J. Connolly, B. diBenedetto, and R. Donadio, "Specifications of Raytran material," Proc. SPIE 181, 141 (1979); Sellmeier fit by B. Tatian, Appl. Opt. 23, 4477 (1984).
+        | Notes: CVD ZnSe at 23 C.
+
+Non-optical and nonlinear properties
+-------------------------------------
+
+Every material carries these scalar properties, read back with ``get('<material>')`` and
+used by ``heat()``, ``electrostatic()``, and the chi(2) EME. Uniaxial crystals store the
+optic-axis (extraordinary) value of ``dn_dT`` and ``eps_r_dc``, and the biaxial
+crystals (KTP, LBO) store their z-axis value. ``d`` (chi(2)) and ``r``
+(the linear electro-optic, or Pockels, tensor) are both contracted coefficients in the
+crystal frame (pm/V); only the nonzero independent coefficients are listed, and ``--``
+means all zero (or, for ``r``, not applicable -- a material with no ``r`` method). A
+thermal conductivity of ``1e-10``, a ``dn_dT`` of ``0``, or a resistivity of ``inf`` is
+the database default, used where no reliable published value exists. Every non-default
+value has a citation in the material's ``property_refs`` dict
+(``get('<material>')['property_refs']``); consult the source code in ``EMP_materials.py``
+for the full citation text.
+
+Not available (default values used): ``dn_dT`` for HfO2, TiO2, TiO2_rutile, GaP, GaSb,
+InAs, InSb, InGaAs, InGaP, AlGaAs, and GGG; ``d`` for InP. ``r`` is currently only entered
+for LN, LN_MgO, GaAs, InP, AlN, GaN, and KTP -- the materials the electrostatic phase-shifter
+example uses; every other material's ``r`` is the base-class zero tensor.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 11 9 9 8 10 22 22
+
+   * - Material
+     - k [W/m*K]
+     - dn/dT [1/K]
+     - eps_r_dc
+     - rho [Ohm*nm]
+     - d [pm/V]
+     - r [pm/V]
+   * - Air
+     - 0.0262
+     - -9e-07
+     - 1.00059
+     - inf
+     - --
+     - --
+   * - Al
+     - 237
+     - 0
+     - 1
+     - 26.5
+     - --
+     - --
+   * - Al2O3
+     - 27.2
+     - 1.31e-05
+     - 9.4
+     - inf
+     - --
+     - --
+   * - AlGaAs
+     - 55
+     - 0
+     - 12.9
+     - inf
+     - d14 = 100, d25 = 100, d36 = 100
+     - --
+   * - AlN
+     - 285
+     - 2.3e-05
+     - 9.14
+     - inf
+     - d15 = -0.1, d24 = -0.1, d31 = -0.1, d32 = -0.1, d33 = 4.3
+     - r13 = 0.11, r23 = 0.11, r33 = 1.16
+   * - Au
+     - 317
+     - 0
+     - 1
+     - 22.14
+     - --
+     - --
+   * - BBO
+     - 1.6
+     - -9.3e-06
+     - 8.1
+     - inf
+     - d15 = 0.04, d16 = -2.2, d21 = -2.2, d22 = 2.2, d24 = 0.04, d31 = 0.04, d32 = 0.04, d33 = 0.04
+     - --
+   * - Cr
+     - 93.9
+     - 0
+     - 1
+     - 126
+     - --
+     - --
+   * - Cu
+     - 401
+     - 0
+     - 1
+     - 16.78
+     - --
+     - --
+   * - GaAs
+     - 55
+     - 0.000267
+     - 12.9
+     - inf
+     - d14 = 170, d25 = 170, d36 = 170
+     - r41 = -1.5, r52 = -1.5, r63 = -1.5
+   * - GaN
+     - 130
+     - 4.9e-05
+     - 8.9
+     - inf
+     - d15 = 5, d24 = 5, d31 = 5, d32 = 5, d33 = -10
+     - r13 = 0.57, r23 = 0.57, r33 = 1.91
+   * - GaP
+     - 110
+     - 0
+     - 11.1
+     - inf
+     - d14 = 36.9, d25 = 36.9, d36 = 36.9
+     - --
+   * - GaSb
+     - 32
+     - 0
+     - 15.7
+     - inf
+     - --
+     - --
+   * - Ge
+     - 58
+     - 0.0004
+     - 16.2
+     - inf
+     - --
+     - --
+   * - GGG
+     - 7.4
+     - 0
+     - 12.11
+     - inf
+     - --
+     - --
+   * - H2O
+     - 0.606
+     - -0.0001
+     - 78.4
+     - inf
+     - --
+     - --
+   * - HfO2
+     - 1.1
+     - 0
+     - 25
+     - inf
+     - --
+     - --
+   * - InAs
+     - 27
+     - 0
+     - 15.15
+     - inf
+     - --
+     - --
+   * - InGaAs
+     - 55
+     - 0
+     - 12.9
+     - inf
+     - --
+     - --
+   * - InGaP
+     - 5.3
+     - 0
+     - 11.8
+     - inf
+     - d14 = 110, d25 = 110, d36 = 110
+     - --
+   * - InP
+     - 68
+     - 0.0002
+     - 12.5
+     - inf
+     - --
+     - r41 = -1.5, r52 = -1.5, r63 = -1.5
+   * - InSb
+     - 18
+     - 0
+     - 16.8
+     - inf
+     - --
+     - --
+   * - KTP
+     - 13
+     - 1.6e-05
+     - 13
+     - inf
+     - d15 = 1.91, d24 = 3.64, d31 = 2.54, d32 = 4.35, d33 = 16.9
+     - r13 = 9.5, r23 = 15.7, r33 = 36.3, r42 = 9.3, r51 = 7.3
+   * - LBO
+     - 3.5
+     - -8.5e-06
+     - 1
+     - inf
+     - d15 = 1.05, d24 = -0.98, d31 = 1.05, d32 = -0.98, d33 = 0.05
+     - --
+   * - LiTaO3
+     - 4.6
+     - 3.9e-05
+     - 43
+     - inf
+     - d33 = 13.8
+     - --
+   * - LN
+     - 4.6
+     - 3.3e-05
+     - 30
+     - inf
+     - d15 = 4.6, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.6, d31 = 4.6, d32 = 4.6, d33 = 25.2
+     - r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8
+   * - LN_MgO
+     - 4.63
+     - 3.3e-05
+     - 30
+     - inf
+     - d15 = 4.4, d16 = 2.2, d21 = 2.2, d22 = -2.2, d24 = 4.4, d31 = 4.4, d32 = 4.4, d33 = 25
+     - r12 = -6.8, r13 = 9.6, r22 = 6.8, r23 = 9.6, r33 = 30.9, r42 = 32.6, r51 = 32.6, r61 = -6.8
+   * - NiCr
+     - 11.3
+     - 0
+     - 1
+     - 1080
+     - --
+     - --
+   * - PMMA_495
+     - 1e-10
+     - 0
+     - 1
+     - inf
+     - --
+     - --
+   * - PMMA_950
+     - 1e-10
+     - 0
+     - 1
+     - inf
+     - --
+     - --
+   * - Pt
+     - 71.6
+     - 0
+     - 1
+     - 105
+     - --
+     - --
+   * - Si
+     - 149
+     - 0.000186
+     - 11.68
+     - inf
+     - --
+     - --
+   * - SiN
+     - 30
+     - 2.45e-05
+     - 7
+     - inf
+     - --
+     - --
+   * - SiO2
+     - 1.38
+     - 8.7e-06
+     - 3.9
+     - inf
+     - --
+     - --
+   * - SU8_2000
+     - 0.2
+     - -0.00011
+     - 3.28
+     - inf
+     - --
+     - --
+   * - SU8_3000
+     - 0.2
+     - -0.00011
+     - 3.28
+     - inf
+     - --
+     - --
+   * - Ta2O5
+     - 0.8
+     - 6.8e-06
+     - 22
+     - inf
+     - --
+     - --
+   * - Ti
+     - 21.9
+     - 0
+     - 1
+     - 420
+     - --
+     - --
+   * - TiN
+     - 12
+     - 0
+     - 1
+     - 250
+     - --
+     - --
+   * - TiO2
+     - 8.7
+     - 0
+     - 86
+     - inf
+     - --
+     - --
+   * - TiO2_rutile
+     - 12.5
+     - 0
+     - 170
+     - inf
+     - --
+     - --
+   * - Vacuum
+     - 1e-10
+     - 0
+     - 1
+     - inf
+     - --
+     - --
+   * - W
+     - 174
+     - 0
+     - 1
+     - 52.8
+     - --
+     - --
+   * - ZnSe
+     - 18
+     - 6.1e-05
+     - 9.1
+     - inf
+     - d14 = 30, d25 = 30, d36 = 30
+     - --

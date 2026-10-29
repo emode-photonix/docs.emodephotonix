@@ -6,7 +6,7 @@ Multi-Physics
 
     Calculate the waveguide modes with the full-vector finite-element method. Requires a '3D' license. The cross-section is meshed with triangles that follow every material interface, and the mesh is refined where the modes are under-resolved, as set by the ``fem_*`` settings in ``settings()``. The saved fields, effective indices, losses and TE fractions are the same quantities, with the same normalization, as described under ``FDM()``, so ``get()``, ``get_fields()``, ``report()``, ``plot()`` and ``EME()`` work the same way. Calling ``FEM()`` sets the profile's ``solver`` setting to 'FEM'.
 
-    All ``boundary_condition`` values, PMLs, expansion regions, bends, transformation-optics sections (bends, the ring and general couplers, and simulation-space transforms), lossy and anisotropic materials (including crystals tilted out of the cross-section with ``theta``), and ``heat()`` and ``electrostatic()`` perturbations are supported. A symmetric or antisymmetric boundary on an axis whose mirror a crystal's orientation breaks raises an error, since it would describe a different structure. Field plots sample the FEM solution at ``x_resolution`` and ``y_resolution``, and ``plot(mesh_display=True)`` shows the triangle mesh.
+    All ``boundary_condition`` values, PMLs, expansion regions, bends, lossy and anisotropic materials (including crystals tilted out of the cross-section with ``theta``), and ``heat()`` and ``electrostatic()`` perturbations are supported. A symmetric or antisymmetric boundary on an axis whose mirror a crystal's orientation breaks raises an error, since it would describe a different structure. Field plots sample the FEM solution at ``x_resolution`` and ``y_resolution``, and ``plot(mesh_display=True)`` shows the triangle mesh.
 
     :param profile: profile name to save the solved profile under, default: '_default'
     :type profile: str or int
@@ -16,25 +16,22 @@ Multi-Physics
     :param bool include_static: whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent ``electrostatic()`` solve, default: True
     :param bool verbose: print progress, default: True
     :param str simulation_name: simulation name, default: 'emode'
-    :return: a dict with ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, ``TM_indices``, ``PML_indices``, ``mesh`` (``vertices``, ``triangles`` and ``region``, the triangle mesh solved on), and ``refinement`` (``n_eff_history``, ``num_dofs`` and ``num_elements`` per refinement level, and ``stopped_by``, the rule that ended refinement).
+    :return: a dict with ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, ``TM_indices``, ``PML_indices``, ``mesh`` (``vertices``, ``triangles`` and ``region``, the triangle mesh solved on), and ``refinement`` (``n_eff_history``, ``num_dofs`` and ``num_elements`` per refinement level, and ``stopped_by``, the rule that ended refinement). For a multi-wavelength profile, a ``WavelengthDict`` of these dicts, one per wavelength, indexable like a ``dict[float, dict]``.
 
 .. data:: heat
 
     Run a steady-state thermal simulation of a waveguide cross-section. Requires a '3D' license.
-
-    .. warning::
-        This function is only available under beta release. Please report any issues or bugs.
 
     .. note::
         Each ``shape()`` now accepts an input parameter called ``heat_only`` (default: False), which can be used to set additional shapes on top or bottom of the photonic layer stack. For example, common ``heat_only`` shapes are the substrate and metal heater layers.
 
         Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 500), which is used to refine the triangular mesh within certain shapes.
 
-        Every material carries ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), ``dn_dT`` (1/K), and ``eps_r_dc``; the defaults are ``1e-10``, infinity, ``0``, and ``1.0`` where no reliable published value has been entered. See the :doc:`Material Database </emodeguide/materials>` page for values and sources.
+        Every material carries ``thermal_conductivity`` (W/m·K), ``resistivity`` (Ohm·nm), ``dn_dT`` (1/K), and ``eps_r_dc``. The defaults are ``1e-10``, infinity, ``0``, and ``1.0`` where no reliable published value has been entered. ``dn_dT`` and ``eps_r_dc`` are one value for every axis or three for the crystal's x, y and z axes, and each principal index shifts by its own ``dn_dT``. The mesh covers the shapes, so a region the shapes enclose without covering takes the background material's properties. See the :doc:`Material Database </emodeguide/materials>` page for values and sources.
 
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param float boundary_temperature: Fixed temperature boundary condition in 'K' set along each perimeter indicated by ``boundaries``. Default: 298.
-    :param list[str] boundaries:  'top', 'bottom', 'left', or 'right'; Indicates which boundaries are set to the fixed temperature ``boundary_temperature``. Default: ['bottom'].
+    :param list[str] boundaries:  'top', 'bottom', 'left', or 'right'. Indicates which boundaries are set to the fixed temperature ``boundary_temperature``. Default: ['bottom'].
     :param bool verbose: Control the display of the progress bar. Default: True.
     :param str simulation_name: Simulation name. Default: 'emode'.
     :return: A dictionary/struct with the mesh points (``p``), mesh triangles (``t``), ``temperature``, ``thermal_conductivity``, and ``heat_generation`` arrays. It also includes the ``boundary_temperature`` and ``boundaries`` settings.
@@ -43,19 +40,16 @@ Multi-Physics
 
     Run a steady-state electrostatic simulation of a waveguide cross-section. Requires a '3D' license.
 
-    .. warning::
-        This function is only available under beta release. Please report any issues or bugs.
-
     .. note::
         Each ``shape()`` also now accepts an input parameter called ``voltage`` (default: None), which is set to create electric field sources. Shapes with ``voltage`` left as None do not get a voltage boundary condition applied.
 
         Each ``shape()`` also now accepts an input parameter called ``fem_resolution`` (default: 500), which is used to refine the triangular mesh within certain shapes.
 
-        Each material in the EMode material database now has ``eps_r_dc`` (relative permittivity at ~1 kHz).
+        Each material in the EMode material database now has ``eps_r_dc`` (relative permittivity at ~1 kHz), one value or three for the crystal's x, y and z axes. The solve uses the in-plane (x, y) block of each material's turned ``eps_r_dc`` tensor.
 
         The DC field derived here perturbs the permittivity through each material's linear electro-optic (Pockels) tensor ``r`` (``get('<material>')['r']``, m/V): :math:`\Delta(1/n^2)_{ij} = \sum_k r_{ijk} E_k`, then :math:`\Delta\varepsilon = -\varepsilon \cdot \Delta(1/n^2) \cdot \varepsilon`. ``FDM()`` applies this automatically on the next solve (``include_static=False`` to skip it), the same way ``heat()``'s temperature field perturbs the permittivity through ``dn_dT``.
 
     :param float min_angle: Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.
     :param bool verbose: Control the display of the progress bar. Default: True.
     :param str simulation_name: Simulation name. Default: 'emode'.
-    :return: A dictionary/struct with the mesh points (``p``), mesh triangles (``t``), ``voltage``, ``eps_dc_grid``, the per-element electric field (``Ex``, ``Ey``, in V/nm), and ``centroids`` (element centers, in the optical window's frame).
+    :return: A dictionary/struct with the mesh points (``p``), mesh triangles (``t``), ``voltage``, ``eps_dc_grid`` (the in-plane DC permittivity of each element, shape (2, 2, number of elements)), the per-element electric field (``Ex``, ``Ey``, in V/nm), and ``centroids`` (element centers, in the optical window's frame).

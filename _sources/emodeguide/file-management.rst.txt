@@ -80,7 +80,7 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
 .. data:: create_profile_set
 
-    Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped. The default ``profile_set_name`` replaces the ``'_default'`` profile.
+    Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped. The default ``profile_set_name`` replaces the ``'_default'`` profile. One member of the set is ``profile='SET.WAVELENGTH'`` (``'wg.1550'``) or ``profile='SET.MEMBER'`` by its original name.
 
     :param profiles: names of the profiles to group
     :type profiles: str or list[str]
@@ -96,16 +96,16 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
 
 .. data:: clear_field_data
 
-    Deletes the following data from every profile, including the default profile, to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``.
+    Deletes the following data from one profile, or from every profile including the default profile, to reduce the '.eph' file size: ``Fx``, ``Fy``, ``Ex``, ``Ey``, ``Ez``, ``Hx``, ``Hy``, ``Hz``, ``Sx``, ``Sy``, ``Sz``, ``x``, ``y``, ``permittivity``, ``permeability``. A profile that does not exist raises an error.
 
-    :param str profile: currently ignored; field data is cleared from all profiles regardless of this argument, default: '_default'
+    :param str profile: name of the profile to clear (``'NAME.WAVELENGTH'`` for one wavelength of a multi-wavelength profile), default: None (every profile)
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: save
 
     Saves a simulation file and keeps the simulation file in the 'open' state.
 
-    :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
+    :param bool save_all_fields: whether to save each solved profile's full ``E`` and ``H`` fields as well as its raw field data (``Fx`` and ``Fy``). A file saved this way opens with the fields ready, which take about five times the space of the raw field data. Each save decides again, so a plain save of a reopened file leaves them out, default: False
     :param str file_type: file type to save the simulation file as, either 'eph' or 'mat', default: 'eph'
     :param bool close: whether to close the simulation file after saving, default: False
     :param str new_save_path: if set, saves the simulation file in this new path, default: None
@@ -116,6 +116,6 @@ Simulation data are stored in an EMode Photonix file with the extension '.eph'. 
     Saves or deletes a simulation file. This function is called through the "close" method of emodeconnection, and these optional parameters can be passed directly to the "close" method.
 
     :param bool save: saves simulation file if True and deletes the simulation file if False, default: True
-    :param bool save_all_fields: whether all field data should be saved (so the ``E``, ``H``, and ``S`` fields can be accessed without an EMode license) or just the raw field data (``Fx`` and ``Fy``), default: False
+    :param bool save_all_fields: whether to save each solved profile's full ``E`` and ``H`` fields as well as its raw field data (``Fx`` and ``Fy``). A file saved this way opens with the fields ready, which take about five times the space of the raw field data. Each save decides again, so a plain save of a reopened file leaves them out, default: False
     :param str file_type: file type to save the simulation file as, either 'eph' or 'mat', default: 'eph'
     :param str simulation_name: simulation name, default: 'emode'

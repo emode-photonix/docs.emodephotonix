@@ -3,8 +3,8 @@ Variable Descriptions
 ---------------------
 
 Descriptions of the variables stored in a simulation file. Variables are read back with
-:data:`get`, or -- for grids, fields, shapes and whole profiles -- with the typed accessors
-:data:`get_grid`, :data:`get_fields`, :data:`get_shape` and :data:`get_profile`. Some
+:data:`get` (or, for grids, fields, shapes and whole profiles, with the typed accessors
+:data:`get_grid`, :data:`get_fields`, :data:`get_shape` and :data:`get_profile`). Some
 variables have an alias, a copy under an older name kept for compatibility. SHAPE stands
 for a shape name and NAME for a profile name. :data:`inspect` lists every name :data:`get`
 can read.
@@ -16,7 +16,7 @@ A simulation file has two levels.
 
 **Top-level variables** describe the file and the EME circuit: ``EMode_simulation_file``,
 ``file_type``, ``emode_version``, ``materials``, ``profiles``,
-``propagation_resolution``, and -- once the corresponding functions have run --
+``propagation_resolution``, and, once the corresponding functions have run,
 ``sweep_data``, ``S_matrix`` (through ``get('S_matrix')``), ``response`` and ``sources``.
 :data:`inspect` returns their names, followed by the per-profile variables and settings
 below. Names beginning with an underscore are internal and may change between versions.
@@ -24,14 +24,21 @@ below. Names beginning with an underscore are internal and may change between ve
 **Profiles** live under the top-level ``profiles`` dictionary, one entry per cross-section.
 ``'_default'`` is the working profile that :data:`settings`, :data:`shape`, :data:`mesh` and
 :data:`FDM` act on unless ``profile=`` is given. :data:`label_profile` saves a copy of it
-under a name; :data:`FDM` with ``profile=`` saves its result under a name; and
+under a name. :data:`FDM` with ``profile=`` saves its result under a name.
 :data:`create_profile_set` groups profiles solved at different wavelengths into one
 multi-wavelength profile, in which case per-profile results come back as a dictionary keyed
 by wavelength. Every function that reads a profile takes ``profile=NAME``: :data:`get`,
 :data:`get_fields`, :data:`get_grid`, :data:`get_shape`, :data:`get_profile`,
 :data:`confinement`, :data:`effective_area`, :data:`group_index`, :data:`orthogonality`,
-:data:`report`, :data:`scattering`, :data:`mesh`, :data:`FDM`, :data:`delete_profile`.
-:data:`reset` acts on ``'_default'`` only and leaves named profiles alone.
+:data:`report`, :data:`scattering`, :data:`mesh`, :data:`FDM`, :data:`delete_profile`,
+:data:`reset`, :data:`clear_field_data`. :data:`reset` and :data:`clear_field_data` act on
+the profile they are given and leave every other profile alone.
+
+One wavelength of a multi-wavelength profile is ``profile='NAME.WAVELENGTH'``, for example
+``get('effective_index', profile='tfln.1550')``. A member can also be named by its own name
+(``'NAME.MEMBER'``) when that name is its own, as after :data:`create_profile_set`. A name
+that several members share, such as the ``'_default'`` that every member of a labeled
+multi-wavelength profile keeps, raises an error naming the ``NAME.WAVELENGTH`` of each.
 
 **Settings** (window, resolution, boundary condition, PML, ...) are part of the profile.
 ``get(key, profile=NAME)`` returns any of them, under its current name or an older alias,
@@ -40,7 +47,7 @@ and ``get_profile(NAME).settings`` returns them all at once.
 Per-profile variables
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Read with ``get(key, profile=NAME)`` (default ``NAME='_default'``); a multi-wavelength
+Read with ``get(key, profile=NAME)`` (default ``NAME='_default'``). A multi-wavelength
 profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wavelength.
 
 .. glossary::
@@ -67,6 +74,9 @@ profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wav
     Gx, Gy
         (*complex arrays*) The auxiliary longitudinal raw field components present for a bend or an anisotropic solve. Present only when the corresponding basis actually carries them.
 
+    convergence
+        (*dict*) The last :data:`converge` run on this profile, as plain data: the arguments it ran with, its ``status``, the settings it chose (``chosen``), one ``stages`` entry per setting it varied and one ``history`` row per solve (the setting's value, the target quantity, its change and estimated error, and the solve time).
+
     confinement_window
         (*list*) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.
 
@@ -92,6 +102,8 @@ profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wav
         .. math::
             \kappa = \frac{\alpha \lambda}{(4 \pi) 10 \, \mathrm{log}_{10}(e)} \approx \frac{\alpha \lambda}{54.575}
 
+        Loss is positive and gain negative. Under a PML, a guided mode of a lossless structure can show a small loss or a small gain (a negative ``loss_dB_per_m``). Neither is physical. It is the error from truncating the mode's evanescent tail at the window and its PML, of the same size as the error in its effective index, and it vanishes as the window widens or the PML thickens (``converge(setting='pml')``). The solve warns when such a mode gains more than 1e-6 of its index.
+
     maximum_overlap
         (*float*) Largest overlap in the mode list, calculated from the ``orthogonality()`` function.
 
@@ -112,13 +124,13 @@ profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wav
         (*list*) The permittivity and permeability arrays are defined by ``mesh`` from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.
 
     PML_indices
-        (*list*) Indices of modes that carry less than 75% of their power inside the simulation window -- modes of the pml (absorbing) region rather than of the device. Present only when the profile was solved with a pml. See ``window_confinement``, and ``remove_pml_modes_bool``/``pml_seed_bool`` under Settings.
+        (*list*) Indices of modes that carry less than 75% of their power inside the simulation window. These are modes of the pml (absorbing) region rather than of the device. Present only when the profile was solved with a pml. See ``window_confinement``, and ``remove_pml_modes_bool``/``pml_seed_bool`` under Settings.
 
     scattering_sum, scattering_loss
         (*list*) Total per-mode scattering loss [dB/m] summed over shape edges: ``scattering_sum`` is a list of per-shape contributions, ``scattering_loss`` their sum. Populated after ``scattering()`` runs.
 
     shapes
-        (*list*) The list of :data:`Shape` objects making up the profile, background included; prefer :data:`get_shape` to read a single shape's attributes and metadata.
+        (*list*) The list of :data:`Shape` objects making up the profile, background included. Prefer :data:`get_shape` to read a single shape's attributes and metadata.
 
     Sx, Sy, Sz
         (*arrays*) [W/nm] The Poynting vector in the x-, y-, and z-directions.
@@ -136,17 +148,17 @@ profile (a profile set) returns a ``dict[float, ...]`` of the same, keyed by wav
         (*float*) [nm] Free-space wavelength.
 
     window_confinement
-        (*list*) Fraction of each mode's power inside the simulation window (inset by one grid cell on every side), only present when the profile has a pml. A mode below 75% is a mode of the absorbing region rather than of the device -- what ``remove_pml_modes_bool`` discards and ``PML_indices`` designates.
+        (*list*) Fraction of each mode's power inside the simulation window (inset by one grid cell on every side), only present when the profile has a pml. A mode below 75% is a mode of the absorbing region rather than of the device (the modes that ``remove_pml_modes_bool`` discards and ``PML_indices`` designates).
 
     xc, yc
         (*complex arrays*) Cell-center coordinates of the mesh grid, in the x- and y-directions. These can be complex when pml layers are introduced.
 
-        Deprecated: ``x``, ``y`` -- read through :data:`get_grid` instead.
+        Deprecated: ``x``, ``y``. Read through :data:`get_grid` instead.
 
 Simulation-level variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
+Read with ``get(key)`` (no ``profile=``). Listed by :data:`inspect`.
 
 .. glossary::
 
@@ -154,7 +166,7 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
         (*str*) The version of EMode that wrote the simulation file.
 
     EMode_simulation_file
-        (*str*) The file name the simulation was created with; also serves as a marker that this is a valid EMode simulation file.
+        (*str*) The file name the simulation was created with. It also serves as a marker that this is a valid EMode simulation file.
 
     file_type
         (*str*) The simulation file's extension, ``'.eph'``.
@@ -166,31 +178,31 @@ Read with ``get(key)`` (no ``profile=``); listed by :data:`inspect`.
         (*bool*) Legacy key, found only in simulation files written before EMode 1.0.5, which still load. It has no effect: EME scattering is controlled by ``EME_settings(apply_scattering=...)``, and ``settings(eme_scattering=...)`` is deprecated and no longer stores it. On a newer file ``get('eme_scattering')`` returns False with a deprecation warning.
 
     materials
-        (*list*) Names of every material in the database, built-in and user-added. A user-added material's own properties are returned by ``get(NAME)``; see ``user_material_NAME`` below.
+        (*list*) Names of every material in the database, built-in and user-added. A user-added material's own properties are returned by ``get(NAME)``. See ``user_material_NAME`` below.
 
     priority_indices
         (*list*) A list of indices corresponding to the priorities of the shapes in the current profile.
 
     profiles
-        (*dict*) The named profiles saved in this file (see "How the simulation file is organized" above); does not include ``'_default'``.
+        (*dict*) The named profiles saved in this file (see "How the simulation file is organized" above). It does not include ``'_default'``.
 
     propagation_resolution
         (*float*) [nm] Sampling resolution used along the propagation direction for EME field reconstruction.
 
     pulse_response
-        (*PulseResponse*) The spectrum of every tracked mode along the chain from the most recent :data:`EME` or :data:`pulse_propagate` with a ``PulsedSource`` excitation; returned by ``get('pulse_response')`` (EMode\ :sup:`3D`\  only). See :class:`PulseResponse`.
+        (*PulseResponse*) The spectrum of every tracked mode along the chain from the most recent :data:`EME` or :data:`pulse_propagate` with a ``PulsedSource`` excitation. It is returned by ``get('pulse_response')`` (EMode\ :sup:`3D`\  only). See :class:`PulseResponse`.
 
     pulsed_source
-        (*PulsedSource*) The declared pulsed excitation; returned by ``get('pulsed_source')``.
+        (*PulsedSource*) The declared pulsed excitation. It is returned by ``get('pulsed_source')``.
 
     response
-        (*CircuitResponse*) The power-dependent nonlinear response from the most recent EME solve with a declared excitation; returned by ``get('response')``. It also carries ``trajectories``, the forward amplitudes recorded along each :math:`\chi^{(2)}` slice, read with ``power_vs_z(wavelength)`` or ``amplitude_vs_z(wavelength)``.
+        (*CircuitResponse*) The power-dependent nonlinear response from the most recent EME solve with a declared excitation. It is returned by ``get('response')`` and also carries ``trajectories``, the forward amplitudes recorded along each :math:`\chi^{(2)}` slice, read with ``power_vs_z(wavelength)`` or ``amplitude_vs_z(wavelength)``.
 
     S_matrix
-        (*SMatrix*) The scattering matrix from a solved EME chain; returned by ``get('S_matrix')`` (EMode\ :sup:`3D`\  only).
+        (*SMatrix*) The scattering matrix from a solved EME chain. It is returned by ``get('S_matrix')`` (EMode\ :sup:`3D`\  only).
 
     sources
-        (*list*) The declared excitation sources for the EME chain; returned by ``get('sources')``.
+        (*list*) The declared excitation sources for the EME chain. It is returned by ``get('sources')``.
 
     sweep_data
         (*dict*) Results from the most recent ``sweep()`` call.
@@ -210,15 +222,15 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
 .. glossary::
 
     bend_radius
-        (*float*) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.
+        (*float*) [nm] Bend radius of the waveguide. A value of 0 indicates that no bend is applied.
 
         Alias: ``radius``
 
     bend_method
-        (*str*) How a nonzero ``bend_radius`` is solved. ``'cylindrical'`` (the default) adds the bend factor 1 + x/R to the mode solver. ``'TO'`` solves the straight cross-section with its material transformed by the bend's conformal map (transformation optics). Both work with the FDM and the FEM. The two methods' effective indices differ by about 6e-4 at R = 10 um, and their bend losses by about 5 %. With a PML, a bend's spectrum starts with PML modes, so set ``max_effective_index`` just above the guided mode. An under-resolved bend shows up as spurious bend loss. The 'Bend Mode Solvers' example compares the four combinations.
+        (*str*) How a nonzero ``bend_radius`` is solved. ``'cylindrical'`` (the default) adds the bend factor 1 + x/R to the mode solver. ``'TO'`` solves the straight cross-section with its material transformed by the bend's conformal map (transformation optics). Both work with the FDM and the FEM. The two methods' effective indices differ by about 6e-4 at R = 10 um, and their bend losses by about 1 % on a fine grid. With a PML, a bend's spectrum starts with PML modes, so set ``max_effective_index`` just above the guided mode. An under-resolved bend shows up as spurious bend loss. The 'Bend Mode Solvers' example compares the four combinations.
 
     boundary_condition
-        (*str*) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. ``get('boundary_condition')`` returns the string as given (for example ``'TE'``), and ``BC`` below is the resolved boundary condition.
+        (*str*) Boundary condition for the simulation window. A value of 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex. The first character indicates south boundary condition and the second character indicates the west boundary condition. ``get('boundary_condition')`` returns the string as given (for example ``'TE'``), and ``BC`` below is the resolved boundary condition.
 
         Alias: ``BC``, as a :data:`settings` argument only. ``get('BC')`` returns the resolved value.
 
@@ -250,13 +262,13 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
         (*int*) FEM element order, 1 or 2. Order 2 converges much faster in the effective index.
 
     fem_points_per_wavelength
-        (*float*) Initial FEM mesh density, as mesh points per wavelength in each material.
+        (*float*) Initial FEM mesh density, as mesh points per wavelength in each material. :data:`converge` chooses it for the FEM with ``setting='resolution'``.
 
     fem_refine_fraction
         (*float*) Share of the estimated error each adaptive FEM refinement pass targets, in (0, 1].
 
     field_to_solve
-        (*str*) Desired transverse field component to solve; either 'Et' or 'Ht'.
+        (*str*) Desired transverse field component to solve: either 'Et' or 'Ht'.
 
     generate_chi2
         (*bool*) Generate the second-order nonlinear susceptibility (:math:`\chi^{(2)}`) tensor for the simulation window when meshing.
@@ -268,25 +280,25 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
         (*bool*) Compute the interfacial scattering loss of every rough shape after each solve of this profile. Set with ``settings(include_scattering=True)``.
 
     max_effective_index
-        (*float*) Upper limit for the effective index; the eigensolver's shift, unless ``pml_seed_bool`` derives one automatically.
+        (*float*) Upper limit for the effective index, which is the eigensolver's shift unless ``pml_seed_bool`` derives one automatically.
 
     mesh_complete_bool
-        Removed; use ``get_profile(NAME).status.meshed``.
+        Removed. Use ``get_profile(NAME).status.meshed``.
 
     num_modes
-        (*int*) Total number of modes to solve.
+        (*int*) Total number of modes to solve. :data:`converge` chooses it with ``setting='modes'``.
 
     num_pml_layers
-        (*int* or *list*) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West].
+        (*int* or *list*) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West]. The FDM's pml is this many grid cells thick where ``pml_thickness`` is 0. For the FEM it refines the pml's mesh (10, the default, meshes it at its material's resolution, 20 twice as finely), and it does not set the thickness.
 
     pml_thickness
-        (*float* or *list*) Either a float or a list of floats indicating the perfectly matched layer thickness in nm for all or each boundary: [North, South, East, West]. 0 means the boundary uses ``num_pml_layers`` instead. Unlike a layer count, this holds the absorber's physical size fixed as the resolution changes.
+        (*float* or *list*) Either a float or a list of floats indicating the perfectly matched layer thickness in nm for all or each boundary: [North, South, East, West]. In the FDM, 0 means the boundary uses ``num_pml_layers`` instead. The FEM delivers exactly this thickness, and where it is 0 the FEM chooses twice the pml's imaginary depth (see ``pml_thickness`` under :data:`settings`). Unlike a layer count, this holds the absorber's physical size fixed as the resolution changes. :data:`converge` chooses it with ``setting='pml'``.
 
     pml_alpha_max
         (*float*) The complex-frequency-shifted (CFS) term of the pml profile, where 0 disables it.
 
     pml_kappa_max
-        (*float*) The maximum real coordinate stretch of the pml profile, reached at the outer pml face.
+        (*float*) The maximum real coordinate stretch of the pml profile, reached at the outer pml face, in both the FDM and the FEM.
 
     pml_NSEW_bool
         (*list*) List of booleans indicating if a perfectly matched layer (pml) boundary condition is applied to each boundary: [North, South, East, West].
@@ -304,7 +316,7 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
         (*bool*) Indicates whether or not to automatically remove artificial modes found in the pml layers.
 
     shape_list, shape_materials
-        Removed; use ``get_profile(NAME).shapes`` (or the per-profile ``shapes`` variable above).
+        Removed. Use ``get_profile(NAME).shapes`` (or the per-profile ``shapes`` variable above).
 
     solver
         (*str*) The mode solver for this profile: ``'default'``, ``'FDM'`` or ``'FEM'``. ``'default'`` is the FDM in every session. The FEM runs only when asked for, with ``solver='FEM'`` or ``FEM()``.
@@ -322,13 +334,13 @@ reads back under the name it was set by, so an alias given to :data:`settings` (
         (*float*) Numerical tolerance for convergence of the effective indices.
 
     window_height
-        (float) [nm] Total height (y-direction) of the simulation window.
+        (float) [nm] Total height (y-direction) of the simulation window. The mesh is a whole even number of ``y_resolution`` cells, starting at the window's bottom (y = 0), so a layer stacked from there in whole cells has its faces on grid lines. A window that is not a whole even number of cells grows to the next even count at the top. Under a y fold of ``boundary_condition`` it grows by the same amount above and below instead, so its middle, where the symmetry wall sits, stays a grid line. ``settings`` warns when the window grows, and ``get('window_height')`` then reads the height that was meshed. A ``window_height`` that is a multiple of twice ``y_resolution`` is meshed as given. The FEM meshes the same window. :data:`converge` chooses it with ``setting='window'``.
 
     window_width
-        (float) [nm] Total width (x-direction) of the simulation window.
+        (float) [nm] Total width (x-direction) of the simulation window. The mesh is a whole even number of ``x_resolution`` cells with a grid line at x = 0, the window's middle. A width that is not grows to the next even count, by the same amount on each side, which keeps x = 0 a grid line, and ``get('window_width')`` then reads the width that was meshed. :data:`converge` chooses it with ``setting='window'``.
 
     x_resolution, y_resolution
-        (*float*) [nm] Mesh grid step in the x- and y-directions.
+        (*float*) [nm] Mesh grid step in the x- and y-directions. :data:`converge` chooses them with ``setting='resolution'``.
 
 Shape attributes
 ^^^^^^^^^^^^^^^^^

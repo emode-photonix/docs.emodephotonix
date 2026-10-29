@@ -1,0 +1,1144 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Python Interface</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
+    <link rel="stylesheet" type="text/css" href="_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=e2a723ec"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/code-tabs.js?v=c983d12e"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'interface';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/interface.html" />
+    <link rel="icon" href="_static/icon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="EMode Guide" href="emodeguide.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.6" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="python-interface">
+<span id="id1"></span><h1>Python Interface</h1>
+<p>To control EMode directly from a Python script, we supply a Python package called <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>. This has been tested with Python 3.10 or higher, including the Anaconda distribution, iPython terminals, and numerous IDEs.</p>
+<p>The source code can be viewed here: <a class="reference external" href="https://github.com/emode-photonix/emodeconnection">emodeconnection</a></p>
+<p>For more information about Python, see these links:</p>
+<table class="hlist"><tr><td><ul class="simple">
+<li><p><a class="reference external" href="https://www.python.org/downloads/">Download Python</a></p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/tutorial/">Python Documentation</a></p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p><a class="reference external" href="https://www.pythontutorial.net/">Python Tutorial</a></p></li>
+</ul>
+</td></tr></table>
+<section id="setup">
+<span id="setuppython"></span><h2>Setup</h2>
+<p>Install the <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> Python package from the command line.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">emodeconnection</span>
+</pre></div>
+</div>
+<p>Update to the latest version with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">emodeconnection</span>
+</pre></div>
+</div>
+<p>Alternatively, the <code class="docutils literal notranslate"><span class="pre">uv</span></code> package manager may be used in place of <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+</section>
+<section id="install-emode">
+<span id="emode-install"></span><h2>Install EMode</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emode-install</span></code> command-line tool is included with the <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>
+Python package. It handles downloading, installing, and updating EMode.
+After installing <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> via pip, you can run the installer.
+You will be prompted to accept the
+<a class="reference external" href="https://emodephotonix.com/legal/eula.pdf">EMode EULA</a> and log in
+with your EMode account credentials. For additional complete options,
+run <code class="docutils literal notranslate"><span class="pre">emode-install</span> <span class="pre">--help</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>emode-install
+</pre></div>
+</div>
+<p>Additional options:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>emode-install<span class="w">                            </span><span class="c1"># Install latest version</span>
+emode-install<span class="w"> </span>--help<span class="w">                     </span><span class="c1"># Show all options</span>
+emode-install<span class="w"> </span>--list-versions<span class="w">            </span><span class="c1"># Show available versions</span>
+emode-install<span class="w"> </span>--update<span class="w">                   </span><span class="c1"># Update to the latest version</span>
+emode-install<span class="w"> </span>--update<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.0.5<span class="w">   </span><span class="c1"># Switch to a specific version</span>
+emode-install<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.0.5<span class="w">            </span><span class="c1"># Install a specific version</span>
+emode-install<span class="w"> </span>--install-dir<span class="w"> </span>/opt/bin<span class="w">     </span><span class="c1"># Custom install directory</span>
+emode-install<span class="w"> </span>--uninstall<span class="w">                </span><span class="c1"># Remove EMode</span>
+emode-install<span class="w"> </span>--uninstall<span class="w"> </span>--install-dir<span class="w"> </span>/opt/bin<span class="w">  </span><span class="c1"># Remove from custom location</span>
+</pre></div>
+</div>
+<p>For automated or headless installs, set these environment variables
+to skip interactive prompts:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>EMODE_EULA_ACCEPTED=1</cite></p></td>
+<td><p>Accept the EULA non-interactively (CI/headless)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>EMODE_EMAIL</cite></p></td>
+<td><p>Pre-fill login email</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>EMODE_PASSWORD</cite></p></td>
+<td><p>Pre-fill password (use with caution)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>EMODE_INTERACTIVE=1</cite></p></td>
+<td><p>Use interactive installer GUI</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>UNINSTALL_EMODE=y</cite></p></td>
+<td><p>Accept the uninstallation non-interactively</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="emode-login">
+<span id="pythonemodelogin"></span><h2>EMode Login</h2>
+<p>Open the EMode Login GUI from a Python session to login to your EMode Photonix account and view your license subscriptions and active sessions. <em>Alternatively</em>, you can run <code class="docutils literal notranslate"><span class="pre">emode</span></code> from the command line to launch the login GUI. Once logged in, click the exit button to close the GUI and save the login credentials.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
+<span class="n">emc</span><span class="o">.</span><span class="n">EModeLogin</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To clear active sessions, select an option from the dropdown in the <em>Active Sessions</em> header row and click <em>Clear</em>. This terminates the selected sessions without consuming a license seat and refreshes the session table. The options are ‘none’ (default), ‘all’ (all non-roaming sessions), ‘mine’ (only sessions launched by the current user), ‘others’ (sessions owned by the current user but launched by other shared users), ‘latest’ (the latest non-roaming session), and ‘oldest’ (the oldest non-roaming session).</p>
+<p>The window refreshes the <em>Active Sessions</em> table every 30 seconds while it is the active window, and at once when it regains focus. The periodic refresh pauses after 15 minutes without a key press or click, and resumes on the next one. Click <em>Refresh</em> in the <em>Active Sessions</em> header row to fetch the table at any time.</p>
+<section id="command-line-login">
+<h3>Command-line login</h3>
+<p>Run <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span></code> from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid; credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option (the same options as the GUI dropdown), and asks whether to log out on this computer.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>emode<span class="w"> </span>login
+</pre></div>
+</div>
+<p>To enter credentials without contacting the license server, run <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span> <span class="pre">--write</span></code>. This prompts for your email and password and writes them directly, without validation or session display. Use this as a basic fallback interface when the license server is unreachable.</p>
+</section>
+</section>
+<section id="the-emode-class">
+<h2>The EMode class</h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EMode">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emode'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roaming</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_existing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pN'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emode_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_open</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Opens the EMode software and initializes a local simulation file. The user’s account must have an active license available to successfully run EMode. If the user has not previously logged in, this will prompt for a username and password. To reset the user profile, run <code class="docutils literal notranslate"><span class="pre">emode</span> <span class="pre">login</span> <span class="pre">--write</span></code> from the command line.</p>
+<p>An existing file can be opened for further analysis by specifying the input argument <code class="docutils literal notranslate"><span class="pre">open_existing</span> <span class="pre">=</span> <span class="pre">True</span></code>. This opened file can be copied to a new file name by specifying the input argument <code class="docutils literal notranslate"><span class="pre">new_name</span> <span class="pre">=</span> <span class="pre">'new_filename'</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All <a class="reference external" href="emodeguide.html">EMode functions</a> are accessible as methods of this class instance using keyword arguments for each function input parameter.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Name of the simulation file. The extension ‘.eph’ will be added to this name. Default: ‘emode’.</p></li>
+<li><p><strong>license_type</strong> (<em>str</em>) – The requested license type, either ‘2d’, ‘3d’, or ‘default’. When running with ‘default’ license type, a ‘3d’ license will be initialized if it is available, otherwise a ‘2d’ license will be initialized if it is available. The ‘2d’ or ‘3d’ options will only request that specific license type if it is available. Default: ‘default’.</p></li>
+<li><p><strong>clear</strong> (<em>str</em>) – Indicate whether to clear existing EMode sessions from this computer. Accepts ‘all’ (all non-roaming sessions), ‘mine’ (only sessions launched by the current user), ‘others’ (sessions owned by the current user but launched by other shared users), ‘latest’/’oldest’ (the latest/oldest non-roaming session), and ‘none’. Clearing can be used when a session crashes to free up a license seat, but it will terminate the associated session. Default: ‘none’.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em> or </em><em>Path</em>) – Name of the path where the simulation file will be created and saved. Default: ‘.’.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to run EMode in verbose mode for debugging. Default: False.</p></li>
+<li><p><strong>roaming</strong> (<em>bool</em>) – Set the license manager to roaming mode. Normal mode (roaming = False) re-checks the license connection every 2 minutes, allowing licenses to reset after 10 minutes if the internet connection fails. Roaming mode (roaming = True) can be used to extend the license re-check to 24 hours to support long simulations without continuously re-checking the license. When ending a session normally on roaming, the license is checked-in. However, when a session crashes, the license will remain checked-out until 24 hours after the start. Use the <code class="docutils literal notranslate"><span class="pre">clear</span></code> parameter or the <a class="reference internal" href="#pythonemodelogin"><span class="std std-ref">EMode Login</span></a> session clearing to terminate ghost license check-outs. Default: False.</p></li>
+<li><p><strong>open_existing</strong> (<em>bool</em>) – Whether to open an existing file or to start a new simulation. Default: False.</p></li>
+<li><p><strong>new_name</strong> (<em>bool</em><em> or </em><em>str</em>) – New name of opened existing file so the original file does not get modified. If False the original name is used. The extension ‘.eph’ will be added to this name. Default: False.</p></li>
+<li><p><strong>priority</strong> (<em>str</em>) – Set the CPU process priority. ‘pH’: High; ‘pAN’: Above normal; ‘pN’: Normal; ‘pBN’: Below normal; ‘pI’: Idle. Default: ‘pN’ (Normal).</p></li>
+<li><p><strong>emode_cmd</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location, or if multiple versions are installed in different locations.</p></li>
+<li><p><strong>force_open</strong> (<em>bool</em>) – If a simulation file with this name is already open elsewhere, open it anyway instead of auto-renaming. Default: False.</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) – Whether to save the simulation file when the session ends. Set to False to run without writing to disk. Default: True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="functions">
+<h2>Functions</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code> package provides access to EMode Login GUI and to the EMode simulation files without using an active EMode license. This is helpful for analyzing simulation data without checking out an EMode license or for sharing the EMode simulation results with a collaborator who does not have an EMode license.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="EModeLogin">
+<span class="sig-name descname"><span class="pre">EModeLogin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Opens the EMode Login GUI to input your EMode Photonix account credentials, view active license subscriptions, and view or clear active sessions (see <a class="reference internal" href="#pythonemodelogin"><span class="std std-ref">EMode Login</span></a>). Once logged in, click the exit button to close the GUI and save the login credentials.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="open_file">
+<span class="sig-name descname"><span class="pre">open_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emode'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Opens an EMode simulation file with the extension ‘.eph’ or ‘.mat’ and returns a dictionary with the file contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>str</em>) – Name of the simulation file. The ‘.eph’ or ‘.mat’ extension is optional to include with the name. Default: ‘emode’.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>; if given, overrides it. Default: None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with all keys and data from the specified EMode simulation file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emode'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Returns the contents of a specified variable from an EMode simulation file with the extension ‘.eph’ or ‘.mat’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>str</em>) – Name of the variable to return from EMode.</p></li>
+<li><p><strong>sim</strong> (<em>str</em>) – Name of the simulation file. The ‘.eph’ or ‘.mat’ extension is optional to include with the name. Default: ‘emode’.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>; if given, overrides it. Default: None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Requested item from EMode.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int, float, str, or array-like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">inspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emode'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Get the names of all top-level variables from EMode simulation file with the extension ‘.eph’ or ‘.mat’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>str</em>) – Name of the simulation file. The ‘.eph’ or ‘.mat’ extension is optional to include with the name. Default: ‘emode’.</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – Alternative to <code class="docutils literal notranslate"><span class="pre">sim</span></code>; if given, overrides it. Default: None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of the top-level variable names in the file. Per-profile results are nested under <code class="docutils literal notranslate"><span class="pre">profiles</span></code> and are read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=...)</span></code> or the typed accessors; see <a class="reference internal" href="emodeguide/variables.html"><span class="doc">Variable Descriptions</span></a>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="constants">
+<h2>Constants</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection.constants</span></code> module contains the following constants.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="c">
+<span class="sig-name descname"><span class="pre">c</span></span></dt>
+<dd><p>The speed of light in vacuum in m/s.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="eps_0">
+<span class="sig-name descname"><span class="pre">eps_0</span></span></dt>
+<dd><p>The vacuum permittivity in F/m.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mu_0">
+<span class="sig-name descname"><span class="pre">mu_0</span></span></dt>
+<dd><p>The vacuum permeability in H/m.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="eta">
+<span class="sig-name descname"><span class="pre">eta</span></span></dt>
+<dd><p>The impedance of free space in Ohms.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="e">
+<span class="sig-name descname"><span class="pre">e</span></span></dt>
+<dd><p>The elementary charge in C.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hbar">
+<span class="sig-name descname"><span class="pre">hbar</span></span></dt>
+<dd><p>The reduced Planck constant in J·s.</p>
+</dd></dl>
+
+</section>
+<section id="types">
+<h2>Types</h2>
+<p>Four types are available as classes of the emodeconnection package to specify material properties, field data, and grid data.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="MaterialProperties">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MaterialProperties</span></span></dt>
+<dd><p>A container for linear and non-linear electromagnetic material parameters. At least one of <cite>n</cite> or <cite>eps</cite> <strong>must</strong> be supplied in any valid instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Scalar or tensor refractive index. Accepts <em>None</em> (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for an anisotropic material.</p></li>
+<li><p><strong>eps</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Relative permittivity tensor εᵣ. Accepts <em>None</em> (unspecified), a float, a list of 3 floats (for x,y,z), or a 3 x 3 list of list of floats for a fully anisotropic material.</p></li>
+<li><p><strong>mu</strong> (<em>Optional</em><em>[</em><em>float</em><em> | </em><em>list</em><em>[</em><em>float</em><em>] </em><em>| </em><em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Relative permeability tensor μᵣ. Same shape conventions as <cite>eps</cite>. Default: <em>None</em> (μᵣ = 1).</p></li>
+<li><p><strong>d</strong> (<em>Optional</em><em>[</em><em>~DTensorType</em><em>]</em>) – Second-order nonlinear susceptibility <em>d</em>. Expected shape is 3x6. Use <em>None</em> when the material is linear. Default: <em>None</em>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="MaterialSpec">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MaterialSpec</span></span></dt>
+<dd><p>A container that defines the adjustable properties of a material being used. All properties default to the materials
+defaults (typically 0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>~MaterialProperties</em><em>]</em>) – Either a <em>str</em> pointing to a material in the Material Database, or a MaterialProperties object. Required.</p></li>
+<li><p><strong>theta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>y</em> for the material in radians. Default: 0.</p></li>
+<li><p><strong>phi</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around <em>z</em> for the material in radians, applied <em>after</em> the theta rotation. Default: 0.</p></li>
+<li><p><strong>psi</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The angle of rotation around the crystal’s own <em>z</em> axis in radians, applied <em>before</em> the theta rotation. Only a biaxial crystal (such as KTP or LBO) or a nonlinear tensor without symmetry about <em>z</em> needs it. Default: 0.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The three angles are <em>z-y-z</em> Euler angles that turn the crystal, not the simulation axes (an active rotation). A material tensor <span class="math notranslate nohighlight">\(T\)</span> given on the crystal axes, such as the permittivity, permeability, <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> or electro-optic tensor, appears in the simulation frame as <span class="math notranslate nohighlight">\(R T R^\mathsf{T}\)</span> (with one <span class="math notranslate nohighlight">\(R\)</span> per index for a higher-rank tensor), where</p>
+<div class="math notranslate nohighlight">
+\[R = R_z(\phi) \, R_y(\theta) \, R_z(\psi)\]</div>
+<p>and <span class="math notranslate nohighlight">\(R_z\)</span>, <span class="math notranslate nohighlight">\(R_y\)</span> are the usual right-handed rotation matrices about <em>z</em> and <em>y</em>. Read right to left, the crystal is turned by <code class="docutils literal notranslate"><span class="pre">psi</span></code> about its <em>z</em> axis first, then by <code class="docutils literal notranslate"><span class="pre">theta</span></code> about <em>y</em>, then by <code class="docutils literal notranslate"><span class="pre">phi</span></code> about <em>z</em>. Column <em>a</em> of <span class="math notranslate nohighlight">\(R\)</span> is the direction crystal axis <em>a</em> points in the simulation frame, so the crystal <em>z</em> axis ends up along <span class="math notranslate nohighlight">\((\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta)\)</span>. The simulation’s propagation direction <em>z</em> then lies along the crystal direction <span class="math notranslate nohighlight">\(R^\mathsf{T} \hat{z}\)</span>. For example, <code class="docutils literal notranslate"><span class="pre">theta=-pi/2,</span> <span class="pre">psi=-phi_pm</span></code> points the propagation direction along <span class="math notranslate nohighlight">\((\cos\phi_\mathrm{pm}, \sin\phi_\mathrm{pm}, 0)\)</span> in the crystal’s <em>xy</em> plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The mole fraction for ternary materials such as AlGaAs and InGaAs. This is ignored in materials without this parameter.  Must be between 0 and 1.</p></li>
+<li><p><strong>loss</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The absorption loss of the material in dB/m.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Field">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Field</span></span></dt>
+<dd><p>A container for field data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field</strong> (<em>array-like</em>) – An array of all of the fields, including all modes with shape [N_fields, N_modes, Nx, Ny].</p></li>
+<li><p><strong>field_names</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A list of the field names, corresponding to the fields in the <code class="docutils literal notranslate"><span class="pre">field</span></code> array.</p></li>
+<li><p><strong>num_modes</strong> (<em>int</em>) – The number of modes.</p></li>
+<li><p><strong>grid</strong> (<a class="reference internal" href="#Grid" title="Grid"><em>Grid</em></a>) – A grid object associated with the fields.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Grid">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Grid</span></span></dt>
+<dd><p>A container that defines the simulation grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like</em>) – Array of the x grid center points of the mesh.</p></li>
+<li><p><strong>y</strong> (<em>array-like</em>) – Array of the y grid center points of the mesh.</p></li>
+<li><p><strong>is_pml</strong> (<em>bool</em>) – Whether the grid includes a PML region.</p></li>
+<li><p><strong>is_expanded</strong> (<em>bool</em>) – Whether the grid includes an expansion region.</p></li>
+<li><p><strong>is_bc</strong> (<em>bool</em>) – True if the boundary condition is ‘00’, False for other boundary conditions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="SMatrix">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SMatrix</span></span></dt>
+<dd><p>A dense, port-structured scattering matrix returned by EME results (e.g. from <code class="docutils literal notranslate"><span class="pre">EME()</span></code> or <code class="docutils literal notranslate"><span class="pre">get(key='S_matrix')</span></code>). Ports are indexed 0 to <code class="docutils literal notranslate"><span class="pre">num_ports</span> <span class="pre">-</span> <span class="pre">1</span></code>; port <em>i</em> spans a contiguous range of modes whose count is <code class="docutils literal notranslate"><span class="pre">port_sizes[i]</span></code>. When <code class="docutils literal notranslate"><span class="pre">port_names</span></code>/<code class="docutils literal notranslate"><span class="pre">wavelengths</span></code> are available, ports can also be addressed by name instead of by index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port_sizes</strong> (<em>tuple</em><em>[</em><em>int</em><em>, </em><em>...</em><em>]</em>) – number of modes in each port.</p></li>
+<li><p><strong>data</strong> (<em>ndarray</em>) – the complex scattering matrix, with shape <code class="docutils literal notranslate"><span class="pre">(total_modes,</span> <span class="pre">total_modes)</span></code>.</p></li>
+<li><p><strong>port_names</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>] or </em><em>None</em>) – name of each port, parallel to <code class="docutils literal notranslate"><span class="pre">port_sizes</span></code>. Default: None.</p></li>
+<li><p><strong>wavelengths</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>...</em><em>] or </em><em>None</em>) – wavelength of each port, parallel to <code class="docutils literal notranslate"><span class="pre">port_sizes</span></code>. Default: None.</p></li>
+</ul>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">SMatrix</span></code> also provides convenience methods: <code class="docutils literal notranslate"><span class="pre">transmission(from_port,</span> <span class="pre">to_port)</span></code>, <code class="docutils literal notranslate"><span class="pre">reflection(port)</span></code>, <code class="docutils literal notranslate"><span class="pre">insertion_loss_dB(from_port,</span> <span class="pre">to_port,</span> <span class="pre">mode)</span></code>, <code class="docutils literal notranslate"><span class="pre">unitarity_error()</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot(kind)</span></code>.</p>
+</dd></dl>
+
+</section>
+<section id="geometry">
+<h2>Geometry</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection.geometry</span></code> module provides classes for defining waveguide centerline paths, used primarily for EME GDS sections.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Pose">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azimuth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Position and orientation of a curve’s local frame within the section frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>w</strong> (<em>float</em>) – Lateral offset.</p></li>
+<li><p><strong>z</strong> (<em>float</em>) – Axial position.</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – x position.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – y position.</p></li>
+<li><p><strong>azimuth</strong> (<em>float</em>) – Orientation angle in radians.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Line">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Straight segment along the local +z axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>length</strong> (<em>float</em>) – Length of the segment (must be positive).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Arc">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Arc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_angle</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Circular arc segment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – Bend radius (signed; sign determines bend direction).</p></li>
+<li><p><strong>sweep_angle</strong> (<em>float</em>) – Subtended angle in radians (signed).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="BSpline">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BSpline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>B-spline curve segment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>knots</strong> (<em>list</em>) – Knot vector. Must satisfy <code class="docutils literal notranslate"><span class="pre">len(knots)</span> <span class="pre">==</span> <span class="pre">len(coefficients)</span> <span class="pre">+</span> <span class="pre">degree</span> <span class="pre">+</span> <span class="pre">1</span></code>.</p></li>
+<li><p><strong>coefficients</strong> (<em>list</em>) – Control points as a list of <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">z]</span></code> pairs.</p></li>
+<li><p><strong>degree</strong> (<em>int</em>) – Spline degree. Default: 3.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Path">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segments</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A composed waveguide centerline built from one or more curve segments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>segments</strong> (<em>tuple</em>) – Tuple of <a class="reference internal" href="#Line" title="Line"><code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></a>, <a class="reference internal" href="#Arc" title="Arc"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arc</span></code></a>, or <a class="reference internal" href="#BSpline" title="BSpline"><code class="xref py py-class docutils literal notranslate"><span class="pre">BSpline</span></code></a> objects. The total path length is the sum of all segment lengths.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py data">
+<dt class="sig sig-object py" id="Curve">
+<span class="sig-name descname"><span class="pre">Curve</span></span></dt>
+<dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[Line,</span> <span class="pre">Arc,</span> <span class="pre">BSpline]</span></code>.</p>
+</dd></dl>
+
+</section>
+<section id="ports">
+<span id="id2"></span><h2>Ports</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection.port</span></code> module provides classes for defining named ports on EME sections. Every EME section function accepts a <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument (see <a class="reference internal" href="emodeguide/eme.html"><span class="doc">EME</span></a>) that replaces the section’s default <code class="docutils literal notranslate"><span class="pre">[Port('left',</span> <span class="pre">None,</span> <span class="pre">'left'),</span> <span class="pre">Port('right',</span> <span class="pre">None,</span> <span class="pre">'right')]</span></code> on a per-<code class="docutils literal notranslate"><span class="pre">side</span></code> basis: a supplied port replaces every existing port on that side, and multiple ports may share a side. Ports are addressed globally as <code class="docutils literal notranslate"><span class="pre">&quot;&lt;section_name&gt;.&lt;port_name&gt;&quot;</span></code> for explicit wiring with <a class="reference internal" href="emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a>.</p>
+<p><strong>Connecting two ports pins their coordinate systems together.</strong> The two ports’ origins, which are the horizontal center and bottom edge of each port’s cross-section, are made to coincide, so a section is positioned by the connection rather than by absolute coordinates. Because the origin is the <em>bottom</em> edge in y, two profiles of different heights stay aligned at their substrate rather than at their vertical centers. Use <code class="docutils literal notranslate"><span class="pre">offset</span></code> below to displace a section off that shared origin.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="Port">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A named port on a section.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Port</span></code> carries two offsets that mean different things: <code class="docutils literal notranslate"><span class="pre">window.offset</span></code> says <em>which part of this section’s cross-section the port exposes</em>, while <code class="docutils literal notranslate"><span class="pre">offset</span></code> says <em>where this section sits</em> relative to what the port connects to. In short, <code class="docutils literal notranslate"><span class="pre">window</span></code> answers “which part of me?” and <code class="docutils literal notranslate"><span class="pre">offset</span></code> answers “where am I?”. A window never moves a section, and an offset never crops one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Port name, unique within its section.</p></li>
+<li><p><strong>window</strong> (<a class="reference internal" href="#Bounds" title="Bounds"><em>Bounds</em></a><em> or </em><em>None</em>) – A rectangular sub-region of the port’s full cross-section to isolate, positioned within <em>this section’s own</em> cross-section. Must overlap the section’s profile. When set on a port that is not connected to anything (an unclaimed, external boundary port), or on a connected port that shares its side with other windows, the port’s modes are solved on just this window instead of the section’s full cross-section. This is the physically correct choice for exciting or measuring a single waveguide within a wider multi-waveguide cross-section (e.g. one arm of a directional coupler), rather than the coupled full-cross-section supermode. Default: None (the port sees the section’s entire cross-section).</p></li>
+</ul>
+</dd>
+</dl>
+<p>A windowed port behaves as follows.</p>
+<ul class="simple">
+<li><p>A window keeps only the modes its content guides, those whose effective index is above what the layer stacks at its edges guide. The rest are standing waves between the window’s walls, which the section does not have, so they are dropped, and a windowed port can have fewer modes than <code class="docutils literal notranslate"><span class="pre">num_modes</span></code>. At least one mode, the one of largest index, is always kept. A section’s own ports, without a window, keep all their modes.</p></li>
+<li><p>Several windows on one side of a section (the bus and ring arms of a ring coupler, say) are matched to the section together, in one junction, and then read out as separate ports, so together they conserve power. A window connected to another section with <a class="reference internal" href="emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> takes part in the same junction and passes its light on to that section from there. A connection windowed on both of its ends keeps a junction of its own.</p></li>
+<li><p>With the FDM, each edge of a window is moved to the nearest cell edge of the section’s own mesh (by at most half a cell), so the window and the section share their grid and the junction stays reciprocal.</p></li>
+<li><p>Each windowed port is placed in the layout on its own window, so a section connected to one window is laid out on that window.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>side</strong> (<em>str</em>) – Which end of the section this port is declared on, either ‘left’ or ‘right’.</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] transverse displacement of this section’s cross-section relative to the port it connects to: <code class="docutils literal notranslate"><span class="pre">offset=(1300,</span> <span class="pre">0)</span></code> places this section’s content 1300 nm in +x from the connection’s shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler’s input port <code class="docutils literal notranslate"><span class="pre">offset</span></code> so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section <code class="docutils literal notranslate"><span class="pre">offset=</span></code> argument (see <a class="reference internal" href="emodeguide/eme.html"><span class="doc">EME</span></a>) is this same displacement applied to every port at once; setting both on one section raises an <a class="reference internal" href="#ArgumentError" title="ArgumentError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgumentError</span></code></a>.</p></li>
+<li><p><strong>basis_transform</strong> (<em>AngledFacetMap</em><em> or </em><em>None</em>) – Declares an angled facet on this port. Build it with <a class="reference internal" href="#make_angled_facet_port" title="make_angled_facet_port"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a> rather than constructing one directly. Default: None (the port’s cross-section is normal to the propagation axis).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="Bounds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A rectangular sub-window of a port’s full cross-section, used as <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">window</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window_width</strong> (<em>float</em>) – Width of the window, in the cross-section’s x-direction.</p></li>
+<li><p><strong>window_height</strong> (<em>float</em>) – Height of the window, in the cross-section’s y-direction.</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Position of the window within the port’s full cross-section: the x-coordinate of the window’s horizontal center, and the y-coordinate of the window’s bottom edge. Note the asymmetry: the second entry is the window’s <strong>bottom</strong>, not its center, matching the cross-section’s own y-axis which starts at 0 at the bottom of the profile. A full-height window therefore wants <code class="docutils literal notranslate"><span class="pre">y=0</span></code>, not <code class="docutils literal notranslate"><span class="pre">-window_height/2</span></code>. The window must overlap the section’s profile.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="make_angled_facet_port">
+<span class="sig-name descname"><span class="pre">make_angled_facet_port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polar_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degrees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Build a <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> whose cross-section is tilted about a hinge line, modelling an angled facet: the plane where this section meets its neighbour is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode’s acceptance cone; for a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the <code class="docutils literal notranslate"><span class="pre">ports</span></code> argument of the waveguide section that ends at the facet, and wire it with <a class="reference internal" href="emodeguide/eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a> if it is not the section’s default left/right adjacency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Port name, unique within its section.</p></li>
+<li><p><strong>side</strong> (<em>str</em>) – Which end of the section the facet is on, either ‘left’ or ‘right’.</p></li>
+<li><p><strong>pivot_angle</strong> (<em>float</em>) – Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless <code class="docutils literal notranslate"><span class="pre">degrees</span></code> is False. 0 is an untilted facet. The sign sets which way the transmitted beam deflects.</p></li>
+<li><p><strong>polar_angle</strong> (<em>float</em>) – Orientation of the hinge line in the transverse plane: 0 for a vertical hinge (the facet is tilted in the x–z plane), ±90 for a horizontal one. Only these axis-aligned values are accepted. Default: 0.</p></li>
+<li><p><strong>pivot_point</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – [nm] a point <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> the hinge line passes through, in the section’s own cross-section coordinates. Default: None (the horizontal centre of the cross-section, at its vertical middle).</p></li>
+<li><p><strong>degrees</strong> (<em>bool</em>) – Whether the angles are in degrees (True) or radians (False). Default: True.</p></li>
+<li><p><strong>window</strong> (<a class="reference internal" href="#Bounds" title="Bounds"><em>Bounds</em></a><em> or </em><em>None</em>) – As <a class="reference internal" href="#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">window</span></code>. Default: None.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Three things to know before using one.</p>
+<ul class="simple">
+<li><p>A facet is taken by the junction kernel directly. The junction is solved with the facet’s forward and backward traces kept explicit; a facet at zero tilt gives the same answer as no facet.</p></li>
+<li><p>The facet belongs on the waveguide side of the junction. It cannot sit on a <a class="reference internal" href="emodeguide/eme.html#pwd_section" title="pwd_section"><code class="xref py py-data docutils literal notranslate"><span class="pre">pwd_section</span></code></a>, whose basis is analytic, or on a profile that uses a PML; both are rejected when the EME chain is built.</p></li>
+<li><p>Size <code class="docutils literal notranslate"><span class="pre">num_modes</span></code> on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental’s reflected plus transmitted power under-runs and the solver warns; ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+</section>
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">emodeconnection.types</span></code> module also contains the following exception classes. All errors in EMode are raised and passed back to the user as one of these errors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="EModeError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EModeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Base class for all EMode exceptions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – Human-readable explanation. Default: ‘’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="ArgumentError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ArgumentError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Invalid value passed to <em>function</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Human-readable explanation.</p></li>
+<li><p><strong>function</strong> (<em>str</em><em> or </em><em>None</em>) – Function name, or None.</p></li>
+<li><p><strong>argument</strong> (<em>str</em><em> or </em><em>None</em>) – Name of the offending argument, or None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="EPHKeyError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EPHKeyError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Missing dataset or attribute <em>key</em> in the given EPH file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Details of the failure.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Path to the EPH file.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Absent key.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="FileError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FileError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Generic file-system or I/O problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Description of the error.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – File path involved.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="LicenseError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LicenseError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_type</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Operation not permitted under <em>license_type</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Explanation of the denial.</p></li>
+<li><p><strong>license_type</strong> (<em>LicenseType</em>) – Active or required licence class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="ShapeError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ShapeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape_name</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Unexpected tensor or geometry shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Explanation of the mismatch.</p></li>
+<li><p><strong>shape_name</strong> (<em>str</em>) – Symbolic name of the offending shape.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="NameError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NameError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Forbidden <em>name</em> within the given <em>type</em> category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Reason for the failure.</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – Category being searched (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;section&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;label&quot;</span></code>).</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Forbidden identifier.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="NotImplementedError">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotImplementedError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Feature is recognised but not yet implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – Description of the missing capability.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-emode">Install EMode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#emode-login">EMode Login</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-line-login">Command-line login</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-emode-class">The EMode class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#EMode"><code class="docutils literal notranslate"><span class="pre">EMode</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#EModeLogin"><code class="docutils literal notranslate"><span class="pre">EModeLogin()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#open_file"><code class="docutils literal notranslate"><span class="pre">open_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c"><code class="docutils literal notranslate"><span class="pre">c</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eps_0"><code class="docutils literal notranslate"><span class="pre">eps_0</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mu_0"><code class="docutils literal notranslate"><span class="pre">mu_0</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eta"><code class="docutils literal notranslate"><span class="pre">eta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e"><code class="docutils literal notranslate"><span class="pre">e</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hbar"><code class="docutils literal notranslate"><span class="pre">hbar</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types">Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialProperties"><code class="docutils literal notranslate"><span class="pre">MaterialProperties</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#MaterialSpec"><code class="docutils literal notranslate"><span class="pre">MaterialSpec</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Grid"><code class="docutils literal notranslate"><span class="pre">Grid</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#SMatrix"><code class="docutils literal notranslate"><span class="pre">SMatrix</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geometry">Geometry</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Pose"><code class="docutils literal notranslate"><span class="pre">Pose</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Line"><code class="docutils literal notranslate"><span class="pre">Line</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Arc"><code class="docutils literal notranslate"><span class="pre">Arc</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#BSpline"><code class="docutils literal notranslate"><span class="pre">BSpline</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Curve"><code class="docutils literal notranslate"><span class="pre">Curve</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ports">Ports</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Port"><code class="docutils literal notranslate"><span class="pre">Port</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Bounds"><code class="docutils literal notranslate"><span class="pre">Bounds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make_angled_facet_port"><code class="docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#EModeError"><code class="docutils literal notranslate"><span class="pre">EModeError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ArgumentError"><code class="docutils literal notranslate"><span class="pre">ArgumentError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#EPHKeyError"><code class="docutils literal notranslate"><span class="pre">EPHKeyError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#FileError"><code class="docutils literal notranslate"><span class="pre">FileError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#LicenseError"><code class="docutils literal notranslate"><span class="pre">LicenseError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ShapeError"><code class="docutils literal notranslate"><span class="pre">ShapeError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#NameError"><code class="docutils literal notranslate"><span class="pre">NameError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#NotImplementedError"><code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

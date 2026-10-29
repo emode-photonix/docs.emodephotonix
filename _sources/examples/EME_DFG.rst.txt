@@ -212,74 +212,74 @@ Highlighted features: ``DFGProcess`` with ``poling_period``, two simultaneous ``
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 1.7 sec
-    Solving modes completed in 4.6 sec
-    Meshing completed in 1.7 sec
-    Solving modes completed in 3.9 sec
-    Meshing completed in 1.7 sec
-    Solving modes completed in 4.3 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
+    Solving modes completed in 3.0 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.4 sec
+    pump     775.00 nm: mode 1, n_eff 2.09797
+    signal  1500.00 nm: mode 0, n_eff 1.93318
+    idler   1603.45 nm: mode 0, n_eff 1.91131
+    poling period: 4.4195 um
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.4 sec
-     completed in 0.4 sec
+     completed in 0.5 sec
+    signal gain at 4 mm: 1.234 dB
+    idler at 4 mm: 0.3114 uW
+    pump depletion: 0.908 %
+    Manley-Rowe (signal gained / idler created): 0.9877
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
 
     Solving S-matrices...
     Solving section: dfg_section... completed in 0.0 sec
-     completed in 0.0 sec
+     completed in 0.1 sec
     Exited EMode
-    pump     775.00 nm: mode 1, n_eff 2.09800
-    signal  1500.00 nm: mode 0, n_eff 1.93330
-    idler   1603.45 nm: mode 0, n_eff 1.91144
-    poling period: 4.4218 um
-    signal gain at 4 mm: 1.232 dB
-    idler at 4 mm: 0.3107 uW
-    pump depletion: 0.946 %
-    Manley-Rowe (signal gained / idler created): 0.9875
 
 
 Figures:

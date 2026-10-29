@@ -131,7 +131,7 @@ Highlighted features: a femtosecond ``PulsedSource``, ``PulsedProcess`` with :ma
             f'{band[0]:.0f}-{band[1]:.0f} nm: {r.band_energy(*band):.3f} pJ, '
             f'{r.band_power(*band) * 1e3:.2f} mW average at {repetition_rate * 1e-6:.0f} MHz'
         )
-        print(f'energy at the time window edges: {r.energy_outside_window():.1e}')
+        print(f'empty stretch of the time window: {r.smallest_window_gap():.3f}')
 
         ## The same chip with fabrication jitter on every domain wall: no mode solve.
         start = time.perf_counter()
@@ -182,77 +182,109 @@ Highlighted features: a femtosecond ``PulsedSource``, ``PulsedProcess`` with :ma
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.7 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.2 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.1 sec
+    Solving modes completed in 2.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.3 sec
+    tracked TE modes [0, 2], n_eff 1.92259 and 1.82023
+    poling period: 4.4189 um to 3.5351 um
 
     Solving S-matrices...
     Solving section: ppln... completed in 0.0 sec
      completed in 0.0 sec
-    Preparing the pulse chain...Meshing completed in 1.2 sec
-    Solving modes completed in 1.8 sec
-    Meshing completed in 1.2 sec
+    Preparing the pulse chain...Meshing completed in 0.0 sec
+    Solving modes completed in 2.0 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.0 sec
+    Meshing completed in 0.0 sec
     Solving modes completed in 2.2 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.2 sec
-    Meshing completed in 1.2 sec
+    Meshing completed in 0.0 sec
     Solving modes completed in 2.4 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.7 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.5 sec
-    Meshing completed in 1.3 sec
-    Solving modes completed in 2.5 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.5 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.2 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.4 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.2 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.3 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.6 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.4 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.6 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.8 sec
-    Meshing completed in 1.2 sec
+    Meshing completed in 0.0 sec
     Solving modes completed in 2.1 sec
-    Meshing completed in 1.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.4 sec
+    Meshing completed in 0.0 sec
     Solving modes completed in 2.6 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.7 sec
-    Meshing completed in 1.2 sec
-    Solving modes completed in 2.8 sec
-    Meshing completed in 1.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.4 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.5 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.5 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.9 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.6 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.9 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.4 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.9 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.4 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.6 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.6 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.5 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.0 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.9 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 1.8 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.0 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.2 sec
+    Meshing completed in 0.0 sec
     Solving modes completed in 2.3 sec
-     completed in 1 min 45.9 sec
-    Propagating the pulse... completed in 3 min 13.5 sec
-    Exited EMode
-    tracked TE modes [0, 2], n_eff 1.92271 and 1.82064
-    poling period: 4.4212 um to 3.5369 um
-    EME() with the pulse: 300 s
-    field patterns: 4, propagation steps: 2212
+    Meshing completed in 0.0 sec
+    Solving modes completed in 2.1 sec
+     completed in 2 min 29.5 sec
+    Propagating the pulse... completed in 1 min 6.8 sec
+    EME() with the pulse: 217 s
+    field patterns: 4, propagation steps: 2577
     output energy: 99.90 pJ of 100 pJ
-      in TE mode 0: 99.900 pJ
+      in TE mode 0: 99.888 pJ
       in TE mode 2: 0.000 pJ
-    700-800 nm: 40.791 pJ, 4.08 mW average at 100 MHz
-    energy at the time window edges: 5.1e-09
-    pulse_propagate() with jittered walls: 194 s
-    700-800 nm with 100 nm rms wall jitter: 38.408 pJ
+    700-800 nm: 39.308 pJ, 3.93 mW average at 100 MHz
+    empty stretch of the time window: 0.906
+    pulse_propagate() with jittered walls: 67 s
+    700-800 nm with 100 nm rms wall jitter: 37.078 pJ
+    Exited EMode
 
 
 Figures:

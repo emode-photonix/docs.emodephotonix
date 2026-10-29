@@ -1,0 +1,162 @@
+
+Simulation setup
+----------------
+
+.. data:: settings
+
+    Specify the simulation settings.
+
+    :param str profile: name of the profile these settings apply to, default: '_default'
+    :param float wavelength: [nm] simulation wavelength, or a list of wavelengths for a multi-wavelength profile that ``FDM()``, ``FEM()``, ``solve()`` and ``EME()`` solve at each one. Setting a new wavelength on a multi-wavelength profile starts it over at that wavelength, default: 1550
+    :param float frequency: [Hz] simulation frequency (an alternative to setting the wavelength), default: None
+    :param excitation: declare a CW pump driving the circuit (EMode\ :sup:`3D`\  only), as ``Source(port=..., wavelength=..., mode=0, power=1.0, phase=0.0)`` from ``emodeconnection``, where ``power`` is in W and ``phase`` in radians. ``port`` is a bare side ('left'/'right') or a qualified '<section>.<port>' name, resolved when the circuit is built, and ``wavelength`` [nm] is matched against the circuit's own wavelengths. This is what makes :data:`EME` solve the power-dependent response of a :math:`\chi^{(2)}` section in addition to the small-signal scattering matrix; the result is read back with ``get('response')``, and the declared source with ``get('sources')``. A ``PulsedSource`` instead launches a femtosecond pulse for the pulsed nonlinear solver, see :ref:`pulsed nonlinear propagation <pulsed-propagation>`. Default: None
+    :type excitation: Source or PulsedSource or None
+    :param float x_resolution: [nm] resolution in the x-direction, default: 10
+    :param float y_resolution: [nm] resolution in the y-direction, default: 10
+    :param float window_width: [nm] simulation window width
+    :param float window_height: [nm] simulation window height
+    :param boundary_condition: boundary condition set as a string with two characters 'XX'; the first character is the south boundary condition, the second character is the west boundary condition; '0': no symmetry (metal boundary), 'S': symmetric Ex, 'A': anti-symmetric Ex; alternatively, 'TE' and 'TM' can be specified to use the any symmetry available to find the fundamental TE and TM modes; use 'TE-h', 'TE-v', 'TM-h', and 'TM-v' to specify only horizontal or vertical symmetry for TE or TM modes; when using an (anti-)symmetric boundary, the ``pml_NSEW_bool`` setting is copied from the north/east perimeter to the south/west perimeter; default: '00'
+    :type boundary_condition: str, length = 2
+    :param int num_modes: number of modes to solve for, default: 1
+    :param str field_to_solve: either 'Et' or 'Ht' to specify whether the transverse electric field or magnetic field is solved, default: 'Et'
+    :param float max_effective_index: maximum value for the effective refractive index, if ``max_effective_index`` is 0 the maximum refractive index found in the simulation window is used, default: 0
+    :param float tolerance: eigenmode solver convergence tolerance, if ``tolerance`` = 0 the computer's precision is used, default: 1e-12
+    :param int solver_threads: maximum number of threads the sparse solver uses to factor this profile's systems, where 0 lets the solver choose (up to every core), default: 0
+    :param str sparse_solver: sparse direct solver for this profile's solves, one of ``'auto'``, ``'rslab'`` or ``'pardiso'``, where ``'auto'`` uses MKL PARDISO on the x86 installers (Linux, Windows and Intel Mac) and rslab on the Apple silicon installer, and ``'pardiso'`` is available only in the x86 installers, default: 'auto'
+    :param str solver: the mode solver used by ``solve()``, ``EME()`` and ``sweep()``: 'FDM' (finite difference), 'FEM' (finite element, EMode\ :sup:`3D`\  only), or 'default', which is the FDM in every session (the FEM runs only when asked for). Calling ``FDM()`` or ``FEM()`` sets this to that solver, default: 'default'
+    :param int fem_order: (FEM) element order, 1 or 2; order 2 converges much faster for the same mesh, default: 2
+    :param float fem_points_per_wavelength: (FEM) mesh points per wavelength in each material before refinement, default: 4
+    :param float fem_min_angle: [degrees] (FEM) smallest triangle angle allowed in the mesh, at most 34, default: 30
+    :param float fem_refine_fraction: (FEM) fraction of the estimated error that each refinement step targets, marking the fewest triangles that carry it, default: 0.5
+    :param int fem_max_refinements: (FEM) most adaptive refinement steps after the first solve, 0 disables refinement, default: 2
+    :param float fem_neff_tolerance: (FEM) refinement stops once no requested mode's effective index changes by more than this relative amount, default: 1e-6
+    :param int fem_max_dofs: (FEM) refinement stops before a mesh would exceed this many unknowns, default: 2000000
+    :param float fem_mesh_wavelength: [nm] (FEM) build and refine the mesh at this wavelength and solve every wavelength on it, so the results of a wavelength scan change smoothly with wavelength. 0 meshes each solve at its own wavelength. ``sweep()`` over wavelength, a wavelength list and a pulsed simulation set it to their shortest wavelength when it is 0, default: 0
+    :param float bend_radius: [nm] waveguide bend radius relative to the center of the window, must be positive and larger than window_width/2, if ``bend_radius`` = 0 no bending is used in the calculation, default: 0
+    :param str bend_method: how a nonzero ``bend_radius`` is solved, either 'cylindrical' (the bend factor 1 + x/R added to the mode solver) or 'TO' (the straight cross-section solved with its material transformed by the bend's conformal map, transformation optics). Both work with the FDM and the FEM, in 2D and 3D sessions, and their effective indices differ by about 6e-4 at R = 10 um. With a PML, set ``max_effective_index`` just above the guided mode, since a TO bend's spectrum starts with PML modes. ``report()`` names the method next to the solver, and the 'Bend Mode Solvers' example compares the two, default: 'cylindrical'
+    :param pml_NSEW_bool: indicates whether to use a pml on each of the 4 boundaries, [north, south, east, west], 0: no pml, 1: use pml, default: [0,0,0,0]
+    :type pml_NSEW_bool: list, length = 4
+    :param num_pml_layers: number of pml layers to use, either a single value that is applied to all boundaries or a list of 4 values; [north, south, east, west], default: 10
+    :type num_pml_layers: int or list with length = 4
+    :param pml_thickness: [nm] pml thickness, either a single value that is applied to all boundaries or a list of 4 values; [north, south, east, west]; a value of 0 on a boundary falls back to ``num_pml_layers`` there, so the two settings can be mixed per boundary. This is the delivered thickness, measured from the simulation window edge out to the outer pml wall, so it stays fixed when the resolution changes -- which is what a grid convergence sweep needs, since ``num_pml_layers`` counts cells and so shrinks the absorber as the mesh is refined. Because the delivered thickness is the integral of the ``pml_kappa_max``/``pml_order`` grading over the layer stack, the number of layers this resolves to depends on those two settings; it is also quantized to a whole number of layers, and a request that does not land on one is rounded with a warning stating what was delivered. If both ``pml_thickness`` and ``num_pml_layers`` are given in the same ``settings()`` call, ``pml_thickness`` takes precedence; otherwise whichever of the two was set most recently applies, default: 0
+    :type pml_thickness: float or list with length = 4
+    :param float pml_order: polynomial grading exponent of the pml stretch profile, default: 3
+    :param float pml_reflection: the target round-trip reflection that the pml is designed for, which sets the maximum pml conductivity; must be greater than 0 and less than 1, default: 1e-8
+    :param float pml_kappa_max: the maximum real coordinate stretch, reached at the outer pml face; must be at least 1, default: 7
+    :param float pml_alpha_max: the complex-frequency-shifted (CFS) pml term, where 0 disables it; raise it if the solve returns too many artificial pml modes, where ``0.1*omega*eps_0`` is a reasonable starting point that is small enough to barely move the physical modes, default: 0
+    :param bool remove_pml_modes_bool: automatically remove the artificial modes of the pml regions from the mode list, identified as modes carrying less than 75% of their power inside the simulation window, default: False
+    :param bool pml_seed_bool: seed the pml eigensolve with the fundamental mode of the same structure solved without a pml, so the guided fundamental lands at mode 0 without a hand-tuned ``max_effective_index``; costs one extra single-mode solve, default: False
+    :param background_material: background material, either a material name (from the material database) or a ~MaterialProperties or ~MaterialSpec object, default: "Vacuum"
+    :type background_material: str or ~MaterialProperties or ~MaterialSpec
+    :param expansion_resolution: [nm] single value or list of 4 values for the stretched grid resolution; [north, south, east, west], the grid is gradually transitioned from res to ``expansion_resolution``, default: 20
+    :type expansion_resolution: float or list
+    :param expansion_size: [nm] single value or list of 4 values for the approximate stretched distance; [north, south, east, west], default: 0
+    :type expansion_size: float or list
+    :param bool subpixel_avg: whether to use sub-pixel averaging of the permittivity/permeability at shape boundaries for improved accuracy, default: True
+    :param bool generate_chi2: whether to generate the second-order nonlinear susceptibility (chi2) tensor for the simulation window, default: False
+    :param bool include_heat: whether to include heat-related material properties when meshing for FEM heat calculations, default: True
+    :param bool include_scattering: compute the interfacial scattering loss of every shape with roughness after each solve of this profile, whether the solve comes from ``FDM()``, ``FEM()``, ``solve()``, ``EME()`` or ``sweep()``, the same as calling ``scattering()`` after each one. ``FDM(scattering=True)`` does this for a single solve. Default: False
+    :param propagation_resolution: [nm] resolution in the z-direction for plotting EME propagation results, default: wavelength/10
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: add_material
+
+    Add a custom material by specifying a wavelength dependent equation.
+
+    :param str name: material name, this will override the built-in material name if an idential name is used; a variable ``user_material_[name]`` will be created
+    :param str refractive_index_equation: refractive index equation to evaluate as a function of the wavelength parameter 'x', where imaginary numbers are specified with a preceding 'j'; only the following characters are allowed in the equation string: "0123456789 x j . + - ^ * / ( ) [ ]"; a list of three equations can also be specified for non-isotropic materials, like '[n_xx, n_yy, n_zz]'; the string must have less than 1000 characters
+    :param str wavelength_unit: either 'nm' or 'um' to specify the unit for the wavelength parameter 'x', default: 'um'
+    :param list wavelength_range: [um] list of the minimum and maximum wavelength recommended for the refractive index equation, default: [0.2, 2.0]
+    :param str citation: reference displayed in material explorer for the custom material, default: 'User defined.'
+    :param float loss: the loss of the material in 'dB/m', default: 0.
+    :param float thermal_conductivity: [W/m·K] thermal conductivity of the material, default: 1e-10
+    :param float resistivity: [Ohm-nm] resistivity of the material, default: infinity
+    :param float dn_dT: [K^-1] change in refractive index per change in temperature, relative to 298 K, default: 0
+    :param float eps_r_dc: [-] relative permittivity at ~1 kHz, default: 1.0
+    :param d: second-order nonlinear susceptibility d-matrix with shape (3, 6); use None for linear materials, default: None
+    :type d: list (3x6) or None
+    :param float phi: [rad] rotation of the crystal about z, applied last, default: 0
+    :param float theta: [rad] rotation of the crystal about y, default: 0
+    :param float psi: [rad] rotation of the crystal about its own z axis, applied first, default: 0. The three angles turn the crystal by R = Rz(phi) Ry(theta) Rz(psi), the same convention as :class:`MaterialSpec`
+    :param dict property_refs: citation string per property name (``'d'``, ``'r'``, ``'thermal_conductivity'``, ``'dn_dT'``, ``'eps_r_dc'``, ``'resistivity'``), default: {}
+    :param str simulation_name: simulation name, default: 'emode'
+
+.. data:: import_database
+
+    Import a custom material database by specifying custom materials in a text file.
+
+    :param str filename: name of text file to be imported
+    :param str simulation_name: simulation name, default: 'emode'
+
+    Here is an example of several custom materials in the database text file to be imported. See the ``add_material`` function for parameter details. Each custom material must contain the ``name`` and ``refractive_index_equation``, separated by a new line. Comments can be added with '#' or '%'. A ``name = ...`` line starts a new record (the spaces around ``=`` are optional); a record with no ``refractive_index_equation`` raises an error and nothing in the file is imported. ``wavelength_range`` is always in um regardless of ``wavelength_unit``, and defaults to ``[0.2, 2.0]`` when omitted. ``citation`` may contain an ``=`` sign.
+
+        | name = custom_name_1
+        | refractive_index_equation = equation_1
+        | wavelength_unit = um (optional)
+        | wavelength_range = [0.2, 2.0] (optional)
+        | citation = reference_1 (optional, default: "User defined by database import.")
+        |
+        | # comment about my custom_SiO2 material
+        | name = custom_SiO2
+        | refractive_index_equation = (1 + 0.696166/(1 - (0.0684043/x)^2) + 0.4079426/(1 - (0.1162414/x)^2) + 0.8974794/(1 - (9.896161/x)^2))^0.5
+        | wavelength_unit = um
+        | wavelength_range = [0.21, 6.7]
+        | citation = '(1) I. H. Malitson, "Interspecimen comparison of the refractive index of fused silica," J. Opt. Soc. Am. 55, 1205 (1965). (2) C. Z. Tan, "Determination of refractive index of silica glass for infrared wavelengths by IR spectroscopy," J. Non-Cryst. Solids 223, 158 (1998).'
+        |
+        | % comment about my custom_name_3 material
+        | name = custom_name_3
+        | refractive_index_equation = equation_3
+        | wavelength_unit = nm
+
+.. data:: shape
+
+    Create or update a shape with attributes. These parameters are saved with 'shape\_'+name+'/' preceding the attribute name. If a name is not given, a number will be allocated as the shape name.
+
+    :param str profile: name of the profile to add the shape to, default: '_default'
+    :param str name: shape name, default: an auto-generated number
+    :param material: the material for this shape.  Takes a string reference to a material in the Material Database, or a ~MaterialSpec or ~MaterialProperties object. default: "Vacuum"
+    :type material: ~MaterialSpec, ~MaterialProperties, or str
+
+    A shape's relative permeability comes from its material, for example ``material=MaterialProperties(n=1.5, mu=2.0)``, and the permeability of an etched region from ``fill_material`` in the same way. ``shape()`` has no permeability argument of its own, and the older ``permeability`` and ``fill_permeability`` arguments raise an error that says so.
+
+    :param float loss_dB_per_m: [dB/m] material propagation loss, if not set by the ``material`` parameter, default: 0
+    :param vertices: list of N vertices that define a closed polygon, or a list of such vertex lists to define multiple disjoint polygons in one shape; if specified ``vertices`` is used to define the shape (``width``, ``height``, ``position``, ``mask``, ``etch``, ``fill`` are ignored), to disable ``vertices``, set ``vertices`` to 0, default: 0
+    :type vertices: list (N,2), list of list (N,2), or int
+    :param float width: shape width, if left unspecified the shape is unbounded in x, extending past both sides of the simulation window, default: None
+    :param height: shape height, or 'full_height' for a shape that is unbounded upward, extending past the top of the simulation window; nothing can be automatically stacked on top of a shape of unbounded height, default: 0
+    :type height: float or str
+    :param position: centered x and y positions relative to the shape width and height, if the y position is left unspecified then it is treated like a layer stacked on top of the previous layer, if only a single value is provided it is assumed to be the x position and the y position is left unspecified, default: (0, 'auto')
+    :type position: list, length = 2
+    :param mask: mask width for etching, centered on x-position set by ``position`` and ``mask_offset``, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask_offset`` values, default: ``width``
+    :type mask: float or list
+    :param mask_offset: the x-position offset for the ``mask`` parameter, or a list of arbitrary length to specify multiple mask regions in combination with a list of ``mask`` values, default: ``0``
+    :type mask_offset: float or list
+    :param tone: 'n'/'N' or 'p'/'P' to define the pattern tone as negative or positive for the ``mask`` parameter, default: ``n``
+    :type tone: str
+    :param float etch_depth: etch depth for a layer outside the mask region, thickness = ``height`` - ``etch_depth``, default: 0
+    :param float sidewall_angle: etched sidewall angle in degrees, 0 is perfectly vertical, 90 is the maximum; only applied to etched features (``height``, ``mask``, and a nonzero ``etch_depth`` must all be specified for this parameter to have any effect), default: 0
+    :param fill_material: the material for the fill for this shape.  Takes the same values as material, as well as "transparent_fill" (the default). "transparent_fill" results in the fill being the background.
+    :type fill_material: ~MaterialSpec, ~MaterialProperties, or str
+    :param correlation_length: interfacial roughness correlation length, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, default: [0,0]
+    :type correlation_length: float or list
+    :param roughness_rms: interfacial roughness standard deviation in nm rms, a single value is applied to all interfaces, a list of 2 applies the first value to all vertical interfaces and the second value to all horizontal interfaces, default: [0,0]
+    :type roughness_rms: float or list
+    :param str shape_type: set shape type as 'planar', 'conformal' (only uses ``name``, ``material``, ``height``, and ``priority``), 'polygon' (only uses ``name``, ``vertices``, ``material`` and ``priority``), or 'ellipse' (only uses ``name``, ``material``, ``width``, ``height``, ``position``, ``sidewall_angle`` (the angle of the ellipse), and ``priority``), default: 'planar'
+    :param float priority: a number that signifies the order in which shapes will be drawn, a higher priority gets drawn over a lower number priority, default: auto-generated integer based on order called
+    :param float fem_resolution: [nm] approximate resolution to target for triangular meshing used by FEM functions, default: 500
+    :param float current: [A] current flowing through the cross-section of the shape, which can generate heat, default: 0
+    :param float voltage: [V] voltage of the shape, None for floating, default: None
+    :param bool heat_only: specifies a shape that will only be rendered when meshing for a heat calculation, default: False
+    :param str simulation_name: simulation name, default: 'emode'
+
+    .. note::
+        Shapes are positioned in absolute coordinates, independent of the simulation window, so a shape may extend beyond the window and the window can be resized or offset without re-seating the geometry. A layer whose bottom edge rests on y = 0, the reference plane that the automatic stacking starts from, is treated as the substrate: its material continues downward without bound, so a window that extends below y = 0 resolves to that layer rather than to the background material.
+
+.. data:: reset
+
+    Clear simulation settings, shape definitions, or both, on the default profile.
+
+    ``'shapes'`` removes every user-defined shape from the default profile (the background remains) and discards its mesh, mode list, and analysis results; ``'settings'`` replaces the default profile with a new one at the default settings, which also removes its shapes, and resets ``propagation_resolution``; ``'all'`` does both. Named profiles created by :data:`label_profile` are not affected. Any other ``kind`` raises an error.
+
+    :param str kind: either 'shapes', 'settings', or 'all' to specify what data is cleared, default: 'shapes'
+    :param str simulation_name: simulation name, default: 'emode'

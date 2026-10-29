@@ -32,7 +32,6 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
@@ -43,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,14 +50,22 @@
     <script src="../_static/code-tabs.js?v=c983d12e"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/Bend_Solvers';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/examples/Bend_Solvers.html" />
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Angled: LNOI" href="LNOI.html" />
+    <link rel="next" title="Straight Waveguide Convergence" href="Straight_Convergence.html" />
     <link rel="prev" title="Bending: SiN" href="SiN.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="1.0.7" />
   </head>
   
   
@@ -194,6 +201,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -288,6 +315,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -308,6 +355,9 @@
 <li class="toctree-l1"><a class="reference internal" href="SOI.html">Basic: SOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SiN.html">Bending: SiN</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Bend Mode Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Straight_Convergence.html">Straight Waveguide Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ring_Design.html">Ring Resonator Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fiber_SMF28.html">SMF-28 Fiber</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LNOI.html">Angled: LNOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Laser.html">Scattering loss: Laser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Open.html">Open a Simulation</a></li>
@@ -321,11 +371,16 @@
 <li class="toctree-l1"><a class="reference internal" href="EME_GDS.html">EME: GDS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_Angled_Facet.html">EME: Angled Facet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_Grating_Coupler.html">EME: Grating Coupler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SBend.html">EME: S-Bend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Y_Branch.html">EME: Y-Branch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_TFLN_Ring.html">EME: TFLN Ring Resonator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_MMI.html">EME: MMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Supercontinuum.html">Nonlinear-EME: Supercontinuum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Inverse_Design.html">Nonlinear-EME: PPLN Inverse Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SFG.html">Nonlinear-EME: SFG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FEM_SOI.html">FEM: SOI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
@@ -372,19 +427,26 @@ converges. The FDM is solved on four grids and the FEM on six fixed meshes
 finest FEM mesh.</p>
 <p>The window and PMLs are optimized by convergence studies run separately. The bend radiates outward, so
 PMLs on the outer (east), top and bottom walls absorb the radiated light, and the guided mode’s
-imaginary index is its bend loss. The FEM’s PML absorbs fully in 500 nm, where the FDM’s needs 1 µm.
+imaginary index is its bend loss. The FDM’s PML needs 1 µm, and the FEM chooses its own, twice the PML’s imaginary depth (2.9 µm here).
 <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code> sits just above the guided mode, so the one mode solved is the guided mode
 rather than a PML mode. A fine mesh in the core (the shape’s <code class="docutils literal notranslate"><span class="pre">fem_resolution</span></code>) lets the FEM resolve
-the mode even at 1 point per wavelength, so its first solve uses a 100 nm core mesh and the rest 50 nm.</p>
+the mode even at 1 point per wavelength, so its first solve uses a 100 nm core mesh and the rest 50 nm.
+The bend is symmetric about the core’s horizontal midplane, so <code class="docutils literal notranslate"><span class="pre">boundary_condition='TE'</span></code> solves
+every grid and mesh on half of the window. The FDM gives the same effective index folded as on the
+full window. The FEM meshes the half window differently, which lowers its coarsest mesh’s effective
+index by 2e-5, still closer to the converged index than any FDM grid.</p>
 <p>The FEM is the best method all-around, but it requires EMode3D. Even its fastest solve is closer to the
 converged effective index than any FDM solve, so more points per wavelength mainly refine its bend
-loss, which converges much faster than the FDM’s. With EMode2D, the FDM with <code class="docutils literal notranslate"><span class="pre">bend_method='TO'</span></code>
-gives better effective index convergence than the FDM in cylindrical coordinates, but its error stops
-falling on the finest grids, and it does not give a reliable bend loss yet. The FDM in cylindrical
-coordinates converges slowest for the effective index, but its bend loss converges steadily, so use it
-when loss is important. With the FDM, choose a grid that puts the waveguide’s edges on grid lines, as
-every grid here does, or the effective index jumps from one grid spacing to the next. The FEM meshes
-the shapes’ edges and needs no such care.</p>
+loss, which converges much faster than the FDM’s. With EMode2D, the FDM in cylindrical coordinates and
+the FDM with <code class="docutils literal notranslate"><span class="pre">bend_method='TO'</span></code> solve the same discretized bend. They give the same effective index on
+every grid to every printed digit, and bend losses within 1 % of each other. Both converge at second
+order, from an effective index error of 2.9e-3 at 50 nm to 1.1e-4 at 10 nm, and at 10 nm their bend
+loss is within 2 % of the FEM’s. The TO solve takes longer on every grid, so the cylindrical
+coordinates are the faster choice with the FDM. With the FDM, choose a grid that puts the waveguide’s
+edges on grid lines, as every grid here does, or the effective index jumps from one grid spacing to
+the next. The FEM meshes the shapes’ edges and needs no such care.</p>
+<p>The mode plot is the TO solve on the 10 nm grid, drawn with <code class="docutils literal notranslate"><span class="pre">window_display=True</span></code>, which outlines
+the window and hatches its PMLs.</p>
 <p><em>This code example is licensed under the</em> <a class="reference external" href="../_static/LICENSE.html">BSD 3-Clause License</a>.</p>
 <div class="tabs docutils container" data-tabgroup="">
 <ul class="tabbar">
@@ -418,7 +480,7 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 <span class="c1">## Define common settings and the waveguide core</span>
 <span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
     <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">window_width</span><span class="o">=</span><span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span><span class="o">=</span><span class="n">window_height</span><span class="p">,</span>
-    <span class="n">num_modes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">boundary_condition</span><span class="o">=</span><span class="s1">&#39;00&#39;</span><span class="p">,</span> <span class="n">background_material</span><span class="o">=</span><span class="s1">&#39;SiO2&#39;</span><span class="p">,</span>
+    <span class="n">num_modes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">boundary_condition</span><span class="o">=</span><span class="s1">&#39;TE&#39;</span><span class="p">,</span> <span class="n">background_material</span><span class="o">=</span><span class="s1">&#39;SiO2&#39;</span><span class="p">,</span>
     <span class="n">bend_radius</span><span class="o">=</span><span class="n">bend_radius</span> <span class="o">+</span> <span class="n">x_off</span><span class="p">,</span>
     <span class="n">pml_NSEW_bool</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pml_kappa_max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_effective_index</span><span class="o">=</span><span class="mf">1.67</span><span class="p">,</span>
     <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">fem_max_refinements</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fem_min_angle</span><span class="o">=</span><span class="mi">33</span><span class="p">)</span>
@@ -427,8 +489,9 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">core_mesh</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-    <span class="c1">## The FEM&#39;s PML absorbs fully in 500 nm, the FDM&#39;s needs 1 um</span>
-    <span class="n">pml</span> <span class="o">=</span> <span class="mi">500</span> <span class="k">if</span> <span class="n">solver</span> <span class="o">==</span> <span class="s1">&#39;FEM&#39;</span> <span class="k">else</span> <span class="mi">1000</span>
+    <span class="c1">## The FDM&#39;s PML needs 1 um. The FEM chooses its own (pml_thickness 0),</span>
+    <span class="c1">## twice the PML&#39;s imaginary depth, 2.9 um here</span>
+    <span class="n">pml</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">solver</span> <span class="o">==</span> <span class="s1">&#39;FEM&#39;</span> <span class="k">else</span> <span class="mi">1000</span>
     <span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">bend_method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
                 <span class="n">x_resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">y_resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
                 <span class="n">fem_points_per_wavelength</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">pml_thickness</span><span class="o">=</span><span class="p">[</span><span class="n">pml</span><span class="p">,</span> <span class="n">pml</span><span class="p">,</span> <span class="n">pml</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
@@ -448,13 +511,13 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
         <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="s1">&#39;FDM&#39;</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
         <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;FDM&#39;</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resolution</span><span class="si">}</span><span class="s1"> nm&#39;</span><span class="p">,</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">))</span>
 
+<span class="c1">## Plot the guided mode of the finest TO grid, with the window and its PMLs</span>
+<span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="n">window_display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;bend_FDM_TO&#39;</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+
 <span class="c1">## Run all resolutions for FEM</span>
 <span class="k">for</span> <span class="n">points</span><span class="p">,</span> <span class="n">core_mesh</span> <span class="ow">in</span> <span class="n">fem_meshes</span><span class="p">:</span>
     <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="s1">&#39;FEM&#39;</span><span class="p">,</span> <span class="s1">&#39;cylindrical&#39;</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">core_mesh</span><span class="o">=</span><span class="n">core_mesh</span><span class="p">)</span>
     <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;FEM&#39;</span><span class="p">,</span> <span class="s1">&#39;cylindrical&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">points</span><span class="si">}</span><span class="s1">/wl, </span><span class="si">{</span><span class="n">core_mesh</span><span class="si">}</span><span class="s1"> nm&#39;</span><span class="p">,</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">))</span>
-
-<span class="c1">## Plot the guided mode of the finest FEM mesh</span>
-<span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;bend_FEM&#39;</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
 
 <span class="c1">## Print each solve&#39;s error against the finest FEM mesh</span>
 <span class="n">reference</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
@@ -483,52 +546,52 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 </pre></div>
 </div>
 </div></div><p>Console output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.6</span> <span class="o">-</span> <span class="n">email</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">4.0</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">6.8</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">47.5</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.4</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.0</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">6.0</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.2</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">31.5</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.7</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.1</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.1</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.2</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">11.1</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
 <span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.1</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">5.9</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">10.1</span> <span class="n">sec</span>
-<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
-<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">22.9</span> <span class="n">sec</span>
-<span class="n">Exited</span> <span class="n">EMode</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">5.4</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">5.6</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">27.3</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.6</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">5.0</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.1</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">9.7</span> <span class="n">sec</span>
 
 <span class="n">solver</span> <span class="n">method</span>                 <span class="n">mesh</span>      <span class="n">n_eff</span>     <span class="n">error</span>    <span class="n">dB</span><span class="o">/</span><span class="n">m</span>  <span class="n">time</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.663104</span>  <span class="o">-</span><span class="mf">2.9e-03</span>  <span class="mf">0.0248</span>       <span class="mf">1.0</span>
-<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">25</span> <span class="n">nm</span>   <span class="mf">1.665276</span>  <span class="o">-</span><span class="mf">7.1e-04</span>  <span class="mf">0.0180</span>       <span class="mf">4.3</span>
-<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">20</span> <span class="n">nm</span>   <span class="mf">1.665535</span>  <span class="o">-</span><span class="mf">4.6e-04</span>  <span class="mf">0.0174</span>       <span class="mf">7.3</span>
-<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">10</span> <span class="n">nm</span>   <span class="mf">1.665877</span>  <span class="o">-</span><span class="mf">1.1e-04</span>  <span class="mf">0.0166</span>      <span class="mf">48.7</span>
-<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665358</span>  <span class="o">-</span><span class="mf">6.3e-04</span>  <span class="mf">0.0000</span>       <span class="mf">1.2</span>
-<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">25</span> <span class="n">nm</span>   <span class="mf">1.665919</span>  <span class="o">-</span><span class="mf">7.0e-05</span>  <span class="mf">0.0002</span>       <span class="mf">4.3</span>
-<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">20</span> <span class="n">nm</span>   <span class="mf">1.665974</span>  <span class="o">-</span><span class="mf">1.6e-05</span>  <span class="mf">0.0003</span>       <span class="mf">7.2</span>
-<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">10</span> <span class="n">nm</span>   <span class="mf">1.666021</span>   <span class="mf">3.1e-05</span>  <span class="mf">0.0003</span>      <span class="mf">35.8</span>
-<span class="n">FEM</span>    <span class="n">cylindrical</span>    <span class="mi">1</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">100</span> <span class="n">nm</span>   <span class="mf">1.665985</span>  <span class="o">-</span><span class="mf">5.2e-06</span>  <span class="mf">0.0168</span>       <span class="mf">2.8</span>
-<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">1</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665982</span>  <span class="o">-</span><span class="mf">7.5e-06</span>  <span class="mf">0.0166</span>       <span class="mf">3.4</span>
-<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">2</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665982</span>  <span class="o">-</span><span class="mf">7.5e-06</span>  <span class="mf">0.0165</span>       <span class="mf">4.5</span>
-<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">3</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665987</span>  <span class="o">-</span><span class="mf">3.3e-06</span>  <span class="mf">0.0164</span>       <span class="mf">8.2</span>
-<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">4</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665987</span>  <span class="o">-</span><span class="mf">3.2e-06</span>  <span class="mf">0.0164</span>      <span class="mf">12.1</span>
-<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">6</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665990</span>   <span class="mf">0.0e+00</span>  <span class="mf">0.0164</span>      <span class="mf">27.7</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.663079</span>  <span class="o">-</span><span class="mf">2.9e-03</span>  <span class="mf">0.0252</span>       <span class="mf">0.4</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">25</span> <span class="n">nm</span>   <span class="mf">1.665263</span>  <span class="o">-</span><span class="mf">7.2e-04</span>  <span class="mf">0.0182</span>       <span class="mf">1.4</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">20</span> <span class="n">nm</span>   <span class="mf">1.665525</span>  <span class="o">-</span><span class="mf">4.6e-04</span>  <span class="mf">0.0175</span>       <span class="mf">2.3</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">10</span> <span class="n">nm</span>   <span class="mf">1.665872</span>  <span class="o">-</span><span class="mf">1.1e-04</span>  <span class="mf">0.0166</span>      <span class="mf">11.5</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.663079</span>  <span class="o">-</span><span class="mf">2.9e-03</span>  <span class="mf">0.0252</span>       <span class="mf">0.9</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">25</span> <span class="n">nm</span>   <span class="mf">1.665263</span>  <span class="o">-</span><span class="mf">7.2e-04</span>  <span class="mf">0.0182</span>       <span class="mf">4.0</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">20</span> <span class="n">nm</span>   <span class="mf">1.665525</span>  <span class="o">-</span><span class="mf">4.6e-04</span>  <span class="mf">0.0175</span>       <span class="mf">6.7</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">10</span> <span class="n">nm</span>   <span class="mf">1.665872</span>  <span class="o">-</span><span class="mf">1.1e-04</span>  <span class="mf">0.0166</span>      <span class="mf">33.4</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>    <span class="mi">1</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">100</span> <span class="n">nm</span>   <span class="mf">1.665965</span>  <span class="o">-</span><span class="mf">2.1e-05</span>  <span class="mf">0.0166</span>       <span class="mf">1.0</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">1</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665973</span>  <span class="o">-</span><span class="mf">1.3e-05</span>  <span class="mf">0.0166</span>       <span class="mf">1.3</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">2</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665975</span>  <span class="o">-</span><span class="mf">1.1e-05</span>  <span class="mf">0.0164</span>       <span class="mf">1.8</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">3</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665979</span>  <span class="o">-</span><span class="mf">6.8e-06</span>  <span class="mf">0.0164</span>       <span class="mf">3.4</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">4</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665982</span>  <span class="o">-</span><span class="mf">4.1e-06</span>  <span class="mf">0.0164</span>       <span class="mf">5.7</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">6</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665986</span>   <span class="mf">0.0e+00</span>  <span class="mf">0.0164</span>      <span class="mf">10.9</span>
+<span class="n">Exited</span> <span class="n">EMode</span>
 </pre></div>
 </div>
 <p>Figures:</p>
@@ -536,7 +599,7 @@ Python</li></ul><div class="tab codetab selected" data-id="0">
 <img alt="../_images/bend_solvers_convergence.png" src="../_images/bend_solvers_convergence.png" style="width: 500px;" />
 </figure>
 <figure class="align-center" style="width: 400px">
-<img alt="../_images/bend_FEM.png" src="../_images/bend_FEM.png" style="width: 400px;" />
+<img alt="../_images/bend_FDM_TO.png" src="../_images/bend_FDM_TO.png" style="width: 400px;" />
 </figure>
 </section>
 

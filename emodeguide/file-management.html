@@ -32,7 +32,6 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
@@ -43,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,6 +50,14 @@
     <script src="../_static/code-tabs.js?v=c983d12e"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/file-management';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/emodeguide/file-management.html" />
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +65,7 @@
     <link rel="prev" title="EMode Guide" href="../emodeguide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="1.0.7" />
   </head>
   
   
@@ -194,6 +201,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -292,6 +319,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -317,6 +364,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fem.html">Multi-Physics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
 <ul class="nav bd-sidenav">
@@ -502,7 +550,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="create_profile_set">
 <span class="sig-name descname"><span class="pre">create_profile_set</span></span></dt>
-<dd><p>Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped. The default <code class="docutils literal notranslate"><span class="pre">profile_set_name</span></code> replaces the <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> profile.</p>
+<dd><p>Group several single-wavelength profiles into one named multi-wavelength profile set, keyed internally by wavelength. All named profiles must share identical shapes, and each must be at a distinct wavelength. The original individual profiles are deleted once grouped. The default <code class="docutils literal notranslate"><span class="pre">profile_set_name</span></code> replaces the <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> profile. One member of the set is <code class="docutils literal notranslate"><span class="pre">profile='SET.WAVELENGTH'</span></code> (<code class="docutils literal notranslate"><span class="pre">'wg.1550'</span></code>) or <code class="docutils literal notranslate"><span class="pre">profile='SET.MEMBER'</span></code> by its original name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -531,11 +579,11 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="clear_field_data">
 <span class="sig-name descname"><span class="pre">clear_field_data</span></span></dt>
-<dd><p>Deletes the following data from every profile, including the default profile, to reduce the ‘.eph’ file size: <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, <code class="docutils literal notranslate"><span class="pre">permeability</span></code>.</p>
+<dd><p>Deletes the following data from one profile, or from every profile including the default profile, to reduce the ‘.eph’ file size: <code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, <code class="docutils literal notranslate"><span class="pre">permeability</span></code>. A profile that does not exist raises an error.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>profile</strong> (<em>str</em>) – currently ignored; field data is cleared from all profiles regardless of this argument, default: ‘_default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em>) – name of the profile to clear (<code class="docutils literal notranslate"><span class="pre">'NAME.WAVELENGTH'</span></code> for one wavelength of a multi-wavelength profile), default: None (every profile)</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>
 </dd>
@@ -549,7 +597,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether all field data should be saved (so the <code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, and <code class="docutils literal notranslate"><span class="pre">S</span></code> fields can be accessed without an EMode license) or just the raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>), default: False</p></li>
+<li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether to save each solved profile’s full <code class="docutils literal notranslate"><span class="pre">E</span></code> and <code class="docutils literal notranslate"><span class="pre">H</span></code> fields as well as its raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>). A file saved this way opens with the fields ready, which take about five times the space of the raw field data. Each save decides again, so a plain save of a reopened file leaves them out, default: False</p></li>
 <li><p><strong>file_type</strong> (<em>str</em>) – file type to save the simulation file as, either ‘eph’ or ‘mat’, default: ‘eph’</p></li>
 <li><p><strong>close</strong> (<em>bool</em>) – whether to close the simulation file after saving, default: False</p></li>
 <li><p><strong>new_save_path</strong> (<em>str</em>) – if set, saves the simulation file in this new path, default: None</p></li>
@@ -567,7 +615,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>save</strong> (<em>bool</em>) – saves simulation file if True and deletes the simulation file if False, default: True</p></li>
-<li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether all field data should be saved (so the <code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, and <code class="docutils literal notranslate"><span class="pre">S</span></code> fields can be accessed without an EMode license) or just the raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>), default: False</p></li>
+<li><p><strong>save_all_fields</strong> (<em>bool</em>) – whether to save each solved profile’s full <code class="docutils literal notranslate"><span class="pre">E</span></code> and <code class="docutils literal notranslate"><span class="pre">H</span></code> fields as well as its raw field data (<code class="docutils literal notranslate"><span class="pre">Fx</span></code> and <code class="docutils literal notranslate"><span class="pre">Fy</span></code>). A file saved this way opens with the fields ready, which take about five times the space of the raw field data. Each save decides again, so a plain save of a reopened file leaves them out, default: False</p></li>
 <li><p><strong>file_type</strong> (<em>str</em>) – file type to save the simulation file as, either ‘eph’ or ‘mat’, default: ‘eph’</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
 </ul>

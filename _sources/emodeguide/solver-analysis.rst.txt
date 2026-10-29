@@ -32,7 +32,7 @@ Solver and analysis
     .. math::
         \mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}
 
-    A multi-wavelength profile (a wavelength list in ``settings()``, or a set from ``create_profile_set()``) is solved at each of its wavelengths, and is saved as one solved profile per wavelength, so ``get()`` returns a dict keyed by wavelength and ``plot()`` and ``EME()`` use the modes at each wavelength. ``FEM()`` and ``solve()`` do the same. The direct return value describes only the longest wavelength.
+    A multi-wavelength profile (a wavelength list in ``settings()``, or a set from ``create_profile_set()``) is solved at each of its wavelengths, and is saved as one solved profile per wavelength, so ``get()`` returns a dict keyed by wavelength and ``plot()`` and ``EME()`` use the modes at each wavelength. ``FEM()`` and ``solve()`` do the same. The direct return value then holds every wavelength's result, keyed by wavelength (see below).
 
     :param profile: profile name to automatically create a profile after running ``FDM()``, default: '_default'
     :type profile: str or int
@@ -48,23 +48,23 @@ Solver and analysis
     :param str simulation_name: simulation name, default: 'emode'
 
     .. note::
-        The direct return value of this function (as called through ``emodeconnection``) is a dict with keys ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, and ``TM_indices``. The individual field components and derived quantities described above (``effective_index``, ``loss_dB_per_m``, ``Ex``/``Ey``/etc.) become available afterward from the saved profile via ``get()``/``get_fields()``, not as top-level keys of this return value.
+        The direct return value of this function (as called through ``emodeconnection``) is a dict with keys ``field`` (a Field object), ``n_eff_tilde``, ``TE_fraction``, ``TE_indices``, ``TM_indices`` and ``PML_indices``. For a multi-wavelength profile it is a ``WavelengthDict`` of these dicts, one per wavelength, indexable like a ``dict[float, dict]`` (``result[1550]['n_eff_tilde']``). The individual field components and derived quantities described above (``effective_index``, ``loss_dB_per_m``, ``Ex``/``Ey``/etc.) become available afterward from the saved profile via ``get()``/``get_fields()``, not as top-level keys of this return value.
 
 .. data:: sweep
 
     This function sweeps a calculation as a function of any available setting, shape parameter, or section parameter (EMode\ :sup:`3D`\  only). Run a parameter sweep of ``key`` over defined ``values`` by solving ``solve_type`` for each value and saving a list of parameters defined by 'result' that correspond to the ``values``. After running a sweep, the data will be available from a parameter called ``sweep_data``, which includes all of the specified parameters of this funcion and the data specified by the ``result`` parameter. The ``result`` parameter can include any parameter that is listed in the ``inspect()`` output (after running the desired simulation). Additionally, the ``result`` parameter can include 'scattering_loss' (a sum of all scattering losses for each mode) or 'mode_order' (a list of mode indices used for tracking the order of the modes).
 
-    :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME. The accepted section keys are 'length', 'num_modes', 'minimum_z_step', 'overlap_variation', 'z_slices', 'offset', 'etch_depth', 'sidewall_angle', 'window_width', 'window_height', and 'facet_angle' (the tilt [degrees] of an angled facet on that section, see :func:`make_angled_facet_port`); any other section key raises an error naming it.
+    :param str key: any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify 'shape, SHAPE_NAME, SHAPE_KEY' to specify shape the SHAPE_KEY of SHAPE_NAME, specify 'section, SECTION_NAME, SECTION_KEY' to specify the SECTION_KEY of SECTION_NAME. The accepted section keys are 'length', 'num_modes', 'minimum_z_step', 'overlap_variation', 'z_slices', 'offset', 'window_width', 'window_height', and 'facet_angle' (the tilt [degrees] of an angled facet on that section, see :func:`make_angled_facet_port`). Any other section key raises an error naming it. A shape's ``etch_depth``, ``sidewall_angle`` and ``tone`` are swept as 'shape, SHAPE_NAME, etch_depth' and so on.
     :param values: the values that define the ``key`` during the sweep
     :type values: list or array
     :param str solve_type: either 'mesh', 'FDM', or 'EME' to specify which solver to run at each sweep step, where 'FDM' means a mode solve with the solver the ``solver`` setting selects (the FDM or the FEM), default: automatically chosen based on the ``key`` and ``result`` selection
     :param result: the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls ``get``, so if you can read the value with ``get`` you can collect it with ``sweep``. Additionally, 'scattering_loss', 'mode_order' and 'monitor_coupling' are accepted. 'monitor_coupling' collects :data:`monitor_coupling` for the monitor named by ``monitor`` and the beam described by ``beam``. With a ``key`` that is one of the beam's arguments ('angle', 'mode_field_diameter', 'center', 'index' or 'polarization') the solved chain is reused and only the overlap is evaluated at each value, with no solve, and ``sweep_data`` also carries ``power_through_plane`` and ``overlap``. Any other key needs ``solve_type='EME'`` and solves the chain at each value. default: 'effective_index'
     :type result: str or list
     :param bool seed: whether to seed each solve step with the previous step's mode list, default: True
-    :param bool adaptive: only for a wavelength sweep. ``values`` keeps its meaning -- the wavelengths you want results at -- and ``adaptive`` changes only *where the solver runs*: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength places further solves until the mode list stops moving by more than ``tolerance``, or the gap reaches ``minimum_step``. The requested wavelengths are then filled in by interpolating the solved mode lists, which is much cheaper than solving every point when the modes vary smoothly. ``sweep_data`` additionally carries ``solved_wavelengths`` (where the solver actually ran) and ``unconverged`` (any stretch the sampler gave up on, reported rather than raised). Default: False
+    :param bool adaptive: only for a wavelength sweep. ``values`` keeps its meaning (the wavelengths you want results at), and ``adaptive`` changes only *where the solver runs*: modes are matched between neighboring solves through a phase-corrected overlap, and a bisection in wavelength places further solves until the mode list stops moving by more than ``tolerance``, or the gap reaches ``minimum_step``. The requested wavelengths are then filled in by interpolating the solved mode lists, which is much cheaper than solving every point when the modes vary smoothly. ``sweep_data`` additionally carries ``solved_wavelengths`` (where the solver actually ran) and ``unconverged`` (any stretch the sampler gave up on, reported rather than raised). Default: False
     :param float tolerance: with ``adaptive``, the largest mode-list change tolerated between adjacent solves, default: 1e-3
     :param float minimum_step: [nm] with ``adaptive``, the smallest wavelength gap the sampler will bisect into, default: the spacing of ``values``
-    :param str method: either 'direct' or 'interpolated'. 'interpolated' is only for ``key='wavelength'`` with ``result='S_matrix'`` (EMode\ :sup:`3D`\  only): the circuit is solved and refined once at the current wavelength with :data:`EME`, every cross-section in it is solved at ``num_nodes`` wavelengths (Chebyshev-Lobatto nodes, ends included) over ``wavelength_range``, and the S-matrix at each of ``values`` is rebuilt from the propagation constants and junctions interpolated between them, so no wavelength in ``values`` solves anything. It suits the hundreds of wavelengths a resonator spectrum needs. A mode that cannot be followed across the range carries nothing in the result. ``sweep_data`` additionally carries ``num_nodes`` and ``interpolation_residual``, the largest error in any S-matrix element at one node predicted from the others, and a warning is logged when it exceeds ``interpolation_tolerance``. Default: 'direct'
+    :param str method: either 'direct' or 'interpolated'. 'interpolated' is only for ``key='wavelength'`` with ``result='S_matrix'`` (EMode\ :sup:`3D`\  only): the circuit is solved and refined once at the current wavelength with :data:`EME`, every cross-section in it is solved at ``num_nodes`` wavelengths (Chebyshev-Lobatto nodes, ends included) over ``wavelength_range``, and the S-matrix at each of ``values`` is rebuilt from the propagation constants and junctions interpolated between them, so no wavelength in ``values`` solves anything. It suits the hundreds of wavelengths a resonator spectrum needs. A mode that cannot be followed across the range keeps its solve at the current wavelength (its effective index and its junction coupling) at every wavelength, with a warning naming its cross-sections, so the result at the current wavelength is always the solved circuit. One node is predicted from the others: ``sweep_data`` additionally carries ``num_nodes``, ``interpolation_residual`` (the largest error at that node in a slice's propagation phase factor or in a junction's S-matrix element) and ``interpolation_residuals`` (the node's wavelength, the slice and junction errors, and the largest error of the whole circuit's S-matrix). A warning naming the slice or junction is logged when ``interpolation_residual`` exceeds ``interpolation_tolerance``. The whole circuit's error is not checked, since a narrow resonance moved by a small fraction of its width changes it by order one. Default: 'direct'
     :param int num_nodes: with ``method='interpolated'``, the number of wavelengths every cross-section is solved at, at least 4. Add nodes, or narrow the range, when ``interpolation_residual`` is too large, default: 8
     :param wavelength_range: [nm] with ``method='interpolated'``, the range the nodes span, which must contain every one of ``values``, default: the range of ``values``
     :type wavelength_range: tuple[float, float]
@@ -73,9 +73,58 @@ Solver and analysis
     :param dict beam: with ``result='monitor_coupling'``, the keyword arguments of :data:`monitor_coupling` that describe the beam, ``mode_field_diameter`` at least, for example ``beam=dict(mode_field_diameter=10.4e3)``. A beam ``key`` overrides its entry here at each value, default: None
     :param str simulation_name: simulation name, default: 'emode'
 
+.. data:: converge
+
+    Find the resolution, window, PML thickness or number of modes a result needs. ``converge()`` varies ``setting`` one step at a time, solving the profile at each step, and watches one quantity of one mode, the ``target``. It stops once the target has settled to within ``tolerance``, prints one row per solve and returns the history. The profile's settings change only with ``apply=True``, so the table can be read first. It runs in every license tier.
+
+    Each setting is varied in its own way:
+
+    * ``'resolution'``: ``x_resolution`` and ``y_resolution`` together, from 20 cells per wavelength in the highest-index material, finer by a factor of :math:`\sqrt{2}` a step. Each step is rounded down so a whole number of cells fills the window and, where the shapes allow, every shape edge lies on a grid line. With ``solver='FEM'`` it varies ``fem_points_per_wavelength`` from 1 in the same ratio, with ``fem_max_refinements=0`` so the routine and not the FEM's own refinement sets each step.
+    * ``'window'``: ``window_width`` and ``window_height``, from the core (every shape bounded on all four sides) plus three decay lengths :math:`1 / (k_0 \sqrt{n_\mathrm{eff}^2 - n_\mathrm{clad}^2})` of the cladding, growing by one decay length on each side a step. The window stays centered on the core, and an axis folded by ``boundary_condition`` stays centered on its mirror plane. On a bend, the outer side starts beyond the caustic :math:`n_\mathrm{eff} R / n_\mathrm{clad}`.
+    * ``'pml'``: ``pml_thickness`` on every side with a PML, from one wavelength in the cladding, growing by half a wavelength a step. With the FEM it starts no thinner than the PML's imaginary depth (see ``pml_thickness`` under :data:`settings`). It needs a PML (``pml_NSEW_bool``).
+    * ``'modes'``: ``num_modes``, doubling until the watched mode is among the modes confined to the window rather than to the PML.
+    * ``'all'``: the window on the coarsest grid, the PML (when one is on), the resolution, the number of modes, then one more check of the window at the final grid.
+
+    The rule that stops it depends on how the setting converges. The resolution converges algebraically, so each step's error is estimated as :math:`|\Delta_k| / (r^p - 1)`, from the change :math:`\Delta_k` since the previous step, the refinement ratio :math:`r` and the order :math:`p` observed over the last three steps (between 1 and 4). A window and a PML converge exponentially, so the estimate is the change itself. The routine stops as ``'converged'`` once the estimated error is at or below the tolerance on two consecutive steps, and reports the last step's settings. A change that flips sign between two consecutive steps stops it as ``'oscillating'``, since a sequence that alternates has not converged whatever its size. The orthogonality target is the largest overlap between two modes (as :data:`orthogonality` computes it), which must fall below the tolerance rather than settle, and a run that stops improving it ends as ``'stalled'``. ``max_solves`` or ``max_time`` running out ends a run as ``'budget'``.
+
+    The watched mode is followed from one step to the next by its overlap, not by its place in the mode list, so a PML mode that moves ahead of it does not change what is watched. A step with no mode overlapping the watched one above 0.9 stops the run as ``'lost mode'``. One mode of a degenerate pair (a round fiber, a square core) can come back in another polarization from one solve to the next, so fold such a window with ``boundary_condition`` before converging it.
+
+    :param str setting: 'resolution', 'window', 'pml', 'modes' or 'all', default: 'resolution'
+    :param str target: 'effective_index', 'group_index' (from :data:`group_index`), 'loss' (``loss_dB_per_m``, with the scattering loss when ``include_scattering`` is set) or 'orthogonality', default: 'effective_index'
+    :param float tolerance: the largest acceptable estimated error, absolute for 'effective_index' (default 1e-4), 'group_index' (1e-3) and 'orthogonality' (1e-6), and relative for 'loss' (1e-2)
+    :param bool apply: write the chosen settings to the profile, default: False
+    :param int max_solves: the most solves to make, across every setting of 'all', default: 20
+    :param float max_time: [s] the most time to take, default: None (no limit)
+    :param int mode: the mode to watch, an index into the first solve's mode list, default: 0
+    :param str profile: the profile to converge, default: '_default'
+    :param str simulation_name: simulation name, default: 'emode'
+    :return: a ``ConvergenceResult`` with ``status``, ``chosen`` (the chosen settings, as :data:`settings` takes them), ``history`` (one row per solve: ``setting``, ``value``, ``settings``, ``quantity``, ``change``, ``estimated_error`` and ``seconds``), ``stages`` (one per setting varied, with its status, its chosen settings and, for the resolution, its observed ``order``) and ``seconds``. ``print(result)`` prints the table again. The same result is saved on the profile as ``convergence``.
+
+    The guide of the :doc:`Straight Waveguide Convergence </examples/Straight_Convergence>` example, a 2000 x 200 nm SiN core in SiO2 at 980 nm, has a known effective index, 1.6874538. Converging its resolution to 1e-4:
+
+    .. code-block:: python
+
+        em.settings(wavelength=980, window_width=7000, window_height=4200, num_modes=1,
+                    boundary_condition='TE', background_material='SiO2')
+        em.shape(name='core', material='SiN', width=2000, height=200, position=[0, 2100])
+        result = em.converge('resolution', 'effective_index', tolerance=1e-4)
+
+    .. code-block:: text
+
+        setting                   value         n_eff     change  est. error  time (s)
+        resolution             23.81 nm      1.686959          -           -       1.5
+        resolution             16.67 nm      1.687108    1.5e-04     4.8e-04       1.3
+        resolution              11.9 nm      1.687301    1.9e-04     4.3e-04       3.1
+        resolution             8.475 nm      1.687368    6.7e-05     4.1e-05       5.4
+
+        resolution: converged (x_resolution=8.474576271186441, y_resolution=8.333333333333334, estimated error 4.1e-05, order 3.09)
+        converged at 0.0001 absolute in 12.8 s
+
+    The x resolutions divide the 500 nm lattice of the core's side walls and the y resolutions the 200 nm lattice of its top and bottom, so every edge lies on a grid line. The chosen 8.5 nm grid is 8.5e-5 from the reference, within the tolerance. ``em.converge('resolution', 'effective_index', tolerance=1e-4, apply=True)`` would also set ``x_resolution`` and ``y_resolution`` to those values.
+
 .. data:: confinement
 
-    Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included. The confinement factors are also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
+    Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included. The confinement factors are also returned by this function. For a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     :param str profile: profile name, default: '_default'
     :param shape_list: name (from ``shape``) or list of names of shapes to include in confinement or 'all' for all shapes, default: 'all'
@@ -89,7 +138,7 @@ Solver and analysis
 
 .. data:: effective_area
 
-    Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas. The ``effective_area`` is also returned by this function and is in units of :math:`\mu\text{m}^2`; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
+    Calculate the effective areas for all modes. After running this function, an array called ``effective_area`` will become available and ``report`` will display the effective areas. The ``effective_area`` is also returned by this function and is in units of :math:`\mu\text{m}^2`. For a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     .. math::
         A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2
@@ -99,7 +148,7 @@ Solver and analysis
 
 .. data:: orthogonality
 
-    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the named (or default) profile, and the ``maximum_overlap`` is returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
+    Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called ``maximum_overlap`` will become available in metadata of the named (or default) profile, and the ``maximum_overlap`` is returned by this function. For a multi-wavelength profile, the return value is a dict keyed by wavelength. Ideally, this value is less than :math:`10^{-3}`, indicating an accurate mode list.
 
     :param profile: profile name, default: '_default'
     :type profile: str or int
@@ -107,18 +156,26 @@ Solver and analysis
 
 .. data:: group_index
 
-    Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index. The ``group_index`` array is also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
+    Calculate the group index for all modes. First, ``group_index`` runs ``FDM`` (if not already run), then it runs ``FDM`` a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called ``group_index`` will become available and ``report`` will display the group index. The ``group_index`` array is also returned by this function. For a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     :param str profile: profile name, default: '_default'
     :param str simulation_name: simulation name, default: 'emode'
 
 .. data:: report
 
-    Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); a ``PML`` column when the profile was solved with a pml, marking the modes that carry less than 75% of their power inside the window (see ``PML_indices`` and ``window_confinement`` in :doc:`Variable Descriptions </emodeguide/variables>`); per-shape confinement factors and scattering loss (if calculated); effective areas (if calculated).
+    Display a simulation report table with information about each mode:
+
+    - mode number
+    - effective index
+    - TE fraction
+    - loss (dB/m)
+    - a ``PML`` column when the profile was solved with a PML, marking the modes that carry less than 75% of their power inside the window (see ``PML_indices`` and ``window_confinement`` in :doc:`Variable Descriptions </emodeguide/variables>`)
+    - per-shape confinement factors and scattering loss (if calculated)
+    - effective areas (if calculated)
 
     The line above the table gives the wavelength and the mode solver that produced the modes, for example ``Wavelength: 1550.0 nm    Solver: FEM``. A saved CSV records both below the table.
 
-    Returns the table as a dictionary keyed by profile name, each table holding one list per column. A multi-wavelength profile returns one table per wavelength, keyed by wavelength; an unsolved profile returns an empty table.
+    Returns the table as a dictionary keyed by profile name, each table holding one list per column. A multi-wavelength profile returns one table per wavelength, keyed by wavelength. An unsolved profile returns an empty table.
 
     :param str profile: profile name, default: '_default'
     :param bool save: whether to save the table to a file or not, default: False
@@ -128,7 +185,7 @@ Solver and analysis
 
 .. data:: label_profile
 
-    Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under ``name`` in the ``profiles`` dictionary of the simulation file, meshing it first if needed. A multi-wavelength profile is saved whole, with each member meshed and keeping its own name. Named profiles are read with ``profile=NAME`` in :data:`get`, :data:`get_fields`, :data:`get_grid`, :data:`get_shape` and :data:`get_profile`, are the inputs to ``overlap``, ``mode_order`` and the EME section functions, and are not affected by :data:`reset`.
+    Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under ``name`` in the ``profiles`` dictionary of the simulation file, meshing it first if needed. A multi-wavelength profile is saved whole, with each member meshed and keeping its own name. Named profiles are read with ``profile=NAME`` in :data:`get`, :data:`get_fields`, :data:`get_grid`, :data:`get_shape` and :data:`get_profile`, and one wavelength of a multi-wavelength one with ``profile='NAME.WAVELENGTH'``. They are the inputs to ``overlap``, ``mode_order`` and the EME section functions, and :data:`reset` changes one only when given its name.
 
     :param str name: save the current simulation state to this name, default: '0'
     :param str simulation_name: simulation name, default: 'emode'
@@ -164,7 +221,7 @@ Solver and analysis
 
 .. data:: scattering
 
-    Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE.metadata['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE.metadata['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE.metadata['scattering_sum']`` (total scattering loss), ``SHAPE.metadata['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE.metadata['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface. The scattering results are also returned by this function as a dictionary keyed by shape name; for a multi-wavelength profile, the return value is a dict keyed by wavelength.
+    Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables ``SHAPE.metadata['scattering_vertical_edges']`` (total loss from all vertical interfaces), ``SHAPE.metadata['scattering_horizontal_edges']`` (total loss from all horizontal interfaces), ``SHAPE.metadata['scattering_sum']`` (total scattering loss), ``SHAPE.metadata['edges']`` (list of edge points for calculating scattering loss), and ``SHAPE.metadata['scattering_all_edges']`` (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface. The scattering results are also returned by this function as a dictionary keyed by shape name. For a multi-wavelength profile, the return value is a dict keyed by wavelength.
 
     [1] T. Barwicz and H. A. Haus, "Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides," J. Lightwave Technol. 23, 2719 (2005).
 
@@ -181,9 +238,11 @@ Solver and analysis
 
     For EME plots in the 'z-x' or 'z-y' planes, the data dropdown also offers an 'Outline' view that displays a geometry-only outline of the declared sections. Once sections are declared with ``straight_section()``, ``pwd_section()``, ``taper_section()``, ``bend_section()`` or ``gds_section()``, calling ``plot()`` before running ``EME()`` shows only the 'Outline' view, which is useful to check the section layout before solving. After ``EME()`` has run, 'Outline' is available alongside the field components.
 
+    A plot of a :math:`\chi^{(2)}` section uses the declared ``excitation`` rather than a unit mode, because conversion depends on power. Each slice is drawn from the forward amplitudes recorded along it, so the generated wavelength builds along the guide instead of stepping at slice boundaries. Without a declared excitation the field shown is the small-signal response, and the solver says so.
+
     :param component: field component or index, 'Ex/y/z', 'Hx/y/z', 'Sx/y/z', 'Index' or 'Shapes', default: None ('Ex', or 'Index' for a circuit with a closed loop)
     :type component: str or None
-    :param str plot_function: plotting function, 'real'; 'imag'; 'abs'; 'abs^2'; 'log', default: 'real'
+    :param str plot_function: plotting function, one of 'real', 'imag', 'abs', 'abs^2' or 'log', default: 'real'
     :param int mode: mode number, default: 0
     :param aspect_ratio: the height:width aspect ratio, 'norm' uses the normal aspect ratio of 0.707, 'real' uses the real aspect ratio defined by the simulation window, or a float specifies the aspect ratio, default: 'norm'
     :type aspect_ratio: str or float
@@ -197,14 +256,13 @@ Solver and analysis
     :param str plane: (EME) plot cross-section plane setting. For 2D simulations, this defaults to 'x-y'. For 3D simulations, it accepts 'x-y', 'z-x', or 'z-y'. The 'z-y' panel also draws the plane of each :data:`monitor`, default: 'z-x'
     :param slice_position: (EME) location of the third dimension for a cross-section display. For example, if `plane` is 'z-x', then the `slice_position` refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: 'sum' (default), which totals the field across the fixed transverse axis, or 'mean', which averages it, default: None
     :type slice_position: float or None
-    :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward)
+    :param bool forward_only: (EME) render only the forward-propagating component of the field instead of the total (forward + backward) field. This only changes the display decomposition of the already-solved field and does not re-solve, default: False
     :param float wavelength: (EME) which wavelength's field to render on a multi-wavelength circuit, such as the pump or the second harmonic of a :math:`\chi^{(2)}` section. Default: None, the circuit's first wavelength
-    :param bool driven: a plot of a :math:`\chi^{(2)}` section uses the declared ``excitation`` rather than a unit mode, because conversion depends on power. Each slice is drawn from the forward amplitudes recorded along it, so the generated wavelength builds along the guide instead of stepping at slice boundaries. Without a declared excitation the field shown is the small-signal response and the solver says so field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False
-    :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, smaller is finer; 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
+    :param resolution: (EME) sample spacing in nm along the propagation axis for the 'z-x'/'z-y' longitudinal panels, where smaller is finer and 'auto' picks a spacing of roughly one sample per horizontal display pixel, default: 'auto'
     :type resolution: float or str
-    :param str excitation: (EME) render the field launched by a free-space field declared with :data:`free_space_field`, instead of unit amplitude in ``mode`` at ``port``. It also selects which port the field is viewed at. This is the only API surface for viewing one; in the plot window the same choice appears in the Mode menu as ``'<name> (free space)'``. Default: None
+    :param str excitation: (EME) render the field launched by a free-space field declared with :data:`free_space_field`, instead of unit amplitude in ``mode`` at ``port``. It also selects which port the field is viewed at. This is the only API surface for viewing one. In the plot window, the same choice appears in the Mode menu as ``'<name> (free space)'``. Default: None
     :param str view: (EME) what the 'z-x' panel shows, either 'layout' (every section where its connections place it on the chip, bends turning and sections after a turn turned with them, both axes in um) or 'simulation' (the circuit unrolled along its length, as solved), default: 'layout'. The 'Physical space' checkbox in the plot window switches between them. Field components follow the guide on the layout, while 'Index' and 'Shapes' stay unrolled. A circuit with a closed loop (a ring closed with :data:`connect_ports`) has no field reconstruction yet: its 'z-x' panel draws the layout outline only, 'Index' and 'Shapes' show its cross-sections, and asking for a field component raises an error.
-    :param str normalization: the field family the colour scale is normalized to, 'vector' (the full transverse vector at the excitation plane), 'component' (the plotted component alone) or 'section' (each section of a 'z-x' or 'z-y' panel scaled by its own peak, so a dim section such as a free-space gap stays visible), default: 'vector'
+    :param str normalization: the field family the color scale is normalized to, 'vector' (the full transverse vector at the excitation plane), 'component' (the plotted component alone) or 'section' (each section of a 'z-x' or 'z-y' panel scaled by its own peak, so a dim section such as a free-space gap stays visible), default: 'vector'
     :param profile: render a stored profile by name instead of the EME section. Once a simulation has declared sections, the plot always follows the section, so this is the only way to view a profile saved by an earlier ``FDM(profile=...)`` call. An unknown name raises an error listing the available profiles, default: None
     :type profile: str or None
     :param str file_name: if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None
@@ -224,28 +282,28 @@ Solver and analysis
 
     Returns the refractive index from a material name (retrieved from the internal reference list), a MaterialSpec object, or from a custom refractive index value. Optionally, the material's reference (or citation) may be returned.
 
-    :param material: material name; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: "AlGaAs, 0.2" for a Al_{0.2}Ga_{0.8}As.
-    :type material: str
+    :param material: material name, a MaterialSpec (a rotated crystal returns its 3×3 index tensor), or a float/list for a custom value. For AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: "AlGaAs, 0.2" for a Al_{0.2}Ga_{0.8}As.
+    :type material: str, MaterialSpec, float, or list
     :param float wavelength: [nm] wavelength, default: 1550
     :param bool reference: additionally return the citation for the material, default: False
     :return: [n_x, n_y, n_z] or ([n_x, n_y, n_z], reference)
 
 .. data:: permeability
 
-    Returns the relative permeability from a material name (retrieved from the internal reference list) or from a custom permeability value. Optionally, the material's reference (or citation) may be returned.
+    Returns the relative permeability from a material name (retrieved from the internal reference list), a MaterialSpec object, or from a custom permeability value. Optionally, the material's reference (or citation) may be returned.
 
-    :param material: material name
-    :type material: str
+    :param material: material name, a MaterialSpec, or a float/list of 3 floats for a custom value
+    :type material: str, MaterialSpec, float, or list
     :param float wavelength: [nm] wavelength, default: 1550
     :param bool reference: additionally return the citation for the material, default: False
     :return: [permeability_x, permeability_y, permeability_z] or ([permeability_x, permeability_y, permeability_z], reference)
 
 .. data:: permittivity
 
-    Returns the relative permittivity from a material name (retrieved from the internal reference list) or from a custom value. For isotropic materials this is a 3-element array; for fully anisotropic materials it is a 3×3 tensor. Optionally, the material's reference (or citation) may be returned.
+    Returns the relative permittivity from a material name (retrieved from the internal reference list), a MaterialSpec object, or from a custom value. For isotropic materials this is a 3-element array, and for fully anisotropic materials, such as a crystal rotated by a MaterialSpec's ``theta``, ``phi`` and ``psi``, it is a 3×3 tensor. Optionally, the material's reference (or citation) may be returned.
 
-    :param material: material name, or a float/list for a custom value
-    :type material: str, float, or list
+    :param material: material name, a MaterialSpec, or a float/list for a custom value
+    :type material: str, MaterialSpec, float, or list
     :param float wavelength: [nm] wavelength, default: 1550
     :param bool reference: additionally return the citation for the material, default: False
     :return: [eps_x, eps_y, eps_z], a 3×3 array, or the corresponding tuple with reference

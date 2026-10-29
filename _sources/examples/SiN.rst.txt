@@ -73,15 +73,15 @@ Highlighted features: bend radius, PMLs, confinement factor, saving plots.
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Meshing completed in 0.8 sec
-    Solving modes completed in 18.1 sec
+    EMode3D 1.0.7 - email
+    Meshing completed in 0.2 sec
+    Solving modes completed in 11.7 sec
 
     Wavelength: 980.0 nm    Solver: FDM, cylindrical bend
  
       Mode #     n_eff    TE %    Loss (dB/m)    PML    background confinement    core confinement
     --------  --------  ------  -------------  -----  ------------------------  ------------------
-        TE-0  1.665877  99.9 %          0.017                           39.3 %              60.7 %
+        TE-0  1.665872  99.9 %          0.017                           39.3 %              60.7 %
  
     Exited EMode
 

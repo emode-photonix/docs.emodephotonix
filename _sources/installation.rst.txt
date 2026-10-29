@@ -35,6 +35,11 @@ There are two installation methods:
 
             emode-install
 
+        On Linux, installing to ``/usr/local/bin`` needs administrator rights, so
+        ``emode-install`` asks for your password through ``sudo`` when it runs in a terminal.
+        Without a terminal or ``sudo``, or if you decline, it installs EMode for your user
+        only, to ``~/.local/bin/emode``, and tells you if that directory is not on your PATH.
+
     .. tab-item:: Manual install
 
         #. Log in to your `EMode account <https://emodephotonix.com/my-account/>`_.

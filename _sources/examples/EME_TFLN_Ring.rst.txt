@@ -158,34 +158,34 @@ circuit's resonance moves by about 0.02 nm, a quarter of its width, so the ring 
 
 Console output::
 
-    EMode3D 1.0.6 - email
+    EMode3D 1.0.7 - email
+    the loop closes to 7.3e-12 nm and 0.0e+00 rad
 
     Solving S-matrices...
     Solving section: coupler... completed in 0.0 sec
-    Solving section: bend_1... completed in 39.4 sec
+    Solving section: bend_1... completed in 20.8 sec
     Solving section: back... completed in 0.0 sec
-    Solving section: bend_2... completed in 39.0 sec
-     completed in 1 min 18.4 sec
+    Solving section: bend_2... completed in 20.4 sec
+     completed in 42.0 sec
 
     Solving S-matrices...
     Solving section: coupler... completed in 0.0 sec
-    Solving section: bend_1... completed in 2.1 sec
+    Solving section: bend_1... completed in 1.4 sec
     Solving section: back... completed in 0.0 sec
-    Solving section: bend_2... completed in 2.1 sec
-     completed in 4.2 sec
-
-    Solving S-matrices...
-    Solving section: coupler... completed in 0.0 sec
-    Solving section: bend_1... completed in 46.2 sec
-    Solving section: back... completed in 0.0 sec
-    Solving section: bend_2... completed in 46.2 sec
-     completed in 1 min 32.4 sec
-    Exited EMode
-    the loop closes to 7.5e-12 nm and 0.0e+00 rad
+    Solving section: bend_2... completed in 1.4 sec
+     completed in 3.6 sec
     free spectral range: 4.49 nm
-    resonance at 1546.830 nm: extinction 3.5 dB, loaded Q 17187
-    resonance at 1551.305 nm: extinction 3.7 dB, loaded Q 17237
-    resonance at 1555.810 nm: extinction 4.1 dB, loaded Q 16377
+    resonance at 1546.570 nm: extinction 1.5 dB, loaded Q 19332
+    resonance at 1551.045 nm: extinction 1.7 dB, loaded Q 19388
+    resonance at 1555.555 nm: extinction 1.2 dB, loaded Q 19444
+
+    Solving S-matrices...
+    Solving section: coupler... completed in 0.0 sec
+    Solving section: bend_1... completed in 21.7 sec
+    Solving section: back... completed in 0.0 sec
+    Solving section: bend_2... completed in 21.0 sec
+     completed in 43.6 sec
+    Exited EMode
 
 
 Figures:

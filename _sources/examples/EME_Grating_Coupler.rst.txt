@@ -111,7 +111,7 @@ reciprocity the same number is the coupling from the fiber into the waveguide.
 
 Console output::
 
-    EMode3D 1.0.6 - email
+    EMode3D 1.0.7 - email
 
     Solving S-matrices...
     Solving section: lead_in... completed in 0.0 sec
@@ -156,14 +156,14 @@ Console output::
     Solving section: 40... completed in 0.0 sec
     Solving section: 41... completed in 0.0 sec
     Solving section: lead_out... completed in 0.0 sec
-     completed in 0.0 sec
-    Sweeping the beam's angle on monitor 'fiber_plane'... completed in 44.2 sec
-    Exited EMode
+     completed in 0.1 sec
     transmitted: 5.4 %
     reflected: 0.4 %
-    radiated up through the monitor: 36.1 %
-    the rest, mostly into the substrate: 58.1 %
-    best fiber angle: 12 deg, coupling -5.92 dB
+    radiated up through the monitor: 36.3 %
+    the rest, mostly into the substrate: 57.9 %
+    Sweeping the beam's angle on monitor 'fiber_plane'... completed in 1 min 6.5 sec
+    best fiber angle: 12 deg, coupling -5.90 dB
+    Exited EMode
 
 
 Figures:

@@ -17,58 +17,195 @@ Quick reference for initializing, running, and closing an EMode session:
 .. note::
 
    The console output on the example pages below, including all timings,
-   was produced on: AMD EPYC 7763 64-Core Processor, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
+   was produced on: INTEL(R) XEON(R) PLATINUM 8573C, 2 logical cores, 8 GB RAM, Ubuntu 24.04.5 LTS, x86_64 Python.
 
 .. hardware-note-end
 
-Example Scripts
-^^^^^^^^^^^^^^^^
+EMode\ :sup:`2D` Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. grid:: 2
-    :gutter: 4
-    :padding: 2
-    :margin: auto
+.. grid:: 1 2 3 3
+    :gutter: 3
 
-    .. grid-item-card:: EMode\ :sup:`2D`
+    .. grid-item-card:: SOI
+        :img-top: examples/Figures/SOI/thumb.png
+        :link: examples/SOI
+        :link-type: doc
         :shadow: md
-        :columns: 6
 
-        .. container:: icon-list
-
-            .. hlist::
-                :columns: 2
-
-                * :octicon:`container;1em` :doc:`SOI <examples//SOI>`
-                * :octicon:`iterations;1em` :doc:`SiN <examples//SiN>`
-                * :octicon:`git-compare;1em` :doc:`Bend Mode Solvers <examples//Bend_Solvers>`
-                * :octicon:`zap;1em` :doc:`LNOI <examples//LNOI>`
-                * :octicon:`light-bulb;1em` :doc:`Laser <examples//Laser>`
-                * :octicon:`file;1em` :doc:`Open <examples//Open>`
-                * :octicon:`graph;1em` :doc:`Dispersion <examples//Dispersion>`
-                * :octicon:`sliders;1em` :doc:`Adaptive Scan <examples//Adaptive_Scan>`
-
-    .. grid-item-card:: EMode\ :sup:`3D`
+    .. grid-item-card:: SiN
+        :img-top: examples/Figures/SiN/thumb.png
+        :link: examples/SiN
+        :link-type: doc
         :shadow: md
-        :columns: 6
 
-        .. container:: icon-list
+    .. grid-item-card:: Bend Mode Solvers
+        :img-top: examples/Figures/Bend_Solvers/thumb.png
+        :link: examples/Bend_Solvers
+        :link-type: doc
+        :shadow: md
 
-            .. hlist::
-                :columns: 2
+    .. grid-item-card:: Straight Waveguide Convergence
+        :img-top: examples/Figures/Straight_Convergence/thumb.png
+        :link: examples/Straight_Convergence
+        :link-type: doc
+        :shadow: md
 
-                * :octicon:`paper-airplane;1em` :doc:`EME: Taper <examples//EME_Taper>`
-                * :octicon:`video;1em` :doc:`EME: Sweep <examples//EME_Sweep>`
-                * :octicon:`project-symlink;1em` :doc:`EME: GDS <examples//EME_GDS>`
-                * :octicon:`broadcast;1em` :doc:`EME: Angled Facet <examples//EME_Angled_Facet>`
-                * :octicon:`rss;1em` :doc:`EME: Grating Coupler <examples//EME_Grating_Coupler>`
-                * :octicon:`sync;1em` :doc:`EME: TFLN Ring Resonator <examples//EME_TFLN_Ring>`
-                * :octicon:`pulse;1em` :doc:`Nonlinear-EME: SHG <examples//EME_SHG>`
-                * :octicon:`zap;1em` :doc:`Nonlinear-EME: PPLN <examples//EME_PPLN>`
-                * :octicon:`flame;1em` :doc:`Nonlinear-EME: Supercontinuum <examples//EME_PPLN_Supercontinuum>`
-                * :octicon:`arrow-switch;1em` :doc:`Nonlinear-EME: DFG <examples//EME_DFG>`
-                * :octicon:`container;1em` :doc:`FEM: SOI <examples//FEM_SOI>`
-                * :octicon:`flame;1em` :doc:`Heater <examples//Heater>`
-                * :octicon:`plug;1em` :doc:`Phase Shifter <examples//Phase_Shifter>`
+    .. grid-item-card:: Ring Resonator Design
+        :img-top: examples/Figures/Ring_Design/thumb.png
+        :link: examples/Ring_Design
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: SMF-28 Fiber
+        :img-top: examples/Figures/Fiber_SMF28/thumb.png
+        :link: examples/Fiber_SMF28
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: LNOI
+        :img-top: examples/Figures/LNOI/thumb.png
+        :link: examples/LNOI
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Laser
+        :img-top: examples/Figures/Laser/thumb.png
+        :link: examples/Laser
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Open
+        :img-top: examples/Figures/Open/thumb.png
+        :link: examples/Open
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Dispersion
+        :img-top: examples/Figures/Dispersion/thumb.png
+        :link: examples/Dispersion
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Adaptive Scan
+        :img-top: examples/Figures/Adaptive_Scan/thumb.png
+        :link: examples/Adaptive_Scan
+        :link-type: doc
+        :shadow: md
+
+EMode\ :sup:`3D` Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. grid:: 1 2 3 3
+    :gutter: 3
+
+    .. grid-item-card:: EME: Taper
+        :img-top: examples/Figures/EME_Taper/thumb.png
+        :link: examples/EME_Taper
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: Sweep
+        :img-top: examples/Figures/EME_Sweep/thumb.png
+        :link: examples/EME_Sweep
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: GDS
+        :img-top: examples/Figures/EME_GDS/thumb.png
+        :link: examples/EME_GDS
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: Angled Facet
+        :img-top: examples/Figures/EME_Angled_Facet/thumb.png
+        :link: examples/EME_Angled_Facet
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: Grating Coupler
+        :img-top: examples/Figures/EME_Grating_Coupler/thumb.png
+        :link: examples/EME_Grating_Coupler
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: S-Bend
+        :img-top: examples/Figures/EME_SBend/thumb.png
+        :link: examples/EME_SBend
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: Y-Branch
+        :img-top: examples/Figures/EME_Y_Branch/thumb.png
+        :link: examples/EME_Y_Branch
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: TFLN Ring Resonator
+        :img-top: examples/Figures/EME_TFLN_Ring/thumb.png
+        :link: examples/EME_TFLN_Ring
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: EME: MMI
+        :img-top: examples/Figures/EME_MMI/thumb.png
+        :link: examples/EME_MMI
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Nonlinear-EME: SHG
+        :img-top: examples/Figures/EME_SHG/thumb.png
+        :link: examples/EME_SHG
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Nonlinear-EME: PPLN
+        :img-top: examples/Figures/EME_PPLN/thumb.png
+        :link: examples/EME_PPLN
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Nonlinear-EME: Supercontinuum
+        :img-top: examples/Figures/EME_PPLN_Supercontinuum/thumb.png
+        :link: examples/EME_PPLN_Supercontinuum
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Nonlinear-EME: PPLN Inverse Design
+        :img-top: examples/Figures/EME_PPLN_Inverse_Design/thumb.png
+        :link: examples/EME_PPLN_Inverse_Design
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Nonlinear-EME: DFG
+        :img-top: examples/Figures/EME_DFG/thumb.png
+        :link: examples/EME_DFG
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Nonlinear-EME: SFG
+        :img-top: examples/Figures/EME_SFG/thumb.png
+        :link: examples/EME_SFG
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: FEM: SOI
+        :img-top: examples/Figures/FEM_SOI/thumb.png
+        :link: examples/FEM_SOI
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Heater
+        :img-top: examples/Figures/Heater/thumb.png
+        :link: examples/Heater
+        :link-type: doc
+        :shadow: md
+
+    .. grid-item-card:: Phase Shifter
+        :img-top: examples/Figures/Phase_Shifter/thumb.png
+        :link: examples/Phase_Shifter
+        :link-type: doc
+        :shadow: md
 
 .. toctree::
    :maxdepth: 1
@@ -78,6 +215,9 @@ Example Scripts
    examples//SOI
    examples//SiN
    examples//Bend_Solvers
+   examples//Straight_Convergence
+   examples//Ring_Design
+   examples//Fiber_SMF28
    examples//LNOI
    examples//Laser
    examples//Open
@@ -94,11 +234,16 @@ Example Scripts
    examples//EME_GDS
    examples//EME_Angled_Facet
    examples//EME_Grating_Coupler
+   examples//EME_SBend
+   examples//EME_Y_Branch
    examples//EME_TFLN_Ring
+   examples//EME_MMI
    examples//EME_SHG
    examples//EME_PPLN
    examples//EME_PPLN_Supercontinuum
+   examples//EME_PPLN_Inverse_Design
    examples//EME_DFG
+   examples//EME_SFG
    examples//FEM_SOI
    examples//Heater
    examples//Phase_Shifter

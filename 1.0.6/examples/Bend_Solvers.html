@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bend Mode Solvers</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=e2a723ec"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/Bend_Solvers';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/examples/Bend_Solvers.html" />
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Angled: LNOI" href="LNOI.html" />
+    <link rel="prev" title="Bending: SiN" href="SiN.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.6" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="SOI.html">Basic: SOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SiN.html">Bending: SiN</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Bend Mode Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LNOI.html">Angled: LNOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laser.html">Scattering loss: Laser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Open.html">Open a Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dispersion.html">Dispersion Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Adaptive_Scan.html">Adaptive Scan</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="EME_Taper.html">EME: Taper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Sweep.html">EME: Sweep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_GDS.html">EME: GDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Angled_Facet.html">EME: Angled Facet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_Grating_Coupler.html">EME: Grating Coupler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_TFLN_Ring.html">EME: TFLN Ring Resonator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_SHG.html">Nonlinear-EME: SHG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN.html">Nonlinear-EME: PPLN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_PPLN_Supercontinuum.html">Nonlinear-EME: Supercontinuum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EME_DFG.html">Nonlinear-EME: DFG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FEM_SOI.html">FEM: SOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Heater.html">Multi-physics: Heater</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Phase_Shifter.html">Multi-physics: Phase Shifter</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="bend-mode-solvers">
+<h1>Bend Mode Solvers</h1>
+<p>The SiN bend of <a class="reference internal" href="SiN.html"><span class="doc">Bending: SiN</span></a> solved with the bend in cylindrical coordinates
+(<code class="docutils literal notranslate"><span class="pre">bend_method='cylindrical'</span></code>, grid coordinate transformation) and by transformation optics
+(<code class="docutils literal notranslate"><span class="pre">bend_method='TO'</span></code>, material transformed by the bend’s conformal map), to compare how fast each
+converges. The FDM is solved on four grids and the FEM on six fixed meshes
+(<code class="docutils literal notranslate"><span class="pre">fem_max_refinements=0</span></code>), and each solve’s effective index and bend loss are compared against the
+finest FEM mesh.</p>
+<p>The window and PMLs are optimized by convergence studies run separately. The bend radiates outward, so
+PMLs on the outer (east), top and bottom walls absorb the radiated light, and the guided mode’s
+imaginary index is its bend loss. The FEM’s PML absorbs fully in 500 nm, where the FDM’s needs 1 µm.
+<code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code> sits just above the guided mode, so the one mode solved is the guided mode
+rather than a PML mode. A fine mesh in the core (the shape’s <code class="docutils literal notranslate"><span class="pre">fem_resolution</span></code>) lets the FEM resolve
+the mode even at 1 point per wavelength, so its first solve uses a 100 nm core mesh and the rest 50 nm.</p>
+<p>The FEM is the best method all-around, but it requires EMode3D. Even its fastest solve is closer to the
+converged effective index than any FDM solve, so more points per wavelength mainly refine its bend
+loss, which converges much faster than the FDM’s. With EMode2D, the FDM with <code class="docutils literal notranslate"><span class="pre">bend_method='TO'</span></code>
+gives better effective index convergence than the FDM in cylindrical coordinates, but its error stops
+falling on the finest grids, and it does not give a reliable bend loss yet. The FDM in cylindrical
+coordinates converges slowest for the effective index, but its bend loss converges steadily, so use it
+when loss is important. With the FDM, choose a grid that puts the waveguide’s edges on grid lines, as
+every grid here does, or the effective index jumps from one grid spacing to the next. The FEM meshes
+the shapes’ edges and needs no such care.</p>
+<p><em>This code example is licensed under the</em> <a class="reference external" href="../_static/LICENSE.html">BSD 3-Clause License</a>.</p>
+<div class="tabs docutils container" data-tabgroup="">
+<ul class="tabbar">
+<li class="tabbutton selected" data-id="0" onclick="sphinx_code_tabs_onclick(this)">
+Python</li></ul><div class="tab codetab selected" data-id="0">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">emodeconnection</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">emc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="c1">## Set simulation parameters: the SiN bend of the &#39;Bending: SiN&#39; example</span>
+<span class="n">wavelength</span> <span class="o">=</span> <span class="mi">980</span>  <span class="c1"># [nm] wavelength</span>
+<span class="n">w_core</span> <span class="o">=</span> <span class="mi">2000</span>  <span class="c1"># [nm] waveguide core width</span>
+<span class="n">w_trench</span> <span class="o">=</span> <span class="mi">1500</span>  <span class="c1"># [nm] waveguide side trench width</span>
+<span class="n">h_core</span> <span class="o">=</span> <span class="mi">200</span>  <span class="c1"># [nm] waveguide core height</span>
+<span class="n">h_clad</span> <span class="o">=</span> <span class="mi">2000</span>  <span class="c1"># [nm] waveguide top and bottom clad, above the PML</span>
+<span class="n">window_width</span> <span class="o">=</span> <span class="n">w_core</span> <span class="o">+</span> <span class="n">w_trench</span><span class="o">*</span><span class="mi">2</span>  <span class="c1"># [nm]</span>
+<span class="n">window_height</span> <span class="o">=</span> <span class="n">h_core</span> <span class="o">+</span> <span class="n">h_clad</span><span class="o">*</span><span class="mi">2</span>  <span class="c1"># [nm]</span>
+<span class="n">bend_radius</span> <span class="o">=</span> <span class="mf">20e3</span>  <span class="c1"># [nm] bend radius at the center of the core</span>
+<span class="n">x_off</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># [nm] core offset, so the bend radius is measured at the core</span>
+
+<span class="c1">## The FDM grids all put the core&#39;s edges on grid lines (each divides 100 nm),</span>
+<span class="c1">## and the FEM meshes are fixed (no refinement), from coarse to fine.</span>
+<span class="n">resolutions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>  <span class="c1"># [nm]</span>
+<span class="n">fem_meshes</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">50</span><span class="p">)]</span>  <span class="c1"># FEM (points per wavelength, core mesh [nm])</span>
+
+<span class="n">em</span> <span class="o">=</span> <span class="n">emc</span><span class="o">.</span><span class="n">EMode</span><span class="p">(</span><span class="n">emode_cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">simulation_name</span><span class="o">=</span><span class="s1">&#39;bend_solvers&#39;</span><span class="p">)</span>
+
+
+<span class="c1">## Define common settings and the waveguide core</span>
+<span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">window_width</span><span class="o">=</span><span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span><span class="o">=</span><span class="n">window_height</span><span class="p">,</span>
+    <span class="n">num_modes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">boundary_condition</span><span class="o">=</span><span class="s1">&#39;00&#39;</span><span class="p">,</span> <span class="n">background_material</span><span class="o">=</span><span class="s1">&#39;SiO2&#39;</span><span class="p">,</span>
+    <span class="n">bend_radius</span><span class="o">=</span><span class="n">bend_radius</span> <span class="o">+</span> <span class="n">x_off</span><span class="p">,</span>
+    <span class="n">pml_NSEW_bool</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pml_kappa_max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_effective_index</span><span class="o">=</span><span class="mf">1.67</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">fem_max_refinements</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fem_min_angle</span><span class="o">=</span><span class="mi">33</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="s1">&#39;SiN&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">w_core</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">h_core</span><span class="p">,</span>
+         <span class="n">position</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">x_off</span><span class="p">,</span> <span class="n">window_height</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="n">fem_resolution</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">core_mesh</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+    <span class="c1">## The FEM&#39;s PML absorbs fully in 500 nm, the FDM&#39;s needs 1 um</span>
+    <span class="n">pml</span> <span class="o">=</span> <span class="mi">500</span> <span class="k">if</span> <span class="n">solver</span> <span class="o">==</span> <span class="s1">&#39;FEM&#39;</span> <span class="k">else</span> <span class="mi">1000</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">bend_method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">x_resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">y_resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                <span class="n">fem_points_per_wavelength</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">pml_thickness</span><span class="o">=</span><span class="p">[</span><span class="n">pml</span><span class="p">,</span> <span class="n">pml</span><span class="p">,</span> <span class="n">pml</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">fem_resolution</span><span class="o">=</span><span class="n">core_mesh</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+    <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+    <span class="n">n_eff</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;effective_index&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;loss_dB_per_m&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span>
+
+
+<span class="c1">## Run all resolutions and bend methods for FDM</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;cylindrical&#39;</span><span class="p">,</span> <span class="s1">&#39;TO&#39;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">resolution</span> <span class="ow">in</span> <span class="n">resolutions</span><span class="p">:</span>
+        <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="s1">&#39;FDM&#39;</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;FDM&#39;</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resolution</span><span class="si">}</span><span class="s1"> nm&#39;</span><span class="p">,</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">))</span>
+
+<span class="c1">## Run all resolutions for FEM</span>
+<span class="k">for</span> <span class="n">points</span><span class="p">,</span> <span class="n">core_mesh</span> <span class="ow">in</span> <span class="n">fem_meshes</span><span class="p">:</span>
+    <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="s1">&#39;FEM&#39;</span><span class="p">,</span> <span class="s1">&#39;cylindrical&#39;</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">core_mesh</span><span class="o">=</span><span class="n">core_mesh</span><span class="p">)</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;FEM&#39;</span><span class="p">,</span> <span class="s1">&#39;cylindrical&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">points</span><span class="si">}</span><span class="s1">/wl, </span><span class="si">{</span><span class="n">core_mesh</span><span class="si">}</span><span class="s1"> nm&#39;</span><span class="p">,</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">))</span>
+
+<span class="c1">## Plot the guided mode of the finest FEM mesh</span>
+<span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="s1">&#39;Ex&#39;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;bend_FEM&#39;</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+
+<span class="c1">## Print each solve&#39;s error against the finest FEM mesh</span>
+<span class="n">reference</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{</span><span class="s2">&quot;solver&quot;</span><span class="si">:</span><span class="s1">7s</span><span class="si">}{</span><span class="s2">&quot;method&quot;</span><span class="si">:</span><span class="s1">13s</span><span class="si">}{</span><span class="s2">&quot;mesh&quot;</span><span class="si">:</span><span class="s1">&gt;14s</span><span class="si">}{</span><span class="s2">&quot;n_eff&quot;</span><span class="si">:</span><span class="s1">&gt;11s</span><span class="si">}{</span><span class="s2">&quot;error&quot;</span><span class="si">:</span><span class="s1">&gt;10s</span><span class="si">}{</span><span class="s2">&quot;dB/m&quot;</span><span class="si">:</span><span class="s1">&gt;8s</span><span class="si">}{</span><span class="s2">&quot;time (s)&quot;</span><span class="si">:</span><span class="s1">&gt;10s</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">solver</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">n_eff</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">elapsed</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">solver</span><span class="si">:</span><span class="s1">7s</span><span class="si">}{</span><span class="n">method</span><span class="si">:</span><span class="s1">13s</span><span class="si">}{</span><span class="n">mesh</span><span class="si">:</span><span class="s1">&gt;14s</span><span class="si">}{</span><span class="n">n_eff</span><span class="si">:</span><span class="s1">&gt;11.6f</span><span class="si">}{</span><span class="n">n_eff</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">reference</span><span class="si">:</span><span class="s1">&gt;10.1e</span><span class="si">}{</span><span class="n">loss</span><span class="si">:</span><span class="s1">&gt;8.4f</span><span class="si">}{</span><span class="n">elapsed</span><span class="si">:</span><span class="s1">&gt;10.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1">## Plot effective index and bend loss errors against solve time</span>
+<span class="n">loss_reference</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">solver</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">marker</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;FDM&#39;</span><span class="p">,</span> <span class="s1">&#39;cylindrical&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;FDM&#39;</span><span class="p">,</span> <span class="s1">&#39;TO&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;FEM&#39;</span><span class="p">,</span> <span class="s1">&#39;cylindrical&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">)):</span>
+    <span class="n">picked</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">r</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">method</span><span class="p">)]</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">picked</span><span class="p">]</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">reference</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">picked</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">solver</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">loss_reference</span><span class="p">)</span> <span class="o">/</span> <span class="n">loss_reference</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">picked</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">solver</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;|n_eff error|&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;|bend loss error| / bend loss&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;solve time (s)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;bend_solvers_convergence.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="n">em</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div><p>Console output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMode3D</span> <span class="mf">1.0.6</span> <span class="o">-</span> <span class="n">email</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">4.0</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">6.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">47.5</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.3</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.8</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.7</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.4</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.0</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">6.0</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.2</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">31.5</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">1.3</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">2.1</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">3.1</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">5.9</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.4</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">10.1</span> <span class="n">sec</span>
+<span class="n">Meshing</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">0.5</span> <span class="n">sec</span>
+<span class="n">Solving</span> <span class="n">modes</span> <span class="n">completed</span> <span class="ow">in</span> <span class="mf">22.9</span> <span class="n">sec</span>
+<span class="n">Exited</span> <span class="n">EMode</span>
+
+<span class="n">solver</span> <span class="n">method</span>                 <span class="n">mesh</span>      <span class="n">n_eff</span>     <span class="n">error</span>    <span class="n">dB</span><span class="o">/</span><span class="n">m</span>  <span class="n">time</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.663104</span>  <span class="o">-</span><span class="mf">2.9e-03</span>  <span class="mf">0.0248</span>       <span class="mf">1.0</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">25</span> <span class="n">nm</span>   <span class="mf">1.665276</span>  <span class="o">-</span><span class="mf">7.1e-04</span>  <span class="mf">0.0180</span>       <span class="mf">4.3</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">20</span> <span class="n">nm</span>   <span class="mf">1.665535</span>  <span class="o">-</span><span class="mf">4.6e-04</span>  <span class="mf">0.0174</span>       <span class="mf">7.3</span>
+<span class="n">FDM</span>    <span class="n">cylindrical</span>           <span class="mi">10</span> <span class="n">nm</span>   <span class="mf">1.665877</span>  <span class="o">-</span><span class="mf">1.1e-04</span>  <span class="mf">0.0166</span>      <span class="mf">48.7</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665358</span>  <span class="o">-</span><span class="mf">6.3e-04</span>  <span class="mf">0.0000</span>       <span class="mf">1.2</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">25</span> <span class="n">nm</span>   <span class="mf">1.665919</span>  <span class="o">-</span><span class="mf">7.0e-05</span>  <span class="mf">0.0002</span>       <span class="mf">4.3</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">20</span> <span class="n">nm</span>   <span class="mf">1.665974</span>  <span class="o">-</span><span class="mf">1.6e-05</span>  <span class="mf">0.0003</span>       <span class="mf">7.2</span>
+<span class="n">FDM</span>    <span class="n">TO</span>                    <span class="mi">10</span> <span class="n">nm</span>   <span class="mf">1.666021</span>   <span class="mf">3.1e-05</span>  <span class="mf">0.0003</span>      <span class="mf">35.8</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>    <span class="mi">1</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">100</span> <span class="n">nm</span>   <span class="mf">1.665985</span>  <span class="o">-</span><span class="mf">5.2e-06</span>  <span class="mf">0.0168</span>       <span class="mf">2.8</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">1</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665982</span>  <span class="o">-</span><span class="mf">7.5e-06</span>  <span class="mf">0.0166</span>       <span class="mf">3.4</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">2</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665982</span>  <span class="o">-</span><span class="mf">7.5e-06</span>  <span class="mf">0.0165</span>       <span class="mf">4.5</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">3</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665987</span>  <span class="o">-</span><span class="mf">3.3e-06</span>  <span class="mf">0.0164</span>       <span class="mf">8.2</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">4</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665987</span>  <span class="o">-</span><span class="mf">3.2e-06</span>  <span class="mf">0.0164</span>      <span class="mf">12.1</span>
+<span class="n">FEM</span>    <span class="n">cylindrical</span>     <span class="mi">6</span><span class="o">/</span><span class="n">wl</span><span class="p">,</span> <span class="mi">50</span> <span class="n">nm</span>   <span class="mf">1.665990</span>   <span class="mf">0.0e+00</span>  <span class="mf">0.0164</span>      <span class="mf">27.7</span>
+</pre></div>
+</div>
+<p>Figures:</p>
+<figure class="align-center" style="width: 500px">
+<img alt="../_images/bend_solvers_convergence.png" src="../_images/bend_solvers_convergence.png" style="width: 500px;" />
+</figure>
+<figure class="align-center" style="width: 400px">
+<img alt="../_images/bend_FEM.png" src="../_images/bend_FEM.png" style="width: 400px;" />
+</figure>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -91,7 +91,7 @@ Next, the directional coupler device is created and simulated for a short couple
 
         ## Set simulation parameters
         wavelength = 1550 # [nm] wavelength
-        dx, dy = 20, 20 # [nm] resolution
+        dx, dy = 20, 10 # [nm] resolution: 22 cells across the core, symmetric about the fold
         h_core = 220 # [nm] waveguide core height
         h_clad = 1200 # [nm] waveguide top and bottom clad
         width_wg = 600 # [nm]
@@ -179,39 +179,39 @@ Next, the directional coupler device is created and simulated for a short couple
 
 Console output::
 
-    EMode3D 1.0.6 - email
+    EMode3D 1.0.7 - email
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
-    Solving section: sbend... completed in 2 min 41.7 sec
+    Solving section: sbend... completed in 1 min 47.3 sec
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 2 min 41.7 sec
+     completed in 1 min 57.4 sec
 
     Sweeping section parameter 'length'...
-    Solving EME: length = 200000.0... completed in 0.5 sec
-    Solving EME: length = 190000.0... completed in 0.4 sec
-    Solving EME: length = 180000.0... completed in 0.4 sec
-    Solving EME: length = 170000.0... completed in 0.4 sec
-    Solving EME: length = 160000.0... completed in 0.4 sec
-    Solving EME: length = 150000.0... completed in 0.4 sec
-    Solving EME: length = 140000.0... completed in 0.4 sec
-    Solving EME: length = 130000.0... completed in 0.4 sec
-    Solving EME: length = 120000.0... completed in 0.4 sec
-    Solving EME: length = 110000.0... completed in 0.4 sec
-    Solving EME: length = 100000.0... completed in 0.4 sec
-    Solving EME: length = 90000.0... completed in 0.4 sec
-    Solving EME: length = 80000.0... completed in 0.5 sec
-    Solving EME: length = 70000.0... completed in 0.4 sec
-    Solving EME: length = 60000.0... completed in 0.4 sec
-    Solving EME: length = 50000.0... completed in 0.4 sec
-    Solving EME: length = 40000.0... completed in 0.4 sec
-    Solving EME: length = 30000.0... completed in 0.4 sec
-    Solving EME: length = 20000.0... completed in 0.4 sec
-    Solving EME: length = 10000.0... completed in 0.4 sec
-    Solving EME: length = 0.0... completed in 0.4 sec
-     completed in 8.7 sec
+    Solving EME: length = 200000.0... completed in 5.0 sec
+    Solving EME: length = 190000.0... completed in 5.1 sec
+    Solving EME: length = 180000.0... completed in 4.9 sec
+    Solving EME: length = 170000.0... completed in 5.2 sec
+    Solving EME: length = 160000.0... completed in 5.1 sec
+    Solving EME: length = 150000.0... completed in 5.0 sec
+    Solving EME: length = 140000.0... completed in 5.1 sec
+    Solving EME: length = 130000.0... completed in 5.0 sec
+    Solving EME: length = 120000.0... completed in 5.1 sec
+    Solving EME: length = 110000.0... completed in 5.1 sec
+    Solving EME: length = 100000.0... completed in 4.9 sec
+    Solving EME: length = 90000.0... completed in 5.1 sec
+    Solving EME: length = 80000.0... completed in 5.0 sec
+    Solving EME: length = 70000.0... completed in 5.1 sec
+    Solving EME: length = 60000.0... completed in 5.0 sec
+    Solving EME: length = 50000.0... completed in 5.0 sec
+    Solving EME: length = 40000.0... completed in 5.1 sec
+    Solving EME: length = 30000.0... completed in 4.9 sec
+    Solving EME: length = 20000.0... completed in 5.0 sec
+    Solving EME: length = 10000.0... completed in 5.0 sec
+    Solving EME: length = 0.0... completed in 4.9 sec
+     completed in 1 min 45.6 sec
 
     Solving S-matrices...
     Solving section: input... completed in 0.0 sec
@@ -219,7 +219,7 @@ Console output::
     Solving section: coupler... completed in 0.0 sec
     Solving section: 4... completed in 0.0 sec
     Solving section: output... completed in 0.0 sec
-     completed in 1.1 sec
+     completed in 9.7 sec
     Exited EMode
 
 

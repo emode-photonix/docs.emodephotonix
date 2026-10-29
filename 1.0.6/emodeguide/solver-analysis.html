@@ -1,0 +1,879 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Solver and analysis</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+    <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=e2a723ec"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/code-tabs.js?v=c983d12e"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/solver-analysis';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/emodeguide/solver-analysis.html" />
+    <link rel="icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="EME" href="eme.html" />
+    <link rel="prev" title="Simulation setup" href="setup.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.6" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="EMode Photonix"/>
+    <img src="../_static/logo-dark.png" class="logo__image only-dark pst-js-only" alt="EMode Photonix"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../interface.html">
+    Interface
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../emodeguide.html">
+    EMode Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://www.emodephotonix.com/">
+    Home
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode2D Functions</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="file-management.html">File management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Simulation setup</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Solver and analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">EMode3D Functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem.html">Multi-Physics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="variables.html">Variable Descriptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Material Database</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation/release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="solver-and-analysis">
+<h1>Solver and analysis</h1>
+<dl class="py data">
+<dt class="sig sig-object py" id="solve">
+<span class="sig-name descname"><span class="pre">solve</span></span></dt>
+<dd><p>Calculate the waveguide modes with the finite-difference (FDM) or the finite-element (FEM) solver. The fields, effective indices, losses and TE fractions are saved as described under <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, whichever solver runs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver_method</strong> (<em>str</em>) – ‘FDM’ or ‘FEM’ runs that solver, the same as calling <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> or <code class="docutils literal notranslate"><span class="pre">FEM()</span></code>, and sets the profile’s <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting to it. ‘default’ runs the solver the <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting selects, without changing it. That setting is itself ‘default’ unless changed, which is the FDM in every session, default: ‘default’</p></li>
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>int</em>) – profile name to save the solved profile under, default: ‘_default’</p></li>
+<li><p><strong>section</strong> (<em>str</em>) – name of an EME section to solve a slice from, instead of the profile’s own settings/shapes, default: None</p></li>
+<li><p><strong>propagation_distance</strong> (<em>float</em>) – [nm] where along <code class="docutils literal notranslate"><span class="pre">section</span></code> to take the cross-section, default: None</p></li>
+<li><p><strong>include_heat</strong> (<em>bool</em>) – whether to include the temperature change from the most recent <code class="docutils literal notranslate"><span class="pre">heat()</span></code> solve, default: True</p></li>
+<li><p><strong>include_static</strong> (<em>bool</em>) – whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent <code class="docutils literal notranslate"><span class="pre">electrostatic()</span></code> solve, default: True</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – print progress, default: True</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>what <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> or <code class="docutils literal notranslate"><span class="pre">FEM()</span></code> returns, for whichever solver ran.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The FEM solver requires an EMode<sup>3D</sup> license, so <code class="docutils literal notranslate"><span class="pre">solve()</span></code> needs one whenever it runs the FEM: with <code class="docutils literal notranslate"><span class="pre">solver_method='FEM'</span></code>, or with ‘default’ when the profile’s <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting is ‘FEM’. See <a class="reference internal" href="fem.html#FEM" title="FEM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FEM</span></code></a> on the Multi-Physics page.</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="FDM">
+<span class="sig-name descname"><span class="pre">FDM</span></span></dt>
+<dd><p>Calculate the waveguide modes using the finite difference method. Calling <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> sets the profile’s <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting to ‘FDM’, so <code class="docutils literal notranslate"><span class="pre">EME()</span></code> and <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> then use the FDM too. It automatically runs <code class="docutils literal notranslate"><span class="pre">EM_mesh</span></code> as needed (generating <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">permittivity</span></code>, and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>). After solving the mode, the effective index (<code class="docutils literal notranslate"><span class="pre">effective_index</span></code>), mode propagation loss (<code class="docutils literal notranslate"><span class="pre">loss_dB_per_m</span></code>), and field components (<code class="docutils literal notranslate"><span class="pre">Fx</span></code>, <code class="docutils literal notranslate"><span class="pre">Fy</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, <code class="docutils literal notranslate"><span class="pre">Ez</span></code>, <code class="docutils literal notranslate"><span class="pre">Hx</span></code>, <code class="docutils literal notranslate"><span class="pre">Hy</span></code>, <code class="docutils literal notranslate"><span class="pre">Hz</span></code>, <code class="docutils literal notranslate"><span class="pre">Sx</span></code>, <code class="docutils literal notranslate"><span class="pre">Sy</span></code>, <code class="docutils literal notranslate"><span class="pre">Sz</span></code>) are available, where the fields are normalized to the equation below.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \mathrm{Re} \iint \left( \vec E \times \vec H^* \right) \! \cdot \! \hat{z} \, \mathrm{d}x \, \mathrm{d}y = 1 \, \mathrm{W}\]</div>
+<p>It also calculates the TE fraction of each mode (<code class="docutils literal notranslate"><span class="pre">TE_fraction</span></code>) with the following equation, and it saves the indices of the TE and TM modes (<code class="docutils literal notranslate"><span class="pre">TE_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">TM_indices</span></code>).</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{{TE_fraction}} = \frac{\iint \left| \vec E_\mathrm{x} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}{\iint \left| \vec E_\mathrm{x} \right|^2 + \left| \vec E_\mathrm{y} \right|^2 \, \mathrm{d}x \, \mathrm{d}y}\]</div>
+<p>A multi-wavelength profile (a wavelength list in <code class="docutils literal notranslate"><span class="pre">settings()</span></code>, or a set from <code class="docutils literal notranslate"><span class="pre">create_profile_set()</span></code>) is solved at each of its wavelengths, and is saved as one solved profile per wavelength, so <code class="docutils literal notranslate"><span class="pre">get()</span></code> returns a dict keyed by wavelength and <code class="docutils literal notranslate"><span class="pre">plot()</span></code> and <code class="docutils literal notranslate"><span class="pre">EME()</span></code> use the modes at each wavelength. <code class="docutils literal notranslate"><span class="pre">FEM()</span></code> and <code class="docutils literal notranslate"><span class="pre">solve()</span></code> do the same. The direct return value describes only the longest wavelength.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>int</em>) – profile name to automatically create a profile after running <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, default: ‘_default’</p></li>
+<li><p><strong>section</strong> (<em>str</em>) – name of an EME section to solve a slice from, instead of the profile’s own settings/shapes, default: None</p></li>
+<li><p><strong>propagation_distance</strong> (<em>float</em>) – [nm] optional propagation distance used to compute an additional propagation phase/loss, default: None</p></li>
+<li><p><strong>mode_filter</strong> (<em>str</em>) – choose to filter the mode list for propagation direction of ‘forward’, ‘backward’, or ‘none’. It acts in the anisotropic solver only, since the isotropic solver returns forward modes by construction. It is saved in the profile’s settings, so a later <code class="docutils literal notranslate"><span class="pre">EME()</span></code> or <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> that solves this profile again uses it too. Default: ‘forward’</p></li>
+<li><p><strong>fLanczos</strong> (<em>int</em>) – size of the eigensolver’s Krylov subspace as a multiple of the number of modes requested, at least 1. Raise it if the solve does not converge. It is saved in the profile’s settings like <code class="docutils literal notranslate"><span class="pre">mode_filter</span></code>. Default: 5</p></li>
+<li><p><strong>solve_type</strong> (<em>str</em>) – either ‘isotropic’, ‘anisotropic’, or ‘auto’ to control whether anisotropic materials are solved with the full tensor or reduced to their isotropic diagonal, default: ‘auto’</p></li>
+<li><p><strong>include_heat</strong> (<em>bool</em>) – whether to include heat-related material properties when meshing, default: True</p></li>
+<li><p><strong>include_static</strong> (<em>bool</em>) – whether to apply the electro-optic (Pockels) permittivity perturbation from the most recent <code class="docutils literal notranslate"><span class="pre">electrostatic()</span></code> solve, default: True</p></li>
+<li><p><strong>scattering</strong> (<em>bool</em>) – whether to automatically calculate interfacial scattering loss for all shapes after solving. The <code class="docutils literal notranslate"><span class="pre">include_scattering</span></code> setting in <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> does the same for every solve of the profile. Default: False</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – print progress, default: True</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The direct return value of this function (as called through <code class="docutils literal notranslate"><span class="pre">emodeconnection</span></code>) is a dict with keys <code class="docutils literal notranslate"><span class="pre">field</span></code> (a Field object), <code class="docutils literal notranslate"><span class="pre">n_eff_tilde</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_fraction</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_indices</span></code>, and <code class="docutils literal notranslate"><span class="pre">TM_indices</span></code>. The individual field components and derived quantities described above (<code class="docutils literal notranslate"><span class="pre">effective_index</span></code>, <code class="docutils literal notranslate"><span class="pre">loss_dB_per_m</span></code>, <code class="docutils literal notranslate"><span class="pre">Ex</span></code>/<code class="docutils literal notranslate"><span class="pre">Ey</span></code>/etc.) become available afterward from the saved profile via <code class="docutils literal notranslate"><span class="pre">get()</span></code>/<code class="docutils literal notranslate"><span class="pre">get_fields()</span></code>, not as top-level keys of this return value.</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="sweep">
+<span class="sig-name descname"><span class="pre">sweep</span></span></dt>
+<dd><p>This function sweeps a calculation as a function of any available setting, shape parameter, or section parameter (EMode<sup>3D</sup> only). Run a parameter sweep of <code class="docutils literal notranslate"><span class="pre">key</span></code> over defined <code class="docutils literal notranslate"><span class="pre">values</span></code> by solving <code class="docutils literal notranslate"><span class="pre">solve_type</span></code> for each value and saving a list of parameters defined by ‘result’ that correspond to the <code class="docutils literal notranslate"><span class="pre">values</span></code>. After running a sweep, the data will be available from a parameter called <code class="docutils literal notranslate"><span class="pre">sweep_data</span></code>, which includes all of the specified parameters of this funcion and the data specified by the <code class="docutils literal notranslate"><span class="pre">result</span></code> parameter. The <code class="docutils literal notranslate"><span class="pre">result</span></code> parameter can include any parameter that is listed in the <code class="docutils literal notranslate"><span class="pre">inspect()</span></code> output (after running the desired simulation). Additionally, the <code class="docutils literal notranslate"><span class="pre">result</span></code> parameter can include ‘scattering_loss’ (a sum of all scattering losses for each mode) or ‘mode_order’ (a list of mode indices used for tracking the order of the modes).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – any settings, shape, or section parameter that will have its value changed in the sweep, directly specify the key for settings parameters, specify ‘shape, SHAPE_NAME, SHAPE_KEY’ to specify shape the SHAPE_KEY of SHAPE_NAME, specify ‘section, SECTION_NAME, SECTION_KEY’ to specify the SECTION_KEY of SECTION_NAME. The accepted section keys are ‘length’, ‘num_modes’, ‘minimum_z_step’, ‘overlap_variation’, ‘z_slices’, ‘offset’, ‘etch_depth’, ‘sidewall_angle’, ‘window_width’, ‘window_height’, and ‘facet_angle’ (the tilt [degrees] of an angled facet on that section, see <a class="reference internal" href="../interface.html#make_angled_facet_port" title="make_angled_facet_port"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_angled_facet_port()</span></code></a>); any other section key raises an error naming it.</p></li>
+<li><p><strong>values</strong> (<em>list</em><em> or </em><em>array</em>) – the values that define the <code class="docutils literal notranslate"><span class="pre">key</span></code> during the sweep</p></li>
+<li><p><strong>solve_type</strong> (<em>str</em>) – either ‘mesh’, ‘FDM’, or ‘EME’ to specify which solver to run at each sweep step, where ‘FDM’ means a mode solve with the solver the <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting selects (the FDM or the FEM), default: automatically chosen based on the <code class="docutils literal notranslate"><span class="pre">key</span></code> and <code class="docutils literal notranslate"><span class="pre">result</span></code> selection</p></li>
+<li><p><strong>result</strong> (<em>str</em><em> or </em><em>list</em>) – the parameters to save from each iteration of the sweep.  This can be any value in the eph file.  Internally, this calls <code class="docutils literal notranslate"><span class="pre">get</span></code>, so if you can read the value with <code class="docutils literal notranslate"><span class="pre">get</span></code> you can collect it with <code class="docutils literal notranslate"><span class="pre">sweep</span></code>. Additionally, ‘scattering_loss’, ‘mode_order’ and ‘monitor_coupling’ are accepted. ‘monitor_coupling’ collects <a class="reference internal" href="eme.html#monitor_coupling" title="monitor_coupling"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor_coupling</span></code></a> for the monitor named by <code class="docutils literal notranslate"><span class="pre">monitor</span></code> and the beam described by <code class="docutils literal notranslate"><span class="pre">beam</span></code>. With a <code class="docutils literal notranslate"><span class="pre">key</span></code> that is one of the beam’s arguments (‘angle’, ‘mode_field_diameter’, ‘center’, ‘index’ or ‘polarization’) the solved chain is reused and only the overlap is evaluated at each value, with no solve, and <code class="docutils literal notranslate"><span class="pre">sweep_data</span></code> also carries <code class="docutils literal notranslate"><span class="pre">power_through_plane</span></code> and <code class="docutils literal notranslate"><span class="pre">overlap</span></code>. Any other key needs <code class="docutils literal notranslate"><span class="pre">solve_type='EME'</span></code> and solves the chain at each value. default: ‘effective_index’</p></li>
+<li><p><strong>seed</strong> (<em>bool</em>) – whether to seed each solve step with the previous step’s mode list, default: True</p></li>
+<li><p><strong>adaptive</strong> (<em>bool</em>) – only for a wavelength sweep. <code class="docutils literal notranslate"><span class="pre">values</span></code> keeps its meaning – the wavelengths you want results at – and <code class="docutils literal notranslate"><span class="pre">adaptive</span></code> changes only <em>where the solver runs</em>: modes are matched between neighbouring solves through a phase-corrected overlap, and a bisection in wavelength places further solves until the mode list stops moving by more than <code class="docutils literal notranslate"><span class="pre">tolerance</span></code>, or the gap reaches <code class="docutils literal notranslate"><span class="pre">minimum_step</span></code>. The requested wavelengths are then filled in by interpolating the solved mode lists, which is much cheaper than solving every point when the modes vary smoothly. <code class="docutils literal notranslate"><span class="pre">sweep_data</span></code> additionally carries <code class="docutils literal notranslate"><span class="pre">solved_wavelengths</span></code> (where the solver actually ran) and <code class="docutils literal notranslate"><span class="pre">unconverged</span></code> (any stretch the sampler gave up on, reported rather than raised). Default: False</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – with <code class="docutils literal notranslate"><span class="pre">adaptive</span></code>, the largest mode-list change tolerated between adjacent solves, default: 1e-3</p></li>
+<li><p><strong>minimum_step</strong> (<em>float</em>) – [nm] with <code class="docutils literal notranslate"><span class="pre">adaptive</span></code>, the smallest wavelength gap the sampler will bisect into, default: the spacing of <code class="docutils literal notranslate"><span class="pre">values</span></code></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – either ‘direct’ or ‘interpolated’. ‘interpolated’ is only for <code class="docutils literal notranslate"><span class="pre">key='wavelength'</span></code> with <code class="docutils literal notranslate"><span class="pre">result='S_matrix'</span></code> (EMode<sup>3D</sup> only): the circuit is solved and refined once at the current wavelength with <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a>, every cross-section in it is solved at <code class="docutils literal notranslate"><span class="pre">num_nodes</span></code> wavelengths (Chebyshev-Lobatto nodes, ends included) over <code class="docutils literal notranslate"><span class="pre">wavelength_range</span></code>, and the S-matrix at each of <code class="docutils literal notranslate"><span class="pre">values</span></code> is rebuilt from the propagation constants and junctions interpolated between them, so no wavelength in <code class="docutils literal notranslate"><span class="pre">values</span></code> solves anything. It suits the hundreds of wavelengths a resonator spectrum needs. A mode that cannot be followed across the range carries nothing in the result. <code class="docutils literal notranslate"><span class="pre">sweep_data</span></code> additionally carries <code class="docutils literal notranslate"><span class="pre">num_nodes</span></code> and <code class="docutils literal notranslate"><span class="pre">interpolation_residual</span></code>, the largest error in any S-matrix element at one node predicted from the others, and a warning is logged when it exceeds <code class="docutils literal notranslate"><span class="pre">interpolation_tolerance</span></code>. Default: ‘direct’</p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>) – with <code class="docutils literal notranslate"><span class="pre">method='interpolated'</span></code>, the number of wavelengths every cross-section is solved at, at least 4. Add nodes, or narrow the range, when <code class="docutils literal notranslate"><span class="pre">interpolation_residual</span></code> is too large, default: 8</p></li>
+<li><p><strong>wavelength_range</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – [nm] with <code class="docutils literal notranslate"><span class="pre">method='interpolated'</span></code>, the range the nodes span, which must contain every one of <code class="docutils literal notranslate"><span class="pre">values</span></code>, default: the range of <code class="docutils literal notranslate"><span class="pre">values</span></code></p></li>
+<li><p><strong>interpolation_tolerance</strong> (<em>float</em>) – with <code class="docutils literal notranslate"><span class="pre">method='interpolated'</span></code>, the largest <code class="docutils literal notranslate"><span class="pre">interpolation_residual</span></code> accepted without a warning, default: 1e-4</p></li>
+<li><p><strong>monitor</strong> (<em>str</em>) – with <code class="docutils literal notranslate"><span class="pre">result='monitor_coupling'</span></code>, the name of the monitor (see <a class="reference internal" href="eme.html#monitor" title="monitor"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor</span></code></a>), default: None</p></li>
+<li><p><strong>beam</strong> (<em>dict</em>) – with <code class="docutils literal notranslate"><span class="pre">result='monitor_coupling'</span></code>, the keyword arguments of <a class="reference internal" href="eme.html#monitor_coupling" title="monitor_coupling"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor_coupling</span></code></a> that describe the beam, <code class="docutils literal notranslate"><span class="pre">mode_field_diameter</span></code> at least, for example <code class="docutils literal notranslate"><span class="pre">beam=dict(mode_field_diameter=10.4e3)</span></code>. A beam <code class="docutils literal notranslate"><span class="pre">key</span></code> overrides its entry here at each value, default: None</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="confinement">
+<span class="sig-name descname"><span class="pre">confinement</span></span></dt>
+<dd><p>Calculate confinement factor of specified shape. By default, only the area of the shape that is used to define the refractive index profile is included in the confinement factor. For instance, if another shape with a higher priority overlaps the specified shape, the overlapped area is not included. The confinement factors are also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – profile name, default: ‘_default’</p></li>
+<li><p><strong>shape_list</strong> – name (from <code class="docutils literal notranslate"><span class="pre">shape</span></code>) or list of names of shapes to include in confinement or ‘all’ for all shapes, default: ‘all’</p></li>
+<li><p><strong>mode_list</strong> (<em>str</em><em> or </em><em>list</em>) – desired modes to calculate confinement, ‘all’, ‘TE’, ‘TM’, or a list of the desired mode indices, default: ‘all’</p></li>
+<li><p><strong>vertices</strong> (<em>list</em><em> (</em><em>Nx2</em><em>)</em>) – list of vertices that define a closed polygon, specifying this parameter will override the <code class="docutils literal notranslate"><span class="pre">shape_list</span></code> input, default: None</p></li>
+<li><p><strong>ignore_priority</strong> (<em>bool</em>) – toggle ignoring overlapped shapes with higher priority, default: False</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="effective_area">
+<span class="sig-name descname"><span class="pre">effective_area</span></span></dt>
+<dd><p>Calculate the effective areas for all modes. After running this function, an array called <code class="docutils literal notranslate"><span class="pre">effective_area</span></code> will become available and <code class="docutils literal notranslate"><span class="pre">report</span></code> will display the effective areas. The <code class="docutils literal notranslate"><span class="pre">effective_area</span></code> is also returned by this function and is in units of <span class="math notranslate nohighlight">\(\mu\text{m}^2\)</span>; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
+<div class="math notranslate nohighlight">
+\[A_\mathrm{eff} = \frac{\left( \iint \left| \vec E \right|^2 \, \mathrm{d}x \, \mathrm{d}y \right)^2}{\iint \left| \vec E \right|^4 \, \mathrm{d}x \, \mathrm{d}y} \, \mu\text{m}^2\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – profile name, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="orthogonality">
+<span class="sig-name descname"><span class="pre">orthogonality</span></span></dt>
+<dd><p>Calculate the highest value of mode overlap between modes in the mode list. After running this function, a variable called <code class="docutils literal notranslate"><span class="pre">maximum_overlap</span></code> will become available in metadata of the named (or default) profile, and the <code class="docutils literal notranslate"><span class="pre">maximum_overlap</span></code> is returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength. Ideally, this value is less than <span class="math notranslate nohighlight">\(10^{-3}\)</span>, indicating an accurate mode list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>int</em>) – profile name, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="group_index">
+<span class="sig-name descname"><span class="pre">group_index</span></span></dt>
+<dd><p>Calculate the group index for all modes. First, <code class="docutils literal notranslate"><span class="pre">group_index</span></code> runs <code class="docutils literal notranslate"><span class="pre">FDM</span></code> (if not already run), then it runs <code class="docutils literal notranslate"><span class="pre">FDM</span></code> a second time with 0.01 % longer wavelength to calculate the group index. After running this function, an array called <code class="docutils literal notranslate"><span class="pre">group_index</span></code> will become available and <code class="docutils literal notranslate"><span class="pre">report</span></code> will display the group index. The <code class="docutils literal notranslate"><span class="pre">group_index</span></code> array is also returned by this function; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – profile name, default: ‘_default’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="report">
+<span class="sig-name descname"><span class="pre">report</span></span></dt>
+<dd><p>Display a simulation report table with information about each mode: mode number; effective index; TE fraction; loss (dB/m); a <code class="docutils literal notranslate"><span class="pre">PML</span></code> column when the profile was solved with a pml, marking the modes that carry less than 75% of their power inside the window (see <code class="docutils literal notranslate"><span class="pre">PML_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">window_confinement</span></code> in <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a>); per-shape confinement factors and scattering loss (if calculated); effective areas (if calculated).</p>
+<p>The line above the table gives the wavelength and the mode solver that produced the modes, for example <code class="docutils literal notranslate"><span class="pre">Wavelength:</span> <span class="pre">1550.0</span> <span class="pre">nm</span>&#160;&#160;&#160; <span class="pre">Solver:</span> <span class="pre">FEM</span></code>. A saved CSV records both below the table.</p>
+<p>Returns the table as a dictionary keyed by profile name, each table holding one list per column. A multi-wavelength profile returns one table per wavelength, keyed by wavelength; an unsolved profile returns an empty table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – profile name, default: ‘_default’</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) – whether to save the table to a file or not, default: False</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – name of the file to save, default: ‘mode_report’</p></li>
+<li><p><strong>file_type</strong> (<em>str</em>) – file type to save, ‘txt’, ‘latex’, or ‘csv’, default: ‘txt’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="label_profile">
+<span class="sig-name descname"><span class="pre">label_profile</span></span></dt>
+<dd><p>Saves a copy of the default profile (settings, shapes, mesh and any solved modes) under <code class="docutils literal notranslate"><span class="pre">name</span></code> in the <code class="docutils literal notranslate"><span class="pre">profiles</span></code> dictionary of the simulation file, meshing it first if needed. A multi-wavelength profile is saved whole, with each member meshed and keeping its own name. Named profiles are read with <code class="docutils literal notranslate"><span class="pre">profile=NAME</span></code> in <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>, <a class="reference internal" href="file-management.html#get_fields" title="get_fields"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_fields</span></code></a>, <a class="reference internal" href="file-management.html#get_grid" title="get_grid"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_grid</span></code></a>, <a class="reference internal" href="file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a> and <a class="reference internal" href="file-management.html#get_profile" title="get_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_profile</span></code></a>, are the inputs to <code class="docutils literal notranslate"><span class="pre">overlap</span></code>, <code class="docutils literal notranslate"><span class="pre">mode_order</span></code> and the EME section functions, and are not affected by <a class="reference internal" href="setup.html#reset" title="reset"><code class="xref py py-data docutils literal notranslate"><span class="pre">reset</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – save the current simulation state to this name, default: ‘0’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="overlap">
+<span class="sig-name descname"><span class="pre">overlap</span></span></dt>
+<dd><p>Calculate overlap integral between two modes. The result is returned by this function and saved on the profile named by <code class="docutils literal notranslate"><span class="pre">profile_b</span></code>, where <code class="docutils literal notranslate"><span class="pre">get('overlap',</span> <span class="pre">profile=profile_b)</span></code> reads the latest result and <code class="docutils literal notranslate"><span class="pre">get('overlaps',</span> <span class="pre">profile=profile_b)</span></code> a record of every overlap computed against it (see <a class="reference internal" href="variables.html"><span class="doc">Variable Descriptions</span></a>).</p>
+<blockquote>
+<div><p>Coldren, Larry A., Scott W. Corzine, and Milan L. Mashanovitch, ‘’Diode lasers and photonic integrated circuits,’’ John Wiley &amp; Sons, 2012.</p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\mathrm{overlap} = \frac{4 n_\mathrm{eff,1} n_\mathrm{eff,2}}{(n_\mathrm{eff,1} + n_\mathrm{eff,2})^2} \frac{\left| \iint \vec E_1 \times \vec H_2 \, \mathrm{d}x \, \mathrm{d}y \right|^2}{\iint \left| \vec E_1 \times \vec H_1 \right| \, \mathrm{d}x \, \mathrm{d}y \, \iint \left| \vec E_2 \times \vec H_2 \right| \, \mathrm{d}x \, \mathrm{d}y}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile_a</strong> (<em>str</em><em> or </em><em>int</em>) – label of first profile, default: ‘_default’</p></li>
+<li><p><strong>mode_a</strong> (<em>int</em>) – mode number from the first profile, default: 0</p></li>
+<li><p><strong>simulation_name_a</strong> (<em>str</em>) – simulation name for the first mode set, default: ‘emode’</p></li>
+<li><p><strong>profile_b</strong> (<em>str</em><em> or </em><em>int</em>) – label of second profile, default: ‘_default’</p></li>
+<li><p><strong>mode_b</strong> (<em>int</em>) – mode number from the second profile, default: 0</p></li>
+<li><p><strong>simulation_name_b</strong> (<em>str</em>) – simulation name for the second mode set, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mode_order">
+<span class="sig-name descname"><span class="pre">mode_order</span></span></dt>
+<dd><p>Calculate mode ordering between two mode lists. The result is returned as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile_a</strong> (<em>str</em><em> or </em><em>int</em>) – label of first profile, default: ‘’</p></li>
+<li><p><strong>profile_b</strong> (<em>str</em><em> or </em><em>int</em>) – label of second profile, default: ‘’</p></li>
+<li><p><strong>raw_fields</strong> (<em>bool</em>) – use the raw (un-normalized) field data for the ordering comparison instead of the interpolated fields, default: False</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="scattering">
+<span class="sig-name descname"><span class="pre">scattering</span></span></dt>
+<dd><p>Calculates the scattering loss from a specified shape and mode using the Volume Current Method [1]. Results are saved in the variables <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_vertical_edges']</span></code> (total loss from all vertical interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_horizontal_edges']</span></code> (total loss from all horizontal interfaces), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_sum']</span></code> (total scattering loss), <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['edges']</span></code> (list of edge points for calculating scattering loss), and <code class="docutils literal notranslate"><span class="pre">SHAPE.metadata['scattering_all_edges']</span></code> (scattering loss from corresponding edges). The fields are interpolated to the exact edge position along the interface. The scattering results are also returned by this function as a dictionary keyed by shape name; for a multi-wavelength profile, the return value is a dict keyed by wavelength.</p>
+<p>[1] T. Barwicz and H. A. Haus, “Three-dimensional analysis of scattering losses due to sidewall roughness in microphotonic waveguides,” J. Lightwave Technol. 23, 2719 (2005).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – profile name, default: ‘_default’</p></li>
+<li><p><strong>shape</strong> (<em>str</em>) – name of the shape for calculating the interfacial scattering, can also be a list of shapes or None (which calculates scattering for all shapes), default: None</p></li>
+<li><p><strong>shapes</strong> (<em>str</em>) – alias for shape</p></li>
+<li><p><strong>mode_list</strong> – mode number, list of mode numbers, or ‘all’, default: ‘all’</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name for the second mode set, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="plot">
+<span class="sig-name descname"><span class="pre">plot</span></span></dt>
+<dd><p>Interactive plot for the fields (if available), refractive index, and shapes, or saving a plot. Colorbars are in V/nm for the electric fields, A/nm for the magnetic fields, and W/nm for the Poynting vectors.</p>
+<p>For EME plots in the ‘z-x’ or ‘z-y’ planes, the data dropdown also offers an ‘Outline’ view that displays a geometry-only outline of the declared sections. Once sections are declared with <code class="docutils literal notranslate"><span class="pre">straight_section()</span></code>, <code class="docutils literal notranslate"><span class="pre">pwd_section()</span></code>, <code class="docutils literal notranslate"><span class="pre">taper_section()</span></code>, <code class="docutils literal notranslate"><span class="pre">bend_section()</span></code> or <code class="docutils literal notranslate"><span class="pre">gds_section()</span></code>, calling <code class="docutils literal notranslate"><span class="pre">plot()</span></code> before running <code class="docutils literal notranslate"><span class="pre">EME()</span></code> shows only the ‘Outline’ view, which is useful to check the section layout before solving. After <code class="docutils literal notranslate"><span class="pre">EME()</span></code> has run, ‘Outline’ is available alongside the field components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component</strong> (<em>str</em><em> or </em><em>None</em>) – field component or index, ‘Ex/y/z’, ‘Hx/y/z’, ‘Sx/y/z’, ‘Index’ or ‘Shapes’, default: None (‘Ex’, or ‘Index’ for a circuit with a closed loop)</p></li>
+<li><p><strong>plot_function</strong> (<em>str</em>) – plotting function, ‘real’; ‘imag’; ‘abs’; ‘abs^2’; ‘log’, default: ‘real’</p></li>
+<li><p><strong>mode</strong> (<em>int</em>) – mode number, default: 0</p></li>
+<li><p><strong>aspect_ratio</strong> (<em>str</em><em> or </em><em>float</em>) – the height:width aspect ratio, ‘norm’ uses the normal aspect ratio of 0.707, ‘real’ uses the real aspect ratio defined by the simulation window, or a float specifies the aspect ratio, default: ‘norm’</p></li>
+<li><p><strong>index_outline</strong> (<em>bool</em>) – setting index outline, default: True</p></li>
+<li><p><strong>text_display</strong> (<em>bool</em>) – setting text display, default: True</p></li>
+<li><p><strong>mesh_display</strong> (<em>bool</em>) – setting mesh display: the finite-difference grid for an FDM solve, or the triangle mesh for an FEM solve (in the cross-section view), default: False</p></li>
+<li><p><strong>window_display</strong> (<em>bool</em>) – setting window display, default: False</p></li>
+<li><p><strong>legend</strong> (<em>bool</em>) – setting inclusion of a legend on the index and shape plots, default: True</p></li>
+<li><p><strong>port</strong> (<em>int</em><em> or </em><em>str</em>) – (EME) the input port that the field is excited from, either a port index or a port name (see <a class="reference internal" href="../interface.html#Port" title="Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>), default: 0</p></li>
+<li><p><strong>plane</strong> (<em>str</em>) – (EME) plot cross-section plane setting. For 2D simulations, this defaults to ‘x-y’. For 3D simulations, it accepts ‘x-y’, ‘z-x’, or ‘z-y’. The ‘z-y’ panel also draws the plane of each <a class="reference internal" href="eme.html#monitor" title="monitor"><code class="xref py py-data docutils literal notranslate"><span class="pre">monitor</span></code></a>, default: ‘z-x’</p></li>
+<li><p><strong>slice_position</strong> (<em>float</em><em> or </em><em>None</em>) – (EME) location of the third dimension for a cross-section display. For example, if <cite>plane</cite> is ‘z-x’, then the <cite>slice_position</cite> refers to the y-position of the cross-section. If None, it reduces the third dimension with the reduction selected in the plot window: ‘sum’ (default), which totals the field across the fixed transverse axis, or ‘mean’, which averages it, default: None</p></li>
+<li><p><strong>forward_only</strong> (<em>bool</em>) – (EME) render only the forward-propagating component of the field instead of the total (forward + backward)</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – (EME) which wavelength’s field to render on a multi-wavelength circuit, such as the pump or the second harmonic of a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section. Default: None, the circuit’s first wavelength</p></li>
+<li><p><strong>driven</strong> (<em>bool</em>) – a plot of a <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> section uses the declared <code class="docutils literal notranslate"><span class="pre">excitation</span></code> rather than a unit mode, because conversion depends on power. Each slice is drawn from the forward amplitudes recorded along it, so the generated wavelength builds along the guide instead of stepping at slice boundaries. Without a declared excitation the field shown is the small-signal response and the solver says so field; this only changes the display decomposition of the already-solved field, it does not re-solve, default: False</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em> or </em><em>str</em>) – (EME) sample spacing in nm along the propagation axis for the ‘z-x’/’z-y’ longitudinal panels, smaller is finer; ‘auto’ picks a spacing of roughly one sample per horizontal display pixel, default: ‘auto’</p></li>
+<li><p><strong>excitation</strong> (<em>str</em>) – (EME) render the field launched by a free-space field declared with <a class="reference internal" href="eme.html#free_space_field" title="free_space_field"><code class="xref py py-data docutils literal notranslate"><span class="pre">free_space_field</span></code></a>, instead of unit amplitude in <code class="docutils literal notranslate"><span class="pre">mode</span></code> at <code class="docutils literal notranslate"><span class="pre">port</span></code>. It also selects which port the field is viewed at. This is the only API surface for viewing one; in the plot window the same choice appears in the Mode menu as <code class="docutils literal notranslate"><span class="pre">'&lt;name&gt;</span> <span class="pre">(free</span> <span class="pre">space)'</span></code>. Default: None</p></li>
+<li><p><strong>view</strong> (<em>str</em>) – (EME) what the ‘z-x’ panel shows, either ‘layout’ (every section where its connections place it on the chip, bends turning and sections after a turn turned with them, both axes in um) or ‘simulation’ (the circuit unrolled along its length, as solved), default: ‘layout’. The ‘Physical space’ checkbox in the plot window switches between them. Field components follow the guide on the layout, while ‘Index’ and ‘Shapes’ stay unrolled. A circuit with a closed loop (a ring closed with <a class="reference internal" href="eme.html#connect_ports" title="connect_ports"><code class="xref py py-data docutils literal notranslate"><span class="pre">connect_ports</span></code></a>) has no field reconstruction yet: its ‘z-x’ panel draws the layout outline only, ‘Index’ and ‘Shapes’ show its cross-sections, and asking for a field component raises an error.</p></li>
+<li><p><strong>normalization</strong> (<em>str</em>) – the field family the colour scale is normalized to, ‘vector’ (the full transverse vector at the excitation plane), ‘component’ (the plotted component alone) or ‘section’ (each section of a ‘z-x’ or ‘z-y’ panel scaled by its own peak, so a dim section such as a free-space gap stays visible), default: ‘vector’</p></li>
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>None</em>) – render a stored profile by name instead of the EME section. Once a simulation has declared sections, the plot always follows the section, so this is the only way to view a profile saved by an earlier <code class="docutils literal notranslate"><span class="pre">FDM(profile=...)</span></code> call. An unknown name raises an error listing the available profiles, default: None</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None</p></li>
+<li><p><strong>file_type</strong> (<em>str</em>) – file type for saving a plot, ‘pdf’ or ‘png’, default: ‘’ (no extension is added to <code class="docutils literal notranslate"><span class="pre">file_name</span></code> unless a file type is given)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="material_explorer">
+<span class="sig-name descname"><span class="pre">material_explorer</span></span></dt>
+<dd><p>Interactive material explorer to plot the refractive indices of all available materials. The default wavelength range in the plot corresponds to the recommended range from the material reference listed below the plot. If wavelengths are specified outside this range, the model will be plotted with a dashed line instead of a solid line. User defined materials are also available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – if specified, forces the function to save a file with the given parameters and will not display the interactive plot, file is saved under a directory called EM_figures, default: None</p></li>
+<li><p><strong>file_type</strong> (<em>str</em>) – file type for saving a plot, ‘pdf’ or ‘png’, default: ‘’ (no extension is added to <code class="docutils literal notranslate"><span class="pre">file_name</span></code> unless a file type is given)</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="refractive_index">
+<span class="sig-name descname"><span class="pre">refractive_index</span></span></dt>
+<dd><p>Returns the refractive index from a material name (retrieved from the internal reference list), a MaterialSpec object, or from a custom refractive index value. Optionally, the material’s reference (or citation) may be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<em>str</em>) – material name; for AlGaAs, the fraction of Al relative to Ga is included in the material name separated by a comma, for example: “AlGaAs, 0.2” for a Al_{0.2}Ga_{0.8}As.</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm] wavelength, default: 1550</p></li>
+<li><p><strong>reference</strong> (<em>bool</em>) – additionally return the citation for the material, default: False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[n_x, n_y, n_z] or ([n_x, n_y, n_z], reference)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="permeability">
+<span class="sig-name descname"><span class="pre">permeability</span></span></dt>
+<dd><p>Returns the relative permeability from a material name (retrieved from the internal reference list) or from a custom permeability value. Optionally, the material’s reference (or citation) may be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<em>str</em>) – material name</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm] wavelength, default: 1550</p></li>
+<li><p><strong>reference</strong> (<em>bool</em>) – additionally return the citation for the material, default: False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[permeability_x, permeability_y, permeability_z] or ([permeability_x, permeability_y, permeability_z], reference)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="permittivity">
+<span class="sig-name descname"><span class="pre">permittivity</span></span></dt>
+<dd><p>Returns the relative permittivity from a material name (retrieved from the internal reference list) or from a custom value. For isotropic materials this is a 3-element array; for fully anisotropic materials it is a 3×3 tensor. Optionally, the material’s reference (or citation) may be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<em>str</em><em>, </em><em>float</em><em>, or </em><em>list</em>) – material name, or a float/list for a custom value</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm] wavelength, default: 1550</p></li>
+<li><p><strong>reference</strong> (<em>bool</em>) – additionally return the citation for the material, default: False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[eps_x, eps_y, eps_z], a 3×3 array, or the corresponding tuple with reference</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="d_matrix">
+<span class="sig-name descname"><span class="pre">d_matrix</span></span></dt>
+<dd><p>Returns the second-order nonlinear d-matrix of a material. Optionally, the material’s reference (or citation) may be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<em>str</em>) – material name</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – [nm] wavelength, default: 1550</p></li>
+<li><p><strong>reference</strong> (<em>bool</em>) – additionally return the citation for the material, default: False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>d-matrix with shape (3, 6), or (d-matrix, reference)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mesh">
+<span class="sig-name descname"><span class="pre">mesh</span></span></dt>
+<dd><p>Generalized mesh tool for arbitrary shapes on a rectangular grid. This is called internally by <code class="docutils literal notranslate"><span class="pre">FDM</span></code> if it has not already been called by the user. Generates vertices for each shape, the actual refractive index for each shape, arrays to define the center points (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>) of the mesh grid, and the relative permittivity and permeability matrices (<code class="docutils literal notranslate"><span class="pre">permittivity</span></code> and <code class="docutils literal notranslate"><span class="pre">permeability</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em>) – profile name, default: ‘_default’</p></li>
+<li><p><strong>run_mesh</strong> (<em>bool</em>) – whether to actually run the meshing step now, or just mark the profile as prepared for meshing without running it, default: True</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – control the display of the progress bar, default: True</p></li>
+<li><p><strong>simulation_name</strong> (<em>str</em>) – simulation name, default: ‘emode’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solve"><code class="docutils literal notranslate"><span class="pre">solve</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#FDM"><code class="docutils literal notranslate"><span class="pre">FDM</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confinement"><code class="docutils literal notranslate"><span class="pre">confinement</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effective_area"><code class="docutils literal notranslate"><span class="pre">effective_area</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality"><code class="docutils literal notranslate"><span class="pre">orthogonality</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group_index"><code class="docutils literal notranslate"><span class="pre">group_index</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#report"><code class="docutils literal notranslate"><span class="pre">report</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#label_profile"><code class="docutils literal notranslate"><span class="pre">label_profile</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overlap"><code class="docutils literal notranslate"><span class="pre">overlap</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode_order"><code class="docutils literal notranslate"><span class="pre">mode_order</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scattering"><code class="docutils literal notranslate"><span class="pre">scattering</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot"><code class="docutils literal notranslate"><span class="pre">plot</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#material_explorer"><code class="docutils literal notranslate"><span class="pre">material_explorer</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refractive_index"><code class="docutils literal notranslate"><span class="pre">refractive_index</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#permeability"><code class="docutils literal notranslate"><span class="pre">permeability</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#permittivity"><code class="docutils literal notranslate"><span class="pre">permittivity</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d_matrix"><code class="docutils literal notranslate"><span class="pre">d_matrix</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mesh"><code class="docutils literal notranslate"><span class="pre">mesh</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright EMode, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

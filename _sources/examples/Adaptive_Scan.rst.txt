@@ -22,7 +22,7 @@ Highlighted features: ``sweep(adaptive=True)`` for a fine wavelength spectrum fr
         ## than how many points are asked for.
 
         ## Set simulation parameters
-        dx, dy = 20, 20  # [nm] resolution
+        dx, dy = 20, 10  # [nm] resolution: 22 cells across the core, symmetric about the fold
         w_core, h_core = 800, 220  # [nm] Si core
         clearance = 1500  # [nm] cladding on each side
         num_modes = 2  # [-] both guided across the band below
@@ -42,7 +42,7 @@ Highlighted features: ``sweep(adaptive=True)`` for a fine wavelength spectrum fr
         em.shape(name='core', material='Si', width=w_core, height=h_core)
 
         ## How many solves the scan costs is set by `tolerance`, the largest mode-list
-        ## change tolerated between neighbouring solves -- not by the number of points.
+        ## change tolerated between neighboring solves -- not by the number of points.
         for tolerance in (1e-2, 1e-3, 5e-4):
             scan = em.sweep(key='wavelength', values=wavelengths, adaptive=True,
                             tolerance=tolerance, result=['effective_index'])
@@ -84,16 +84,16 @@ Highlighted features: ``sweep(adaptive=True)`` for a fine wavelength spectrum fr
 
 Console output::
 
-    EMode3D 1.0.6 - email
-    Adaptive wavelength scan over 1500-1600 nm... completed in 4.2 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 10.9 sec
-    Adaptive wavelength scan over 1500-1600 nm... completed in 24.2 sec
-    Meshing completed in 0.4 sec
-    Solving modes completed in 0.4 sec
-    Exited EMode
+    EMode3D 1.0.7 - email
+    Adaptive wavelength scan over 1500-1600 nm... completed in 4.3 sec
     tolerance 1e-02:   5 solves for 201 points  (40x fewer)
-    tolerance 1e-03:  14 solves for 201 points  (14x fewer)
-    tolerance 5e-04:  32 solves for 201 points  (6x fewer)
+    Adaptive wavelength scan over 1500-1600 nm... completed in 7.1 sec
+    tolerance 1e-03:   9 solves for 201 points  (22x fewer)
+    Adaptive wavelength scan over 1500-1600 nm... completed in 16.3 sec
+    tolerance 5e-04:  20 solves for 201 points  (10x fewer)
+    Meshing completed in 0.0 sec
+    Solving modes completed in 0.8 sec
+    Exited EMode
 
 
 Figures:

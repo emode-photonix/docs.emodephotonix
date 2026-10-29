@@ -32,7 +32,6 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
@@ -43,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,14 +51,22 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/fem';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/emodeguide/fem.html" />
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Variable Descriptions" href="variables.html" />
+    <link rel="next" title="Optimization" href="optimization.html" />
     <link rel="prev" title="EME" href="eme.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="1.0.7" />
   </head>
   
   
@@ -195,6 +202,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -293,6 +320,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -318,6 +365,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Multi-Physics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
 <ul class="nav bd-sidenav">
@@ -368,7 +416,7 @@
 <dt class="sig sig-object py" id="FEM">
 <span class="sig-name descname"><span class="pre">FEM</span></span></dt>
 <dd><p>Calculate the waveguide modes with the full-vector finite-element method. Requires a ‘3D’ license. The cross-section is meshed with triangles that follow every material interface, and the mesh is refined where the modes are under-resolved, as set by the <code class="docutils literal notranslate"><span class="pre">fem_*</span></code> settings in <code class="docutils literal notranslate"><span class="pre">settings()</span></code>. The saved fields, effective indices, losses and TE fractions are the same quantities, with the same normalization, as described under <code class="docutils literal notranslate"><span class="pre">FDM()</span></code>, so <code class="docutils literal notranslate"><span class="pre">get()</span></code>, <code class="docutils literal notranslate"><span class="pre">get_fields()</span></code>, <code class="docutils literal notranslate"><span class="pre">report()</span></code>, <code class="docutils literal notranslate"><span class="pre">plot()</span></code> and <code class="docutils literal notranslate"><span class="pre">EME()</span></code> work the same way. Calling <code class="docutils literal notranslate"><span class="pre">FEM()</span></code> sets the profile’s <code class="docutils literal notranslate"><span class="pre">solver</span></code> setting to ‘FEM’.</p>
-<p>All <code class="docutils literal notranslate"><span class="pre">boundary_condition</span></code> values, PMLs, expansion regions, bends, transformation-optics sections (bends, the ring and general couplers, and simulation-space transforms), lossy and anisotropic materials (including crystals tilted out of the cross-section with <code class="docutils literal notranslate"><span class="pre">theta</span></code>), and <code class="docutils literal notranslate"><span class="pre">heat()</span></code> and <code class="docutils literal notranslate"><span class="pre">electrostatic()</span></code> perturbations are supported. A symmetric or antisymmetric boundary on an axis whose mirror a crystal’s orientation breaks raises an error, since it would describe a different structure. Field plots sample the FEM solution at <code class="docutils literal notranslate"><span class="pre">x_resolution</span></code> and <code class="docutils literal notranslate"><span class="pre">y_resolution</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot(mesh_display=True)</span></code> shows the triangle mesh.</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">boundary_condition</span></code> values, PMLs, expansion regions, bends, lossy and anisotropic materials (including crystals tilted out of the cross-section with <code class="docutils literal notranslate"><span class="pre">theta</span></code>), and <code class="docutils literal notranslate"><span class="pre">heat()</span></code> and <code class="docutils literal notranslate"><span class="pre">electrostatic()</span></code> perturbations are supported. A symmetric or antisymmetric boundary on an axis whose mirror a crystal’s orientation breaks raises an error, since it would describe a different structure. Field plots sample the FEM solution at <code class="docutils literal notranslate"><span class="pre">x_resolution</span></code> and <code class="docutils literal notranslate"><span class="pre">y_resolution</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot(mesh_display=True)</span></code> shows the triangle mesh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -382,7 +430,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dict with <code class="docutils literal notranslate"><span class="pre">field</span></code> (a Field object), <code class="docutils literal notranslate"><span class="pre">n_eff_tilde</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_fraction</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">TM_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">PML_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">mesh</span></code> (<code class="docutils literal notranslate"><span class="pre">vertices</span></code>, <code class="docutils literal notranslate"><span class="pre">triangles</span></code> and <code class="docutils literal notranslate"><span class="pre">region</span></code>, the triangle mesh solved on), and <code class="docutils literal notranslate"><span class="pre">refinement</span></code> (<code class="docutils literal notranslate"><span class="pre">n_eff_history</span></code>, <code class="docutils literal notranslate"><span class="pre">num_dofs</span></code> and <code class="docutils literal notranslate"><span class="pre">num_elements</span></code> per refinement level, and <code class="docutils literal notranslate"><span class="pre">stopped_by</span></code>, the rule that ended refinement).</p>
+<dd class="field-even"><p>a dict with <code class="docutils literal notranslate"><span class="pre">field</span></code> (a Field object), <code class="docutils literal notranslate"><span class="pre">n_eff_tilde</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_fraction</span></code>, <code class="docutils literal notranslate"><span class="pre">TE_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">TM_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">PML_indices</span></code>, <code class="docutils literal notranslate"><span class="pre">mesh</span></code> (<code class="docutils literal notranslate"><span class="pre">vertices</span></code>, <code class="docutils literal notranslate"><span class="pre">triangles</span></code> and <code class="docutils literal notranslate"><span class="pre">region</span></code>, the triangle mesh solved on), and <code class="docutils literal notranslate"><span class="pre">refinement</span></code> (<code class="docutils literal notranslate"><span class="pre">n_eff_history</span></code>, <code class="docutils literal notranslate"><span class="pre">num_dofs</span></code> and <code class="docutils literal notranslate"><span class="pre">num_elements</span></code> per refinement level, and <code class="docutils literal notranslate"><span class="pre">stopped_by</span></code>, the rule that ended refinement). For a multi-wavelength profile, a <code class="docutils literal notranslate"><span class="pre">WavelengthDict</span></code> of these dicts, one per wavelength, indexable like a <code class="docutils literal notranslate"><span class="pre">dict[float,</span> <span class="pre">dict]</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -391,22 +439,18 @@
 <dt class="sig sig-object py" id="heat">
 <span class="sig-name descname"><span class="pre">heat</span></span></dt>
 <dd><p>Run a steady-state thermal simulation of a waveguide cross-section. Requires a ‘3D’ license.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This function is only available under beta release. Please report any issues or bugs.</p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">heat_only</span></code> (default: False), which can be used to set additional shapes on top or bottom of the photonic layer stack. For example, common <code class="docutils literal notranslate"><span class="pre">heat_only</span></code> shapes are the substrate and metal heater layers.</p>
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> also now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">fem_resolution</span></code> (default: 500), which is used to refine the triangular mesh within certain shapes.</p>
-<p>Every material carries <code class="docutils literal notranslate"><span class="pre">thermal_conductivity</span></code> (W/m·K), <code class="docutils literal notranslate"><span class="pre">resistivity</span></code> (Ohm·nm), <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> (1/K), and <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code>; the defaults are <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>, infinity, <code class="docutils literal notranslate"><span class="pre">0</span></code>, and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> where no reliable published value has been entered. See the <a class="reference internal" href="materials.html"><span class="doc">Material Database</span></a> page for values and sources.</p>
+<p>Every material carries <code class="docutils literal notranslate"><span class="pre">thermal_conductivity</span></code> (W/m·K), <code class="docutils literal notranslate"><span class="pre">resistivity</span></code> (Ohm·nm), <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> (1/K), and <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code>. The defaults are <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>, infinity, <code class="docutils literal notranslate"><span class="pre">0</span></code>, and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> where no reliable published value has been entered. <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code> and <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code> are one value for every axis or three for the crystal’s x, y and z axes, and each principal index shifts by its own <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code>. The mesh covers the shapes, so a region the shapes enclose without covering takes the background material’s properties. See the <a class="reference internal" href="materials.html"><span class="doc">Material Database</span></a> page for values and sources.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>min_angle</strong> (<em>float</em>) – Minimum angle for triangular mesh. Smaller values result in a finer mesh, but can prevent the meshing algorithm from converging. Default: 30.</p></li>
 <li><p><strong>boundary_temperature</strong> (<em>float</em>) – Fixed temperature boundary condition in ‘K’ set along each perimeter indicated by <code class="docutils literal notranslate"><span class="pre">boundaries</span></code>. Default: 298.</p></li>
-<li><p><strong>boundaries</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – ‘top’, ‘bottom’, ‘left’, or ‘right’; Indicates which boundaries are set to the fixed temperature <code class="docutils literal notranslate"><span class="pre">boundary_temperature</span></code>. Default: [‘bottom’].</p></li>
+<li><p><strong>boundaries</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – ‘top’, ‘bottom’, ‘left’, or ‘right’. Indicates which boundaries are set to the fixed temperature <code class="docutils literal notranslate"><span class="pre">boundary_temperature</span></code>. Default: [‘bottom’].</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Control the display of the progress bar. Default: True.</p></li>
 <li><p><strong>simulation_name</strong> (<em>str</em>) – Simulation name. Default: ‘emode’.</p></li>
 </ul>
@@ -421,15 +465,11 @@
 <dt class="sig sig-object py" id="electrostatic">
 <span class="sig-name descname"><span class="pre">electrostatic</span></span></dt>
 <dd><p>Run a steady-state electrostatic simulation of a waveguide cross-section. Requires a ‘3D’ license.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This function is only available under beta release. Please report any issues or bugs.</p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> also now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">voltage</span></code> (default: None), which is set to create electric field sources. Shapes with <code class="docutils literal notranslate"><span class="pre">voltage</span></code> left as None do not get a voltage boundary condition applied.</p>
 <p>Each <code class="docutils literal notranslate"><span class="pre">shape()</span></code> also now accepts an input parameter called <code class="docutils literal notranslate"><span class="pre">fem_resolution</span></code> (default: 500), which is used to refine the triangular mesh within certain shapes.</p>
-<p>Each material in the EMode material database now has <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code> (relative permittivity at ~1 kHz).</p>
+<p>Each material in the EMode material database now has <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code> (relative permittivity at ~1 kHz), one value or three for the crystal’s x, y and z axes. The solve uses the in-plane (x, y) block of each material’s turned <code class="docutils literal notranslate"><span class="pre">eps_r_dc</span></code> tensor.</p>
 <p>The DC field derived here perturbs the permittivity through each material’s linear electro-optic (Pockels) tensor <code class="docutils literal notranslate"><span class="pre">r</span></code> (<code class="docutils literal notranslate"><span class="pre">get('&lt;material&gt;')['r']</span></code>, m/V): <span class="math notranslate nohighlight">\(\Delta(1/n^2)_{ij} = \sum_k r_{ijk} E_k\)</span>, then <span class="math notranslate nohighlight">\(\Delta\varepsilon = -\varepsilon \cdot \Delta(1/n^2) \cdot \varepsilon\)</span>. <code class="docutils literal notranslate"><span class="pre">FDM()</span></code> applies this automatically on the next solve (<code class="docutils literal notranslate"><span class="pre">include_static=False</span></code> to skip it), the same way <code class="docutils literal notranslate"><span class="pre">heat()</span></code>’s temperature field perturbs the permittivity through <code class="docutils literal notranslate"><span class="pre">dn_dT</span></code>.</p>
 </div>
 <dl class="field-list simple">
@@ -441,7 +481,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary/struct with the mesh points (<code class="docutils literal notranslate"><span class="pre">p</span></code>), mesh triangles (<code class="docutils literal notranslate"><span class="pre">t</span></code>), <code class="docutils literal notranslate"><span class="pre">voltage</span></code>, <code class="docutils literal notranslate"><span class="pre">eps_dc_grid</span></code>, the per-element electric field (<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, in V/nm), and <code class="docutils literal notranslate"><span class="pre">centroids</span></code> (element centers, in the optical window’s frame).</p>
+<dd class="field-even"><p>A dictionary/struct with the mesh points (<code class="docutils literal notranslate"><span class="pre">p</span></code>), mesh triangles (<code class="docutils literal notranslate"><span class="pre">t</span></code>), <code class="docutils literal notranslate"><span class="pre">voltage</span></code>, <code class="docutils literal notranslate"><span class="pre">eps_dc_grid</span></code> (the in-plane DC permittivity of each element, shape (2, 2, number of elements)), the per-element electric field (<code class="docutils literal notranslate"><span class="pre">Ex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ey</span></code>, in V/nm), and <code class="docutils literal notranslate"><span class="pre">centroids</span></code> (element centers, in the optical window’s frame).</p>
 </dd>
 </dl>
 </dd></dl>

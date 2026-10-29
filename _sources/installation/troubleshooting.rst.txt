@@ -34,11 +34,11 @@ Troubleshooting
 
     A convergence study is required for any quantitative result. Systematically vary ``x_resolution`` and ``y_resolution`` (halving each time), then ``window_width`` and ``window_height`` (increase until ``n_eff`` changes by less than your target tolerance), and finally ``expansion_size`` on each boundary. The ``sweep()`` function automates this: e.g., ``sweep(key='x_resolution', values=[20, 10, 5], result='effective_index')``. A ``max_effective_index`` set too close to ``n_eff`` can also bias the eigenvalue search.
 
-    If the simulation has a PML, specify it with ``pml_thickness`` rather than ``num_pml_layers`` for the resolution part of the sweep. ``num_pml_layers`` counts grid cells, so the absorber shrinks every time the mesh is refined and the boundary moves along with the discretization -- the sweep then measures the two effects together and will not converge cleanly. ``pml_thickness`` holds the absorber's physical size fixed and adjusts the layer count for you.
+    If the simulation has a PML, specify it with ``pml_thickness`` rather than ``num_pml_layers`` for the resolution part of the sweep. ``num_pml_layers`` counts grid cells, so the absorber shrinks every time the mesh is refined and the boundary moves along with the discretization. The sweep then measures the two effects together and will not converge cleanly. ``pml_thickness`` holds the absorber's physical size fixed and adjusts the layer count for you.
 
 .. dropdown:: Setting boundary_condition='TE' or 'TM' sometimes falls back to '00' and solves the full window.
 
-    The ``'TE'`` and ``'TM'`` shortcuts detect symmetry from the refractive index profile. If the geometry is not symmetric about the window center (e.g., a shape is off-center), no symmetry is found and EMode falls back to ``'00'``. Check the resolved boundary condition with ``em.get('BC')`` after ``FDM()``. Use explicit boundary conditions such as ``'SS'`` or ``'0S'`` if you know the geometry is symmetric. The south (y) boundary is the first character; the west (x) boundary is the second.
+    The ``'TE'`` and ``'TM'`` shortcuts detect symmetry from the refractive index profile. If the geometry is not symmetric about the window center (e.g., a shape is off-center), no symmetry is found and EMode falls back to ``'00'``. Check the resolved boundary condition with ``em.get('BC')`` after ``FDM()``. Use explicit boundary conditions such as ``'SS'`` or ``'0S'`` if you know the geometry is symmetric. The south (y) boundary is the first character, and the west (x) boundary is the second.
 
 .. dropdown:: A shape is not visible in plot(component='Shapes'), or the geometry looks wrong.
 
@@ -62,7 +62,13 @@ Troubleshooting
 
 .. dropdown:: The returned effective_index is complex, or loss_dB_per_m is unexpectedly nonzero for a nominally lossless design.
 
-    A nonzero imaginary effective index indicates optical loss from one or more sources: (1) a material with a nonzero imaginary refractive index or ``loss_dB_per_m``; (2) PML layers absorbing leaky field energy, which can be reduced by increasing ``window_width``, ``window_height``, or ``expansion_size``; (3) ``bend_radius`` is set, which introduces radiative bending loss. Check each source using ``em.get('loss_dB_per_m')`` and ``em.get('bend_radius')``.
+    A nonzero imaginary effective index indicates optical loss from one or more sources:
+
+    1. A material with a nonzero imaginary refractive index or ``loss_dB_per_m``.
+    2. PML layers absorbing leaky field energy, which can be reduced by increasing ``window_width``, ``window_height``, or ``expansion_size``.
+    3. ``bend_radius`` is set, which introduces radiative bending loss.
+
+    Check each source using ``em.get('loss_dB_per_m')`` and ``em.get('bend_radius')``.
 
 .. dropdown:: An issue is not covered here, or behavior seems incorrect.
 

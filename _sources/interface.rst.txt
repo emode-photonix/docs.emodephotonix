@@ -102,7 +102,7 @@ The window refreshes the *Active Sessions* table every 30 seconds while it is th
 Command-line login
 ^^^^^^^^^^^^^^^^^^
 
-Run ``emode login`` from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid; credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option (the same options as the GUI dropdown), and asks whether to log out on this computer.
+Run ``emode login`` from the command line for an interactive text version of the login GUI. It validates any stored credentials against the license server and prompts for your email and password if they are missing or invalid. Credentials are only saved after successful validation. It then displays your subscriptions and active sessions, prompts for a session-clearing option, and asks whether to log out on this computer. The clearing options are the GUI dropdown's, plus a number: each session you can clear by itself is numbered in the active sessions table (roaming sessions are not), and typing its number clears only that session, on whichever computer it runs, as the GUI's per-row clear button does.
 
 .. code-block:: bash
 
@@ -133,7 +133,7 @@ The EMode class
     :param bool open_existing: Whether to open an existing file or to start a new simulation. Default: False.
     :param new_name: New name of opened existing file so the original file does not get modified. If False the original name is used. The extension '.eph' will be added to this name. Default: False.
     :type new_name: bool or str
-    :param str priority: Set the CPU process priority. 'pH': High; 'pAN': Above normal; 'pN': Normal; 'pBN': Below normal; 'pI': Idle. Default: 'pN' (Normal).
+    :param str priority: Set the CPU process priority. 'pH': High, 'pAN': Above normal, 'pN': Normal, 'pBN': Below normal, 'pI': Idle. Default: 'pN' (Normal).
     :param list[str] emode_cmd: Set the EMode executable command. For standard installations, this can be ignored. Only use this if the EMode executable has been moved to a custom location, or if multiple versions are installed in different locations.
     :param bool force_open: If a simulation file with this name is already open elsewhere, open it anyway instead of auto-renaming. Default: False.
     :param bool save: Whether to save the simulation file when the session ends. Set to False to run without writing to disk. Default: True.
@@ -153,7 +153,7 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
     Opens an EMode simulation file with the extension '.eph' or '.mat' and returns a dictionary with the file contents.
 
     :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
-    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
+    :param str simulation_name: Alternative to ``sim``. If given, it overrides ``sim``. Default: None.
     :return: Dictionary with all keys and data from the specified EMode simulation file.
     :rtype: dict
 
@@ -163,7 +163,7 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
 
     :param str variable: Name of the variable to return from EMode.
     :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
-    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
+    :param str simulation_name: Alternative to ``sim``. If given, it overrides ``sim``. Default: None.
     :return: Requested item from EMode.
     :rtype: int, float, str, or array-like
 
@@ -173,8 +173,8 @@ The ``emodeconnection`` package provides access to EMode Login GUI and to the EM
     Get the names of all top-level variables from EMode simulation file with the extension '.eph' or '.mat'.
 
     :param str sim: Name of the simulation file. The '.eph' or '.mat' extension is optional to include with the name. Default: 'emode'.
-    :param str simulation_name: Alternative to ``sim``; if given, overrides it. Default: None.
-    :return: List of the top-level variable names in the file. Per-profile results are nested under ``profiles`` and are read with ``get(key, profile=...)`` or the typed accessors; see :doc:`Variable Descriptions <emodeguide/variables>`.
+    :param str simulation_name: Alternative to ``sim``. If given, it overrides ``sim``. Default: None.
+    :return: List of the top-level variable names in the file. Per-profile results are nested under ``profiles`` and are read with ``get(key, profile=...)`` or the typed accessors. See :doc:`Variable Descriptions <emodeguide/variables>`.
     :rtype: list
 
 Constants
@@ -301,7 +301,7 @@ Four types are available as classes of the emodeconnection package to specify ma
 
 .. py:class:: SMatrix
 
-   A dense, port-structured scattering matrix returned by EME results (e.g. from ``EME()`` or ``get(key='S_matrix')``). Ports are indexed 0 to ``num_ports - 1``; port *i* spans a contiguous range of modes whose count is ``port_sizes[i]``. When ``port_names``/``wavelengths`` are available, ports can also be addressed by name instead of by index.
+   A dense, port-structured scattering matrix returned by EME results (e.g. from ``EME()`` or ``get(key='S_matrix')``). Ports are indexed 0 to ``num_ports - 1``. Port *i* spans a contiguous range of modes whose count is ``port_sizes[i]``. When ``port_names``/``wavelengths`` are available, ports can also be addressed by name instead of by index.
 
    :param port_sizes: number of modes in each port.
    :type port_sizes: tuple[int, ...]
@@ -315,7 +315,12 @@ Four types are available as classes of the emodeconnection package to specify ma
    :param wavelengths: wavelength of each port, parallel to ``port_sizes``. Default: None.
    :type wavelengths: tuple[float, ...] or None
 
-   ``SMatrix`` also provides convenience methods: ``transmission(from_port, to_port)``, ``reflection(port)``, ``insertion_loss_dB(from_port, to_port, mode)``, ``unitarity_error()``, and ``plot(kind)``.
+   :param mode_power: real power each mode carries, one entry per row of ``data``. A lossy mode carries little or no real power. Default: None (an S-matrix from an older solver).
+   :type mode_power: ~numpy.ndarray or None
+
+   ``SMatrix`` also provides convenience methods: ``transmission(from_port, to_port)``, ``reflection(port)``, ``power(from_port, to_port)``, ``insertion_loss_dB(from_port, to_port, mode)``, ``unitarity_error(from_ports)``, and ``plot(kind)``.
+
+   ``unitarity_error`` measures how far the S-matrix is from conserving power. Each mode that carries real power is scaled to unit power, and the result is :math:`\|S'^\dagger S' - I\|_F / \sqrt{n}` over the :math:`n` incident modes counted, so a lossless S-matrix reads 0 and a 10% gain on every mode reads 0.1, whatever the number of modes. Lossy modes carry no power and are not counted. Without ``mode_power`` every mode counts as carrying unit power, which holds for guided modes but not for a plane-wave (PWD) section. ``from_ports`` counts only the modes incident from those ports. Use it when one side's basis cannot receive what the other side sends: at a facet into free space, the guided modes of the waveguide cannot hold the plane waves arriving from the free-space side, so the whole matrix loses power while the balance counted from the waveguide port holds.
 
 Geometry
 --------
@@ -346,7 +351,7 @@ The ``emodeconnection.geometry`` module provides classes for defining waveguide 
 
    Circular arc segment.
 
-   :param float radius: Bend radius (signed; sign determines bend direction).
+   :param float radius: Bend radius (signed, where the sign determines bend direction).
    :param float sweep_angle: Subtended angle in radians (signed).
 
 ----
@@ -400,7 +405,7 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
    * Each windowed port is placed in the layout on its own window, so a section connected to one window is laid out on that window.
 
    :param str side: Which end of the section this port is declared on, either 'left' or 'right'.
-   :param offset: [nm] transverse displacement of this section's cross-section relative to the port it connects to: ``offset=(1300, 0)`` places this section's content 1300 nm in +x from the connection's shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler's input port ``offset`` so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section ``offset=`` argument (see :doc:`EME </emodeguide/eme>`) is this same displacement applied to every port at once; setting both on one section raises an :class:`ArgumentError`.
+   :param offset: [nm] transverse displacement of this section's cross-section relative to the port it connects to: ``offset=(1300, 0)`` places this section's content 1300 nm in +x from the connection's shared origin. Default: (0, 0). Typically you annotate whichever side is off-axis, e.g. giving a coupler's input port ``offset`` so a centered adapter waveguide lines up with it, rather than offsetting the adapter. The legacy per-section ``offset=`` argument (see :doc:`EME </emodeguide/eme>`) is this same displacement applied to every port at once. Setting both on one section raises an :class:`ArgumentError`.
    :type offset: tuple[float, float]
    :param basis_transform: Declares an angled facet on this port. Build it with :func:`make_angled_facet_port` rather than constructing one directly. Default: None (the port's cross-section is normal to the propagation axis).
    :type basis_transform: AngledFacetMap or None
@@ -420,11 +425,11 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
 
 .. py:function:: make_angled_facet_port(name, side, pivot_angle, polar_angle=0.0, pivot_point=None, degrees=True, window=None)
 
-   Build a :class:`Port` whose cross-section is tilted about a hinge line, modelling an angled facet: the plane where this section meets its neighbour is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode's acceptance cone; for a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the ``ports`` argument of the waveguide section that ends at the facet, and wire it with :data:`connect_ports` if it is not the section's default left/right adjacency.
+   Build a :class:`Port` whose cross-section is tilted about a hinge line, modeling an angled facet: the plane where this section meets its neighbor is no longer normal to the propagation axis. Reflection back into the guided mode then falls off with tilt, as it does physically, once the reflected beam (deflected by twice the tilt) leaves the mode's acceptance cone. For a 3 µm wide guide the reflection halves near 2.7° and is down 30 dB by 7°. Pass the result in the ``ports`` argument of the waveguide section that ends at the facet, and wire it with :data:`connect_ports` if it is not the section's default left/right adjacency.
 
    :param str name: Port name, unique within its section.
    :param str side: Which end of the section the facet is on, either 'left' or 'right'.
-   :param float pivot_angle: Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless ``degrees`` is False. 0 is an untilted facet. The sign sets which way the transmitted beam deflects.
+   :param float pivot_angle: Tilt of the facet plane away from the plane normal to the propagation axis, in degrees unless ``degrees`` is False. 0 is an untilted facet. A positive tilt about a vertical hinge moves the facet further along the propagation axis on the +x side of the hinge, so its plane is ``z = z_facet + tan(pivot_angle) (x - x_hinge)``. Light arriving along +z meets it at an angle of incidence equal to the tilt. The reflection leaves at twice the tilt from the backward axis, toward +x, and the transmitted beam leaves at ``asin(n_eff sin(pivot_angle) / n_gap)`` from the facet normal (Snell's law with the mode's effective index), on the +x side of it. A negative tilt mirrors all of this to -x. For a horizontal hinge (``polar_angle`` +90) the same holds with -y in place of +x, and plot() draws the facet as a line on the z-x or z-y panel.
    :param float polar_angle: Orientation of the hinge line in the transverse plane: 0 for a vertical hinge (the facet is tilted in the x–z plane), ±90 for a horizontal one. Only these axis-aligned values are accepted. Default: 0.
    :param pivot_point: [nm] a point ``(x, y)`` the hinge line passes through, in the section's own cross-section coordinates. Default: None (the horizontal centre of the cross-section, at its vertical middle).
    :type pivot_point: tuple[float, float] or None
@@ -433,11 +438,12 @@ The ``emodeconnection.port`` module provides classes for defining named ports on
    :type window: Bounds or None
 
    .. note::
-      Three things to know before using one.
+      Four things to know before using one.
 
-      * A facet is taken by the junction kernel directly. The junction is solved with the facet's forward and backward traces kept explicit; a facet at zero tilt gives the same answer as no facet.
-      * The facet belongs on the waveguide side of the junction. It cannot sit on a :data:`pwd_section`, whose basis is analytic, or on a profile that uses a PML; both are rejected when the EME chain is built.
-      * Size ``num_modes`` on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental's reflected plus transmitted power under-runs and the solver warns; ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.
+      * A facet is taken by the junction kernel directly. The junction is solved with the facet's forward and backward traces kept explicit. A facet at zero tilt gives the same answer as no facet.
+      * The facet belongs on the waveguide side of the junction. It cannot sit on a :data:`pwd_section`, whose basis is analytic, or on a profile that uses a PML. Both are rejected when the EME chain is built.
+      * Size ``num_modes`` on the waveguide section so its basis can hold the reflection deflected by twice the tilt. When it cannot, the fundamental's reflected plus transmitted power under-runs and the solver warns. Ten modes on a 3 µm wide, 300 nm tall guide hold the power to about 8° of tilt and lose half of it by 15°.
+      * The facet is a model for small to moderate tilts. The cross-section is solved flat and its trace is carried onto the tilted plane, which assumes the mode is unchanged by the tilt, an assumption that weakens as the tilt grows. Past the critical angle, where ``n_eff sin(pivot_angle)`` exceeds the gap's index, no plane wave carries the light away and it is totally internally reflected, into the higher-order modes the waveguide section has to hold. Keep tilts well below the critical angle (for a mode of effective index 3.4 that is about 25° into oxide and 17° into air), and check that the reflected plus transmitted power stays near 1 as ``num_modes`` grows.
 
 Exceptions
 ----------
@@ -488,7 +494,7 @@ The ``emodeconnection.types`` module also contains the following exception class
    Operation not permitted under *license_type*.
 
    :param str msg: Explanation of the denial.
-   :param LicenseType license_type: Active or required licence class.
+   :param LicenseType license_type: Active or required license class.
 
 ----
 
@@ -513,6 +519,6 @@ The ``emodeconnection.types`` module also contains the following exception class
 
 .. py:class:: NotImplementedError(msg)
 
-   Feature is recognised but not yet implemented.
+   Feature is recognized but not yet implemented.
 
    :param str msg: Description of the missing capability.

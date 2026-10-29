@@ -23,6 +23,7 @@ Run the :ref:`EMode Login <PythonEModeLogin>` GUI or the ``emode login`` command
 
         * `EME <emodeguide/eme.html>`_
         * `Multi-Physics <emodeguide/fem.html>`_
+        * `Optimization <emodeguide/optimization.html>`_
 
 .. toctree::
     :maxdepth: 0
@@ -40,6 +41,7 @@ Run the :ref:`EMode Login <PythonEModeLogin>` GUI or the ``emode login`` command
 
     emodeguide/eme
     emodeguide/fem
+    emodeguide/optimization
 
 .. toctree::
    :caption: Glossaries

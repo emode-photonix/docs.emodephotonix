@@ -32,7 +32,6 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
     <link rel="stylesheet" type="text/css" href="../_static/code-tabs.css?v=1bc26e2f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=75c64c47" />
@@ -43,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,14 +51,22 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'emodeguide/variables';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.emodephotonix.com/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.7';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="canonical" href="https://docs.emodephotonix.com/emodeguide/variables.html" />
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Material Database" href="materials.html" />
-    <link rel="prev" title="Multi-Physics" href="fem.html" />
+    <link rel="prev" title="Optimization" href="optimization.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="1.0.7" />
   </head>
   
   
@@ -195,6 +202,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -293,6 +320,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
   <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
@@ -318,6 +365,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="eme.html">EME</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fem.html">Multi-Physics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossaries</span></p>
 <ul class="current nav bd-sidenav">
@@ -365,8 +413,8 @@
   <section id="variable-descriptions">
 <h1>Variable Descriptions</h1>
 <p>Descriptions of the variables stored in a simulation file. Variables are read back with
-<a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>, or – for grids, fields, shapes and whole profiles – with the typed accessors
-<a class="reference internal" href="file-management.html#get_grid" title="get_grid"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_grid</span></code></a>, <a class="reference internal" href="file-management.html#get_fields" title="get_fields"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_fields</span></code></a>, <a class="reference internal" href="file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a> and <a class="reference internal" href="file-management.html#get_profile" title="get_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_profile</span></code></a>. Some
+<a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a> (or, for grids, fields, shapes and whole profiles, with the typed accessors
+<a class="reference internal" href="file-management.html#get_grid" title="get_grid"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_grid</span></code></a>, <a class="reference internal" href="file-management.html#get_fields" title="get_fields"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_fields</span></code></a>, <a class="reference internal" href="file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a> and <a class="reference internal" href="file-management.html#get_profile" title="get_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_profile</span></code></a>). Some
 variables have an alias, a copy under an older name kept for compatibility. SHAPE stands
 for a shape name and NAME for a profile name. <a class="reference internal" href="file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a> lists every name <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>
 can read.</p>
@@ -375,28 +423,34 @@ can read.</p>
 <p>A simulation file has two levels.</p>
 <p><strong>Top-level variables</strong> describe the file and the EME circuit: <code class="docutils literal notranslate"><span class="pre">EMode_simulation_file</span></code>,
 <code class="docutils literal notranslate"><span class="pre">file_type</span></code>, <code class="docutils literal notranslate"><span class="pre">emode_version</span></code>, <code class="docutils literal notranslate"><span class="pre">materials</span></code>, <code class="docutils literal notranslate"><span class="pre">profiles</span></code>,
-<code class="docutils literal notranslate"><span class="pre">propagation_resolution</span></code>, and – once the corresponding functions have run –
+<code class="docutils literal notranslate"><span class="pre">propagation_resolution</span></code>, and, once the corresponding functions have run,
 <code class="docutils literal notranslate"><span class="pre">sweep_data</span></code>, <code class="docutils literal notranslate"><span class="pre">S_matrix</span></code> (through <code class="docutils literal notranslate"><span class="pre">get('S_matrix')</span></code>), <code class="docutils literal notranslate"><span class="pre">response</span></code> and <code class="docutils literal notranslate"><span class="pre">sources</span></code>.
 <a class="reference internal" href="file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a> returns their names, followed by the per-profile variables and settings
 below. Names beginning with an underscore are internal and may change between versions.</p>
 <p><strong>Profiles</strong> live under the top-level <code class="docutils literal notranslate"><span class="pre">profiles</span></code> dictionary, one entry per cross-section.
 <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> is the working profile that <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>, <a class="reference internal" href="setup.html#shape" title="shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">shape</span></code></a>, <a class="reference internal" href="solver-analysis.html#mesh" title="mesh"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesh</span></code></a> and
 <a class="reference internal" href="solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> act on unless <code class="docutils literal notranslate"><span class="pre">profile=</span></code> is given. <a class="reference internal" href="solver-analysis.html#label_profile" title="label_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">label_profile</span></code></a> saves a copy of it
-under a name; <a class="reference internal" href="solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> with <code class="docutils literal notranslate"><span class="pre">profile=</span></code> saves its result under a name; and
+under a name. <a class="reference internal" href="solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a> with <code class="docutils literal notranslate"><span class="pre">profile=</span></code> saves its result under a name.
 <a class="reference internal" href="file-management.html#create_profile_set" title="create_profile_set"><code class="xref py py-data docutils literal notranslate"><span class="pre">create_profile_set</span></code></a> groups profiles solved at different wavelengths into one
 multi-wavelength profile, in which case per-profile results come back as a dictionary keyed
 by wavelength. Every function that reads a profile takes <code class="docutils literal notranslate"><span class="pre">profile=NAME</span></code>: <a class="reference internal" href="../interface.html#get" title="get"><code class="xref py py-data docutils literal notranslate"><span class="pre">get</span></code></a>,
 <a class="reference internal" href="file-management.html#get_fields" title="get_fields"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_fields</span></code></a>, <a class="reference internal" href="file-management.html#get_grid" title="get_grid"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_grid</span></code></a>, <a class="reference internal" href="file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a>, <a class="reference internal" href="file-management.html#get_profile" title="get_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_profile</span></code></a>,
 <a class="reference internal" href="solver-analysis.html#confinement" title="confinement"><code class="xref py py-data docutils literal notranslate"><span class="pre">confinement</span></code></a>, <a class="reference internal" href="solver-analysis.html#effective_area" title="effective_area"><code class="xref py py-data docutils literal notranslate"><span class="pre">effective_area</span></code></a>, <a class="reference internal" href="solver-analysis.html#group_index" title="group_index"><code class="xref py py-data docutils literal notranslate"><span class="pre">group_index</span></code></a>, <a class="reference internal" href="solver-analysis.html#orthogonality" title="orthogonality"><code class="xref py py-data docutils literal notranslate"><span class="pre">orthogonality</span></code></a>,
-<a class="reference internal" href="solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a>, <a class="reference internal" href="solver-analysis.html#scattering" title="scattering"><code class="xref py py-data docutils literal notranslate"><span class="pre">scattering</span></code></a>, <a class="reference internal" href="solver-analysis.html#mesh" title="mesh"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesh</span></code></a>, <a class="reference internal" href="solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a>, <a class="reference internal" href="file-management.html#delete_profile" title="delete_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">delete_profile</span></code></a>.
-<a class="reference internal" href="setup.html#reset" title="reset"><code class="xref py py-data docutils literal notranslate"><span class="pre">reset</span></code></a> acts on <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> only and leaves named profiles alone.</p>
+<a class="reference internal" href="solver-analysis.html#report" title="report"><code class="xref py py-data docutils literal notranslate"><span class="pre">report</span></code></a>, <a class="reference internal" href="solver-analysis.html#scattering" title="scattering"><code class="xref py py-data docutils literal notranslate"><span class="pre">scattering</span></code></a>, <a class="reference internal" href="solver-analysis.html#mesh" title="mesh"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesh</span></code></a>, <a class="reference internal" href="solver-analysis.html#FDM" title="FDM"><code class="xref py py-data docutils literal notranslate"><span class="pre">FDM</span></code></a>, <a class="reference internal" href="file-management.html#delete_profile" title="delete_profile"><code class="xref py py-data docutils literal notranslate"><span class="pre">delete_profile</span></code></a>,
+<a class="reference internal" href="setup.html#reset" title="reset"><code class="xref py py-data docutils literal notranslate"><span class="pre">reset</span></code></a>, <a class="reference internal" href="file-management.html#clear_field_data" title="clear_field_data"><code class="xref py py-data docutils literal notranslate"><span class="pre">clear_field_data</span></code></a>. <a class="reference internal" href="setup.html#reset" title="reset"><code class="xref py py-data docutils literal notranslate"><span class="pre">reset</span></code></a> and <a class="reference internal" href="file-management.html#clear_field_data" title="clear_field_data"><code class="xref py py-data docutils literal notranslate"><span class="pre">clear_field_data</span></code></a> act on
+the profile they are given and leave every other profile alone.</p>
+<p>One wavelength of a multi-wavelength profile is <code class="docutils literal notranslate"><span class="pre">profile='NAME.WAVELENGTH'</span></code>, for example
+<code class="docutils literal notranslate"><span class="pre">get('effective_index',</span> <span class="pre">profile='tfln.1550')</span></code>. A member can also be named by its own name
+(<code class="docutils literal notranslate"><span class="pre">'NAME.MEMBER'</span></code>) when that name is its own, as after <a class="reference internal" href="file-management.html#create_profile_set" title="create_profile_set"><code class="xref py py-data docutils literal notranslate"><span class="pre">create_profile_set</span></code></a>. A name
+that several members share, such as the <code class="docutils literal notranslate"><span class="pre">'_default'</span></code> that every member of a labeled
+multi-wavelength profile keeps, raises an error naming the <code class="docutils literal notranslate"><span class="pre">NAME.WAVELENGTH</span></code> of each.</p>
 <p><strong>Settings</strong> (window, resolution, boundary condition, PML, …) are part of the profile.
 <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=NAME)</span></code> returns any of them, under its current name or an older alias,
 and <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).settings</span></code> returns them all at once.</p>
 </section>
 <section id="per-profile-variables">
 <h2>Per-profile variables</h2>
-<p>Read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=NAME)</span></code> (default <code class="docutils literal notranslate"><span class="pre">NAME='_default'</span></code>); a multi-wavelength
+<p>Read with <code class="docutils literal notranslate"><span class="pre">get(key,</span> <span class="pre">profile=NAME)</span></code> (default <code class="docutils literal notranslate"><span class="pre">NAME='_default'</span></code>). A multi-wavelength
 profile (a profile set) returns a <code class="docutils literal notranslate"><span class="pre">dict[float,</span> <span class="pre">...]</span></code> of the same, keyed by wavelength.</p>
 <dl class="glossary">
 <dt id="term-background_material">background_material</dt><dd><p>(<em>float</em> or <em>str</em>) The background material of the profile’s simulation window, setting the default material where no shapes are defined.</p>
@@ -413,6 +467,8 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </dd>
 <dt id="term-Gx-Gy">Gx, Gy</dt><dd><p>(<em>complex arrays</em>) The auxiliary longitudinal raw field components present for a bend or an anisotropic solve. Present only when the corresponding basis actually carries them.</p>
 </dd>
+<dt id="term-convergence">convergence</dt><dd><p>(<em>dict</em>) The last <a class="reference internal" href="solver-analysis.html#converge" title="converge"><code class="xref py py-data docutils literal notranslate"><span class="pre">converge</span></code></a> run on this profile, as plain data: the arguments it ran with, its <code class="docutils literal notranslate"><span class="pre">status</span></code>, the settings it chose (<code class="docutils literal notranslate"><span class="pre">chosen</span></code>), one <code class="docutils literal notranslate"><span class="pre">stages</span></code> entry per setting it varied and one <code class="docutils literal notranslate"><span class="pre">history</span></code> row per solve (the setting’s value, the target quantity, its change and estimated error, and the solve time).</p>
+</dd>
 <dt id="term-confinement_window">confinement_window</dt><dd><p>(<em>list</em>) The confinement factor for each specified mode is saved under this variable only when the confinement region is specified with a list of vertices, instead of a specific shape.</p>
 </dd>
 <dt id="term-effective_area">effective_area</dt><dd><p>(<em>list</em>) The effective area of each waveguide mode in units of square microns (<span class="math notranslate nohighlight">\(\mu \mathrm{m}^2\)</span>), calculated by the following equation.</p>
@@ -428,6 +484,7 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">alpha</span></code></p>
 <div class="math notranslate nohighlight">
 \[\kappa = \frac{\alpha \lambda}{(4 \pi) 10 \, \mathrm{log}_{10}(e)} \approx \frac{\alpha \lambda}{54.575}\]</div>
+<p>Loss is positive and gain negative. Under a PML, a guided mode of a lossless structure can show a small loss or a small gain (a negative <code class="docutils literal notranslate"><span class="pre">loss_dB_per_m</span></code>). Neither is physical. It is the error from truncating the mode’s evanescent tail at the window and its PML, of the same size as the error in its effective index, and it vanishes as the window widens or the PML thickens (<code class="docutils literal notranslate"><span class="pre">converge(setting='pml')</span></code>). The solve warns when such a mode gains more than 1e-6 of its index.</p>
 </dd>
 <dt id="term-maximum_overlap">maximum_overlap</dt><dd><p>(<em>float</em>) Largest overlap in the mode list, calculated from the <code class="docutils literal notranslate"><span class="pre">orthogonality()</span></code> function.</p>
 </dd>
@@ -443,11 +500,11 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </dd>
 <dt id="term-permittivity-permeability">permittivity, permeability</dt><dd><p>(<em>list</em>) The permittivity and permeability arrays are defined by <code class="docutils literal notranslate"><span class="pre">mesh</span></code> from the current shapes and settings. Each is a list of arrays defining the corresponding parameters in the x-, y-, and z-directions.</p>
 </dd>
-<dt id="term-PML_indices">PML_indices</dt><dd><p>(<em>list</em>) Indices of modes that carry less than 75% of their power inside the simulation window – modes of the pml (absorbing) region rather than of the device. Present only when the profile was solved with a pml. See <code class="docutils literal notranslate"><span class="pre">window_confinement</span></code>, and <code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code>/<code class="docutils literal notranslate"><span class="pre">pml_seed_bool</span></code> under Settings.</p>
+<dt id="term-PML_indices">PML_indices</dt><dd><p>(<em>list</em>) Indices of modes that carry less than 75% of their power inside the simulation window. These are modes of the pml (absorbing) region rather than of the device. Present only when the profile was solved with a pml. See <code class="docutils literal notranslate"><span class="pre">window_confinement</span></code>, and <code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code>/<code class="docutils literal notranslate"><span class="pre">pml_seed_bool</span></code> under Settings.</p>
 </dd>
 <dt id="term-scattering_sum-scattering_loss">scattering_sum, scattering_loss</dt><dd><p>(<em>list</em>) Total per-mode scattering loss [dB/m] summed over shape edges: <code class="docutils literal notranslate"><span class="pre">scattering_sum</span></code> is a list of per-shape contributions, <code class="docutils literal notranslate"><span class="pre">scattering_loss</span></code> their sum. Populated after <code class="docutils literal notranslate"><span class="pre">scattering()</span></code> runs.</p>
 </dd>
-<dt id="term-shapes">shapes</dt><dd><p>(<em>list</em>) The list of <code class="xref py py-data docutils literal notranslate"><span class="pre">Shape</span></code> objects making up the profile, background included; prefer <a class="reference internal" href="file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a> to read a single shape’s attributes and metadata.</p>
+<dt id="term-shapes">shapes</dt><dd><p>(<em>list</em>) The list of <code class="xref py py-data docutils literal notranslate"><span class="pre">Shape</span></code> objects making up the profile, background included. Prefer <a class="reference internal" href="file-management.html#get_shape" title="get_shape"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_shape</span></code></a> to read a single shape’s attributes and metadata.</p>
 </dd>
 <dt id="term-Sx-Sy-Sz">Sx, Sy, Sz</dt><dd><p>(<em>arrays</em>) [W/nm] The Poynting vector in the x-, y-, and z-directions.</p>
 </dd>
@@ -459,20 +516,20 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </dd>
 <dt id="term-wavelength">wavelength</dt><dd><p>(<em>float</em>) [nm] Free-space wavelength.</p>
 </dd>
-<dt id="term-window_confinement">window_confinement</dt><dd><p>(<em>list</em>) Fraction of each mode’s power inside the simulation window (inset by one grid cell on every side), only present when the profile has a pml. A mode below 75% is a mode of the absorbing region rather than of the device – what <code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code> discards and <code class="docutils literal notranslate"><span class="pre">PML_indices</span></code> designates.</p>
+<dt id="term-window_confinement">window_confinement</dt><dd><p>(<em>list</em>) Fraction of each mode’s power inside the simulation window (inset by one grid cell on every side), only present when the profile has a pml. A mode below 75% is a mode of the absorbing region rather than of the device (the modes that <code class="docutils literal notranslate"><span class="pre">remove_pml_modes_bool</span></code> discards and <code class="docutils literal notranslate"><span class="pre">PML_indices</span></code> designates).</p>
 </dd>
 <dt id="term-xc-yc">xc, yc</dt><dd><p>(<em>complex arrays</em>) Cell-center coordinates of the mesh grid, in the x- and y-directions. These can be complex when pml layers are introduced.</p>
-<p>Deprecated: <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> – read through <a class="reference internal" href="file-management.html#get_grid" title="get_grid"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_grid</span></code></a> instead.</p>
+<p>Deprecated: <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>. Read through <a class="reference internal" href="file-management.html#get_grid" title="get_grid"><code class="xref py py-data docutils literal notranslate"><span class="pre">get_grid</span></code></a> instead.</p>
 </dd>
 </dl>
 </section>
 <section id="simulation-level-variables">
 <h2>Simulation-level variables</h2>
-<p>Read with <code class="docutils literal notranslate"><span class="pre">get(key)</span></code> (no <code class="docutils literal notranslate"><span class="pre">profile=</span></code>); listed by <a class="reference internal" href="file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a>.</p>
+<p>Read with <code class="docutils literal notranslate"><span class="pre">get(key)</span></code> (no <code class="docutils literal notranslate"><span class="pre">profile=</span></code>). Listed by <a class="reference internal" href="file-management.html#inspect" title="inspect"><code class="xref py py-data docutils literal notranslate"><span class="pre">inspect</span></code></a>.</p>
 <dl class="simple glossary">
 <dt id="term-emode_version">emode_version</dt><dd><p>(<em>str</em>) The version of EMode that wrote the simulation file.</p>
 </dd>
-<dt id="term-EMode_simulation_file">EMode_simulation_file</dt><dd><p>(<em>str</em>) The file name the simulation was created with; also serves as a marker that this is a valid EMode simulation file.</p>
+<dt id="term-EMode_simulation_file">EMode_simulation_file</dt><dd><p>(<em>str</em>) The file name the simulation was created with. It also serves as a marker that this is a valid EMode simulation file.</p>
 </dd>
 <dt id="term-file_type">file_type</dt><dd><p>(<em>str</em>) The simulation file’s extension, <code class="docutils literal notranslate"><span class="pre">'.eph'</span></code>.</p>
 </dd>
@@ -480,23 +537,23 @@ profile (a profile set) returns a <code class="docutils literal notranslate"><sp
 </dd>
 <dt id="term-eme_scattering">eme_scattering</dt><dd><p>(<em>bool</em>) Legacy key, found only in simulation files written before EMode 1.0.5, which still load. It has no effect: EME scattering is controlled by <code class="docutils literal notranslate"><span class="pre">EME_settings(apply_scattering=...)</span></code>, and <code class="docutils literal notranslate"><span class="pre">settings(eme_scattering=...)</span></code> is deprecated and no longer stores it. On a newer file <code class="docutils literal notranslate"><span class="pre">get('eme_scattering')</span></code> returns False with a deprecation warning.</p>
 </dd>
-<dt id="term-materials">materials</dt><dd><p>(<em>list</em>) Names of every material in the database, built-in and user-added. A user-added material’s own properties are returned by <code class="docutils literal notranslate"><span class="pre">get(NAME)</span></code>; see <code class="docutils literal notranslate"><span class="pre">user_material_NAME</span></code> below.</p>
+<dt id="term-materials">materials</dt><dd><p>(<em>list</em>) Names of every material in the database, built-in and user-added. A user-added material’s own properties are returned by <code class="docutils literal notranslate"><span class="pre">get(NAME)</span></code>. See <code class="docutils literal notranslate"><span class="pre">user_material_NAME</span></code> below.</p>
 </dd>
 <dt id="term-priority_indices">priority_indices</dt><dd><p>(<em>list</em>) A list of indices corresponding to the priorities of the shapes in the current profile.</p>
 </dd>
-<dt id="term-profiles">profiles</dt><dd><p>(<em>dict</em>) The named profiles saved in this file (see “How the simulation file is organized” above); does not include <code class="docutils literal notranslate"><span class="pre">'_default'</span></code>.</p>
+<dt id="term-profiles">profiles</dt><dd><p>(<em>dict</em>) The named profiles saved in this file (see “How the simulation file is organized” above). It does not include <code class="docutils literal notranslate"><span class="pre">'_default'</span></code>.</p>
 </dd>
 <dt id="term-propagation_resolution">propagation_resolution</dt><dd><p>(<em>float</em>) [nm] Sampling resolution used along the propagation direction for EME field reconstruction.</p>
 </dd>
-<dt id="term-pulse_response">pulse_response</dt><dd><p>(<em>PulseResponse</em>) The spectrum of every tracked mode along the chain from the most recent <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> or <a class="reference internal" href="eme.html#pulse_propagate" title="pulse_propagate"><code class="xref py py-data docutils literal notranslate"><span class="pre">pulse_propagate</span></code></a> with a <code class="docutils literal notranslate"><span class="pre">PulsedSource</span></code> excitation; returned by <code class="docutils literal notranslate"><span class="pre">get('pulse_response')</span></code> (EMode<sup>3D</sup> only). See <a class="reference internal" href="eme.html#PulseResponse" title="PulseResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">PulseResponse</span></code></a>.</p>
+<dt id="term-pulse_response">pulse_response</dt><dd><p>(<em>PulseResponse</em>) The spectrum of every tracked mode along the chain from the most recent <a class="reference internal" href="eme.html#EME" title="EME"><code class="xref py py-data docutils literal notranslate"><span class="pre">EME</span></code></a> or <a class="reference internal" href="eme.html#pulse_propagate" title="pulse_propagate"><code class="xref py py-data docutils literal notranslate"><span class="pre">pulse_propagate</span></code></a> with a <code class="docutils literal notranslate"><span class="pre">PulsedSource</span></code> excitation. It is returned by <code class="docutils literal notranslate"><span class="pre">get('pulse_response')</span></code> (EMode<sup>3D</sup> only). See <a class="reference internal" href="eme.html#PulseResponse" title="PulseResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">PulseResponse</span></code></a>.</p>
 </dd>
-<dt id="term-pulsed_source">pulsed_source</dt><dd><p>(<em>PulsedSource</em>) The declared pulsed excitation; returned by <code class="docutils literal notranslate"><span class="pre">get('pulsed_source')</span></code>.</p>
+<dt id="term-pulsed_source">pulsed_source</dt><dd><p>(<em>PulsedSource</em>) The declared pulsed excitation. It is returned by <code class="docutils literal notranslate"><span class="pre">get('pulsed_source')</span></code>.</p>
 </dd>
-<dt id="term-response">response</dt><dd><p>(<em>CircuitResponse</em>) The power-dependent nonlinear response from the most recent EME solve with a declared excitation; returned by <code class="docutils literal notranslate"><span class="pre">get('response')</span></code>. It also carries <code class="docutils literal notranslate"><span class="pre">trajectories</span></code>, the forward amplitudes recorded along each <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> slice, read with <code class="docutils literal notranslate"><span class="pre">power_vs_z(wavelength)</span></code> or <code class="docutils literal notranslate"><span class="pre">amplitude_vs_z(wavelength)</span></code>.</p>
+<dt id="term-response">response</dt><dd><p>(<em>CircuitResponse</em>) The power-dependent nonlinear response from the most recent EME solve with a declared excitation. It is returned by <code class="docutils literal notranslate"><span class="pre">get('response')</span></code> and also carries <code class="docutils literal notranslate"><span class="pre">trajectories</span></code>, the forward amplitudes recorded along each <span class="math notranslate nohighlight">\(\chi^{(2)}\)</span> slice, read with <code class="docutils literal notranslate"><span class="pre">power_vs_z(wavelength)</span></code> or <code class="docutils literal notranslate"><span class="pre">amplitude_vs_z(wavelength)</span></code>.</p>
 </dd>
-<dt id="term-S_matrix">S_matrix</dt><dd><p>(<em>SMatrix</em>) The scattering matrix from a solved EME chain; returned by <code class="docutils literal notranslate"><span class="pre">get('S_matrix')</span></code> (EMode<sup>3D</sup> only).</p>
+<dt id="term-S_matrix">S_matrix</dt><dd><p>(<em>SMatrix</em>) The scattering matrix from a solved EME chain. It is returned by <code class="docutils literal notranslate"><span class="pre">get('S_matrix')</span></code> (EMode<sup>3D</sup> only).</p>
 </dd>
-<dt id="term-sources">sources</dt><dd><p>(<em>list</em>) The declared excitation sources for the EME chain; returned by <code class="docutils literal notranslate"><span class="pre">get('sources')</span></code>.</p>
+<dt id="term-sources">sources</dt><dd><p>(<em>list</em>) The declared excitation sources for the EME chain. It is returned by <code class="docutils literal notranslate"><span class="pre">get('sources')</span></code>.</p>
 </dd>
 <dt id="term-sweep_data">sweep_data</dt><dd><p>(<em>dict</em>) Results from the most recent <code class="docutils literal notranslate"><span class="pre">sweep()</span></code> call.</p>
 </dd>
@@ -512,12 +569,12 @@ reads back under the name it was set by, so an alias given to <a class="referenc
 <code class="docutils literal notranslate"><span class="pre">radius</span></code> or <code class="docutils literal notranslate"><span class="pre">N_pml</span></code>) works here too. Each is also a field of
 <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).settings</span></code>.</p>
 <dl class="glossary">
-<dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide; 0 indicates that no bend is applied.</p>
+<dt id="term-bend_radius">bend_radius</dt><dd><p>(<em>float</em>) [nm] Bend radius of the waveguide. A value of 0 indicates that no bend is applied.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
 </dd>
-<dt id="term-bend_method">bend_method</dt><dd><p>(<em>str</em>) How a nonzero <code class="docutils literal notranslate"><span class="pre">bend_radius</span></code> is solved. <code class="docutils literal notranslate"><span class="pre">'cylindrical'</span></code> (the default) adds the bend factor 1 + x/R to the mode solver. <code class="docutils literal notranslate"><span class="pre">'TO'</span></code> solves the straight cross-section with its material transformed by the bend’s conformal map (transformation optics). Both work with the FDM and the FEM. The two methods’ effective indices differ by about 6e-4 at R = 10 um, and their bend losses by about 5 %. With a PML, a bend’s spectrum starts with PML modes, so set <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code> just above the guided mode. An under-resolved bend shows up as spurious bend loss. The ‘Bend Mode Solvers’ example compares the four combinations.</p>
+<dt id="term-bend_method">bend_method</dt><dd><p>(<em>str</em>) How a nonzero <code class="docutils literal notranslate"><span class="pre">bend_radius</span></code> is solved. <code class="docutils literal notranslate"><span class="pre">'cylindrical'</span></code> (the default) adds the bend factor 1 + x/R to the mode solver. <code class="docutils literal notranslate"><span class="pre">'TO'</span></code> solves the straight cross-section with its material transformed by the bend’s conformal map (transformation optics). Both work with the FDM and the FEM. The two methods’ effective indices differ by about 6e-4 at R = 10 um, and their bend losses by about 1 % on a fine grid. With a PML, a bend’s spectrum starts with PML modes, so set <code class="docutils literal notranslate"><span class="pre">max_effective_index</span></code> just above the guided mode. An under-resolved bend shows up as spurious bend loss. The ‘Bend Mode Solvers’ example compares the four combinations.</p>
 </dd>
-<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window; 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex; the first character indicates south boundary condition and the second character indicates the west boundary condition. <code class="docutils literal notranslate"><span class="pre">get('boundary_condition')</span></code> returns the string as given (for example <code class="docutils literal notranslate"><span class="pre">'TE'</span></code>), and <code class="docutils literal notranslate"><span class="pre">BC</span></code> below is the resolved boundary condition.</p>
+<dt id="term-boundary_condition">boundary_condition</dt><dd><p>(<em>str</em>) Boundary condition for the simulation window. A value of 0 indicates a metal boundary (driving all fields to zero at the boundary) and A or S indicate anti-symmetric or symmetric Ex. The first character indicates south boundary condition and the second character indicates the west boundary condition. <code class="docutils literal notranslate"><span class="pre">get('boundary_condition')</span></code> returns the string as given (for example <code class="docutils literal notranslate"><span class="pre">'TE'</span></code>), and <code class="docutils literal notranslate"><span class="pre">BC</span></code> below is the resolved boundary condition.</p>
 <p>Alias: <code class="docutils literal notranslate"><span class="pre">BC</span></code>, as a <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a> argument only. <code class="docutils literal notranslate"><span class="pre">get('BC')</span></code> returns the resolved value.</p>
 </dd>
 <dt id="term-BC">BC</dt><dd><p>(<em>str</em>) A copy of the boundary_condition before running FDM(). After running FDM(), this variable represents the actual boundary condition string as a combination of ‘0’, ‘A’, or ‘S’. For example, setting the boundary_condition to ‘TE’ and running FDM() will result in BC changing to either ‘SS’, ‘0S’, ‘S0’, or ‘00’, depending on the index profile cross-section symmetry.</p>
@@ -538,11 +595,11 @@ reads back under the name it was set by, so an alias given to <a class="referenc
 </dd>
 <dt id="term-fem_order">fem_order</dt><dd><p>(<em>int</em>) FEM element order, 1 or 2. Order 2 converges much faster in the effective index.</p>
 </dd>
-<dt id="term-fem_points_per_wavelength">fem_points_per_wavelength</dt><dd><p>(<em>float</em>) Initial FEM mesh density, as mesh points per wavelength in each material.</p>
+<dt id="term-fem_points_per_wavelength">fem_points_per_wavelength</dt><dd><p>(<em>float</em>) Initial FEM mesh density, as mesh points per wavelength in each material. <a class="reference internal" href="solver-analysis.html#converge" title="converge"><code class="xref py py-data docutils literal notranslate"><span class="pre">converge</span></code></a> chooses it for the FEM with <code class="docutils literal notranslate"><span class="pre">setting='resolution'</span></code>.</p>
 </dd>
 <dt id="term-fem_refine_fraction">fem_refine_fraction</dt><dd><p>(<em>float</em>) Share of the estimated error each adaptive FEM refinement pass targets, in (0, 1].</p>
 </dd>
-<dt id="term-field_to_solve">field_to_solve</dt><dd><p>(<em>str</em>) Desired transverse field component to solve; either ‘Et’ or ‘Ht’.</p>
+<dt id="term-field_to_solve">field_to_solve</dt><dd><p>(<em>str</em>) Desired transverse field component to solve: either ‘Et’ or ‘Ht’.</p>
 </dd>
 <dt id="term-generate_chi2">generate_chi2</dt><dd><p>(<em>bool</em>) Generate the second-order nonlinear susceptibility (<span class="math notranslate nohighlight">\(\chi^{(2)}\)</span>) tensor for the simulation window when meshing.</p>
 </dd>
@@ -550,19 +607,19 @@ reads back under the name it was set by, so an alias given to <a class="referenc
 </dd>
 <dt id="term-include_scattering">include_scattering</dt><dd><p>(<em>bool</em>) Compute the interfacial scattering loss of every rough shape after each solve of this profile. Set with <code class="docutils literal notranslate"><span class="pre">settings(include_scattering=True)</span></code>.</p>
 </dd>
-<dt id="term-max_effective_index">max_effective_index</dt><dd><p>(<em>float</em>) Upper limit for the effective index; the eigensolver’s shift, unless <code class="docutils literal notranslate"><span class="pre">pml_seed_bool</span></code> derives one automatically.</p>
+<dt id="term-max_effective_index">max_effective_index</dt><dd><p>(<em>float</em>) Upper limit for the effective index, which is the eigensolver’s shift unless <code class="docutils literal notranslate"><span class="pre">pml_seed_bool</span></code> derives one automatically.</p>
 </dd>
-<dt id="term-mesh_complete_bool">mesh_complete_bool</dt><dd><p>Removed; use <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).status.meshed</span></code>.</p>
+<dt id="term-mesh_complete_bool">mesh_complete_bool</dt><dd><p>Removed. Use <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).status.meshed</span></code>.</p>
 </dd>
-<dt id="term-num_modes">num_modes</dt><dd><p>(<em>int</em>) Total number of modes to solve.</p>
+<dt id="term-num_modes">num_modes</dt><dd><p>(<em>int</em>) Total number of modes to solve. <a class="reference internal" href="solver-analysis.html#converge" title="converge"><code class="xref py py-data docutils literal notranslate"><span class="pre">converge</span></code></a> chooses it with <code class="docutils literal notranslate"><span class="pre">setting='modes'</span></code>.</p>
 </dd>
-<dt id="term-num_pml_layers">num_pml_layers</dt><dd><p>(<em>int</em> or <em>list</em>) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West].</p>
+<dt id="term-num_pml_layers">num_pml_layers</dt><dd><p>(<em>int</em> or <em>list</em>) Either an integer or a list of integers indicating the number of perfectly matched layers for all or each boundary: [North, South, East, West]. The FDM’s pml is this many grid cells thick where <code class="docutils literal notranslate"><span class="pre">pml_thickness</span></code> is 0. For the FEM it refines the pml’s mesh (10, the default, meshes it at its material’s resolution, 20 twice as finely), and it does not set the thickness.</p>
 </dd>
-<dt id="term-pml_thickness">pml_thickness</dt><dd><p>(<em>float</em> or <em>list</em>) Either a float or a list of floats indicating the perfectly matched layer thickness in nm for all or each boundary: [North, South, East, West]. 0 means the boundary uses <code class="docutils literal notranslate"><span class="pre">num_pml_layers</span></code> instead. Unlike a layer count, this holds the absorber’s physical size fixed as the resolution changes.</p>
+<dt id="term-pml_thickness">pml_thickness</dt><dd><p>(<em>float</em> or <em>list</em>) Either a float or a list of floats indicating the perfectly matched layer thickness in nm for all or each boundary: [North, South, East, West]. In the FDM, 0 means the boundary uses <code class="docutils literal notranslate"><span class="pre">num_pml_layers</span></code> instead. The FEM delivers exactly this thickness, and where it is 0 the FEM chooses twice the pml’s imaginary depth (see <code class="docutils literal notranslate"><span class="pre">pml_thickness</span></code> under <a class="reference internal" href="setup.html#settings" title="settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">settings</span></code></a>). Unlike a layer count, this holds the absorber’s physical size fixed as the resolution changes. <a class="reference internal" href="solver-analysis.html#converge" title="converge"><code class="xref py py-data docutils literal notranslate"><span class="pre">converge</span></code></a> chooses it with <code class="docutils literal notranslate"><span class="pre">setting='pml'</span></code>.</p>
 </dd>
 <dt id="term-pml_alpha_max">pml_alpha_max</dt><dd><p>(<em>float</em>) The complex-frequency-shifted (CFS) term of the pml profile, where 0 disables it.</p>
 </dd>
-<dt id="term-pml_kappa_max">pml_kappa_max</dt><dd><p>(<em>float</em>) The maximum real coordinate stretch of the pml profile, reached at the outer pml face.</p>
+<dt id="term-pml_kappa_max">pml_kappa_max</dt><dd><p>(<em>float</em>) The maximum real coordinate stretch of the pml profile, reached at the outer pml face, in both the FDM and the FEM.</p>
 </dd>
 <dt id="term-pml_NSEW_bool">pml_NSEW_bool</dt><dd><p>(<em>list</em>) List of booleans indicating if a perfectly matched layer (pml) boundary condition is applied to each boundary: [North, South, East, West].</p>
 </dd>
@@ -574,7 +631,7 @@ reads back under the name it was set by, so an alias given to <a class="referenc
 </dd>
 <dt id="term-remove_pml_modes_bool">remove_pml_modes_bool</dt><dd><p>(<em>bool</em>) Indicates whether or not to automatically remove artificial modes found in the pml layers.</p>
 </dd>
-<dt id="term-shape_list-shape_materials">shape_list, shape_materials</dt><dd><p>Removed; use <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).shapes</span></code> (or the per-profile <code class="docutils literal notranslate"><span class="pre">shapes</span></code> variable above).</p>
+<dt id="term-shape_list-shape_materials">shape_list, shape_materials</dt><dd><p>Removed. Use <code class="docutils literal notranslate"><span class="pre">get_profile(NAME).shapes</span></code> (or the per-profile <code class="docutils literal notranslate"><span class="pre">shapes</span></code> variable above).</p>
 </dd>
 <dt id="term-solver">solver</dt><dd><p>(<em>str</em>) The mode solver for this profile: <code class="docutils literal notranslate"><span class="pre">'default'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FDM'</span></code> or <code class="docutils literal notranslate"><span class="pre">'FEM'</span></code>. <code class="docutils literal notranslate"><span class="pre">'default'</span></code> is the FDM in every session. The FEM runs only when asked for, with <code class="docutils literal notranslate"><span class="pre">solver='FEM'</span></code> or <code class="docutils literal notranslate"><span class="pre">FEM()</span></code>.</p>
 </dd>
@@ -586,11 +643,11 @@ reads back under the name it was set by, so an alias given to <a class="referenc
 </dd>
 <dt id="term-tolerance">tolerance</dt><dd><p>(<em>float</em>) Numerical tolerance for convergence of the effective indices.</p>
 </dd>
-<dt id="term-window_height">window_height</dt><dd><p>(float) [nm] Total height (y-direction) of the simulation window.</p>
+<dt id="term-window_height">window_height</dt><dd><p>(float) [nm] Total height (y-direction) of the simulation window. The mesh is a whole even number of <code class="docutils literal notranslate"><span class="pre">y_resolution</span></code> cells, starting at the window’s bottom (y = 0), so a layer stacked from there in whole cells has its faces on grid lines. A window that is not a whole even number of cells grows to the next even count at the top. Under a y fold of <code class="docutils literal notranslate"><span class="pre">boundary_condition</span></code> it grows by the same amount above and below instead, so its middle, where the symmetry wall sits, stays a grid line. <code class="docutils literal notranslate"><span class="pre">settings</span></code> warns when the window grows, and <code class="docutils literal notranslate"><span class="pre">get('window_height')</span></code> then reads the height that was meshed. A <code class="docutils literal notranslate"><span class="pre">window_height</span></code> that is a multiple of twice <code class="docutils literal notranslate"><span class="pre">y_resolution</span></code> is meshed as given. The FEM meshes the same window. <a class="reference internal" href="solver-analysis.html#converge" title="converge"><code class="xref py py-data docutils literal notranslate"><span class="pre">converge</span></code></a> chooses it with <code class="docutils literal notranslate"><span class="pre">setting='window'</span></code>.</p>
 </dd>
-<dt id="term-window_width">window_width</dt><dd><p>(float) [nm] Total width (x-direction) of the simulation window.</p>
+<dt id="term-window_width">window_width</dt><dd><p>(float) [nm] Total width (x-direction) of the simulation window. The mesh is a whole even number of <code class="docutils literal notranslate"><span class="pre">x_resolution</span></code> cells with a grid line at x = 0, the window’s middle. A width that is not grows to the next even count, by the same amount on each side, which keeps x = 0 a grid line, and <code class="docutils literal notranslate"><span class="pre">get('window_width')</span></code> then reads the width that was meshed. <a class="reference internal" href="solver-analysis.html#converge" title="converge"><code class="xref py py-data docutils literal notranslate"><span class="pre">converge</span></code></a> chooses it with <code class="docutils literal notranslate"><span class="pre">setting='window'</span></code>.</p>
 </dd>
-<dt id="term-x_resolution-y_resolution">x_resolution, y_resolution</dt><dd><p>(<em>float</em>) [nm] Mesh grid step in the x- and y-directions.</p>
+<dt id="term-x_resolution-y_resolution">x_resolution, y_resolution</dt><dd><p>(<em>float</em>) [nm] Mesh grid step in the x- and y-directions. <a class="reference internal" href="solver-analysis.html#converge" title="converge"><code class="xref py py-data docutils literal notranslate"><span class="pre">converge</span></code></a> chooses them with <code class="docutils literal notranslate"><span class="pre">setting='resolution'</span></code>.</p>
 </dd>
 </dl>
 </section>
